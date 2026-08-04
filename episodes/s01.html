@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S01 · Les schemes de paiement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F4F8;
+    --ink:#0E1B2C;
+    --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8;
+    --cobalt-deep:#153A9E;
+    --mint:#17B587;
+    --coral:#E85C4A;
+    --line:#D8DEE9;
+    --card:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;justify-content:center;
+    line-height:1.5;
+  }
+  .app{
+    width:100%;max-width:480px;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Progress ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;min-height:28px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .segments{display:flex;gap:6px;flex:1}
+  .seg{
+    height:6px;flex:1;border-radius:3px;background:var(--line);
+    transition:background .35s ease;
+  }
+  .seg.done{background:var(--cobalt)}
+  .seg.now{background:linear-gradient(90deg,var(--cobalt),var(--mint));animation:segpulse 1.6s ease infinite}
+  @keyframes segpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .streak{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--mint);white-space:nowrap;display:none;
+  }
+  .streak.on{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.6)}to{transform:none}}
+
+  /* ---------- Écrans ---------- */
+  .screen{flex:1;display:none;flex-direction:column;animation:slideIn .32s ease}
+  .screen.active{display:flex}
+  @keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen,.streak.on,.seg.now,.sheet,.opt.correct,.opt.wrong{animation:none !important;transition:none !important}
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(30px,8vw,38px);line-height:1.08;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:22px;line-height:1.15;margin-bottom:12px;
+  }
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
+  }
+  p{color:var(--ink-soft);font-size:15.5px}
+  p + p{margin-top:10px}
+  p strong{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover{justify-content:space-between}
+  .cover-chip{
+    width:52px;height:38px;border-radius:8px;margin:26px 0 22px;
+    background:linear-gradient(135deg,var(--cobalt) 0%,#1FA9A0 100%);
+    position:relative;overflow:hidden;
+  }
+  .cover-chip::after{
+    content:"";position:absolute;inset:8px;border:1.5px solid rgba(255,255,255,.55);
+    border-radius:4px;
+  }
+  .cover-meta{
+    display:flex;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-meta span b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cartes concept ---------- */
+  .concept-card{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;border:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(14,27,44,.05);
+  }
+  .keyfact{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;color:var(--ink);
+  }
+  .keyfact b{font-weight:600}
+
+  /* ---------- Diagramme 4 coins ---------- */
+  .diagram{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 14px 14px;margin-top:14px;
+  }
+  .diagram-grid{
+    display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;
+    gap:10px;position:relative;
+  }
+  .actor{
+    border:1.5px solid var(--line);border-radius:12px;padding:10px 8px;
+    text-align:center;font-size:13px;font-weight:600;background:#FAFBFD;
+    transition:border-color .3s, background .3s;
+  }
+  .actor small{display:block;font-weight:400;font-size:11px;color:var(--ink-soft);margin-top:2px}
+  .actor.lit{border-color:var(--cobalt);background:#EDF1FB}
+  .actor.scheme{
+    grid-column:1 / 3;justify-self:center;padding:10px 26px;
+    background:var(--ink);color:#fff;border-color:var(--ink);
+  }
+  .actor.scheme small{color:#B9C4D6}
+  .actor.scheme.lit{background:var(--cobalt-deep);border-color:var(--cobalt-deep)}
+  .flow-caption{
+    margin-top:12px;min-height:40px;font-size:13.5px;color:var(--ink-soft);
+    text-align:center;
+  }
+  .flow-caption b{color:var(--ink)}
+  .flow-btn{
+    margin-top:10px;width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--cobalt);
+    background:transparent;color:var(--cobalt);font-family:inherit;font-weight:600;font-size:14.5px;
+    cursor:pointer;
+  }
+  .flow-btn:active{background:#EDF1FB;transform:scale(.98)}
+
+  /* ---------- Quiz ---------- */
+  .qnum{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .question{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;line-height:1.25;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:14.5px;color:var(--ink);
+    cursor:pointer;transition:border-color .2s, background .2s, transform .1s;
+  }
+  .opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .opt.correct{border-color:var(--mint);background:#E9F8F2;animation:popIn .35s ease}
+  .opt.wrong{border-color:var(--coral);background:#FCEEEB;animation:shake .3s ease}
+  @keyframes popIn{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  .opt:disabled{cursor:default}
+
+  /* ---------- Feedback sheet (façon Duolingo) ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;pointer-events:none;
+    transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  }
+  .sheet.show{transform:none;pointer-events:auto}
+  .sheet-inner{
+    width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(14,27,44,.18);
+  }
+  .sheet.good .sheet-inner{background:#E9F8F2}
+  .sheet.bad .sheet-inner{background:#FCEEEB}
+  .sheet-title{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .sheet.good .sheet-title{color:#0C6B4E}
+  .sheet.bad .sheet-title{color:#9C3527}
+  .sheet-text{font-size:14px;line-height:1.5}
+  .sheet.good .sheet-text{color:#0C6B4E}
+  .sheet.bad .sheet-text{color:#9C3527}
+  .sheet-text b{font-weight:600}
+  .sheet .cta{margin-top:16px}
+  .sheet.good .cta{background:var(--mint)}
+  .sheet.bad .cta{background:var(--coral)}
+
+  /* ---------- Recap / score ---------- */
+  .score-big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;
+    line-height:1;margin:10px 0 4px;
+  }
+  .score-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+  .stats{
+    display:flex;gap:10px;margin-top:18px;
+  }
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;display:block}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft)}
+  .recap-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .recap-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:14px;color:var(--ink);display:flex;gap:10px;
+  }
+  .recap-item::before{content:"→";color:var(--cobalt);font-weight:700;flex-shrink:0}
+  .recap-item.ok::before{content:"✓";color:var(--mint)}
+  .recap-item.ko::before{content:"✗";color:var(--coral)}
+  .teaser{
+    margin-top:20px;padding:15px 16px;border-radius:12px;background:#0E1B2C;color:#C9D4E4;
+    font-size:13.5px;
+  }
+  .teaser b{color:#fff}
+  .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+
+  /* ---------- Confetti (sans faute) ---------- */
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:12px;opacity:.95;border-radius:2px;
+    animation:fall 2.6s ease-in forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(105vh) rotate(540deg);opacity:.7}
+  }
+
+  /* ---------- CTA bas ---------- */
+  .cta-zone{margin-top:auto;padding-top:22px}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;
+    background:var(--cobalt);color:#fff;font-family:'Instrument Sans',sans-serif;
+    font-weight:600;font-size:16px;cursor:pointer;
+    transition:opacity .2s, background .2s, transform .1s;
+  }
+  .cta:disabled{opacity:.35;cursor:default}
+  .cta:not(:disabled):active{background:var(--cobalt-deep);transform:scale(.98)}
+  .cta.ghost{background:transparent;color:var(--cobalt);border:1.5px solid var(--cobalt);margin-top:10px}
+  .cta.ghost:not(:disabled):active{background:#EDF1FB}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar" id="topbar" style="visibility:hidden">
+    <span class="eyebrow">S01</span>
+    <div class="segments" id="segments"></div>
+    <span class="streak" id="streak"></span>
+  </div>
+
+  <!-- 0 · COVER -->
+  <section class="screen cover active" data-step="cover">
+    <div>
+      <div class="kicker">Micro-formation · Épisode 01</div>
+      <div class="cover-chip"></div>
+      <h1>Les schemes de paiement</h1>
+      <p style="margin-top:14px">Visa, Mastercard, CB : tout le monde connaît les logos, peu savent ce qu'il y a derrière. En 5 minutes, comprenez le rôle exact d'un scheme — et qui fait quoi dans une transaction carte.</p>
+      <div class="cover-meta">
+        <span><b>5 min</b> · lecture</span>
+        <span><b>4</b> concepts</span>
+        <span><b>4</b> quiz</span>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" onclick="start()">Commencer</button>
+    </div>
+  </section>
+
+  <!-- 1 · CONCEPT : définition -->
+  <section class="screen" data-step="1">
+    <div class="concept-card">
+      <div class="kicker">Concept 1 / 4</div>
+      <h2>Un scheme, c'est un réseau — pas une banque</h2>
+      <p>Un scheme (Visa, Mastercard, CB, UnionPay…) est l'organisation qui <strong>opère le réseau</strong> reliant des milliers de banques entre elles, <strong>édicte les règles</strong> du jeu, et <strong>porte la marque</strong> que porteurs et marchands reconnaissent.</p>
+      <p>Ce qu'il ne fait pas : il n'émet pas de cartes, n'accorde pas de crédit, ne détient pas l'argent des transactions. Ça, ce sont les banques.</p>
+      <div class="keyfact">💡 <b>À retenir :</b> le scheme est l'arbitre et l'infrastructure du match — jamais un joueur qui touche le ballon (l'argent).</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 2 · QUIZ 1 -->
+  <section class="screen" data-step="2">
+    <div class="qnum">QUIZ 1 / 4</div>
+    <div class="question">Lequel de ces rôles n'est PAS celui d'un scheme ?</div>
+    <div class="options" data-quiz="0" data-answer="1" data-next="3">
+      <button class="opt">Définir les règles du réseau</button>
+      <button class="opt">Accorder un crédit au porteur de la carte</button>
+      <button class="opt">Fixer les taux d'interchange par défaut</button>
+      <button class="opt">Gérer la marque et son acceptation</button>
+    </div>
+  </section>
+
+  <!-- 3 · CONCEPT : 4 coins -->
+  <section class="screen" data-step="3">
+    <div class="concept-card" style="padding-bottom:16px">
+      <div class="kicker">Concept 2 / 4</div>
+      <h2>Le modèle à 4 coins</h2>
+      <p>Chaque paiement carte fait circuler l'information entre <strong>4 acteurs</strong> — et le scheme au milieu, qui les connecte tous.</p>
+    </div>
+    <div class="diagram">
+      <div class="diagram-grid">
+        <div class="actor" id="a-porteur">🧍 Porteur<small>le client</small></div>
+        <div class="actor" id="a-marchand">🏪 Marchand<small>le commerçant</small></div>
+        <div class="actor" id="a-emetteur">🏦 Émetteur<small>banque du client</small></div>
+        <div class="actor" id="a-acquereur">🏦 Acquéreur<small>banque du marchand</small></div>
+        <div class="actor scheme" id="a-scheme">◈ SCHEME<small>le réseau au centre</small></div>
+      </div>
+      <div class="flow-caption" id="flowcap">Suivez le trajet d'un paiement de 60 € — appuyez sur le bouton.</div>
+      <button class="flow-btn" id="flowbtn" onclick="stepFlow()">▶ Lancer le paiement</button>
+    </div>
+    <div class="cta-zone"><button class="cta" id="next-flow" disabled onclick="go(4)">Continuer</button></div>
+  </section>
+
+  <!-- 4 · QUIZ 2 -->
+  <section class="screen" data-step="4">
+    <div class="qnum">QUIZ 2 / 4</div>
+    <div class="question">Dans le modèle à 4 coins, qui paie l'interchange, et à qui ?</div>
+    <div class="options" data-quiz="1" data-answer="1" data-next="5">
+      <button class="opt">Le porteur → à l'émetteur</button>
+      <button class="opt">L'acquéreur → à l'émetteur</button>
+      <button class="opt">L'émetteur → à l'acquéreur</button>
+      <button class="opt">Le marchand → au scheme</button>
+    </div>
+  </section>
+
+  <!-- 5 · CONCEPT : ce que fait le scheme -->
+  <section class="screen" data-step="5">
+    <div class="concept-card">
+      <div class="kicker">Concept 3 / 4</div>
+      <h2>Concrètement, le scheme vend 4 choses</h2>
+      <p><strong>1 · Des règles communes.</strong> Formats de messages, sécurité, délais : tout le monde parle la même langue, partout dans le monde.</p>
+      <p><strong>2 · La compensation.</strong> Il calcule qui doit combien à qui chaque jour entre des milliers de banques, et orchestre le règlement.</p>
+      <p><strong>3 · L'arbitrage.</strong> Litige, fraude, chargeback : c'est le règlement du scheme qui tranche entre émetteur et acquéreur.</p>
+      <p><strong>4 · La marque.</strong> Le logo sur la vitrine qui garantit au porteur que sa carte passera.</p>
+      <div class="keyfact">💡 <b>Son revenu :</b> les scheme fees, facturés aux banques membres — à ne pas confondre avec l'interchange, qui va à l'émetteur.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 6 · QUIZ 3 -->
+  <section class="screen" data-step="6">
+    <div class="qnum">QUIZ 3 / 4</div>
+    <div class="question">Un client conteste un paiement (chargeback). Selon quelles règles le litige est-il arbitré ?</div>
+    <div class="options" data-quiz="2" data-answer="2" data-next="7">
+      <button class="opt">Celles de la banque du marchand</button>
+      <button class="opt">Celles de la Banque centrale européenne</button>
+      <button class="opt">Celles du scheme utilisé pour la transaction</button>
+      <button class="opt">Celles du fabricant du terminal</button>
+    </div>
+  </section>
+
+  <!-- 7 · CONCEPT : CB et co-badgeage -->
+  <section class="screen" data-step="7">
+    <div class="concept-card">
+      <div class="kicker">Concept 4 / 4 · Spécificité française</div>
+      <h2>CB : le scheme domestique, et le co-badgeage</h2>
+      <p>La France a son propre scheme : <strong>CB (Cartes Bancaires)</strong>, créé par les banques françaises. La plupart des cartes françaises sont <strong>co-badgées</strong> : CB <em>et</em> Visa (ou Mastercard) sur la même carte.</p>
+      <p>En France, la transaction passe en priorité par CB (coûts plus bas pour le marchand) ; à l'étranger, le badge international prend le relais.</p>
+      <div class="keyfact">💡 <b>Depuis le règlement européen IFR (2015)</b>, le consommateur peut imposer la marque de son choix au point de vente — le marchand peut prédéfinir une priorité, mais pas l'imposer.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
+  </section>
+
+  <!-- 8 · QUIZ 4 -->
+  <section class="screen" data-step="8">
+    <div class="qnum">QUIZ 4 / 4</div>
+    <div class="question">Carte co-badgée CB/Visa en France : qui a le dernier mot sur la marque utilisée au point de vente ?</div>
+    <div class="options" data-quiz="3" data-answer="2" data-next="9">
+      <button class="opt">L'émetteur de la carte</button>
+      <button class="opt">Le scheme le plus cher</button>
+      <button class="opt">Le consommateur, s'il exprime un choix</button>
+      <button class="opt">Le terminal, aléatoirement</button>
+    </div>
+  </section>
+
+  <!-- 9 · RECAP -->
+  <section class="screen" data-step="9">
+    <div>
+      <div class="kicker">Épisode terminé</div>
+      <div class="score-big" id="scoreval">–</div>
+      <div class="score-label" id="scoremsg">SCORE</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TEMPS</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>SÉRIE MAX</span></div>
+      </div>
+      <div class="recap-list" id="recaplist">
+        <div class="recap-item" data-q="0">Le scheme est un réseau + des règles + une marque. Jamais une banque.</div>
+        <div class="recap-item" data-q="1">4 coins : porteur, marchand, émetteur, acquéreur — le scheme les relie tous.</div>
+        <div class="recap-item" data-q="2">L'interchange va à l'émetteur ; les scheme fees vont au scheme.</div>
+        <div class="recap-item" data-q="3">En France : CB en domestique, co-badgeage, et le consommateur choisit (IFR).</div>
+      </div>
+      <div class="teaser">
+        <div class="kicker">Prochain épisode</div>
+        <b>S02 · L'interchange</b> — Sur vos 60 € de courses, combien partent en commissions entre banques ? Faites votre pari. Réponse au prochain épisode — et pourquoi Bruxelles a dû s'en mêler.
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" id="sharebtn" onclick="shareScore()">Partager mon score</button>
+      <button class="cta ghost" onclick="location.reload()">Refaire l'épisode</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Feedback sheet -->
+<div class="sheet" id="sheet">
+  <div class="sheet-inner">
+    <div class="sheet-title" id="sheet-title"></div>
+    <div class="sheet-text" id="sheet-text"></div>
+    <button class="cta" id="sheet-cta">Continuer</button>
+  </div>
+</div>
+
+<script>
+  let current = 0;
+  let score = 0;
+  let streakNow = 0, streakBest = 0;
+  let t0 = null;
+  const results = [null,null,null,null];
+  const order = ['cover','1','2','3','4','5','6','7','8','9'];
+
+  const segWrap = document.getElementById('segments');
+  for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
+
+  function start(){ t0 = Date.now(); go(1); }
+
+  function go(n){
+    current = n;
+    document.getElementById('sheet').classList.remove('show','good','bad');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
+    document.getElementById('topbar').style.visibility = n===0 ? 'hidden' : 'visible';
+    document.querySelectorAll('.seg').forEach((s,i)=>{
+      s.classList.toggle('done', i < n-1);
+      s.classList.toggle('now', i === n-1);
+    });
+    if(order[n]==='9') showScore();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Quiz ----
+  const EXPLAIN = [
+    {good:"Le crédit, c'est l'émetteur — la banque du porteur. Le scheme ne prête pas un centime.",
+     bad:"Le crédit est accordé par l'<b>émetteur</b> (la banque du porteur). Le scheme fixe les règles, l'interchange par défaut et gère la marque, mais ne touche jamais à l'argent du client."},
+    {good:"L'acquéreur reverse l'interchange à l'émetteur — c'est le coût que le marchand retrouve dans sa commission.",
+     bad:"C'est l'<b>acquéreur qui paie l'interchange à l'émetteur</b>, sur chaque transaction. Il le répercute ensuite au marchand dans sa commission (MSC)."},
+    {good:"Chaque scheme publie son règlement litiges — c'est lui l'arbitre entre émetteur et acquéreur.",
+     bad:"C'est le <b>règlement du scheme</b> qui s'applique. Visa, Mastercard et CB ont chacun leurs procédures de chargeback qui s'imposent aux banques membres."},
+    {good:"Depuis le règlement IFR de 2015, le choix exprimé par le consommateur prime sur la priorité du marchand.",
+     bad:"Depuis le <b>règlement européen IFR (2015)</b>, si le consommateur exprime un choix de marque, ce choix s'impose. Le marchand peut seulement prédéfinir une priorité par défaut."}
+  ];
+  const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
+  const BAD_TITLES = ["Le piège classique","Contre-intuitif — vous n'êtes pas seul","Pas tout à fait","Surprenant, non ?"];
+
+  document.querySelectorAll('.options').forEach(block=>{
+    const qi = +block.dataset.quiz;
+    const ans = +block.dataset.answer;
+    const next = +block.dataset.next;
+    block.querySelectorAll('.opt').forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const good = i===ans;
+        results[qi] = good;
+        if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); }
+        else { streakNow = 0; }
+        btn.classList.add(good?'correct':'wrong');
+        if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
+        if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
+        // streak chip
+        const st = document.getElementById('streak');
+        if(streakNow >= 2){ st.textContent = '✓ ×' + streakNow; st.classList.add('on'); }
+        else { st.classList.remove('on'); }
+        // feedback sheet
+        const sheet = document.getElementById('sheet');
+        document.getElementById('sheet-title').textContent =
+          good ? '✓ ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '✗ ' + BAD_TITLES[qi];
+        document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
+        const cta = document.getElementById('sheet-cta');
+        cta.textContent = next===9 ? 'Voir mon score' : 'Continuer';
+        cta.onclick = ()=>go(next);
+        sheet.classList.add('show', good?'good':'bad');
+        sheet.classList.remove(good?'bad':'good');
+      });
+    });
+  });
+
+  // ---- Diagramme 4 coins ----
+  const FLOW = [
+    {lit:['a-porteur','a-marchand'], txt:"<b>1.</b> Le porteur présente sa carte au marchand — 60 € au terminal."},
+    {lit:['a-marchand','a-acquereur'], txt:"<b>2.</b> Le terminal envoie la demande d'autorisation à l'acquéreur."},
+    {lit:['a-acquereur','a-scheme'], txt:"<b>3.</b> L'acquéreur route la demande via le <b>scheme</b>…"},
+    {lit:['a-scheme','a-emetteur'], txt:"<b>4.</b> …qui la transmet à l'émetteur. Celui-ci vérifie solde, plafond, fraude → <b>autorisation</b>."},
+    {lit:['a-scheme'], txt:"<b>5.</b> Plus tard : le scheme orchestre compensation et règlement. L'argent circule entre banques — jamais par le scheme."}
+  ];
+  let flowStep = -1;
+  function stepFlow(){
+    flowStep++;
+    if(flowStep >= FLOW.length){
+      flowStep = -1;
+      document.querySelectorAll('.actor').forEach(a=>a.classList.remove('lit'));
+      document.getElementById('flowcap').innerHTML = "Rejouez le trajet si besoin, puis continuez.";
+      document.getElementById('flowbtn').textContent = "▶ Rejouer le paiement";
+      return;
+    }
+    document.querySelectorAll('.actor').forEach(a=>a.classList.remove('lit'));
+    FLOW[flowStep].lit.forEach(id=>document.getElementById(id).classList.add('lit'));
+    document.getElementById('flowcap').innerHTML = FLOW[flowStep].txt;
+    document.getElementById('flowbtn').textContent = flowStep===FLOW.length-1 ? "Terminer" : "▶ Étape suivante";
+    if(flowStep===FLOW.length-1) document.getElementById('next-flow').disabled = false;
+  }
+
+  // ---- Score ----
+  function fmtTime(ms){
+    const s = Math.round(ms/1000);
+    return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+  }
+  function showScore(){
+    document.getElementById('scoreval').textContent = score + " / 4";
+    const msg = score===4 ? "SANS FAUTE — NIVEAU EXPERT" :
+                score>=3 ? "SOLIDE — LES BASES SONT LÀ" :
+                score>=2 ? "CORRECT — RELISEZ LES CONCEPTS 2 ET 3" :
+                "À REVOIR — REFAITES L'ÉPISODE";
+    document.getElementById('scoremsg').textContent = msg;
+    document.getElementById('stat-score').textContent = score + '/4';
+    document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '–';
+    document.getElementById('stat-best').textContent = '×' + streakBest;
+    document.querySelectorAll('.recap-item').forEach(el=>{
+      const r = results[+el.dataset.q];
+      if(r===true) el.classList.add('ok');
+      if(r===false) el.classList.add('ko');
+    });
+    if(score===4) confetti();
+  }
+
+  function confetti(){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    const colors = ['#1F4FD8','#17B587','#E85C4A','#0E1B2C'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('i');
+      p.style.left = (Math.random()*100)+'%';
+      p.style.background = colors[i%4];
+      p.style.animationDelay = (Math.random()*0.9)+'s';
+      p.style.animationDuration = (2+Math.random()*1.4)+'s';
+      c.appendChild(p);
+    }
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+
+  // ---- Partage façon Wordle ----
+  function shareScore(){
+    const grid = results.map(r=>r?'🟩':'🟥').join('');
+    const time = t0 ? fmtTime(Date.now()-t0) : '';
+    const txt = `S01 · Les schemes de paiement — ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.`;
+    const btn = document.getElementById('sharebtn');
+    if(navigator.share){
+      navigator.share({text:txt}).catch(()=>{});
+    } else if(navigator.clipboard){
+      navigator.clipboard.writeText(txt).then(()=>{
+        btn.textContent = 'Copié ✓ — collez-le où vous voulez';
+        setTimeout(()=>btn.textContent='Partager mon score', 2500);
+      });
+    }
+  }
+</script>
+</body>
+</html>
