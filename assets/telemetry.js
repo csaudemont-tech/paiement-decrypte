@@ -13,7 +13,7 @@
 window.PD = (function () {
   'use strict';
 
-  var ENDPOINT = ''; // ← SESSION 3 : URL Apps Script ("https://script.google.com/macros/s/…/exec")
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbyQjYEwoQ_8DNw8GYq05Lo1PyLZ5ex978MQCAJsW889n1kbM0UOzjMNy9cxv3Vvhxf1SQ/exec'; // ← SESSION 3 : URL Apps Script ("https://script.google.com/macros/s/…/exec")
 
   var EP = (document.body && document.body.dataset.ep) || 'unknown';
   var visit = Math.random().toString(36).slice(2, 10);
