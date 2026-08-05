@@ -244,7 +244,7 @@
   .cta.ghost:not(:disabled):active{background:#EDF1FB}
 </style>
 </head>
-<body>
+<body data-ep="s01">
 <div class="app">
 
   <div class="topbar" id="topbar" style="visibility:hidden">
@@ -268,6 +268,7 @@
     </div>
     <div class="cta-zone">
       <button class="cta" onclick="start()">Commencer</button>
+      <button class="cta ghost" id="resumebtn" style="display:none"></button>
     </div>
   </section>
 
@@ -417,7 +418,13 @@
   </div>
 </div>
 
+<script src="../assets/telemetry.js"></script>
+<script src="../assets/progress.js"></script>
 <script>
+  // Wrappers sûrs : si les assets ne chargent pas, l'épisode fonctionne quand même.
+  const PDT = window.PD || { track(){}, screen(){}, complete(){} };
+  const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+
   let current = 0;
   let score = 0;
   let streakNow = 0, streakBest = 0;
@@ -428,10 +435,14 @@
   const segWrap = document.getElementById('segments');
   for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
 
-  function start(){ t0 = Date.now(); go(1); }
+  function start(){ t0 = Date.now(); PDT.track('ep_start'); go(1); }
 
   function go(n){
     current = n;
+    PDT.screen(order[n]);
+    if(n > 0 && order[n] !== '9'){
+      PDP.save('s01', {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+    }
     document.getElementById('sheet').classList.remove('show','good','bad');
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
@@ -467,6 +478,7 @@
         block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
         const good = i===ans;
         results[qi] = good;
+        PDT.track('quiz_answer', {quiz:qi, choice:i, correct:good});
         if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); }
         else { streakNow = 0; }
         btn.classList.add(good?'correct':'wrong');
@@ -498,8 +510,9 @@
     {lit:['a-scheme','a-emetteur'], txt:"<b>4.</b> …qui la transmet à l'émetteur. Celui-ci vérifie solde, plafond, fraude → <b>autorisation</b>."},
     {lit:['a-scheme'], txt:"<b>5.</b> Plus tard : le scheme orchestre compensation et règlement. L'argent circule entre banques — jamais par le scheme."}
   ];
-  let flowStep = -1;
+  let flowStep = -1, flowTracked = false;
   function stepFlow(){
+    if(!flowTracked){ PDT.track('interactive_used'); flowTracked = true; }
     flowStep++;
     if(flowStep >= FLOW.length){
       flowStep = -1;
@@ -521,6 +534,8 @@
     return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
   }
   function showScore(){
+    PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
+    PDP.save('s01', {completed:true, screen:9, score, streakBest, results});
     document.getElementById('scoreval').textContent = score + " / 4";
     const msg = score===4 ? "SANS FAUTE — NIVEAU EXPERT" :
                 score>=3 ? "SOLIDE — LES BASES SONT LÀ" :
@@ -568,7 +583,32 @@
         setTimeout(()=>btn.textContent='Partager mon score', 2500);
       });
     }
+    PDT.track('share', {score});
   }
+
+  // ---- Reprise (progress.js) ----
+  (function(){
+    const p = PDP.load('s01');
+    if(!p || p.completed || !(p.screen > 0)) return;
+    // Si l'écran sauvegardé est un quiz déjà répondu, on reprend à l'écran suivant.
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9}; // écran quiz -> écran suivant
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3}; // écran quiz -> index quiz
+    let target = p.screen;
+    if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){
+      target = QUIZ_NEXT[target];
+    }
+    const b = document.getElementById('resumebtn');
+    b.textContent = 'Reprendre où j\'en étais';
+    b.style.display = 'block';
+    b.onclick = ()=>{
+      score = p.score || 0;
+      streakBest = p.streakBest || 0;
+      (p.results || []).forEach((r,i)=>{ results[i] = r; });
+      t0 = Date.now() - (p.elapsed || 0);
+      PDT.track('resume', {screen: target});
+      go(target);
+    };
+  })();
 </script>
 </body>
 </html>

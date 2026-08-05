@@ -34,10 +34,21 @@ paiement-decrypte/
 Chaque mise à jour = re-glisser le fichier modifié (ou `git push`) : le site
 se redéploie tout seul en ~1 min.
 
+## Télémétrie (session 2 — fait)
+
+`assets/telemetry.js` émet des événements **anonymes, sans cookie** :
+`ep_start`, `screen_view`/`screen_time` (temps par écran), `quiz_answer`
+(bonne/mauvaise), `interactive_used`, `drop` (abandon + dernier écran vu),
+`complete` (score + temps), `resume`, `share`.
+Tant que `ENDPOINT` est vide dans `telemetry.js`, les événements s'affichent
+seulement dans la console du navigateur (F12) — rien n'est envoyé.
+`assets/progress.js` gère la reprise d'épisode en localStorage (bouton
+« Reprendre où j'en étais » sur la cover).
+
 ## Plus tard (ne pas faire maintenant)
 
-- **Session 2** : `assets/telemetry.js` (événements anonymes) + `assets/progress.js`
-  (progression localStorage), intégrés au template épisode.
+- **Session 3** : créer le Google Sheet + Apps Script, coller l'URL de
+  déploiement dans `ENDPOINT` (en tête de `assets/telemetry.js`).
 - **Session 4** : remplacer le formulaire placeholder de `index.html`
   (marqueur `KIT_FORM` dans le code) par l'endpoint Kit.
 - **Session 5 — domaine** : acheter `paiement-decrypte.fr` (OVH ou Gandi, ~8 €/an) →
