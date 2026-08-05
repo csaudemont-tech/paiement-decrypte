@@ -175,13 +175,13 @@
   <section class="signup">
     <h2>Le prochain épisode, dans votre boîte mail.</h2>
     <p>Un email par épisode, rien d'autre. Désinscription en un clic.</p>
-    <!-- KIT_FORM : remplacer l'action par l'endpoint Kit en session 4 -->
+    <!-- KIT_FORM : branché sur le formulaire Kit n°9768048 (session 4) -->
     <form id="signup-form" novalidate>
-      <input type="email" name="email" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
+      <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
       <button type="submit">Me prévenir</button>
     </form>
-    <p class="ok" id="signup-ok">Merci ! Les inscriptions ouvrent au lancement — revenez très vite.</p>
-    <p class="note">Double opt-in : vous confirmerez votre adresse par email.</p>
+    <p class="ok" id="signup-ok"></p>
+    <p class="note">Double opt-in : vous confirmerez votre adresse par email. Désinscription en un clic.</p>
   </section>
 
   <footer>
@@ -191,13 +191,15 @@
   </footer>
 
 </div>
+<script src="assets/subscribe.js"></script>
 <script>
-  // Placeholder jusqu'au branchement Kit (session 4) :
-  // affiche une confirmation sans envoyer de donnée nulle part.
-  document.getElementById('signup-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    document.getElementById('signup-ok').classList.add('show');
-    this.querySelector('button').disabled = true;
+  PDSubscribe.bind(document.getElementById('signup-form'), function(ok, msg){
+    var el = document.getElementById('signup-ok');
+    el.textContent = ok
+      ? 'Presque fait ! Ouvrez votre boîte mail et cliquez sur le lien de confirmation.'
+      : (msg || 'Une erreur est survenue — réessayez.');
+    el.style.color = ok ? '' : '#E85C4A';
+    el.classList.add('show');
   });
 </script>
 </body>

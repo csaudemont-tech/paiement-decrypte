@@ -219,6 +219,21 @@
   }
   .teaser b{color:#fff}
   .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+  .teaser form{display:flex;gap:8px;margin-top:14px}
+  .teaser input{
+    flex:1;min-width:0;font:inherit;font-size:14px;padding:11px 14px;border-radius:10px;
+    border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
+  }
+  .teaser input::placeholder{color:#7286A0}
+  .teaser input:focus{border-color:var(--mint)}
+  .teaser form button{
+    font:inherit;font-weight:600;font-size:14px;color:var(--ink);
+    background:var(--mint);border:0;border-radius:10px;padding:11px 14px;cursor:pointer;white-space:nowrap;
+  }
+  .teaser form button:disabled{opacity:.6}
+  .teaser .sub-note{font-size:11.5px;color:#7286A0;margin-top:8px}
+  .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
+  .teaser .sub-ok.show{display:block}
 
   /* ---------- Confetti (sans faute) ---------- */
   .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
@@ -399,6 +414,12 @@
       <div class="teaser">
         <div class="kicker">Prochain épisode</div>
         <b>S02 · L'interchange</b> — Sur vos 60 € de courses, combien partent en commissions entre banques ? Faites votre pari. Réponse au prochain épisode — et pourquoi Bruxelles a dû s'en mêler.
+        <form id="ep-signup" novalidate>
+          <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
+          <button type="submit">Recevoir S02</button>
+        </form>
+        <p class="sub-ok" id="ep-signup-ok"></p>
+        <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>
       </div>
     </div>
     <div class="cta-zone">
@@ -420,6 +441,7 @@
 
 <script src="../assets/telemetry.js"></script>
 <script src="../assets/progress.js"></script>
+<script src="../assets/subscribe.js"></script>
 <script>
   // Wrappers sûrs : si les assets ne chargent pas, l'épisode fonctionne quand même.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
@@ -584,6 +606,19 @@
       });
     }
     PDT.track('share', {score});
+  }
+
+  // ---- Abonnement fin d'épisode (subscribe.js) ----
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
+      var el = document.getElementById('ep-signup-ok');
+      el.textContent = ok
+        ? 'Presque fait ! Confirmez via l\'email qui vient de partir.'
+        : (msg || 'Une erreur est survenue — réessayez.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+      if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu — jamais l'email
+    });
   }
 
   // ---- Reprise (progress.js) ----
