@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>S01 · Les schemes de paiement</title>
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<title>S01 · Card schemes — Payment Decrypted</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
@@ -252,7 +252,7 @@
   .cta.ghost:not(:disabled):active{background:#EDF1FB}
 </style>
 </head>
-<body data-ep="s01">
+<body data-ep="s01-en">
 <div class="app">
 
   <div class="topbar" id="topbar" style="visibility:hidden">
@@ -264,7 +264,7 @@
   <!-- 0 · COVER -->
   <section class="screen cover active" data-step="cover">
     <div>
-      <div class="kicker">Micro-formation · Épisode 01</div>
+      <div class="kicker">Micro-lesson · Episode 01</div>
       <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
         <defs>
           <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
@@ -277,158 +277,162 @@
         <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
         <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
       </svg>
-      <h1>Les schemes de paiement</h1>
-      <p style="margin-top:14px">Visa, Mastercard, CB : tout le monde connaît les logos, peu savent ce qu'il y a derrière. En 5 minutes, comprenez le rôle exact d'un scheme — et qui fait quoi dans une transaction carte.</p>
+      <h1>Card schemes</h1>
+      <p style="margin-top:14px">Visa, Mastercard, CB: everyone knows the logos, few know what's behind them. In 5 minutes, understand exactly what a scheme does — and who does what in a card transaction.</p>
       <div class="cover-meta">
-        <span><b>5 min</b> · lecture</span>
+        <span><b>5 min</b> · read</span>
         <span><b>4</b> concepts</span>
-        <span><b>4</b> quiz</span>
+        <span><b>4</b> quizzes</span>
       </div>
     </div>
     <div class="cta-zone">
-      <button class="cta" onclick="start()">Commencer</button>
+      <button class="cta" onclick="start()">Start</button>
       <button class="cta ghost" id="resumebtn" style="display:none"></button>
     </div>
   </section>
 
-  <!-- 1 · CONCEPT : définition -->
+  <!-- 1 · CONCEPT -->
   <section class="screen" data-step="1">
     <div class="concept-card">
       <div class="kicker">Concept 1 / 4</div>
-      <h2>Un scheme, c'est un réseau — pas une banque</h2>
-      <p>Un scheme (Visa, Mastercard, CB, UnionPay…) est l'organisation qui <strong>opère le réseau</strong> reliant des milliers de banques entre elles, <strong>édicte les règles</strong> du jeu, et <strong>porte la marque</strong> que porteurs et marchands reconnaissent.</p>
-      <p>Ce qu'il ne fait pas : il n'émet pas de cartes, n'accorde pas de crédit, ne détient pas l'argent des transactions. Ça, ce sont les banques.</p>
-      <div class="keyfact">💡 <b>À retenir :</b> le scheme est l'arbitre et l'infrastructure du match — jamais un joueur qui touche le ballon (l'argent).</div>
+      <h2>A scheme is a network — not a bank</h2>
+      <p>A scheme (Visa, Mastercard, CB, UnionPay…) is the organisation that <strong>operates the network</strong> connecting thousands of banks, <strong>sets the rules</strong> of the game, and <strong>owns the brand</strong> that cardholders and merchants recognise.</p>
+      <p>What it doesn't do: it doesn't issue cards, doesn't grant credit, and never holds the money moving through transactions. That's the banks' job.</p>
+      <div class="keyfact">💡 <b>Remember:</b> the scheme is the referee and the pitch — never a player who touches the ball (the money).</div>
     </div>
-    <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Check I've got it</button></div>
   </section>
 
   <!-- 2 · QUIZ 1 -->
   <section class="screen" data-step="2">
     <div class="qnum">QUIZ 1 / 4</div>
-    <div class="question">Lequel de ces rôles n'est PAS celui d'un scheme ?</div>
+    <div class="question">Which of these is NOT a scheme's role?</div>
     <div class="options" data-quiz="0" data-answer="1" data-next="3">
-      <button class="opt">Définir les règles du réseau</button>
-      <button class="opt">Accorder un crédit au porteur de la carte</button>
-      <button class="opt">Fixer les taux d'interchange par défaut</button>
-      <button class="opt">Gérer la marque et son acceptation</button>
+      <button class="opt">Setting the network's rules</button>
+      <button class="opt">Granting credit to the cardholder</button>
+      <button class="opt">Setting default interchange rates</button>
+      <button class="opt">Managing the brand and its acceptance</button>
     </div>
   </section>
 
-  <!-- 3 · CONCEPT : 4 coins -->
+  <!-- 3 · CONCEPT : four-party model -->
   <section class="screen" data-step="3">
     <div class="concept-card" style="padding-bottom:16px">
       <div class="kicker">Concept 2 / 4</div>
-      <h2>Le modèle à 4 coins</h2>
-      <p>Chaque paiement carte fait circuler l'information entre <strong>4 acteurs</strong> — et le scheme au milieu, qui les connecte tous.</p>
+      <h2>The four-party model</h2>
+      <p>Every card payment moves information between <strong>4 players</strong> — with the scheme in the middle, connecting them all.</p>
     </div>
     <div class="diagram">
       <div class="diagram-grid">
-        <div class="actor" id="a-porteur">🧍 Porteur<small>le client</small></div>
-        <div class="actor" id="a-marchand">🏪 Marchand<small>le commerçant</small></div>
-        <div class="actor" id="a-emetteur">🏦 Émetteur<small>banque du client</small></div>
-        <div class="actor" id="a-acquereur">🏦 Acquéreur<small>banque du marchand</small></div>
-        <div class="actor scheme" id="a-scheme">◈ SCHEME<small>le réseau au centre</small></div>
+        <div class="actor" id="a-porteur">🧍 Cardholder<small>the customer</small></div>
+        <div class="actor" id="a-marchand">🏪 Merchant<small>the shop</small></div>
+        <div class="actor" id="a-emetteur">🏦 Issuer<small>customer's bank</small></div>
+        <div class="actor" id="a-acquereur">🏦 Acquirer<small>merchant's bank</small></div>
+        <div class="actor scheme" id="a-scheme">◈ SCHEME<small>the network in the middle</small></div>
       </div>
-      <div class="flow-caption" id="flowcap">Suivez le trajet d'un paiement de 60 € — appuyez sur le bouton.</div>
-      <button class="flow-btn" id="flowbtn" onclick="stepFlow()">▶ Lancer le paiement</button>
+      <div class="flow-caption" id="flowcap">Follow a €60 payment step by step — tap the button.</div>
+      <button class="flow-btn" id="flowbtn" onclick="stepFlow()">▶ Run the payment</button>
     </div>
-    <div class="cta-zone"><button class="cta" id="next-flow" disabled onclick="go(4)">Continuer</button></div>
+    <div class="cta-zone"><button class="cta" id="next-flow" disabled onclick="go(4)">Continue</button></div>
   </section>
 
   <!-- 4 · QUIZ 2 -->
   <section class="screen" data-step="4">
     <div class="qnum">QUIZ 2 / 4</div>
-    <div class="question">Dans le modèle à 4 coins, qui paie l'interchange, et à qui ?</div>
+    <div class="question">In the four-party model, who pays interchange, and to whom?</div>
     <div class="options" data-quiz="1" data-answer="1" data-next="5">
-      <button class="opt">Le porteur → à l'émetteur</button>
-      <button class="opt">L'acquéreur → à l'émetteur</button>
-      <button class="opt">L'émetteur → à l'acquéreur</button>
-      <button class="opt">Le marchand → au scheme</button>
+      <button class="opt">The cardholder → to the issuer</button>
+      <button class="opt">The acquirer → to the issuer</button>
+      <button class="opt">The issuer → to the acquirer</button>
+      <button class="opt">The merchant → to the scheme</button>
     </div>
   </section>
 
-  <!-- 5 · CONCEPT : ce que fait le scheme -->
+  <!-- 5 · CONCEPT : what a scheme sells -->
   <section class="screen" data-step="5">
     <div class="concept-card">
       <div class="kicker">Concept 3 / 4</div>
-      <h2>Concrètement, le scheme vend 4 choses</h2>
-      <p><strong>1 · Des règles communes.</strong> Formats de messages, sécurité, délais : tout le monde parle la même langue, partout dans le monde.</p>
-      <p><strong>2 · La compensation.</strong> Il calcule qui doit combien à qui chaque jour entre des milliers de banques, et orchestre le règlement.</p>
-      <p><strong>3 · L'arbitrage.</strong> Litige, fraude, chargeback : c'est le règlement du scheme qui tranche entre émetteur et acquéreur.</p>
-      <p><strong>4 · La marque.</strong> Le logo sur la vitrine qui garantit au porteur que sa carte passera.</p>
-      <div class="keyfact">💡 <b>Son revenu :</b> les scheme fees, facturés aux banques membres — à ne pas confondre avec l'interchange, qui va à l'émetteur.</div>
+      <h2>Concretely, a scheme sells 4 things</h2>
+      <p><strong>1 · Common rules.</strong> Message formats, security, timelines: everyone speaks the same language, everywhere in the world.</p>
+      <p><strong>2 · Clearing.</strong> It works out who owes what to whom, every day, across thousands of banks — and orchestrates settlement.</p>
+      <p><strong>3 · Arbitration.</strong> Disputes, fraud, chargebacks: the scheme's rulebook decides between issuer and acquirer.</p>
+      <p><strong>4 · The brand.</strong> The logo on the shop window that guarantees the cardholder their card will work.</p>
+      <div class="keyfact">💡 <b>Its revenue:</b> scheme fees, charged to member banks — not to be confused with interchange, which goes to the issuer.</div>
     </div>
-    <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Check I've got it</button></div>
   </section>
 
   <!-- 6 · QUIZ 3 -->
   <section class="screen" data-step="6">
     <div class="qnum">QUIZ 3 / 4</div>
-    <div class="question">Un client conteste un paiement (chargeback). Selon quelles règles le litige est-il arbitré ?</div>
+    <div class="question">A customer disputes a payment (chargeback). Whose rules govern the dispute?</div>
     <div class="options" data-quiz="2" data-answer="2" data-next="7">
-      <button class="opt">Celles de la banque du marchand</button>
-      <button class="opt">Celles de la Banque centrale européenne</button>
-      <button class="opt">Celles du scheme utilisé pour la transaction</button>
-      <button class="opt">Celles du fabricant du terminal</button>
+      <button class="opt">The merchant's bank's</button>
+      <button class="opt">The European Central Bank's</button>
+      <button class="opt">Those of the scheme used for the transaction</button>
+      <button class="opt">The terminal manufacturer's</button>
     </div>
   </section>
 
-  <!-- 7 · CONCEPT : CB et co-badgeage -->
+  <!-- 7 · CONCEPT : CB and co-badging -->
   <section class="screen" data-step="7">
     <div class="concept-card">
-      <div class="kicker">Concept 4 / 4 · Spécificité française</div>
-      <h2>CB : le scheme domestique, et le co-badgeage</h2>
-      <p>La France a son propre scheme : <strong>CB (Cartes Bancaires)</strong>, créé par les banques françaises. La plupart des cartes françaises sont <strong>co-badgées</strong> : CB <em>et</em> Visa (ou Mastercard) sur la même carte.</p>
-      <p>En France, la transaction passe en priorité par CB (coûts plus bas pour le marchand) ; à l'étranger, le badge international prend le relais.</p>
-      <div class="keyfact">💡 <b>Depuis le règlement européen IFR (2015)</b>, le consommateur peut imposer la marque de son choix au point de vente — le marchand peut prédéfinir une priorité, mais pas l'imposer.</div>
+      <div class="kicker">Concept 4 / 4 · The French twist</div>
+      <h2>CB: France's domestic scheme, and co-badging</h2>
+      <p>France runs its own scheme: <strong>CB (Cartes Bancaires)</strong>, created by the French banks. Most French cards are <strong>co-badged</strong>: CB <em>and</em> Visa (or Mastercard) on the same card.</p>
+      <p>In France, transactions run through CB by default (cheaper for the merchant); abroad, the international badge takes over.</p>
+      <div class="keyfact">💡 <b>Since the EU Interchange Fee Regulation (IFR, 2015)</b>, the consumer can impose the brand of their choice at the point of sale — the merchant may pre-set a default, but cannot force it.</div>
     </div>
-    <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Last question</button></div>
   </section>
 
   <!-- 8 · QUIZ 4 -->
   <section class="screen" data-step="8">
     <div class="qnum">QUIZ 4 / 4</div>
-    <div class="question">Carte co-badgée CB/Visa en France : qui a le dernier mot sur la marque utilisée au point de vente ?</div>
+    <div class="question">A CB/Visa co-badged card in France: who has the final say on which brand is used at the point of sale?</div>
     <div class="options" data-quiz="3" data-answer="2" data-next="9">
-      <button class="opt">L'émetteur de la carte</button>
-      <button class="opt">Le scheme le plus cher</button>
-      <button class="opt">Le consommateur, s'il exprime un choix</button>
-      <button class="opt">Le terminal, aléatoirement</button>
+      <button class="opt">The card issuer</button>
+      <button class="opt">The most expensive scheme</button>
+      <button class="opt">The consumer, if they express a choice</button>
+      <button class="opt">The terminal, at random</button>
     </div>
   </section>
 
   <!-- 9 · RECAP -->
   <section class="screen" data-step="9">
     <div>
-      <div class="kicker">Épisode terminé</div>
+      <div class="kicker">Episode complete</div>
       <div class="score-big" id="scoreval">–</div>
       <div class="score-label" id="scoremsg">SCORE</div>
       <div class="stats">
         <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
-        <div class="stat"><b id="stat-time">–</b><span>TEMPS</span></div>
-        <div class="stat"><b id="stat-best">–</b><span>SÉRIE MAX</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TIME</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>BEST STREAK</span></div>
       </div>
       <div class="recap-list" id="recaplist">
-        <div class="recap-item" data-q="0">Le scheme est un réseau + des règles + une marque. Jamais une banque.</div>
-        <div class="recap-item" data-q="1">4 coins : porteur, marchand, émetteur, acquéreur — le scheme les relie tous.</div>
-        <div class="recap-item" data-q="2">L'interchange va à l'émetteur ; les scheme fees vont au scheme.</div>
-        <div class="recap-item" data-q="3">En France : CB en domestique, co-badgeage, et le consommateur choisit (IFR).</div>
+        <div class="recap-item" data-q="0">A scheme is a network + rules + a brand. Never a bank.</div>
+        <div class="recap-item" data-q="1">Four parties: cardholder, merchant, issuer, acquirer — the scheme connects them all.</div>
+        <div class="recap-item" data-q="2">Interchange goes to the issuer; scheme fees go to the scheme.</div>
+        <div class="recap-item" data-q="3">In France: CB at home, co-badging, and the consumer chooses (IFR).</div>
       </div>
       <div class="teaser">
-        <div class="kicker">Prochain épisode</div>
-        <b>S02 · L'interchange</b> — Sur vos 60 € de courses, combien partent en commissions entre banques ? Faites votre pari. Réponse au prochain épisode — et pourquoi Bruxelles a dû s'en mêler.
-        <form id="ep-signup" novalidate>
-          <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
-          <button type="submit">Recevoir S02</button>
+        <div class="kicker">Next episode</div>
+        <b>S02 · Interchange</b> — Of your €60 of groceries, how much leaks away in bank-to-bank fees? Place your bet. The answer in the next episode — and why Brussels had to step in.
+        <form id="ep-signup" novalidate
+              data-sending="Sending…" data-sent="Sent ✓"
+              data-msg-invalid="Please enter a valid email address."
+              data-msg-rejected="Subscription failed — check the address and try again."
+              data-msg-network="Couldn't send — check your connection and try again.">
+          <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
+          <button type="submit">Get S02</button>
         </form>
         <p class="sub-ok" id="ep-signup-ok"></p>
-        <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>
+        <p class="sub-note">One email per episode, nothing else. Double opt-in, one-click unsubscribe.</p>
       </div>
     </div>
     <div class="cta-zone">
-      <button class="cta" id="sharebtn" onclick="shareScore()">Partager mon score</button>
-      <button class="cta ghost" onclick="location.reload()">Refaire l'épisode</button>
+      <button class="cta" id="sharebtn" onclick="shareScore()">Share my score</button>
+      <button class="cta ghost" onclick="location.reload()">Play again</button>
     </div>
   </section>
 
@@ -439,15 +443,15 @@
   <div class="sheet-inner">
     <div class="sheet-title" id="sheet-title"></div>
     <div class="sheet-text" id="sheet-text"></div>
-    <button class="cta" id="sheet-cta">Continuer</button>
+    <button class="cta" id="sheet-cta">Continue</button>
   </div>
 </div>
 
-<script src="../assets/telemetry.js"></script>
-<script src="../assets/progress.js"></script>
-<script src="../assets/subscribe.js"></script>
+<script src="../../assets/telemetry.js"></script>
+<script src="../../assets/progress.js"></script>
+<script src="../../assets/subscribe.js"></script>
 <script>
-  // Wrappers sûrs : si les assets ne chargent pas, l'épisode fonctionne quand même.
+  // Safe wrappers: the episode still works if the assets fail to load.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
   const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
 
@@ -467,7 +471,7 @@
     current = n;
     PDT.screen(order[n]);
     if(n > 0 && order[n] !== '9'){
-      PDP.save('s01', {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+      PDP.save('s01-en', {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
     }
     document.getElementById('sheet').classList.remove('show','good','bad');
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -483,17 +487,17 @@
 
   // ---- Quiz ----
   const EXPLAIN = [
-    {good:"Le crédit, c'est l'émetteur — la banque du porteur. Le scheme ne prête pas un centime.",
-     bad:"Le crédit est accordé par l'<b>émetteur</b> (la banque du porteur). Le scheme fixe les règles, l'interchange par défaut et gère la marque, mais ne touche jamais à l'argent du client."},
-    {good:"L'acquéreur reverse l'interchange à l'émetteur — c'est le coût que le marchand retrouve dans sa commission.",
-     bad:"C'est l'<b>acquéreur qui paie l'interchange à l'émetteur</b>, sur chaque transaction. Il le répercute ensuite au marchand dans sa commission (MSC)."},
-    {good:"Chaque scheme publie son règlement litiges — c'est lui l'arbitre entre émetteur et acquéreur.",
-     bad:"C'est le <b>règlement du scheme</b> qui s'applique. Visa, Mastercard et CB ont chacun leurs procédures de chargeback qui s'imposent aux banques membres."},
-    {good:"Depuis le règlement IFR de 2015, le choix exprimé par le consommateur prime sur la priorité du marchand.",
-     bad:"Depuis le <b>règlement européen IFR (2015)</b>, si le consommateur exprime un choix de marque, ce choix s'impose. Le marchand peut seulement prédéfinir une priorité par défaut."}
+    {good:"Credit is the issuer's job — the cardholder's bank. The scheme doesn't lend a cent.",
+     bad:"Credit is granted by the <b>issuer</b> (the cardholder's bank). The scheme sets the rules, default interchange rates and manages the brand — but never touches the customer's money."},
+    {good:"The acquirer pays interchange to the issuer — a cost the merchant finds again in its fees.",
+     bad:"The <b>acquirer pays interchange to the issuer</b>, on every transaction. It then passes it on to the merchant inside the merchant service charge (MSC)."},
+    {good:"Each scheme publishes its dispute rulebook — it's the referee between issuer and acquirer.",
+     bad:"The <b>scheme's rulebook</b> applies. Visa, Mastercard and CB each have chargeback procedures that bind their member banks."},
+    {good:"Since the 2015 IFR, the consumer's expressed choice overrides the merchant's default.",
+     bad:"Under the <b>EU Interchange Fee Regulation (IFR, 2015)</b>, if the consumer expresses a brand choice, that choice prevails. The merchant can only pre-set a default priority."}
   ];
-  const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
-  const BAD_TITLES = ["Le piège classique","Contre-intuitif — vous n'êtes pas seul","Pas tout à fait","Surprenant, non ?"];
+  const GOOD_TITLES = ["Correct!","Nice one!","Flawless!","Exactly!"];
+  const BAD_TITLES = ["The classic trap","Counter-intuitive — you're not alone","Not quite","Surprising, right?"];
 
   document.querySelectorAll('.options').forEach(block=>{
     const qi = +block.dataset.quiz;
@@ -510,17 +514,15 @@
         btn.classList.add(good?'correct':'wrong');
         if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
         if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
-        // streak chip
         const st = document.getElementById('streak');
         if(streakNow >= 2){ st.textContent = '✓ ×' + streakNow; st.classList.add('on'); }
         else { st.classList.remove('on'); }
-        // feedback sheet
         const sheet = document.getElementById('sheet');
         document.getElementById('sheet-title').textContent =
           good ? '✓ ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '✗ ' + BAD_TITLES[qi];
         document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
         const cta = document.getElementById('sheet-cta');
-        cta.textContent = next===9 ? 'Voir mon score' : 'Continuer';
+        cta.textContent = next===9 ? 'See my score' : 'Continue';
         cta.onclick = ()=>go(next);
         sheet.classList.add('show', good?'good':'bad');
         sheet.classList.remove(good?'bad':'good');
@@ -528,13 +530,13 @@
     });
   });
 
-  // ---- Diagramme 4 coins ----
+  // ---- Four-party diagram ----
   const FLOW = [
-    {lit:['a-porteur','a-marchand'], txt:"<b>1.</b> Le porteur présente sa carte au marchand — 60 € au terminal."},
-    {lit:['a-marchand','a-acquereur'], txt:"<b>2.</b> Le terminal envoie la demande d'autorisation à l'acquéreur."},
-    {lit:['a-acquereur','a-scheme'], txt:"<b>3.</b> L'acquéreur route la demande via le <b>scheme</b>…"},
-    {lit:['a-scheme','a-emetteur'], txt:"<b>4.</b> …qui la transmet à l'émetteur. Celui-ci vérifie solde, plafond, fraude → <b>autorisation</b>."},
-    {lit:['a-scheme'], txt:"<b>5.</b> Plus tard : le scheme orchestre compensation et règlement. L'argent circule entre banques — jamais par le scheme."}
+    {lit:['a-porteur','a-marchand'], txt:"<b>1.</b> The cardholder presents their card to the merchant — €60 at the terminal."},
+    {lit:['a-marchand','a-acquereur'], txt:"<b>2.</b> The terminal sends the authorisation request to the acquirer."},
+    {lit:['a-acquereur','a-scheme'], txt:"<b>3.</b> The acquirer routes the request through the <b>scheme</b>…"},
+    {lit:['a-scheme','a-emetteur'], txt:"<b>4.</b> …which passes it to the issuer. It checks balance, limits, fraud → <b>authorisation</b>."},
+    {lit:['a-scheme'], txt:"<b>5.</b> Later: the scheme orchestrates clearing and settlement. Money moves between banks — never through the scheme."}
   ];
   let flowStep = -1, flowTracked = false;
   function stepFlow(){
@@ -543,14 +545,14 @@
     if(flowStep >= FLOW.length){
       flowStep = -1;
       document.querySelectorAll('.actor').forEach(a=>a.classList.remove('lit'));
-      document.getElementById('flowcap').innerHTML = "Rejouez le trajet si besoin, puis continuez.";
-      document.getElementById('flowbtn').textContent = "▶ Rejouer le paiement";
+      document.getElementById('flowcap').innerHTML = "Replay the journey if you like, then continue.";
+      document.getElementById('flowbtn').textContent = "▶ Replay the payment";
       return;
     }
     document.querySelectorAll('.actor').forEach(a=>a.classList.remove('lit'));
     FLOW[flowStep].lit.forEach(id=>document.getElementById(id).classList.add('lit'));
     document.getElementById('flowcap').innerHTML = FLOW[flowStep].txt;
-    document.getElementById('flowbtn').textContent = flowStep===FLOW.length-1 ? "Terminer" : "▶ Étape suivante";
+    document.getElementById('flowbtn').textContent = flowStep===FLOW.length-1 ? "Finish" : "▶ Next step";
     if(flowStep===FLOW.length-1) document.getElementById('next-flow').disabled = false;
   }
 
@@ -561,12 +563,12 @@
   }
   function showScore(){
     PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
-    PDP.save('s01', {completed:true, screen:9, score, streakBest, results});
+    PDP.save('s01-en', {completed:true, screen:9, score, streakBest, results});
     document.getElementById('scoreval').textContent = score + " / 4";
-    const msg = score===4 ? "SANS FAUTE — NIVEAU EXPERT" :
-                score>=3 ? "SOLIDE — LES BASES SONT LÀ" :
-                score>=2 ? "CORRECT — RELISEZ LES CONCEPTS 2 ET 3" :
-                "À REVOIR — REFAITES L'ÉPISODE";
+    const msg = score===4 ? "PERFECT — EXPERT LEVEL" :
+                score>=3 ? "SOLID — YOU'VE GOT THE BASICS" :
+                score>=2 ? "FAIR — REVISIT CONCEPTS 2 AND 3" :
+                "WORTH A REPLAY";
     document.getElementById('scoremsg').textContent = msg;
     document.getElementById('stat-score').textContent = score + '/4';
     document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '–';
@@ -595,49 +597,48 @@
     setTimeout(()=>c.remove(), 4500);
   }
 
-  // ---- Partage façon Wordle ----
+  // ---- Wordle-style share ----
   function shareScore(){
     const grid = results.map(r=>r?'🟩':'🟥').join('');
     const time = t0 ? fmtTime(Date.now()-t0) : '';
-    const txt = `S01 · Les schemes de paiement — ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.`;
+    const txt = `S01 · Card schemes — ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.`;
     const btn = document.getElementById('sharebtn');
     if(navigator.share){
       navigator.share({text:txt}).catch(()=>{});
     } else if(navigator.clipboard){
       navigator.clipboard.writeText(txt).then(()=>{
-        btn.textContent = 'Copié ✓ — collez-le où vous voulez';
-        setTimeout(()=>btn.textContent='Partager mon score', 2500);
+        btn.textContent = 'Copied ✓ — paste it anywhere';
+        setTimeout(()=>btn.textContent='Share my score', 2500);
       });
     }
     PDT.track('share', {score});
   }
 
-  // ---- Abonnement fin d'épisode (subscribe.js) ----
+  // ---- End-of-episode signup (subscribe.js) ----
   if(window.PDSubscribe){
     PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
       var el = document.getElementById('ep-signup-ok');
       el.textContent = ok
-        ? 'Presque fait ! Confirmez via l\'email qui vient de partir.'
-        : (msg || 'Une erreur est survenue — réessayez.');
+        ? 'Almost there! Confirm via the email we just sent.'
+        : (msg || 'Something went wrong — please try again.');
       el.style.color = ok ? '' : '#E85C4A';
       el.classList.add('show');
-      if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu — jamais l'email
+      if(ok) PDT.track('subscribe_ok'); // the fact a signup happened — never the email itself
     });
   }
 
-  // ---- Reprise (progress.js) ----
+  // ---- Resume (progress.js) ----
   (function(){
-    const p = PDP.load('s01');
+    const p = PDP.load('s01-en');
     if(!p || p.completed || !(p.screen > 0)) return;
-    // Si l'écran sauvegardé est un quiz déjà répondu, on reprend à l'écran suivant.
-    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9}; // écran quiz -> écran suivant
-    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3}; // écran quiz -> index quiz
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9};
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3};
     let target = p.screen;
     if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){
       target = QUIZ_NEXT[target];
     }
     const b = document.getElementById('resumebtn');
-    b.textContent = 'Reprendre où j\'en étais';
+    b.textContent = 'Pick up where I left off';
     b.style.display = 'block';
     b.onclick = ()=>{
       score = p.score || 0;
