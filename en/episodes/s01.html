@@ -6,6 +6,8 @@
 <title>S1 · E01 · Card schemes — Payment Decrypted</title>
 <meta name="description" content="Visa, Mastercard, CB: what a card scheme actually does and the four-party model, explained in 5 minutes with quizzes — by following a €60 payment.">
 <link rel="canonical" href="https://paiement-decrypte.fr/en/episodes/s01.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s01.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s01.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Payment Decrypted">
 <meta property="og:locale" content="en_GB">
@@ -346,7 +348,7 @@
         <div class="actor" id="a-acquereur">🏦 Acquirer<small>merchant's bank</small></div>
         <div class="actor scheme" id="a-scheme">◈ SCHEME<small>the network in the middle</small></div>
       </div>
-      <div class="flow-caption" id="flowcap">Follow a €60 payment step by step — tap the button.</div>
+      <div class="flow-caption" id="flowcap" aria-live="polite">Follow a €60 payment step by step — tap the button.</div>
       <button class="flow-btn" id="flowbtn" onclick="stepFlow()">▶ Run the payment</button>
     </div>
     <div class="cta-zone"><button class="cta" id="next-flow" disabled onclick="go(4)">Continue</button></div>
@@ -442,7 +444,7 @@
           <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
           <button type="submit">Get E02</button>
         </form>
-        <p class="sub-ok" id="ep-signup-ok"></p>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
         <p class="sub-note">One email per episode, nothing else. Double opt-in, one-click unsubscribe.</p>
       </div>
     </div>
@@ -455,7 +457,7 @@
 </div>
 
 <!-- Feedback sheet -->
-<div class="sheet" id="sheet">
+<div class="sheet" id="sheet" aria-live="polite">
   <div class="sheet-inner">
     <div class="sheet-title" id="sheet-title"></div>
     <div class="sheet-text" id="sheet-text"></div>

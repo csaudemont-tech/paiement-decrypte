@@ -6,6 +6,8 @@
 <title>S1 · E01 · Les schemes de paiement</title>
 <meta name="description" content="Visa, Mastercard, CB : le rôle exact d'un réseau de paiement et le modèle à 4 coins, expliqués en 5 minutes avec quiz – en suivant un paiement de 60 €.">
 <link rel="canonical" href="https://paiement-decrypte.fr/episodes/s01.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s01.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s01.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Paiement Décrypté">
 <meta property="og:locale" content="fr_FR">
@@ -368,7 +370,7 @@
         <div class="actor" id="a-acquereur">🏦 Acquéreur<small>banque du marchand</small></div>
         <div class="actor scheme" id="a-scheme">◈ RÉSEAU<small>Visa, Mastercard, CB…</small></div>
       </div>
-      <div class="flow-caption" id="flowcap">Suivez le trajet d'un paiement de 60 € – appuyez sur le bouton.</div>
+      <div class="flow-caption" id="flowcap" aria-live="polite">Suivez le trajet d'un paiement de 60 € – appuyez sur le bouton.</div>
       <button class="flow-btn" id="flowbtn" onclick="stepFlow()">▶ Lancer le paiement</button>
     </div>
     <div class="cta-zone"><button class="cta" id="next-flow" disabled onclick="go(4)">Continuer</button></div>
@@ -460,7 +462,7 @@
           <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
           <button type="submit">Recevoir E02</button>
         </form>
-        <p class="sub-ok" id="ep-signup-ok"></p>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
         <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>
       </div>
     </div>
@@ -473,7 +475,7 @@
 </div>
 
 <!-- Feedback sheet -->
-<div class="sheet" id="sheet">
+<div class="sheet" id="sheet" aria-live="polite">
   <div class="sheet-inner">
     <div class="sheet-title" id="sheet-title"></div>
     <div class="sheet-text" id="sheet-text"></div>
