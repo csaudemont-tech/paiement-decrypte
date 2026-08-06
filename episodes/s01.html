@@ -4,10 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>S1 · E01 · Les schemes de paiement</title>
+<meta name="description" content="Visa, Mastercard, CB : le rôle exact d'un réseau de paiement et le modèle à 4 coins, expliqués en 5 minutes avec quiz – en suivant un paiement de 60 €.">
+<link rel="canonical" href="https://paiement-decrypte.fr/episodes/s01.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Paiement Décrypté">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/episodes/s01.html">
+<meta property="og:title" content="S1 · E01 · Les schemes de paiement – Paiement Décrypté">
+<meta property="og:description" content="Visa, Mastercard, CB : le modèle à 4 coins expliqué en 5 minutes, avec quiz.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
 <style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
   :root{
     --bg:#F2F4F8;
     --ink:#0E1B2C;
@@ -388,7 +403,7 @@
   <!-- 6 · QUIZ 3 -->
   <section class="screen" data-step="6">
     <div class="qnum">QUIZ 3 / 4</div>
-    <div class="question">Un client conteste un paiement (chargeback). Selon quelles règles le litige est-il arbitré ?</div>
+    <div class="question">Un client conteste un paiement (chargeback). Selon les règles de quel acteur le litige est-il tranché ?</div>
     <div class="options" data-quiz="2" data-answer="2" data-next="7">
       <button class="opt">La banque du marchand</button>
       <button class="opt">La Banque centrale européenne</button>
@@ -473,6 +488,7 @@
   // Wrappers sûrs : si les assets ne chargent pas, l'épisode fonctionne quand même.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
   const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open'); // ouverture de la cover, avant tout clic
 
   let current = 0;
   let score = 0;
@@ -484,7 +500,7 @@
   const segWrap = document.getElementById('segments');
   for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
 
-  function start(){ t0 = Date.now(); PDT.track('ep_start'); go(1); }
+  function start(){ t0 = Date.now(); PDP.save('s01', {completed:false}); PDT.track('ep_start'); go(1); }
 
   function go(n){
     current = n;
@@ -586,9 +602,12 @@
     PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
     PDP.save('s01', {completed:true, screen:9, score, streakBest, results});
     document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const relire = missed.length===1 ? "RELISEZ LE CONCEPT "+missed[0]
+                 : "RELISEZ LES CONCEPTS "+missed.slice(0,-1).join(", ")+" ET "+missed[missed.length-1];
     const msg = score===4 ? "SANS FAUTE – NIVEAU EXPERT" :
-                score>=3 ? "SOLIDE – LES BASES SONT LÀ" :
-                score>=2 ? "CORRECT – RELISEZ LES CONCEPTS 2 ET 3" :
+                score>=3 ? "SOLIDE – "+relire+" ET C'EST PARFAIT" :
+                score>=2 ? "CORRECT – "+relire :
                 "À REVOIR – REFAITES L'ÉPISODE";
     document.getElementById('scoremsg').textContent = msg;
     document.getElementById('stat-score').textContent = score + '/4';
@@ -622,7 +641,7 @@
   function shareScore(){
     const grid = results.map(r=>r?'🟩':'🟥').join('');
     const time = t0 ? fmtTime(Date.now()-t0) : '';
-    const txt = `S1 · E01 · Les schemes de paiement – ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.`;
+    const txt = `S1 · E01 · Les schemes de paiement – ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.\npaiement-decrypte.fr`;
     const btn = document.getElementById('sharebtn');
     if(navigator.share){
       navigator.share({text:txt}).catch(()=>{});

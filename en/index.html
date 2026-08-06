@@ -5,12 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Payment Decrypted — payments explained from the field</title>
 <meta name="description" content="Interactive 5-minute micro-lessons on payments: card schemes, interchange, acquiring. The plumbing everyone uses and nobody explains.">
+<link rel="canonical" href="https://paiement-decrypte.fr/en/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Payment Decrypted">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/en/">
+<meta property="og:title" content="Payment Decrypted — payments explained from the field">
+<meta property="og:description" content="Interactive 5-minute micro-lessons on payments: card schemes, interchange, acquiring. Short concepts, quizzes, one interactive moment per episode.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-en.png">
 <link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/">
 <link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
 <style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
   :root{
     --bg:#F2F4F8;
     --ink:#0E1B2C;
@@ -38,15 +53,8 @@
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--ink-soft);
   }
-  /* masthead : segments façon numéro de carte */
-  .masthead{display:flex;align-items:center;gap:12px;margin-bottom:34px}
-  .masthead .segs{display:flex;gap:5px}
-  .masthead .segs i{width:14px;height:6px;border-radius:3px;background:var(--cobalt);display:block}
-  .masthead .segs i:nth-child(2){background:var(--mint)}
-  .masthead .segs i:nth-child(3){background:var(--coral)}
-  .masthead .segs i:nth-child(4){background:var(--line)}
-
-  .mark{width:44px;height:44px;display:block;margin-bottom:20px}
+  .masthead{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+  .mark{width:20px;height:20px;display:block;flex-shrink:0}
 
   h1{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
@@ -132,30 +140,28 @@
   }
   footer p + p{margin-top:8px}
   footer b{color:var(--ink);font-weight:600}
+  .lang{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
 </style>
-<style>.lang{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}</style>
 </head>
-<body>
+<body data-ep="home-en">
 <div class="app">
 
   <div class="masthead">
-    <div class="segs"><i></i><i></i><i></i><i></i></div>
+    <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+      <defs>
+        <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1F4FD8"/>
+          <stop offset="100%" stop-color="#17B587"/>
+        </linearGradient>
+      </defs>
+      <rect x="1.5" y="1.5" width="37" height="37" rx="9" fill="url(#markGrad)"/>
+      <rect x="9" y="11" width="22" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2.4"/>
+      <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
+      <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
+    </svg>
     <span class="eyebrow">Payment Decrypted</span>
     <a class="lang" href="../" hreflang="fr">FR</a>
   </div>
-
-  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
-    <defs>
-      <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#1F4FD8"/>
-        <stop offset="100%" stop-color="#17B587"/>
-      </linearGradient>
-    </defs>
-    <rect x="1.5" y="1.5" width="37" height="37" rx="9" fill="url(#markGrad)"/>
-    <rect x="9" y="11" width="22" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2.4"/>
-    <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
-    <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
-  </svg>
 
   <h1>Payments, <em>decrypted</em> from the field.</h1>
   <p class="lede">
@@ -169,16 +175,16 @@
     <p class="season-q">What really happens when a card pays &euro;60?</p>
 
     <a class="ep" href="episodes/s01.html">
-      <p class="ep-num"><span>S01</span><span class="dur">~5 min</span></p>
+      <p class="ep-num"><span>E01</span><span class="dur">~5 min</span></p>
       <h3>Card schemes</h3>
       <p>Visa, Mastercard, CB: everyone knows the logos, few know what&rsquo;s behind them. The four-party model, explained by following a &euro;60 payment.</p>
       <span class="ep-cta">Start the episode</span>
     </a>
 
     <div class="ep locked" aria-disabled="true">
-      <p class="ep-num"><span>S02</span><span class="dur">~5 min</span></p>
+      <p class="ep-num"><span>E02</span><span class="dur">~5 min</span></p>
       <h3>Interchange</h3>
-      <p>Who pays what on &euro;100 of card sales &mdash; payments&rsquo; most misunderstood fee.</p>
+      <p>Who pays what on &euro;60 of card sales &mdash; payments&rsquo; most misunderstood fee.</p>
       <span class="badge">COMING SOON</span>
     </div>
   </section>
@@ -186,7 +192,7 @@
   <section class="signup">
     <h2>The next episode, straight to your inbox.</h2>
     <p>One email per episode, nothing else. One-click unsubscribe.</p>
-    <form id="signup-form" novalidate
+    <form id="signup-form" novalidate data-kit-form="9773354"
           data-sending="Sending&hellip;" data-sent="Sent &#10003;"
           data-msg-invalid="Please enter a valid email address."
           data-msg-rejected="Subscription failed &mdash; check the address and try again."
@@ -205,16 +211,21 @@
   </footer>
 
 </div>
+<script src="../assets/telemetry.js"></script>
 <script src="../assets/subscribe.js"></script>
 <script>
-  PDSubscribe.bind(document.getElementById('signup-form'), function(ok, msg){
-    var el = document.getElementById('signup-ok');
-    el.textContent = ok
-      ? 'Almost there! Check your inbox and click the confirmation link.'
-      : (msg || 'Something went wrong — please try again.');
-    el.style.color = ok ? '' : '#E85C4A';
-    el.classList.add('show');
-  });
+  if(window.PD) PD.track('page_open');
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('signup-form'), function(ok, msg){
+      if(ok && window.PD) PD.track('subscribe_ok');
+      var el = document.getElementById('signup-ok');
+      el.textContent = ok
+        ? 'Almost there! Check your inbox and click the confirmation link.'
+        : (msg || 'Something went wrong — please try again.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+    });
+  }
 </script>
 </body>
 </html>

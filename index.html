@@ -5,12 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paiement Décrypté – le paiement expliqué depuis le terrain</title>
 <meta name="description" content="Micro-formations interactives de 5 minutes sur le paiement : schemes, interchange, acquiring, monétique. Le paiement que personne ne vulgarise.">
+<link rel="canonical" href="https://paiement-decrypte.fr/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Paiement Décrypté">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/">
+<meta property="og:title" content="Paiement Décrypté – le paiement expliqué depuis le terrain">
+<meta property="og:description" content="Micro-formations interactives de 5 minutes : schemes, interchange, acquiring, monétique. Concepts courts, quiz, un moment interactif par épisode.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
 <link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/">
 <link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
 <style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
   :root{
     --bg:#F2F4F8;
     --ink:#0E1B2C;
@@ -128,7 +142,7 @@
   footer b{color:var(--ink);font-weight:600}
 </style>
 </head>
-<body>
+<body data-ep="home">
 <div class="app">
 
   <div class="masthead">
@@ -157,7 +171,7 @@
 
   <section class="season">
     <p class="season-head">Saison 1 · Le circuit de l'argent</p>
-    <p class="season-q">Quel rôle ont les schemes dans un paiement&nbsp;?</p>
+    <p class="season-q">Quel rôle joue le réseau dans un paiement&nbsp;?</p>
 
     <a class="ep" href="episodes/s01.html">
       <p class="ep-num"><span>E01</span><span class="dur">~5 min</span></p>
@@ -169,7 +183,7 @@
     <div class="ep locked" aria-disabled="true">
       <p class="ep-num"><span>E02</span><span class="dur">~5 min</span></p>
       <h3>L'interchange</h3>
-      <p>Qui paie quoi sur 100&nbsp;€ encaissés – la commission la plus mal comprise du paiement.</p>
+      <p>Qui paie quoi sur les 60&nbsp;€ encaissés – la commission la plus mal comprise du paiement.</p>
       <span class="badge">BIENTÔT</span>
     </div>
   </section>
@@ -193,10 +207,13 @@
   </footer>
 
 </div>
+<script src="assets/telemetry.js"></script>
 <script src="assets/subscribe.js"></script>
 <script>
+  if(window.PD) PD.track('page_open');
   if(window.PDSubscribe){
     PDSubscribe.bind(document.getElementById('signup-form'), function(ok, msg){
+      if(ok && window.PD) PD.track('subscribe_ok');
       var el = document.getElementById('signup-ok');
       el.textContent = ok
         ? 'Presque fait ! Ouvrez votre boîte mail et cliquez sur le lien de confirmation.'

@@ -3,11 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>S01 · Card schemes — Payment Decrypted</title>
+<title>S1 · E01 · Card schemes — Payment Decrypted</title>
+<meta name="description" content="Visa, Mastercard, CB: what a card scheme actually does and the four-party model, explained in 5 minutes with quizzes — by following a €60 payment.">
+<link rel="canonical" href="https://paiement-decrypte.fr/en/episodes/s01.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Payment Decrypted">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/en/episodes/s01.html">
+<meta property="og:title" content="S1 · E01 · Card schemes — Payment Decrypted">
+<meta property="og:description" content="Visa, Mastercard, CB: the four-party model explained in 5 minutes, with quizzes.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-en.png">
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
 <style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
   :root{
     --bg:#F2F4F8;
     --ink:#0E1B2C;
@@ -256,7 +272,7 @@
 <div class="app">
 
   <div class="topbar" id="topbar" style="visibility:hidden">
-    <span class="eyebrow">S01</span>
+    <span class="eyebrow">S1 · E01</span>
     <div class="segments" id="segments"></div>
     <span class="streak" id="streak"></span>
   </div>
@@ -417,14 +433,14 @@
       </div>
       <div class="teaser">
         <div class="kicker">Next episode</div>
-        <b>S02 · Interchange</b> — Of your €60 of groceries, how much leaks away in bank-to-bank fees? Place your bet. The answer in the next episode — and why Brussels had to step in.
-        <form id="ep-signup" novalidate
+        <b>S1 · E02 · Interchange</b> — Of your €60 of groceries, how much leaks away in bank-to-bank fees? Place your bet. The answer in the next episode — and why Brussels had to step in.
+        <form id="ep-signup" novalidate data-kit-form="9773354"
               data-sending="Sending…" data-sent="Sent ✓"
               data-msg-invalid="Please enter a valid email address."
               data-msg-rejected="Subscription failed — check the address and try again."
               data-msg-network="Couldn't send — check your connection and try again.">
           <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
-          <button type="submit">Get S02</button>
+          <button type="submit">Get E02</button>
         </form>
         <p class="sub-ok" id="ep-signup-ok"></p>
         <p class="sub-note">One email per episode, nothing else. Double opt-in, one-click unsubscribe.</p>
@@ -454,6 +470,7 @@
   // Safe wrappers: the episode still works if the assets fail to load.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
   const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open'); // cover opened, before any tap
 
   let current = 0;
   let score = 0;
@@ -465,7 +482,7 @@
   const segWrap = document.getElementById('segments');
   for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
 
-  function start(){ t0 = Date.now(); PDT.track('ep_start'); go(1); }
+  function start(){ t0 = Date.now(); PDP.save('s01-en', {completed:false}); PDT.track('ep_start'); go(1); }
 
   function go(n){
     current = n;
@@ -565,9 +582,12 @@
     PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
     PDP.save('s01-en', {completed:true, screen:9, score, streakBest, results});
     document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const revisit = missed.length===1 ? "REVISIT CONCEPT "+missed[0]
+                  : "REVISIT CONCEPTS "+missed.slice(0,-1).join(", ")+" AND "+missed[missed.length-1];
     const msg = score===4 ? "PERFECT — EXPERT LEVEL" :
-                score>=3 ? "SOLID — YOU'VE GOT THE BASICS" :
-                score>=2 ? "FAIR — REVISIT CONCEPTS 2 AND 3" :
+                score>=3 ? "SOLID — "+revisit+" AND YOU'RE THERE" :
+                score>=2 ? "FAIR — "+revisit :
                 "WORTH A REPLAY";
     document.getElementById('scoremsg').textContent = msg;
     document.getElementById('stat-score').textContent = score + '/4';
@@ -601,7 +621,7 @@
   function shareScore(){
     const grid = results.map(r=>r?'🟩':'🟥').join('');
     const time = t0 ? fmtTime(Date.now()-t0) : '';
-    const txt = `S01 · Card schemes — ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.`;
+    const txt = `S1 · E01 · Card schemes — ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.\npaiement-decrypte.fr/en/`;
     const btn = document.getElementById('sharebtn');
     if(navigator.share){
       navigator.share({text:txt}).catch(()=>{});
