@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paiement Décrypté — le paiement expliqué depuis le terrain</title>
-<meta name="description" content="Micro-formations interactives de 5 minutes sur le paiement : schemes, interchange, acquiring, monétique. La plomberie que personne ne vulgarise.">
+<title>Paiement Décrypté – le paiement expliqué depuis le terrain</title>
+<meta name="description" content="Micro-formations interactives de 5 minutes sur le paiement : schemes, interchange, acquiring, monétique. Le paiement que personne ne vulgarise.">
 <link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/">
 <link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -38,13 +38,7 @@
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--ink-soft);
   }
-  /* masthead : segments façon numéro de carte */
   .masthead{display:flex;align-items:center;gap:12px;margin-bottom:34px}
-  .masthead .segs{display:flex;gap:5px}
-  .masthead .segs i{width:14px;height:6px;border-radius:3px;background:var(--cobalt);display:block}
-  .masthead .segs i:nth-child(2){background:var(--mint)}
-  .masthead .segs i:nth-child(3){background:var(--coral)}
-  .masthead .segs i:nth-child(4){background:var(--line)}
   .lang{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
 
   .mark{width:44px;height:44px;display:block;margin-bottom:20px}
@@ -139,7 +133,6 @@
 <div class="app">
 
   <div class="masthead">
-    <div class="segs"><i></i><i></i><i></i><i></i></div>
     <span class="eyebrow">Paiement Décrypté</span>
     <a class="lang" href="en/" hreflang="en">EN</a>
   </div>
@@ -159,14 +152,14 @@
 
   <h1>Le paiement, <em>décrypté</em> depuis le terrain.</h1>
   <p class="lede">
-    Des micro-formations interactives de <strong>5 minutes</strong> sur la plomberie
+    Des micro-formations interactives de <strong>5 minutes</strong> sur le paiement
     que personne ne vulgarise : schemes, interchange, acquiring, monétique.
     <strong>Concepts courts, quiz, un moment interactif par épisode.</strong>
   </p>
 
   <section class="season">
     <p class="season-head">Saison 1 · Le circuit de l'argent</p>
-    <p class="season-q">Que se passe-t-il vraiment quand une carte paie 60&nbsp;€&nbsp;?</p>
+    <p class="season-q">Quel rôle ont les schemes dans un paiement&nbsp;?</p>
 
     <a class="ep" href="episodes/s01.html">
       <p class="ep-num"><span>S01</span><span class="dur">~5 min</span></p>
@@ -178,7 +171,7 @@
     <div class="ep locked" aria-disabled="true">
       <p class="ep-num"><span>S02</span><span class="dur">~5 min</span></p>
       <h3>L'interchange</h3>
-      <p>Qui paie quoi sur 100&nbsp;€ encaissés — la commission la plus mal comprise du paiement.</p>
+      <p>Qui paie quoi sur 100&nbsp;€ encaissés – la commission la plus mal comprise du paiement.</p>
       <span class="badge">BIENTÔT</span>
     </div>
   </section>
@@ -196,7 +189,7 @@
   </section>
 
   <footer>
-    <p><b>Paiement Décrypté</b> est écrit par un praticien du paiement — 10&nbsp;ans+ d'expérience en acquisition, terminaux et opérations, France &amp; Europe.</p>
+    <p><b>Paiement Décrypté</b> est écrit par un praticien du paiement – 10&nbsp;ans+ d'expérience en acquisition, terminaux et opérations, France &amp; Europe.</p>
     <p>Données : ce site mesure des statistiques d'usage <b>anonymes</b>, sans cookie ni traceur. Email : collecté uniquement via le formulaire ci-dessus, avec double confirmation ; désinscription en un clic dans chaque envoi.</p>
     <p>© 2026 Paiement Décrypté</p>
   </footer>
@@ -204,14 +197,16 @@
 </div>
 <script src="assets/subscribe.js"></script>
 <script>
-  PDSubscribe.bind(document.getElementById('signup-form'), function(ok, msg){
-    var el = document.getElementById('signup-ok');
-    el.textContent = ok
-      ? 'Presque fait ! Ouvrez votre boîte mail et cliquez sur le lien de confirmation.'
-      : (msg || 'Une erreur est survenue — réessayez.');
-    el.style.color = ok ? '' : '#E85C4A';
-    el.classList.add('show');
-  });
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('signup-form'), function(ok, msg){
+      var el = document.getElementById('signup-ok');
+      el.textContent = ok
+        ? 'Presque fait ! Ouvrez votre boîte mail et cliquez sur le lien de confirmation.'
+        : (msg || 'Une erreur est survenue – réessayez.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+    });
+  }
 </script>
 </body>
 </html>

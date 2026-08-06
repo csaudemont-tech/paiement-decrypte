@@ -101,6 +101,8 @@
     font-size:14.5px;color:var(--ink);
   }
   .keyfact b{font-weight:600}
+  .hub-illus{display:flex;justify-content:center;margin-top:14px}
+  .hub-cap{margin-top:8px;font-size:13px;color:var(--ink-soft);text-align:center}
 
   /* ---------- Diagramme 4 coins ---------- */
   .diagram{
@@ -278,7 +280,7 @@
         <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
       </svg>
       <h1>Les schemes de paiement</h1>
-      <p style="margin-top:14px">Visa, Mastercard, CB : tout le monde connaît les logos, peu savent ce qu'il y a derrière. En 5 minutes, comprenez le rôle exact d'un scheme — et qui fait quoi dans une transaction carte.</p>
+      <p style="margin-top:14px">Visa, Mastercard, CB : tout le monde connaît les logos, peu savent ce qu'il y a derrière. En 5 minutes, comprenez le rôle exact d'un réseau de paiement – et qui fait quoi dans une transaction carte.</p>
       <div class="cover-meta">
         <span><b>5 min</b> · lecture</span>
         <span><b>4</b> concepts</span>
@@ -295,10 +297,31 @@
   <section class="screen" data-step="1">
     <div class="concept-card">
       <div class="kicker">Concept 1 / 4</div>
-      <h2>Un scheme, c'est un réseau — pas une banque</h2>
-      <p>Un scheme (Visa, Mastercard, CB, UnionPay…) est l'organisation qui <strong>opère le réseau</strong> reliant des milliers de banques entre elles, <strong>édicte les règles</strong> du jeu, et <strong>porte la marque</strong> que porteurs et marchands reconnaissent.</p>
+      <h2>Un réseau de paiement, ce n'est pas une banque</h2>
+      <p>Un réseau (Visa, Mastercard, CB, UnionPay…) est l'organisation qui relie des milliers de banques entre elles, <strong>édicte les règles</strong> du jeu, et <strong>porte la marque</strong> que porteurs et marchands reconnaissent. Dans le jargon du secteur, on l'appelle aussi un <strong>« scheme »</strong>.</p>
       <p>Ce qu'il ne fait pas : il n'émet pas de cartes, n'accorde pas de crédit, ne détient pas l'argent des transactions. Ça, ce sont les banques.</p>
-      <div class="keyfact">💡 <b>À retenir :</b> le scheme est l'arbitre et l'infrastructure du match — jamais un joueur qui touche le ballon (l'argent).</div>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 240 140" width="100%" height="140" style="max-width:280px">
+          <g stroke="#1F4FD8" stroke-width="1.5" opacity=".45">
+            <line x1="120" y1="70" x2="28" y2="18"/>
+            <line x1="120" y1="70" x2="28" y2="122"/>
+            <line x1="120" y1="70" x2="82" y2="12"/>
+            <line x1="120" y1="70" x2="82" y2="128"/>
+            <line x1="120" y1="70" x2="212" y2="24"/>
+            <line x1="120" y1="70" x2="212" y2="116"/>
+          </g>
+          <circle cx="28" cy="18" r="7" fill="#17B587"/>
+          <circle cx="28" cy="122" r="7" fill="#17B587"/>
+          <circle cx="82" cy="12" r="7" fill="#17B587"/>
+          <circle cx="82" cy="128" r="7" fill="#17B587"/>
+          <circle cx="212" cy="24" r="7" fill="#17B587"/>
+          <circle cx="212" cy="116" r="7" fill="#17B587"/>
+          <circle cx="120" cy="70" r="17" fill="#1F4FD8"/>
+          <text x="120" y="74" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" font-family="JetBrains Mono, monospace">R</text>
+        </svg>
+      </div>
+      <p class="hub-cap">Chaque banque, chaque commerçant, chaque carte parle déjà ce même langage – c'est ce maillage déjà en place qui rend un scheme quasi impossible à remplacer.</p>
+      <div class="keyfact">💡 <b>À retenir :</b> le réseau est l'arbitre et l'infrastructure du match – jamais un joueur qui touche le ballon (l'argent).</div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
   </section>
@@ -306,12 +329,12 @@
   <!-- 2 · QUIZ 1 -->
   <section class="screen" data-step="2">
     <div class="qnum">QUIZ 1 / 4</div>
-    <div class="question">Lequel de ces rôles n'est PAS celui d'un scheme ?</div>
-    <div class="options" data-quiz="0" data-answer="1" data-next="3">
-      <button class="opt">Définir les règles du réseau</button>
+    <div class="question">Lequel de ces rôles est bien celui d'un réseau de paiement ?</div>
+    <div class="options" data-quiz="0" data-answer="2" data-next="3">
       <button class="opt">Accorder un crédit au porteur de la carte</button>
-      <button class="opt">Fixer les taux d'interchange par défaut</button>
-      <button class="opt">Gérer la marque et son acceptation</button>
+      <button class="opt">Émettre la carte physique du client</button>
+      <button class="opt">Définir les règles communes du réseau</button>
+      <button class="opt">Détenir l'argent de la transaction</button>
     </div>
   </section>
 
@@ -320,7 +343,7 @@
     <div class="concept-card" style="padding-bottom:16px">
       <div class="kicker">Concept 2 / 4</div>
       <h2>Le modèle à 4 coins</h2>
-      <p>Chaque paiement carte fait circuler l'information entre <strong>4 acteurs</strong> — et le scheme au milieu, qui les connecte tous.</p>
+      <p>Chaque paiement carte fait circuler l'information entre <strong>4 acteurs</strong> – et le réseau au milieu, qui les connecte tous.</p>
     </div>
     <div class="diagram">
       <div class="diagram-grid">
@@ -328,9 +351,9 @@
         <div class="actor" id="a-marchand">🏪 Marchand<small>le commerçant</small></div>
         <div class="actor" id="a-emetteur">🏦 Émetteur<small>banque du client</small></div>
         <div class="actor" id="a-acquereur">🏦 Acquéreur<small>banque du marchand</small></div>
-        <div class="actor scheme" id="a-scheme">◈ SCHEME<small>le réseau au centre</small></div>
+        <div class="actor scheme" id="a-scheme">◈ RÉSEAU<small>Visa, Mastercard, CB…</small></div>
       </div>
-      <div class="flow-caption" id="flowcap">Suivez le trajet d'un paiement de 60 € — appuyez sur le bouton.</div>
+      <div class="flow-caption" id="flowcap">Suivez le trajet d'un paiement de 60 € – appuyez sur le bouton.</div>
       <button class="flow-btn" id="flowbtn" onclick="stepFlow()">▶ Lancer le paiement</button>
     </div>
     <div class="cta-zone"><button class="cta" id="next-flow" disabled onclick="go(4)">Continuer</button></div>
@@ -339,12 +362,12 @@
   <!-- 4 · QUIZ 2 -->
   <section class="screen" data-step="4">
     <div class="qnum">QUIZ 2 / 4</div>
-    <div class="question">Dans le modèle à 4 coins, qui paie l'interchange, et à qui ?</div>
-    <div class="options" data-quiz="1" data-answer="1" data-next="5">
-      <button class="opt">Le porteur → à l'émetteur</button>
-      <button class="opt">L'acquéreur → à l'émetteur</button>
-      <button class="opt">L'émetteur → à l'acquéreur</button>
-      <button class="opt">Le marchand → au scheme</button>
+    <div class="question">Dans le modèle à 4 coins, qui achemine la demande d'autorisation entre l'acquéreur et l'émetteur ?</div>
+    <div class="options" data-quiz="1" data-answer="2" data-next="5">
+      <button class="opt">Le porteur, directement</button>
+      <button class="opt">Le marchand, via son terminal</button>
+      <button class="opt">Le réseau (scheme)</button>
+      <button class="opt">La banque centrale</button>
     </div>
   </section>
 
@@ -352,12 +375,12 @@
   <section class="screen" data-step="5">
     <div class="concept-card">
       <div class="kicker">Concept 3 / 4</div>
-      <h2>Concrètement, le scheme vend 4 choses</h2>
+      <h2>Concrètement, un réseau vend 4 choses</h2>
       <p><strong>1 · Des règles communes.</strong> Formats de messages, sécurité, délais : tout le monde parle la même langue, partout dans le monde.</p>
       <p><strong>2 · La compensation.</strong> Il calcule qui doit combien à qui chaque jour entre des milliers de banques, et orchestre le règlement.</p>
-      <p><strong>3 · L'arbitrage.</strong> Litige, fraude, chargeback : c'est le règlement du scheme qui tranche entre émetteur et acquéreur.</p>
-      <p><strong>4 · La marque.</strong> Le logo sur la vitrine qui garantit au porteur que sa carte passera.</p>
-      <div class="keyfact">💡 <b>Son revenu :</b> les scheme fees, facturés aux banques membres — à ne pas confondre avec l'interchange, qui va à l'émetteur.</div>
+      <p><strong>3 · L'arbitrage.</strong> Litige, fraude, chargeback : quand un porteur (le client) conteste un paiement, c'est le règlement du réseau qui tranche entre émetteur et acquéreur.</p>
+      <p><strong>4 · La marque.</strong> La notoriété et l'acceptation du réseau : plus une marque est reconnue et acceptée dans le monde, plus elle a de valeur pour les banques et les commerçants. Visa et Mastercard communiquent d'ailleurs sur le nombre de pays où leur carte est acceptée – c'est leur indicateur phare.</p>
+      <div class="keyfact">💡 <b>Son revenu :</b> les frais de réseau (les « scheme fees »), facturés aux banques membres – à ne pas confondre avec l'interchange, qui va à l'émetteur.</div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
   </section>
@@ -367,10 +390,10 @@
     <div class="qnum">QUIZ 3 / 4</div>
     <div class="question">Un client conteste un paiement (chargeback). Selon quelles règles le litige est-il arbitré ?</div>
     <div class="options" data-quiz="2" data-answer="2" data-next="7">
-      <button class="opt">Celles de la banque du marchand</button>
-      <button class="opt">Celles de la Banque centrale européenne</button>
-      <button class="opt">Celles du scheme utilisé pour la transaction</button>
-      <button class="opt">Celles du fabricant du terminal</button>
+      <button class="opt">La banque du marchand</button>
+      <button class="opt">La Banque centrale européenne</button>
+      <button class="opt">Le réseau (scheme) utilisé pour la transaction</button>
+      <button class="opt">Le fabricant du terminal</button>
     </div>
   </section>
 
@@ -378,10 +401,10 @@
   <section class="screen" data-step="7">
     <div class="concept-card">
       <div class="kicker">Concept 4 / 4 · Spécificité française</div>
-      <h2>CB : le scheme domestique, et le co-badgeage</h2>
-      <p>La France a son propre scheme : <strong>CB (Cartes Bancaires)</strong>, créé par les banques françaises. La plupart des cartes françaises sont <strong>co-badgées</strong> : CB <em>et</em> Visa (ou Mastercard) sur la même carte.</p>
-      <p>En France, la transaction passe en priorité par CB (coûts plus bas pour le marchand) ; à l'étranger, le badge international prend le relais.</p>
-      <div class="keyfact">💡 <b>Depuis le règlement européen IFR (2015)</b>, le consommateur peut imposer la marque de son choix au point de vente — le marchand peut prédéfinir une priorité, mais pas l'imposer.</div>
+      <h2>CB : le réseau domestique, et le co-badgeage</h2>
+      <p>La France a son propre réseau : <strong>CB (Cartes Bancaires)</strong>, créé par les banques françaises. La plupart des cartes françaises sont <strong>co-badgées</strong> : CB <em>et</em> Visa (ou Mastercard) sur la même carte.</p>
+      <p>En France, le terminal applique en priorité CB (coûts plus bas pour le marchand), selon une liste de priorité définie par l'acquéreur ; à l'étranger, le badge international prend le relais.</p>
+      <div class="keyfact">💡 <b>Depuis le règlement européen IFR (2015)</b>, le consommateur peut imposer la marque de son choix au point de vente : la priorité définie par l'acquéreur ne s'applique que s'il n'exprime aucun choix.</div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
   </section>
@@ -392,9 +415,9 @@
     <div class="question">Carte co-badgée CB/Visa en France : qui a le dernier mot sur la marque utilisée au point de vente ?</div>
     <div class="options" data-quiz="3" data-answer="2" data-next="9">
       <button class="opt">L'émetteur de la carte</button>
-      <button class="opt">Le scheme le plus cher</button>
+      <button class="opt">Le réseau le moins cher</button>
       <button class="opt">Le consommateur, s'il exprime un choix</button>
-      <button class="opt">Le terminal, aléatoirement</button>
+      <button class="opt">Le terminal, suivant une priorité définie</button>
     </div>
   </section>
 
@@ -410,14 +433,14 @@
         <div class="stat"><b id="stat-best">–</b><span>SÉRIE MAX</span></div>
       </div>
       <div class="recap-list" id="recaplist">
-        <div class="recap-item" data-q="0">Le scheme est un réseau + des règles + une marque. Jamais une banque.</div>
-        <div class="recap-item" data-q="1">4 coins : porteur, marchand, émetteur, acquéreur — le scheme les relie tous.</div>
-        <div class="recap-item" data-q="2">L'interchange va à l'émetteur ; les scheme fees vont au scheme.</div>
+        <div class="recap-item" data-q="0">Un réseau (scheme) : des règles communes + une marque + une infrastructure. Jamais une banque.</div>
+        <div class="recap-item" data-q="1">4 coins : porteur, marchand, émetteur, acquéreur – le réseau les relie tous.</div>
+        <div class="recap-item" data-q="2">L'interchange va à l'émetteur ; les scheme fees vont au réseau.</div>
         <div class="recap-item" data-q="3">En France : CB en domestique, co-badgeage, et le consommateur choisit (IFR).</div>
       </div>
       <div class="teaser">
         <div class="kicker">Prochain épisode</div>
-        <b>S02 · L'interchange</b> — Sur vos 60 € de courses, combien partent en commissions entre banques ? Faites votre pari. Réponse au prochain épisode — et pourquoi Bruxelles a dû s'en mêler.
+        <b>S02 · L'interchange</b> – Sur vos 60 € de courses, combien partent en commissions entre banques ? Faites votre pari. Réponse au prochain épisode – et pourquoi Bruxelles a dû s'en mêler.
         <form id="ep-signup" novalidate>
           <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
           <button type="submit">Recevoir S02</button>
@@ -483,17 +506,17 @@
 
   // ---- Quiz ----
   const EXPLAIN = [
-    {good:"Le crédit, c'est l'émetteur — la banque du porteur. Le scheme ne prête pas un centime.",
-     bad:"Le crédit est accordé par l'<b>émetteur</b> (la banque du porteur). Le scheme fixe les règles, l'interchange par défaut et gère la marque, mais ne touche jamais à l'argent du client."},
-    {good:"L'acquéreur reverse l'interchange à l'émetteur — c'est le coût que le marchand retrouve dans sa commission.",
-     bad:"C'est l'<b>acquéreur qui paie l'interchange à l'émetteur</b>, sur chaque transaction. Il le répercute ensuite au marchand dans sa commission (MSC)."},
-    {good:"Chaque scheme publie son règlement litiges — c'est lui l'arbitre entre émetteur et acquéreur.",
-     bad:"C'est le <b>règlement du scheme</b> qui s'applique. Visa, Mastercard et CB ont chacun leurs procédures de chargeback qui s'imposent aux banques membres."},
-    {good:"Depuis le règlement IFR de 2015, le choix exprimé par le consommateur prime sur la priorité du marchand.",
-     bad:"Depuis le <b>règlement européen IFR (2015)</b>, si le consommateur exprime un choix de marque, ce choix s'impose. Le marchand peut seulement prédéfinir une priorité par défaut."}
+    {good:"Exactement : fixer les règles du jeu, c'est le cœur du métier d'un réseau – avec la marque et l'infrastructure qui va avec.",
+     bad:"La bonne réponse : <b>définir les règles communes du réseau</b>. Un scheme n'accorde pas de crédit, ne détient pas l'argent et n'émet pas de carte – ça, c'est le rôle des banques (émetteur et acquéreur)."},
+    {good:"Exactement : le réseau achemine chaque demande d'autorisation de l'acquéreur vers l'émetteur, en une poignée de centaines de millisecondes.",
+     bad:"C'est le <b>réseau (scheme)</b> qui achemine la demande : l'acquéreur l'envoie, le réseau la route vers l'émetteur, qui répond par l'autorisation ou le refus."},
+    {good:"Chaque réseau publie son règlement litiges – c'est lui l'arbitre entre émetteur et acquéreur.",
+     bad:"C'est le <b>règlement du réseau</b> qui s'applique. Visa, Mastercard et CB ont chacun leurs procédures de chargeback qui s'imposent aux banques membres."},
+    {good:"Depuis le règlement IFR de 2015, le choix exprimé par le consommateur prime toujours sur la priorité définie par l'acquéreur.",
+     bad:"Le terminal suit une <b>liste de priorité définie par l'acquéreur</b> (la banque du marchand) – mais depuis le <b>règlement européen IFR (2015)</b>, dès que le consommateur exprime un choix de marque, c'est son choix qui prime."}
   ];
   const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
-  const BAD_TITLES = ["Le piège classique","Contre-intuitif — vous n'êtes pas seul","Pas tout à fait","Surprenant, non ?"];
+  const BAD_TITLES = ["Le piège classique","Contre-intuitif – vous n'êtes pas seul","Pas tout à fait","Surprenant, non ?"];
 
   document.querySelectorAll('.options').forEach(block=>{
     const qi = +block.dataset.quiz;
@@ -530,11 +553,11 @@
 
   // ---- Diagramme 4 coins ----
   const FLOW = [
-    {lit:['a-porteur','a-marchand'], txt:"<b>1.</b> Le porteur présente sa carte au marchand — 60 € au terminal."},
+    {lit:['a-porteur','a-marchand'], txt:"<b>1.</b> Le porteur présente sa carte au marchand – 60 € au terminal."},
     {lit:['a-marchand','a-acquereur'], txt:"<b>2.</b> Le terminal envoie la demande d'autorisation à l'acquéreur."},
-    {lit:['a-acquereur','a-scheme'], txt:"<b>3.</b> L'acquéreur route la demande via le <b>scheme</b>…"},
+    {lit:['a-acquereur','a-scheme'], txt:"<b>3.</b> L'acquéreur route la demande via le <b>réseau</b>…"},
     {lit:['a-scheme','a-emetteur'], txt:"<b>4.</b> …qui la transmet à l'émetteur. Celui-ci vérifie solde, plafond, fraude → <b>autorisation</b>."},
-    {lit:['a-scheme'], txt:"<b>5.</b> Plus tard : le scheme orchestre compensation et règlement. L'argent circule entre banques — jamais par le scheme."}
+    {lit:['a-scheme'], txt:"<b>5.</b> Plus tard, en coulisses : le réseau calcule qui doit combien à qui entre les banques, et déclenche le règlement. Mais l'argent circule directement de banque à banque : il ne transite jamais par le réseau."}
   ];
   let flowStep = -1, flowTracked = false;
   function stepFlow(){
@@ -563,10 +586,10 @@
     PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
     PDP.save('s01', {completed:true, screen:9, score, streakBest, results});
     document.getElementById('scoreval').textContent = score + " / 4";
-    const msg = score===4 ? "SANS FAUTE — NIVEAU EXPERT" :
-                score>=3 ? "SOLIDE — LES BASES SONT LÀ" :
-                score>=2 ? "CORRECT — RELISEZ LES CONCEPTS 2 ET 3" :
-                "À REVOIR — REFAITES L'ÉPISODE";
+    const msg = score===4 ? "SANS FAUTE – NIVEAU EXPERT" :
+                score>=3 ? "SOLIDE – LES BASES SONT LÀ" :
+                score>=2 ? "CORRECT – RELISEZ LES CONCEPTS 2 ET 3" :
+                "À REVOIR – REFAITES L'ÉPISODE";
     document.getElementById('scoremsg').textContent = msg;
     document.getElementById('stat-score').textContent = score + '/4';
     document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '–';
@@ -599,13 +622,13 @@
   function shareScore(){
     const grid = results.map(r=>r?'🟩':'🟥').join('');
     const time = t0 ? fmtTime(Date.now()-t0) : '';
-    const txt = `S01 · Les schemes de paiement — ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.`;
+    const txt = `S01 · Les schemes de paiement – ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.`;
     const btn = document.getElementById('sharebtn');
     if(navigator.share){
       navigator.share({text:txt}).catch(()=>{});
     } else if(navigator.clipboard){
       navigator.clipboard.writeText(txt).then(()=>{
-        btn.textContent = 'Copié ✓ — collez-le où vous voulez';
+        btn.textContent = 'Copié ✓ – collez-le où vous voulez';
         setTimeout(()=>btn.textContent='Partager mon score', 2500);
       });
     }
@@ -618,7 +641,7 @@
       var el = document.getElementById('ep-signup-ok');
       el.textContent = ok
         ? 'Presque fait ! Confirmez via l\'email qui vient de partir.'
-        : (msg || 'Une erreur est survenue — réessayez.');
+        : (msg || 'Une erreur est survenue – réessayez.');
       el.style.color = ok ? '' : '#E85C4A';
       el.classList.add('show');
       if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu — jamais l'email
