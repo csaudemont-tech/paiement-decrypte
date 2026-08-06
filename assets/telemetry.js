@@ -13,7 +13,7 @@
 window.PD = (function () {
   'use strict';
 
-  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbyQjYEwoQ_8DNw8GYq05Lo1PyLZ5ex978MQCAJsW889n1kbM0UOzjMNy9cxv3Vvhxf1SQ/exec'; // branché en session 3
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbwbUKQ-u1Zqf6rhW4cBita2x1baNzN-lVU0qyYJf0kVqymAmOOJ8FBGsFOKzb0owrLUEA/exec'; // déploiement Code.gs v2 (durci, 2026-08-06)
 
   var EP = (document.body && document.body.dataset.ep) || 'unknown';
   var visit = Math.random().toString(36).slice(2, 10);
