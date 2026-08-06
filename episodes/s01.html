@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>S01 · Les schemes de paiement</title>
+<title>S1 · E01 · Les schemes de paiement</title>
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -258,7 +258,7 @@
 <div class="app">
 
   <div class="topbar" id="topbar" style="visibility:hidden">
-    <span class="eyebrow">S01</span>
+    <span class="eyebrow">S1 · E01</span>
     <div class="segments" id="segments"></div>
     <span class="streak" id="streak"></span>
   </div>
@@ -440,10 +440,10 @@
       </div>
       <div class="teaser">
         <div class="kicker">Prochain épisode</div>
-        <b>S02 · L'interchange</b> – Sur vos 60 € de courses, combien partent en commissions entre banques ? Faites votre pari. Réponse au prochain épisode – et pourquoi Bruxelles a dû s'en mêler.
+        <b>S1 · E02 · L'interchange</b> – Sur vos 60 € de courses, combien partent en commissions entre banques ? Faites votre pari. Réponse au prochain épisode – et pourquoi Bruxelles a dû s'en mêler.
         <form id="ep-signup" novalidate>
           <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
-          <button type="submit">Recevoir S02</button>
+          <button type="submit">Recevoir E02</button>
         </form>
         <p class="sub-ok" id="ep-signup-ok"></p>
         <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>
@@ -622,7 +622,7 @@
   function shareScore(){
     const grid = results.map(r=>r?'🟩':'🟥').join('');
     const time = t0 ? fmtTime(Date.now()-t0) : '';
-    const txt = `S01 · Les schemes de paiement – ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.`;
+    const txt = `S1 · E01 · Les schemes de paiement – ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.`;
     const btn = document.getElementById('sharebtn');
     if(navigator.share){
       navigator.share({text:txt}).catch(()=>{});
