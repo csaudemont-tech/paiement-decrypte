@@ -38,7 +38,8 @@
     --radius:18px;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
+  html{height:100%}
+  body{min-height:100%}
   body{
     font-family:'Instrument Sans',system-ui,sans-serif;
     background:var(--bg);
@@ -644,13 +645,18 @@
     const time = t0 ? fmtTime(Date.now()-t0) : '';
     const txt = `S1 · E01 · Les schemes de paiement – ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.\npaiement-decrypte.fr`;
     const btn = document.getElementById('sharebtn');
-    if(navigator.share){
+    const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile && navigator.share){
+      // Mobile : share sheet native (WhatsApp, app LinkedIn…)
       navigator.share({text:txt}).catch(()=>{});
-    } else if(navigator.clipboard){
-      navigator.clipboard.writeText(txt).then(()=>{
-        btn.textContent = 'Copié ✓ – collez-le où vous voulez';
-        setTimeout(()=>btn.textContent='Partager mon score', 2500);
-      });
+    } else {
+      // Desktop : copie + composer LinkedIn pré-rempli (la share sheet OS n'apporte rien ici)
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).catch(()=>{});
+      }
+      btn.textContent = 'Copié ✓ – votre post LinkedIn est prêt';
+      setTimeout(()=>btn.textContent='Partager mon score', 3000);
+      window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
     }
     PDT.track('share', {score});
   }
