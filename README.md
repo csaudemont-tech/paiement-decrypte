@@ -9,7 +9,8 @@ Site 100 % statique : aucun serveur, aucune base de données à maintenir.
 paiement-decrypte/
 ├── index.html          landing : promesse + épisodes + formulaire email
 ├── episodes/
-│   └── s01.html        S01 · Les schemes de paiement (v3, autonome)
+│   └── s1e01.html      S1E01 · Les schemes de paiement (v3, autonome)
+│   └── s01.html        redirection vers s1e01.html (ancien lien du test collègues)
 ├── assets/             (session 2 : telemetry.js + progress.js)
 └── README.md
 ```
@@ -29,7 +30,7 @@ paiement-decrypte/
    Source : **Deploy from a branch** → Branch : `main`, dossier `/ (root)` → **Save**.
 4. **Attendre ~2 min**, puis ouvrir :
    `https://<ton-pseudo>.github.io/paiement-decrypte/`
-   → vérifier sur **téléphone** : landing OK, épisode S01 jouable de bout en bout.
+   → vérifier sur **téléphone** : landing OK, épisode S1E01 jouable de bout en bout.
 
 Chaque mise à jour = re-glisser le fichier modifié (ou `git push`) : le site
 se redéploie tout seul en ~1 min.
@@ -63,5 +64,9 @@ seulement dans la console du navigateur (F12) — rien n'est envoyé.
 - Aucun matériel employeur, jamais — le repo est public.
 - Un épisode = un fichier HTML autonome dans `episodes/`. Pas de framework,
   pas de build : ce qui est dans le repo est ce qui est servi.
+- Nommage des épisodes (acté 2026-08-07) : `s<saison>e<numéro>` — slug
+  `s1e01.html`, tag télémétrie `s1e01` (`s1e01-en` pour /en/), numérotation
+  remise à zéro à chaque saison. Ne jamais réutiliser un ancien slug :
+  l'ancien `s01.html` reste en redirection.
 - La télémétrie reste anonyme (pas de cookie, pas d'identifiant) —
   ne pas « améliorer » ça sans revoir le point RGPD du cadrage.

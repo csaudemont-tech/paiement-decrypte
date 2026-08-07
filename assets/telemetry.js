@@ -25,7 +25,7 @@ window.PD = (function () {
   function send(e, d) {
     var payload = {
       k: 'pd1',          // jeton anti-spam (vérifié par Code.gs — même valeur des deux côtés)
-      ep: EP,            // épisode (ex. "s01")
+      ep: EP,            // épisode (ex. "s1e01")
       v: visit,          // jeton de passage (éphémère)
       t: Date.now() - t0,// ms depuis l'ouverture
       e: e,              // nom de l'événement
