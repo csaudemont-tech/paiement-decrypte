@@ -106,7 +106,7 @@
       <textarea class="pd-agent-input" id="pd-agent-input" rows="1" placeholder="Écris ta question…" maxlength="2000"></textarea>
       <button class="pd-agent-send" type="submit" aria-label="Envoyer">→</button>
     </form>
-    <div class="pd-agent-foot">Assistant automatisé, pas Charles en personne — <a href="/#inscription" style="color:#1F4FD8">s'inscrire à la newsletter</a></div>
+    <div class="pd-agent-foot"><a href="/#inscription" style="color:#1F4FD8">S'inscrire à la newsletter</a></div>
   `;
 
   document.body.appendChild(panel);

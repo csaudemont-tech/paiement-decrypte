@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Décrypter un fichier de config terminal</title>
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('https://paiement-decrypte.fr/assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('https://paiement-decrypte.fr/assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('https://paiement-decrypte.fr/assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8; --ink:#0E1B2C; --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8; --mint:#17B587; --coral:#E85C4A; --amber:#E8A23F;
+    --line:#D8DEE9; --card:#FFFFFF; --radius:18px;
+    --sans:'Instrument Sans',system-ui,sans-serif;
+    --display:'Bricolage Grotesque',var(--sans);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  [hidden]{display:none !important}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.5;padding:32px 18px 80px}
+  .wrap{max-width:880px;margin:0 auto}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--cobalt);margin-bottom:8px}
+  h1{font-family:var(--display);font-size:28px;margin:0 0 10px;letter-spacing:-.01em}
+  .lede{color:var(--ink-soft);font-size:15.5px;max-width:680px;margin-bottom:22px}
+  .lede b{color:var(--ink);font-weight:600}
+
+  .status{border-radius:12px;padding:12px 16px;font-size:13.5px;margin-bottom:14px;border-left:3px solid}
+  .status.ok{background:#EAF7F2;border-color:var(--mint)}
+  .status.open{background:#FDF3E9;border-color:var(--amber)}
+  .status b{font-weight:600}
+  .status .src{display:block;margin-top:4px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:20px}
+  .card h2{font-family:var(--display);font-size:19px;margin:0 0 4px}
+  .card .field-name{font-family:var(--mono);font-size:13px;color:var(--cobalt);margin-bottom:14px}
+  .card p.desc{color:var(--ink-soft);font-size:14px;margin:8px 0 16px}
+
+  .demo-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  .demo-row input{font-family:var(--mono);font-size:14px;border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#FAFBFD;color:var(--ink);width:220px}
+  .demo-row input:focus{outline:none;border-color:var(--cobalt)}
+  .demo-row button{font-family:var(--sans);font-weight:600;font-size:13.5px;background:var(--cobalt);color:#fff;border:none;border-radius:10px;padding:9px 16px;cursor:pointer}
+  .demo-row .tag{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+
+  table.bits{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:6px}
+  table.bits th{text-align:left;color:var(--ink-soft);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;padding:6px 8px;border-bottom:1px solid var(--line)}
+  table.bits td{padding:7px 8px;border-bottom:1px solid #EEF1F6;vertical-align:top}
+  table.bits td.byte{font-family:var(--mono);color:var(--ink-soft);white-space:nowrap}
+  table.bits td.bit{font-family:var(--mono);white-space:nowrap}
+  table.bits tr.on td{color:var(--ink);font-weight:600}
+  table.bits tr.on td.bit{color:var(--mint)}
+  table.bits tr.off td{color:#B7BFCC}
+  .chip{display:inline-block;font-family:var(--mono);font-size:11px;border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:6px;color:var(--ink-soft)}
+
+  .open-fields{border:1.5px dashed var(--amber);border-radius:var(--radius);padding:20px 24px;background:#FFFCF6}
+  .open-fields h2{font-family:var(--display);font-size:18px;margin:0 0 8px;color:#92650F}
+  .open-fields ul{margin:10px 0 0;padding-left:20px;font-size:14px;color:var(--ink-soft)}
+  .open-fields li{margin-bottom:8px}
+  .open-fields code{font-family:var(--mono);background:#fff;border:1px solid var(--line);border-radius:5px;padding:0 5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Paiement Décrypté · prototype interne, pas encore public</div>
+  <h1>Décrypter un fichier de config terminal</h1>
+  <p class="lede"><b>Deux champs sourcés et démontrables</b> ci-dessous (valeurs d'exemple, aucune donnée réelle). Objectif : valider le format de "field card" avant de l'étendre au reste du vocabulaire nexo/OSCAR. Les deux champs non sourcés sont listés en bas, avec ce qu'il manque pour avancer.</p>
+
+  <div class="status ok"><b>terminalCapabilities</b> — réutilise la table déjà validée du décodeur EMV existant (tag 9F33).
+    <span class="src">Source : EMV 4.3 Book 4, Annexe A2 (Terminal Capabilities) — table partagée avec emv-parser via emv-dictionary.js, pas une copie locale.</span>
+  </div>
+  <div class="status ok"><b>additionalTerminalCapabilities</b> — sourcé pour ce prototype (tag 9F40), et depuis rapatrié dans emv-dictionary.js pour qu'emv-parser en profite aussi.
+    <span class="src">Source : EMV 4.3 Book 4, Annexe A3, Tables 28-32, p.118-120 (5 octets : type de transaction ×2, saisie, sortie ×2).</span>
+  </div>
+
+  <!-- Card 1 : terminalCapabilities (9F33) -->
+  <div class="card">
+    <h2>Capacités du terminal <span class="chip">tag EMV 9F33</span></h2>
+    <div class="field-name">&lt;terminalCapabilities&gt;</div>
+    <p class="desc">Ce que le terminal sait faire côté lecture de carte et vérification porteur : saisie manuelle, piste magnétique, puce contact ; méthodes de vérification (PIN, signature, aucune) ; méthodes d'authentification offline (SDA/DDA/CDA). 3 octets, 12 des 24 bits définis par la norme (le reste RFU).</p>
+    <div class="demo-row">
+      <input id="tc-input" value="E0F8C8" maxlength="6">
+      <button onclick="renderTC()">Décoder</button>
+      <span class="tag">exemple, pas une valeur réelle</span>
+    </div>
+    <table class="bits"><thead><tr><th>Octet</th><th>Bit</th><th>Signification</th></tr></thead><tbody id="tc-body"></tbody></table>
+  </div>
+
+  <!-- Card 2 : additionalTerminalCapabilities (9F40) -->
+  <div class="card">
+    <h2>Capacités additionnelles du terminal <span class="chip">tag EMV 9F40</span></h2>
+    <div class="field-name">&lt;additionalTerminalCapabilities&gt;</div>
+    <p class="desc">Complète 9F33 : types de transaction acceptés (achat, cash, cashback, retrait...), capacités de saisie (clavier numérique, touches fonction...) et de restitution (impression, affichage, table de code ISO 8859). 5 octets.</p>
+    <div class="demo-row">
+      <input id="atc-input" value="6000C00000" maxlength="10">
+      <button onclick="renderATC()">Décoder</button>
+      <span class="tag">exemple, pas une valeur réelle</span>
+    </div>
+    <table class="bits"><thead><tr><th>Octet</th><th>Bit</th><th>Signification</th></tr></thead><tbody id="atc-body"></tbody></table>
+  </div>
+
+  <div class="open-fields">
+    <h2>Champs identifiés, pas encore sourcés</h2>
+    <p style="font-size:14px;color:var(--ink-soft);margin:0">Ces deux champs apparaissent dans tes fichiers (valeurs observées à titre indicatif, ex. <code>configuredServices=F200/F600</code>, <code>defaultCardService=01</code>) mais je n'ai trouvé aucune définition bit à bit dans les sources autorisées (nexo FAST v3.1 Part 1, EMV Book 3/4, C-2-Kernel-2, PCI officiel) — ce ne sont a priori pas des tags EMV standard ni des éléments nexo-FAST documentés publiquement, plutôt des paramètres propres au schéma du logiciel qui a généré ces fichiers (namespace <code>schemas.artifact.pl/oscarv4</code>).</p>
+    <ul>
+      <li><b>configuredServices</b> — bitmask 2 octets. Hypothèse à vérifier : liste des services de transaction actifs (vente, remboursement, annulation, pré-autorisation...), mais sans confirmation.</li>
+      <li><b>defaultCardService</b> — 1 octet, ressemble à une valeur d'énumération plutôt qu'un bitmask (service par défaut sélectionné parmi la liste ci-dessus).</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--ink-soft);margin:12px 0 0">Pour avancer sans deviner : si tu as une doc du fournisseur du schéma OSCAR (même un extrait générique, pas spécifique à un déploiement), ou si tu peux confirmer/infirmer l'hypothèse depuis ton expérience terrain, je bâtis la table dessus. Sinon ces deux champs restent hors dictionnaire v1, plutôt que d'inventer une explication non vérifiée.</p>
+  </div>
+</div>
+
+<script src="https://paiement-decrypte.fr/assets/js/emv-dictionary.js"></script>
+<script>
+/* TERMCAP_BITS (9F33) et ATC_BITS (9F40) viennent d'emv-dictionary.js, chargé
+   juste au-dessus : même source que emv-parser, plus de copie locale (P1). */
+
+function decodeBits(hex, bits){
+  const bytes = hex.trim().toUpperCase().match(/../g) || [];
+  const rows = [];
+  bits.forEach(([byteIdx, mask, label]) => {
+    const byte = bytes[byteIdx-1] ? parseInt(bytes[byteIdx-1], 16) : 0;
+    const on = (byte & mask) === mask;
+    const bitNum = Math.log2(mask) + 1;
+    rows.push({byteIdx, bitNum, label, on});
+  });
+  return rows;
+}
+function renderTable(bodyId, rows){
+  const tbody = document.getElementById(bodyId);
+  tbody.innerHTML = rows.map(r => `
+    <tr class="${r.on?'on':'off'}">
+      <td class="byte">octet ${r.byteIdx}</td>
+      <td class="bit">b${r.bitNum}</td>
+      <td>${r.label} ${r.on ? '— actif' : '— inactif'}</td>
+    </tr>`).join('');
+}
+
+function renderTC(){
+  const hex = document.getElementById('tc-input').value;
+  renderTable('tc-body', decodeBits(hex, TERMCAP_BITS));
+}
+function renderATC(){
+  const hex = document.getElementById('atc-input').value;
+  renderTable('atc-body', decodeBits(hex, ATC_BITS));
+}
+renderTC(); renderATC();
+</script>
+</body>
+</html>
