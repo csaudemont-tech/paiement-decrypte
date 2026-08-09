@@ -106,6 +106,9 @@
     color:var(--coral);
   }
 
+  .tools{margin-top:36px}
+  .tools-note{color:var(--ink-soft);font-size:14px;margin-bottom:16px}
+
   .signup{
     margin-top:36px;background:var(--ink);color:#fff;
     border-radius:var(--radius);padding:24px 22px;
@@ -171,7 +174,7 @@
 
   <section class="season">
     <p class="season-head">Saison 1 · Le circuit de l'argent</p>
-    <p class="season-q">Quel rôle joue le réseau dans un paiement&nbsp;?</p>
+    <p class="season-q">Que se passe-t-il vraiment quand une carte paie 60&nbsp;€&nbsp;?</p>
 
     <a class="ep" href="episodes/s1e01.html">
       <p class="ep-num"><span>E01</span><span class="dur">~5 min</span></p>
@@ -180,12 +183,31 @@
       <span class="ep-cta">Commencer l'épisode</span>
     </a>
 
-    <div class="ep locked" aria-disabled="true">
+    <a class="ep" href="episodes/s1e02.html">
       <p class="ep-num"><span>E02</span><span class="dur">~5 min</span></p>
       <h3>L'interchange</h3>
-      <p>Qui paie quoi sur les 60&nbsp;€ encaissés – la commission la plus mal comprise du paiement.</p>
+      <p>Qui paie quoi sur les 60&nbsp;€ encaissés, la commission la plus mal comprise du paiement. Faites votre pari.</p>
+      <span class="ep-cta">Commencer l'épisode</span>
+    </a>
+
+    <div class="ep locked" aria-disabled="true">
+      <p class="ep-num"><span>E03</span><span class="dur">~5 min</span></p>
+      <h3>CB &amp; co-badgeage</h3>
+      <p>Deux réseaux sur la même puce, un seul par paiement, l'exception française que les newsletters anglophones ignorent.</p>
       <span class="badge">BIENTÔT</span>
     </div>
+  </section>
+
+  <section class="tools">
+    <p class="season-head">Outils</p>
+    <p class="tools-note">Pas un épisode, un outil de travail : à garder sous le coude.</p>
+
+    <a class="ep" href="outils/emv-parser.html">
+      <p class="ep-num"><span>OUTIL</span><span class="dur">Bêta</span></p>
+      <h3>Décodeur EMV TLV</h3>
+      <p>Collez un flux TLV EMV : décodage tag par tag, avec le sens métier de chaque champ, pas juste son nom.</p>
+      <span class="ep-cta">Ouvrir l'outil</span>
+    </a>
   </section>
 
   <section class="signup" id="inscription">
