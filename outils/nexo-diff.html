@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diff nexo/OSCAR - comparer deux fichiers de config terminal</title>
+<link rel="canonical" href="https://paiement-decrypte.fr/outils/nexo-diff.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/nexo-diff.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/nexo-diff.html">
+<link rel="icon" type="image/svg+xml" href="https://paiement-decrypte.fr/assets/favicon.svg">
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('https://paiement-decrypte.fr/assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('https://paiement-decrypte.fr/assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('https://paiement-decrypte.fr/assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8; --ink:#0E1B2C; --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8; --mint:#17B587; --coral:#E85C4A; --amber:#E8A23F;
+    --line:#D8DEE9; --card:#FFFFFF; --radius:18px;
+    --sans:'Instrument Sans',system-ui,sans-serif;
+    --display:'Bricolage Grotesque',var(--sans);
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  [hidden]{display:none !important}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.5;padding:32px 18px 100px}
+  .wrap{max-width:1040px;margin:0 auto}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--cobalt);margin-bottom:8px}
+  .tool-back{margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .tool-back a{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);text-decoration:none}
+  .tool-back a:hover{color:var(--cobalt)}
+  .tool-back .lang{border:1px solid var(--line);border-radius:8px;padding:3px 9px}
+  h1{font-family:var(--display);font-size:28px;margin:0 0 10px;letter-spacing:-.01em}
+  .lede{color:var(--ink-soft);font-size:15.5px;max-width:720px;margin-bottom:18px}
+  .lede b{color:var(--ink);font-weight:600}
+
+  .privacy{border-radius:12px;padding:12px 16px;font-size:13px;margin-bottom:24px;border-left:3px solid var(--mint);background:#EAF7F2;color:var(--ink-soft)}
+  .privacy b{color:var(--ink)}
+
+  .inputs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+  @media (max-width:760px){.inputs{grid-template-columns:1fr}}
+  .input-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+  .input-card h2{font-family:var(--display);font-size:16px;margin:0 0 4px}
+  .input-card .role{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:10px}
+  .input-card textarea{width:100%;min-height:140px;font-family:var(--mono);font-size:11.5px;border:1.5px solid var(--line);border-radius:10px;padding:10px;background:#FAFBFD;color:var(--ink);resize:vertical}
+  .input-card textarea:focus{outline:none;border-color:var(--cobalt)}
+  .file-row{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12.5px;color:var(--ink-soft)}
+  .file-row input[type=file]{font-family:var(--sans);font-size:12.5px;max-width:100%}
+  .file-row .fname{font-family:var(--mono);color:var(--ink)}
+
+  .actions{display:flex;gap:10px;align-items:center;margin-bottom:26px;flex-wrap:wrap}
+  .btn{font-family:var(--sans);font-weight:600;font-size:14px;background:var(--cobalt);color:#fff;border:none;border-radius:10px;padding:11px 20px;cursor:pointer}
+  .btn.secondary{background:#fff;color:var(--cobalt);border:1.5px solid var(--cobalt)}
+  .err{color:var(--coral);font-size:13.5px;font-family:var(--mono)}
+
+  .summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+  .summary .pill{font-family:var(--mono);font-size:12px;border-radius:20px;padding:6px 14px;border:1px solid var(--line);background:#fff}
+  .summary .pill b{font-weight:700}
+  .summary .pill.added{border-color:var(--mint);color:#0E7A54}
+  .summary .pill.removed{border-color:var(--coral);color:#B0442F}
+  .summary .pill.changed{border-color:var(--amber);color:#92650F}
+  .summary .pill.moved{border-color:var(--cobalt);color:var(--cobalt)}
+
+  .group{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:16px;overflow:hidden}
+  .group-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;cursor:pointer;user-select:none}
+  .group-head:hover{background:#FAFBFD}
+  .group-head h2{font-family:var(--display);font-size:16.5px;margin:0}
+  .group-head .tag{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-left:8px}
+  .group-head .counts{font-family:var(--mono);font-size:12px;color:var(--ink-soft);display:flex;gap:10px}
+  .group-head .counts .n-added{color:#0E7A54}
+  .group-head .counts .n-removed{color:#B0442F}
+  .group-head .counts .n-changed{color:#92650F}
+  .group-head .counts .n-moved{color:var(--cobalt)}
+  .group-head .chev{font-size:12px;color:var(--ink-soft);transition:transform .15s}
+  .group.open .chev{transform:rotate(90deg)}
+  .group-body{border-top:1px solid var(--line);padding:0 20px}
+  .group.closed .group-body{display:none}
+
+  .record{padding:14px 0;border-bottom:1px solid #EEF1F6}
+  .record:last-child{border-bottom:none}
+  .record-key{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);margin-bottom:8px}
+  .record-key .badge{font-family:var(--sans);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;border-radius:5px;padding:2px 7px;margin-right:8px}
+  .badge.added{background:#EAF7F2;color:#0E7A54}
+  .badge.removed{background:#FCEBE8;color:#B0442F}
+  .badge.changed{background:#FDF3E9;color:#92650F}
+  .badge.moved{background:#EAEFFC;color:var(--cobalt)}
+
+  table.fields{width:100%;border-collapse:collapse;font-size:13px}
+  table.fields td{padding:5px 8px;vertical-align:top;border-bottom:1px solid #F3F5F9}
+  table.fields td.fname{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap;width:220px}
+  table.fields td.before{color:#B0442F}
+  table.fields td.after{color:#0E7A54}
+  table.fields td.before, table.fields td.after{font-family:var(--mono);font-size:12px;max-width:340px;word-break:break-all}
+  table.fields .arrow{color:var(--ink-soft);padding:0 4px}
+  .decoded{font-family:var(--sans);font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+  .decoded .plus{color:#0E7A54}
+  .decoded .minus{color:#B0442F}
+  .unsourced{font-size:10.5px;color:var(--amber);font-family:var(--sans)}
+
+  .empty{color:var(--ink-soft);font-size:13.5px;padding:20px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tool-back"><a href="https://paiement-decrypte.fr/outils/">&larr; Toute la boîte à outils</a><a class="lang" href="https://paiement-decrypte.fr/en/outils/nexo-diff.html" hreflang="en">EN</a></div>
+  <div class="kicker">Paiement Décrypté · outil gratuit, 100&nbsp;% navigateur</div>
+  <h1>Diff nexo/OSCAR - comparer deux fichiers de config terminal</h1>
+  <p class="lede"><b>Colle ou charge deux fichiers</b> (schéma <code>schemas.artifact.pl/oscarv4</code>, blocs e0-f0) : le comparateur regroupe les blocs répétés par leur clé naturelle (AID, RID, TAID, BIN…), repère quand un enregistrement a juste été <b>déplacé</b> (ex. un profil applicatif renuméroté) plutôt que de l'afficher comme un ajout et une suppression séparés, et décode les champs bit à bit déjà sourcés (terminalCapabilities, additionalTerminalCapabilities, TAC) avec le même dictionnaire que nexo-config et emv-parser. Les blocs sans aucune différence restent repliés par défaut.</p>
+
+  <div class="privacy"><b>Tout se passe dans le navigateur.</b> Les fichiers collés/chargés ne sont jamais envoyés à un serveur - le parsing et le diff tournent en JS côté client uniquement. Utile puisque ces fichiers contiennent souvent des identifiants commerçant/acquéreur réels.</div>
+
+  <div class="inputs">
+    <div class="input-card">
+      <h2>Fichier A</h2>
+      <div class="role">avant</div>
+      <textarea id="xml-a" placeholder="Colle le XML ici, ou charge un fichier ci-dessous…"></textarea>
+      <div class="file-row"><input type="file" id="file-a" accept=".xml,text/xml"><span class="fname" id="fname-a"></span></div>
+    </div>
+    <div class="input-card">
+      <h2>Fichier B</h2>
+      <div class="role">après</div>
+      <textarea id="xml-b" placeholder="Colle le XML ici, ou charge un fichier ci-dessous…"></textarea>
+      <div class="file-row"><input type="file" id="file-b" accept=".xml,text/xml"><span class="fname" id="fname-b"></span></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="runDiff()">Comparer</button>
+    <button class="btn secondary" onclick="swapFiles()">Inverser A / B</button>
+    <span class="err" id="err" hidden></span>
+  </div>
+
+  <div id="summary" class="summary" hidden></div>
+  <div id="results"></div>
+</div>
+
+<script src="https://paiement-decrypte.fr/assets/js/emv-dictionary.js"></script>
+<script>
+/* ============================================================
+   Diff nexo/OSCAR - moteur
+   Réutilise TERMCAP_BITS / ATC_BITS / TVR_BITS / EMV_AIDS /
+   COUNTRY_DICT / CURRENCY_DICT depuis emv-dictionary.js, chargé
+   juste au-dessus : même source que emv-parser et nexo-config.
+   Pas de nouvelle lecture de spec (P2) - uniquement de la
+   ré-composition du moteur déjà validé.
+   ============================================================ */
+
+/* Libellés des blocs OSCAR connus (schéma schemas.artifact.pl/oscarv4) */
+const BLOCK_LABELS = {
+  e0: "Identité terminal",
+  e1: "Paramètres terminal",
+  e2: "Profils applicatifs par AID",
+  e3: "Clés publiques CA (par RID)",
+  e4: "Services",
+  e5: "Sélection d'application (TAID)",
+  e6: "Profils par scheme / acquéreur",
+  e7: "Préfixes BIN",
+  e8: "Profils par BIN",
+};
+
+/* Clé de corrélation par type de bloc : quels champs identifient "le même
+   enregistrement" d'un fichier à l'autre. Blocs non listés : repli
+   générique (premier champ trouvé). Pas de tag EMV standard derrière ces
+   clés - c'est la structure OSCAR observée, pas une norme publique. */
+const KEY_FIELDS = {
+  e2: ['aid', 'applicationProfileNumber'],
+  e3: ['rid', 'caPublicKeyIndex'],
+  e4: ['serviceIdentifier'],
+  e5: ['taid'],
+  e6: ['applicationProfileNumber'],
+  e7: ['bid'],
+  e8: ['bid', 'applicationProfileNumber'],
+};
+
+/* Champs identifiés dans nexo-config comme non sourcés : on les affiche
+   telles quelles (avant/après) mais sans prétendre les décoder. */
+const UNSOURCED_FIELDS = new Set(['configuredServices', 'defaultCardService']);
+
+function fieldValueToString(v) {
+  if (v == null) return '∅';
+  if (Array.isArray(v)) return v.map(fieldValueToString).join(' | ');
+  if (typeof v === 'object') return Object.entries(v).map(([k, x]) => `${k}=${x}`).join(', ');
+  return String(v);
+}
+
+function parseOscarXml(xmlText) {
+  const doc = new DOMParser().parseFromString(xmlText, 'application/xml');
+  const perr = doc.getElementsByTagName('parsererror')[0];
+  if (perr) throw new Error("XML invalide : " + perr.textContent.trim().slice(0, 300));
+  const root = doc.documentElement;
+  if (!root) throw new Error("Fichier vide ou illisible.");
+  const blocks = [];
+  for (const el of Array.from(root.children)) {
+    const tag = el.tagName;
+    const fields = {};
+    for (const child of Array.from(el.children)) {
+      const cname = child.tagName;
+      let val;
+      if (child.children.length > 0) {
+        val = {};
+        for (const gc of Array.from(child.children)) val[gc.tagName] = (gc.textContent || '').trim();
+      } else {
+        val = (child.textContent || '').trim();
+      }
+      if (Object.prototype.hasOwnProperty.call(fields, cname)) {
+        if (!Array.isArray(fields[cname])) fields[cname] = [fields[cname]];
+        fields[cname].push(val);
+      } else {
+        fields[cname] = val;
+      }
+    }
+    blocks.push({ tag, fields });
+  }
+  return blocks;
+}
+
+function keyOf(tag, fields) {
+  const kf = KEY_FIELDS[tag];
+  if (kf) return kf.map(k => fieldValueToString(fields[k])).join(' / ');
+  const firstName = Object.keys(fields)[0];
+  return firstName ? `${firstName}=${fieldValueToString(fields[firstName])}` : '(bloc sans champ)';
+}
+
+function groupByTag(blocks) {
+  const g = {};
+  blocks.forEach(b => { (g[b.tag] = g[b.tag] || []).push(b); });
+  return g;
+}
+
+/* ---------- Décodage réutilisant le moteur emv-parser / nexo-config ---------- */
+
+function bitLabelsOn(hex, table) {
+  const bytes = (hex || '').trim().toUpperCase().match(/../g) || [];
+  const set = new Set();
+  table.forEach(([byteIdx, mask, label]) => {
+    const byte = bytes[byteIdx - 1] ? parseInt(bytes[byteIdx - 1], 16) : 0;
+    if ((byte & mask) === mask) set.add(label);
+  });
+  return set;
+}
+function decodeBitsDiff(hexA, hexB, table) {
+  const a = bitLabelsOn(hexA, table), b = bitLabelsOn(hexB, table);
+  return {
+    added: [...b].filter(x => !a.has(x)),
+    removed: [...a].filter(x => !b.has(x)),
+  };
+}
+function decodeBitsSingle(hex, table) {
+  const set = bitLabelsOn(hex, table);
+  return set.size ? [...set] : [];
+}
+
+/* tacDefault/tacDenial/tacOnline sont des Terminal Action Codes : 5 octets
+   qui reprennent EXACTEMENT le plan de bits du TVR (EMV Book 3, Terminal
+   Action Analysis) - un bit TAC actif = "si ce bit TVR se lève, agir".
+   On réutilise donc TVR_BITS tel quel, sans nouvelle table. */
+const FIELD_DECODERS = {
+  terminalCapabilities: TERMCAP_BITS,
+  additionalTerminalCapabilities: ATC_BITS,
+  tacDefault: TVR_BITS,
+  tacDenial: TVR_BITS,
+  tacOnline: TVR_BITS,
+};
+
+/* Lookups directs (pas de bitfield) réutilisant le dictionnaire partagé */
+function scalarLookup(fieldName, value) {
+  if (!value || typeof value !== 'string') return null;
+  if (fieldName === 'aid') {
+    // aid peut porter un suffixe propriétaire (ex. C0000301) après le RID standard,
+    // on ne matche que sur les AID connus tels quels
+    const a = EMV_AIDS[value];
+    return a ? `${a.reseau} - ${a.produit}` : null;
+  }
+  if (fieldName === 'terminalCountryCode') {
+    const c = COUNTRY_DICT[value.padStart(3, '0')];
+    return c || null;
+  }
+  if (fieldName === 'terminalTransactionCurrencyCode') {
+    const c = CURRENCY_DICT[value.padStart(3, '0')];
+    return c ? `${c.code} (${c.name})` : null;
+  }
+  return null;
+}
+
+/* ---------- Diff d'une paire de blocs (même clé, présents des 2 côtés) ---------- */
+
+function diffFields(fieldsA, fieldsB) {
+  const names = new Set([...Object.keys(fieldsA), ...Object.keys(fieldsB)]);
+  const rows = [];
+  for (const name of names) {
+    const a = fieldsA[name], b = fieldsB[name];
+    const sa = fieldValueToString(a), sb = fieldValueToString(b);
+    if (sa === sb) continue; // inchangé, pas affiché
+    const row = { name, before: a, after: b, beforeStr: sa, afterStr: sb };
+    if (Object.prototype.hasOwnProperty.call(FIELD_DECODERS, name) && typeof a === 'string' && typeof b === 'string') {
+      row.bitsDiff = decodeBitsDiff(a, b, FIELD_DECODERS[name]);
+    } else {
+      const la = scalarLookup(name, typeof a === 'string' ? a : null);
+      const lb = scalarLookup(name, typeof b === 'string' ? b : null);
+      if (la || lb) row.lookup = { before: la, after: lb };
+    }
+    if (UNSOURCED_FIELDS.has(name)) row.unsourced = true;
+    rows.push(row);
+  }
+  rows.sort((x, y) => x.name.localeCompare(y.name));
+  return rows;
+}
+
+/* ---------- Diff complet ---------- */
+
+/* ---------- Repérage intelligent (Option C) ----------
+   Un "ajouté" et un "supprimé" du même bloc dont le contenu se ressemble
+   fortement ne sont presque jamais deux événements séparés : c'est le
+   même enregistrement dont la clé (ex. n° de profil applicatif) a changé.
+   On les fusionne en une seule carte "Déplacé" plutôt que de les montrer
+   comme deux entrées sans lien.
+   Aucune connaissance métier codée en dur : la similarité se calcule sur
+   TOUS les champs, quel que soit le bloc - pas de clé spécifique à e2/e6. */
+
+const MOVE_SIMILARITY_THRESHOLD = 0.5; // à ajuster selon les cas réels fournis
+
+function fieldSimilarity(fieldsA, fieldsB) {
+  const names = new Set([...Object.keys(fieldsA), ...Object.keys(fieldsB)]);
+  if (names.size === 0) return 0;
+  let same = 0;
+  names.forEach(n => { if (fieldValueToString(fieldsA[n]) === fieldValueToString(fieldsB[n])) same++; });
+  return same / names.size;
+}
+
+function reconcileMoves(removedList, addedList) {
+  // removedList/addedList: [{key, fields}]
+  const candidates = [];
+  removedList.forEach((r, ri) => {
+    addedList.forEach((a, ai) => {
+      candidates.push({ ri, ai, sim: fieldSimilarity(r.fields, a.fields) });
+    });
+  });
+  candidates.sort((x, y) => y.sim - x.sim);
+  const usedR = new Set(), usedA = new Set();
+  const moved = [];
+  for (const c of candidates) {
+    if (c.sim < MOVE_SIMILARITY_THRESHOLD) break;
+    if (usedR.has(c.ri) || usedA.has(c.ai)) continue;
+    usedR.add(c.ri); usedA.add(c.ai);
+    moved.push({ from: removedList[c.ri], to: addedList[c.ai], sim: c.sim });
+  }
+  const stillRemoved = removedList.filter((_, i) => !usedR.has(i));
+  const stillAdded = addedList.filter((_, i) => !usedA.has(i));
+  return { moved, stillRemoved, stillAdded };
+}
+
+function diffOscar(blocksA, blocksB) {
+  const gA = groupByTag(blocksA), gB = groupByTag(blocksB);
+  const allTags = [...new Set([...Object.keys(gA), ...Object.keys(gB)])];
+  allTags.sort((x, y) => {
+    const ox = parseInt(x.slice(1), 10), oy = parseInt(y.slice(1), 10);
+    if (!isNaN(ox) && !isNaN(oy)) return ox - oy;
+    return x.localeCompare(y);
+  });
+
+  const groups = [];
+  for (const tag of allTags) {
+    const listA = gA[tag] || [], listB = gB[tag] || [];
+    const mapA = new Map(listA.map(b => [keyOf(tag, b.fields), b.fields]));
+    const mapB = new Map(listB.map(b => [keyOf(tag, b.fields), b.fields]));
+    const allKeys = [...new Set([...mapA.keys(), ...mapB.keys()])];
+
+    const records = [];
+    const rawRemoved = [], rawAdded = [];
+    for (const key of allKeys) {
+      const inA = mapA.has(key), inB = mapB.has(key);
+      if (inA && inB) {
+        const rows = diffFields(mapA.get(key), mapB.get(key));
+        if (rows.length) records.push({ key, status: 'changed', rows });
+      } else if (inA && !inB) {
+        rawRemoved.push({ key, fields: mapA.get(key) });
+      } else {
+        rawAdded.push({ key, fields: mapB.get(key) });
+      }
+    }
+
+    const { moved, stillRemoved, stillAdded } = reconcileMoves(rawRemoved, rawAdded);
+    moved.forEach(m => {
+      const rows = diffFields(m.from.fields, m.to.fields);
+      records.push({ key: `${m.from.key}  →  ${m.to.key}`, status: 'moved', rows, similarity: m.sim });
+    });
+    stillRemoved.forEach(r => records.push({ key: r.key, status: 'removed', fields: r.fields }));
+    stillAdded.forEach(a => records.push({ key: a.key, status: 'added', fields: a.fields }));
+
+    const nAdded = stillAdded.length;
+    const nRemoved = stillRemoved.length;
+    const nMoved = moved.length;
+    const nChanged = records.filter(r => r.status === 'changed').length;
+    const nUnchanged = allKeys.length - (nChanged + rawRemoved.length + rawAdded.length);
+    if (records.length === 0 && listA.length === 0 && listB.length === 0) continue;
+    groups.push({ tag, label: BLOCK_LABELS[tag] || tag, records, nAdded, nRemoved, nMoved, nChanged, nUnchanged, total: allKeys.length });
+  }
+  return groups;
+}
+
+/* ---------- Rendu ---------- */
+
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function renderBitsDiff(bd) {
+  if (!bd || (!bd.added.length && !bd.removed.length)) return '';
+  const parts = [];
+  bd.added.forEach(l => parts.push(`<span class="plus">+ ${esc(l)}</span>`));
+  bd.removed.forEach(l => parts.push(`<span class="minus">− ${esc(l)}</span>`));
+  return `<div class="decoded">${parts.join('<br>')}</div>`;
+}
+
+function renderRecordRows(rows) {
+  return `<table class="fields"><tbody>${rows.map(r => `
+    <tr>
+      <td class="fname">${esc(r.name)}${r.unsourced ? '<div class="unsourced">non sourcé</div>' : ''}</td>
+      <td class="before">${esc(r.beforeStr)}</td>
+      <td class="arrow">→</td>
+      <td class="after">${esc(r.afterStr)}${r.lookup && r.lookup.after ? `<div class="decoded">${esc(r.lookup.after)}</div>` : ''}${renderBitsDiff(r.bitsDiff)}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+
+function renderWholeRecord(fields, status) {
+  const cls = status === 'removed' ? 'before' : 'after';
+  const rows = Object.keys(fields).sort().map(name => {
+    const v = fields[name];
+    let extra = '';
+    if (Object.prototype.hasOwnProperty.call(FIELD_DECODERS, name) && typeof v === 'string') {
+      const labels = decodeBitsSingle(v, FIELD_DECODERS[name]);
+      if (labels.length) extra = `<div class="decoded">${labels.map(esc).join(', ')}</div>`;
+    } else {
+      const l = scalarLookup(name, typeof v === 'string' ? v : null);
+      if (l) extra = `<div class="decoded">${esc(l)}</div>`;
+    }
+    if (UNSOURCED_FIELDS.has(name)) extra += '<div class="unsourced">non sourcé</div>';
+    return { name, afterStr: fieldValueToString(v), extra };
+  });
+  return `<table class="fields"><tbody>${rows.map(r => `
+    <tr><td class="fname">${esc(r.name)}</td><td colspan="3" class="${cls}">${esc(r.afterStr)}${r.extra}</td></tr>`).join('')}</tbody></table>`;
+}
+
+const BADGES = {
+  added: '<span class="badge added">Ajouté</span>',
+  removed: '<span class="badge removed">Supprimé</span>',
+  changed: '<span class="badge changed">Modifié</span>',
+  moved: '<span class="badge moved">Déplacé</span>',
+};
+
+function renderGroup(g, idx) {
+  const bodyId = `grp-${idx}`;
+  // ordre d'affichage : ce qui bouge le plus loin de la clé naturelle en premier
+  const order = { moved: 0, changed: 1, added: 2, removed: 3 };
+  const sorted = g.records.slice().sort((a, b) => order[a.status] - order[b.status]);
+  const items = sorted.map(r => {
+    const badge = BADGES[r.status];
+    const body = (r.status === 'changed' || r.status === 'moved') ? renderRecordRows(r.rows) : renderWholeRecord(r.fields, r.status);
+    return `<div class="record"><div class="record-key">${badge}${esc(r.key)}</div>${body}</div>`;
+  }).join('');
+  const hasChanges = g.records.length > 0;
+  return `
+  <div class="group ${hasChanges ? 'open' : 'closed'}" id="${bodyId}-wrap">
+    <div class="group-head" onclick="toggleGroup('${bodyId}-wrap')">
+      <h2>${esc(g.label)} <span class="tag">${esc(g.tag)}</span></h2>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="counts">
+          <span>${g.nUnchanged} inchangé(s)</span>
+          ${g.nMoved ? `<span class="n-moved">${g.nMoved} déplacé(s)</span>` : ''}
+          ${g.nChanged ? `<span class="n-changed">${g.nChanged} modifié(s)</span>` : ''}
+          ${g.nAdded ? `<span class="n-added">+${g.nAdded}</span>` : ''}
+          ${g.nRemoved ? `<span class="n-removed">−${g.nRemoved}</span>` : ''}
+        </div>
+        <span class="chev">▶</span>
+      </div>
+    </div>
+    <div class="group-body">${items || '<div class="empty">Aucune différence dans ce bloc.</div>'}</div>
+  </div>`;
+}
+
+function toggleGroup(id) {
+  document.getElementById(id).classList.toggle('closed');
+  document.getElementById(id).classList.toggle('open');
+}
+
+function runDiff() {
+  const errEl = $('err');
+  errEl.hidden = true; errEl.textContent = '';
+  $('summary').hidden = true;
+  $('results').innerHTML = '';
+  const xmlA = $('xml-a').value.trim(), xmlB = $('xml-b').value.trim();
+  if (!xmlA || !xmlB) { errEl.hidden = false; errEl.textContent = "Colle ou charge les deux fichiers avant de comparer."; return; }
+  let blocksA, blocksB;
+  try {
+    blocksA = parseOscarXml(xmlA);
+    blocksB = parseOscarXml(xmlB);
+  } catch (e) {
+    errEl.hidden = false; errEl.textContent = e.message;
+    return;
+  }
+  const groups = diffOscar(blocksA, blocksB);
+  const totalAdded = groups.reduce((s, g) => s + g.nAdded, 0);
+  const totalRemoved = groups.reduce((s, g) => s + g.nRemoved, 0);
+  const totalChanged = groups.reduce((s, g) => s + g.nChanged, 0);
+  const totalMoved = groups.reduce((s, g) => s + g.nMoved, 0);
+  const totalUnchanged = groups.reduce((s, g) => s + g.nUnchanged, 0);
+
+  const sum = $('summary');
+  sum.hidden = false;
+  sum.innerHTML = `
+    <span class="pill">${groups.reduce((s, g) => s + g.total, 0)} enregistrement(s) au total, dont ${totalUnchanged} identiques</span>
+    ${totalMoved ? `<span class="pill moved"><b>${totalMoved}</b> déplacé(s)</span>` : ''}
+    ${totalChanged ? `<span class="pill changed"><b>${totalChanged}</b> modifié(s)</span>` : ''}
+    ${totalAdded ? `<span class="pill added"><b>${totalAdded}</b> ajouté(s)</span>` : ''}
+    ${totalRemoved ? `<span class="pill removed"><b>${totalRemoved}</b> supprimé(s)</span>` : ''}`;
+
+  $('results').innerHTML = groups.map((g, i) => renderGroup(g, i)).join('');
+}
+
+function swapFiles() {
+  const a = $('xml-a').value, b = $('xml-b').value;
+  $('xml-a').value = b; $('xml-b').value = a;
+  const fa = $('fname-a').textContent, fb = $('fname-b').textContent;
+  $('fname-a').textContent = fb; $('fname-b').textContent = fa;
+}
+
+const $ = id => document.getElementById(id);
+
+function wireFileInput(inputId, textareaId, fnameId) {
+  $(inputId).addEventListener('change', (ev) => {
+    const file = ev.target.files[0];
+    if (!file) return;
+    $(fnameId).textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = () => { $(textareaId).value = reader.result; };
+    reader.readAsText(file, 'utf-8');
+  });
+}
+wireFileInput('file-a', 'xml-a', 'fname-a');
+wireFileInput('file-b', 'xml-b', 'fname-b');
+</script>
+<script src="https://paiement-decrypte.fr/assets/agent-widget.js" data-api-url="https://paiement-decrypte-agent.paiement-decrypte.workers.dev/api/chat"></script>
+</body>
+</html>

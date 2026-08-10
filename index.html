@@ -32,6 +32,7 @@
     --cobalt:#1F4FD8;
     --cobalt-deep:#153A9E;
     --mint:#17B587;
+    --mint-deep:#0E9270;
     --coral:#E85C4A;
     --line:#D8DEE9;
     --card:#FFFFFF;
@@ -47,37 +48,43 @@
     width:100%;max-width:480px;min-height:100dvh;
     display:flex;flex-direction:column;
     padding:24px 20px calc(28px + env(safe-area-inset-bottom));
+    transition:max-width .2s ease;
   }
+  @media (min-width:760px){ .app{max-width:900px} }
+  @media (min-width:1040px){ .app{max-width:1120px} }
+
   .eyebrow{
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--ink-soft);
   }
-  .masthead{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+  .masthead{display:flex;align-items:center;gap:10px;margin-bottom:26px;flex-wrap:wrap}
   .mark{width:20px;height:20px;display:block;flex-shrink:0}
-  .lang{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
   .masthead-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-  .masthead-right .lang{margin-left:0}
-  .toolkit-nav{
-    display:inline-flex;align-items:center;gap:6px;background:var(--cobalt);color:#fff;
+  .lang{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+  .tools-nav{
+    display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:#fff;
     font-weight:600;font-size:12.5px;padding:8px 14px;border-radius:999px;text-decoration:none;
-    box-shadow:0 2px 8px rgba(31,79,216,.30);
+    box-shadow:0 2px 8px rgba(23,181,135,.35);
   }
-  .toolkit-nav:hover{background:var(--cobalt-deep)}
-  .ep.tool{border-left-color:var(--mint)}
-  .toolkit-all{margin-top:14px;font-size:14px}
-  .toolkit-all a{color:var(--cobalt);text-decoration:none;font-weight:600}
-  .toolkit-all a:hover{text-decoration:underline}
+  .tools-nav:hover{background:var(--mint-deep)}
 
   h1{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-    font-size:clamp(32px,9vw,42px);line-height:1.06;letter-spacing:-.01em;
+    font-size:clamp(32px,9vw,44px);line-height:1.06;letter-spacing:-.01em;
     margin-bottom:14px;
   }
   h1 em{font-style:normal;color:var(--cobalt)}
   .lede{color:var(--ink-soft);font-size:16px;max-width:40ch}
   .lede strong{color:var(--ink);font-weight:600}
+  @media (min-width:760px){ .lede{max-width:60ch} }
 
-  .season{margin-top:36px}
+  .section{margin-top:36px}
+  .section-title-main{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(21px,4vw,26px);line-height:1.15;letter-spacing:-.005em;margin-bottom:6px;
+  }
+  .section-sub{color:var(--ink-soft);font-size:14.5px;max-width:60ch;margin-bottom:16px}
+
   .season-head{
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
     text-transform:uppercase;color:var(--cobalt);margin-bottom:6px;
@@ -87,32 +94,40 @@
     line-height:1.2;margin-bottom:16px;
   }
 
-  .ep{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  .grid{display:grid;gap:12px;grid-template-columns:1fr}
+  @media (min-width:760px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  @media (min-width:1040px){ .grid{grid-template-columns:repeat(3,1fr)} }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:var(--radius);
     padding:20px;box-shadow:0 2px 10px rgba(14,27,44,.05);
-    display:block;text-decoration:none;color:inherit;
+    display:flex;flex-direction:column;text-decoration:none;color:inherit;
     transition:transform .15s ease, box-shadow .15s ease;
   }
-  .ep:active{transform:scale(.985)}
-  .ep + .ep{margin-top:12px}
-  .ep-num{
+  .card:active{transform:scale(.985)}
+  .card.episode{border-left-color:var(--cobalt)}
+  .card.tool{border-left-color:var(--mint)}
+  .card.locked{opacity:.55;pointer-events:none}
+
+  .card-eyebrow{
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
     color:var(--ink-soft);margin-bottom:6px;display:flex;justify-content:space-between;
   }
-  .ep-num .dur{color:var(--mint)}
-  .ep h3{
+  .card-eyebrow .accent{color:var(--mint)}
+  .card.episode .card-eyebrow .accent{color:var(--cobalt-deep)}
+  .card h3{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px;
     line-height:1.15;margin-bottom:4px;
   }
-  .ep p{color:var(--ink-soft);font-size:14.5px}
-  .ep-cta{
-    margin-top:14px;display:inline-flex;align-items:center;gap:8px;
+  .card p{color:var(--ink-soft);font-size:14.5px;flex:1}
+  .card-cta{
+    margin-top:14px;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
     background:var(--cobalt);color:#fff;font-weight:600;font-size:15px;
     padding:12px 20px;border-radius:999px;
   }
-  .ep-cta::after{content:"→"}
-  .ep.locked{opacity:.55;pointer-events:none}
-  .ep.locked .badge{
+  .card.tool .card-cta{background:var(--mint)}
+  .card-cta::after{content:"→"}
+  .card.locked .badge{
     display:inline-block;margin-top:12px;
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
     color:var(--coral);
@@ -127,7 +142,7 @@
     line-height:1.15;margin-bottom:8px;
   }
   .signup p{color:#B9C4D4;font-size:14.5px;margin-bottom:16px}
-  .signup form{display:flex;flex-direction:column;gap:10px}
+  .signup form{display:flex;flex-direction:column;gap:10px;max-width:440px}
   .signup input{
     font:inherit;font-size:15px;padding:13px 16px;border-radius:12px;
     border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
@@ -172,7 +187,7 @@
     </svg>
     <span class="eyebrow">Paiement Décrypté</span>
     <div class="masthead-right">
-      <a class="toolkit-nav" href="outils/">Ma boîte à outils</a>
+      <a class="tools-nav" href="outils/">Ma boîte à outils</a>
       <a class="lang" href="en/" hreflang="en">EN</a>
     </div>
   </div>
@@ -184,56 +199,74 @@
     <strong>Concepts courts, quiz, un moment interactif par épisode.</strong>
   </p>
 
-  <section class="season">
+  <section class="section" id="formation">
+    <h2 class="section-title-main">Formation</h2>
+    <p class="section-sub">Des micro-formations en épisodes, organisées par saison.</p>
     <p class="season-head">Saison 1 · Le circuit de l'argent</p>
     <p class="season-q">Que se passe-t-il vraiment quand une carte paie 60&nbsp;€&nbsp;?</p>
 
-    <a class="ep" href="episodes/s1e01.html">
-      <p class="ep-num"><span>E01</span><span class="dur">~5 min</span></p>
-      <h3>Les schemes de paiement</h3>
-      <p>Visa, Mastercard, CB : le modèle à 4 coins, expliqué en suivant un paiement de 60&nbsp;€.</p>
-      <span class="ep-cta">Commencer l'épisode</span>
-    </a>
+    <div class="grid">
+      <a class="card episode" href="episodes/s1e01.html">
+        <p class="card-eyebrow"><span>E01</span><span class="accent">~5 min</span></p>
+        <h3>Les schemes de paiement</h3>
+        <p>Visa, Mastercard, CB : le modèle à 4 coins, expliqué en suivant un paiement de 60&nbsp;€.</p>
+        <span class="card-cta">Commencer l'épisode</span>
+      </a>
 
-    <a class="ep" href="episodes/s1e02.html">
-      <p class="ep-num"><span>E02</span><span class="dur">~5 min</span></p>
-      <h3>L'interchange</h3>
-      <p>Qui paie quoi sur les 60&nbsp;€ encaissés, la commission la plus mal comprise du paiement. Faites votre pari.</p>
-      <span class="ep-cta">Commencer l'épisode</span>
-    </a>
+      <a class="card episode" href="episodes/s1e02.html">
+        <p class="card-eyebrow"><span>E02</span><span class="accent">~5 min</span></p>
+        <h3>L'interchange</h3>
+        <p>Qui paie quoi sur les 60&nbsp;€ encaissés, la commission la plus mal comprise du paiement. Faites votre pari.</p>
+        <span class="card-cta">Commencer l'épisode</span>
+      </a>
 
-    <div class="ep locked" aria-disabled="true">
-      <p class="ep-num"><span>E03</span><span class="dur">~5 min</span></p>
-      <h3>CB &amp; co-badgeage</h3>
-      <p>Deux réseaux sur la même puce, un seul par paiement, l'exception française que les newsletters anglophones ignorent.</p>
-      <span class="badge">BIENTÔT</span>
+      <div class="card episode locked" aria-disabled="true">
+        <p class="card-eyebrow"><span>E03</span><span class="accent">~5 min</span></p>
+        <h3>CB &amp; co-badgeage</h3>
+        <p>Deux réseaux sur la même puce, un seul par paiement, l'exception française que les newsletters anglophones ignorent.</p>
+        <span class="badge">BIENTÔT</span>
+      </div>
     </div>
   </section>
 
-  <section class="season toolkit">
-    <p class="season-head">Ma boîte à outils</p>
-    <p class="season-q">Des outils gratuits, pensés pour le terrain : décoder, comprendre, vérifier.</p>
+  <section class="section" id="outils-preview">
+    <h2 class="section-title-main">Ma boîte à outils</h2>
+    <p class="section-sub">Pas des épisodes, des outils de travail à garder sous le coude.</p>
 
-    <a class="ep tool" href="outils/emv-parser.html">
-      <p class="ep-num"><span>OUTIL</span><span class="dur">gratuit</span></p>
-      <h3>Décodeur EMV TLV</h3>
-      <p>Décode un flux TLV tag par tag, avec un encodeur intégré. Rien ne sort de votre navigateur.</p>
-      <span class="ep-cta">Ouvrir l'outil</span>
-    </a>
+    <div class="grid">
+      <a class="card tool" href="outils/emv-parser.html">
+        <p class="card-eyebrow"><span>OUTIL</span></p>
+        <h3>Décodeur EMV TLV</h3>
+        <p>Décode un flux TLV tag par tag, avec un encodeur intégré.</p>
+        <span class="card-cta">Ouvrir l'outil</span>
+      </a>
 
-    <div class="ep tool locked" aria-disabled="true">
-      <p class="ep-num"><span>OUTIL</span></p>
-      <h3>NEXO Acquirer Explainer</h3>
-      <p>Explore les messages du protocole NEXO côté acquéreur, message par message.</p>
-      <span class="badge">À VENIR</span>
+      <a class="card tool" href="outils/nexo-diff.html">
+        <p class="card-eyebrow"><span>OUTIL</span></p>
+        <h3>Diff config NEXO</h3>
+        <p>Compare deux fichiers de configuration terminal et met en avant ce qui a changé.</p>
+        <span class="card-cta">Ouvrir l'outil</span>
+      </a>
+
+      <div class="card tool locked" aria-disabled="true">
+        <p class="card-eyebrow"><span>OUTIL</span></p>
+        <h3>NEXO Acquirer Explainer</h3>
+        <p>Explore les messages du protocole NEXO côté acquéreur.</p>
+        <span class="badge">À VENIR</span>
+      </div>
+
+      <div class="card tool locked" aria-disabled="true">
+        <p class="card-eyebrow"><span>OUTIL</span></p>
+        <h3>Décodeur config NEXO</h3>
+        <p>Lecture claire d'un fichier de configuration terminal.</p>
+        <span class="badge">À VENIR</span>
+      </div>
     </div>
-
-    <p class="toolkit-all"><a href="outils/">Voir toute la boîte à outils →</a></p>
   </section>
 
   <section class="signup" id="inscription">
-    <h2>Le prochain épisode, dans votre boîte mail.</h2>
-    <p>Un email par épisode, rien d'autre. Désinscription en un clic.</p>
+    <h2>Restez informé·e de nos actualités.</h2>
+    <p>Nouveaux épisodes, nouveaux outils, rien d'autre. Désinscription en un clic.</p>
     <!-- KIT_FORM : branché sur le formulaire Kit n°9768048 (session 4) -->
     <form id="signup-form" novalidate>
       <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
@@ -245,6 +278,7 @@
 
   <footer>
     <p>Données : ce site mesure des statistiques d'usage <b>anonymes</b>, sans cookie ni traceur. Email : collecté uniquement via le formulaire ci-dessus, avec double confirmation ; désinscription en un clic dans chaque envoi.</p>
+    <p>Une id&eacute;e d'&eacute;pisode ou d'outil&nbsp;? &Eacute;crivez &agrave; <a href="mailto:bonjour@paiement-decrypte.fr?subject=Proposition%20de%20sujet" style="color:var(--cobalt)">bonjour@paiement-decrypte.fr</a>.</p>
     <p>© 2026 Paiement Décrypté</p>
   </footer>
 
