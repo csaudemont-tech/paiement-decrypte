@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment Decrypted — payments explained from the field</title>
+<title>Payment Decrypted · payments explained from the field</title>
 <meta name="description" content="Interactive 5-minute micro-lessons on payments: card schemes, interchange, acquiring. The plumbing everyone uses and nobody explains.">
 <link rel="canonical" href="https://paiement-decrypte.fr/en/">
 <meta property="og:type" content="website">
@@ -11,7 +11,7 @@
 <meta property="og:locale" content="en_GB">
 <meta property="og:locale:alternate" content="fr_FR">
 <meta property="og:url" content="https://paiement-decrypte.fr/en/">
-<meta property="og:title" content="Payment Decrypted — payments explained from the field">
+<meta property="og:title" content="Payment Decrypted · payments explained from the field">
 <meta property="og:description" content="Interactive 5-minute micro-lessons on payments: card schemes, interchange, acquiring. Short concepts, quizzes, one interactive moment per episode.">
 <meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png">
 <meta property="og:image:width" content="2400">
@@ -141,6 +141,18 @@
   footer p + p{margin-top:8px}
   footer b{color:var(--ink);font-weight:600}
   .lang{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+  .masthead-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .masthead-right .lang{margin-left:0}
+  .toolkit-nav{
+    display:inline-flex;align-items:center;gap:6px;background:var(--cobalt);color:#fff;
+    font-weight:600;font-size:12.5px;padding:8px 14px;border-radius:999px;text-decoration:none;
+    box-shadow:0 2px 8px rgba(31,79,216,.30);
+  }
+  .toolkit-nav:hover{background:var(--cobalt-deep)}
+  .ep.tool{border-left-color:var(--mint)}
+  .toolkit-all{margin-top:14px;font-size:14px}
+  .toolkit-all a{color:var(--cobalt);text-decoration:none;font-weight:600}
+  .toolkit-all a:hover{text-decoration:underline}
 </style>
 </head>
 <body data-ep="home-en">
@@ -160,7 +172,10 @@
       <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
     </svg>
     <span class="eyebrow">Payment Decrypted</span>
-    <a class="lang" href="../" hreflang="fr">FR</a>
+    <div class="masthead-right">
+      <a class="toolkit-nav" href="outils/">My toolkit</a>
+      <a class="lang" href="../" hreflang="fr">FR</a>
+    </div>
   </div>
 
   <h1>Payments, <em>decrypted</em> from the field.</h1>
@@ -181,12 +196,40 @@
       <span class="ep-cta">Start the episode</span>
     </a>
 
-    <div class="ep locked" aria-disabled="true">
+    <a class="ep" href="episodes/s1e02.html">
       <p class="ep-num"><span>E02</span><span class="dur">~5 min</span></p>
       <h3>Interchange</h3>
-      <p>Who pays what on &euro;60 of card sales &mdash; payments&rsquo; most misunderstood fee.</p>
+      <p>Who pays what on &euro;60 of card sales, payments&rsquo; most misunderstood fee. Place your bet.</p>
+      <span class="ep-cta">Start the episode</span>
+    </a>
+
+    <div class="ep locked" aria-disabled="true">
+      <p class="ep-num"><span>E03</span><span class="dur">~5 min</span></p>
+      <h3>CB &amp; co-badging</h3>
+      <p>Two schemes on one chip, a single winner per payment, the French exception anglophone newsletters ignore.</p>
       <span class="badge">COMING SOON</span>
     </div>
+  </section>
+
+  <section class="season toolkit">
+    <p class="season-head">My toolkit</p>
+    <p class="season-q">Free tools, built for the field: decode, understand, verify.</p>
+
+    <a class="ep tool" href="outils/emv-parser.html">
+      <p class="ep-num"><span>TOOL</span><span class="dur">free</span></p>
+      <h3>EMV TLV Decoder</h3>
+      <p>Decode a TLV stream tag by tag, with a built-in encoder. Nothing leaves your browser.</p>
+      <span class="ep-cta">Open the tool</span>
+    </a>
+
+    <div class="ep tool locked" aria-disabled="true">
+      <p class="ep-num"><span>TOOL</span></p>
+      <h3>NEXO Acquirer Explainer</h3>
+      <p>Explore NEXO protocol messages on the acquirer side, message by message.</p>
+      <span class="badge">COMING SOON</span>
+    </div>
+
+    <p class="toolkit-all"><a href="outils/">See the whole toolkit →</a></p>
   </section>
 
   <section class="signup" id="subscribe">
@@ -195,8 +238,8 @@
     <form id="signup-form" novalidate data-kit-form="9773354"
           data-sending="Sending&hellip;" data-sent="Sent &#10003;"
           data-msg-invalid="Please enter a valid email address."
-          data-msg-rejected="Subscription failed &mdash; check the address and try again."
-          data-msg-network="Couldn&rsquo;t send &mdash; check your connection and try again.">
+          data-msg-rejected="Subscription failed, check the address and try again."
+          data-msg-network="Couldn&rsquo;t send, check your connection and try again.">
       <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
       <button type="submit">Notify me</button>
     </form>
@@ -205,9 +248,7 @@
   </section>
 
   <footer>
-    <p><b>Payment Decrypted</b> is written by a payments practitioner &mdash; 10+ years across acquiring, payment terminals and operations, in France &amp; Europe.</p>
     <p>Data: this site collects <b>anonymous</b> usage statistics only, with no cookies or trackers. Email: collected solely via the form above, with double confirmation; one-click unsubscribe in every email.</p>
-    <p>Got an episode or tool idea? Write to <a href="mailto:bonjour@paiement-decrypte.fr?subject=Topic%20suggestion" style="color:var(--cobalt)">bonjour@paiement-decrypte.fr</a>.</p>
     <p>&copy; 2026 Paiement D&eacute;crypt&eacute; &middot; <a href="../" style="color:inherit">Version fran&ccedil;aise</a></p>
   </footer>
 

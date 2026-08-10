@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 · E02 · L'interchange</title>
+<meta name="description" content="L'interchange en 5 minutes : la commission que la banque du commerçant verse à celle du client, qui la paie au final, et pourquoi l'UE l'a plafonnée en 2015 (IFR). Avec quiz et pari.">
+<link rel="canonical" href="https://paiement-decrypte.fr/episodes/s1e02.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e02.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e02.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Paiement Décrypté">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/episodes/s1e02.html">
+<meta property="og:title" content="S1 · E02 · L'interchange – Paiement Décrypté">
+<meta property="og:description" content="Sur 60 € payés par carte, combien partent en commissions ? Faites votre pari, réponse en 5 minutes, avec quiz.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1254">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8;
+    --ink:#0E1B2C;
+    --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8;
+    --cobalt-deep:#153A9E;
+    --mint:#17B587;
+    --coral:#E85C4A;
+    --line:#D8DEE9;
+    --card:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{height:100%}
+  body{min-height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;justify-content:center;
+    line-height:1.5;
+  }
+  .app{
+    width:100%;max-width:480px;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Progress ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;min-height:28px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .segments{display:flex;gap:6px;flex:1}
+  .seg{
+    height:6px;flex:1;border-radius:3px;background:var(--line);
+    transition:background .35s ease;
+  }
+  .seg.done{background:var(--cobalt)}
+  .seg.now{background:linear-gradient(90deg,var(--cobalt),var(--mint));animation:segpulse 1.6s ease infinite}
+  @keyframes segpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .streak{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--mint);white-space:nowrap;display:none;
+  }
+  .streak.on{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.6)}to{transform:none}}
+
+  /* ---------- Écrans ---------- */
+  .screen{flex:1;display:none;flex-direction:column;animation:slideIn .32s ease}
+  .screen.active{display:flex}
+  @keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen,.streak.on,.seg.now,.sheet,.opt.correct,.opt.wrong{animation:none !important;transition:none !important}
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(30px,8vw,38px);line-height:1.08;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:22px;line-height:1.15;margin-bottom:12px;
+  }
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
+  }
+  p{color:var(--ink-soft);font-size:15.5px}
+  p + p{margin-top:10px}
+  p strong{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover{justify-content:space-between}
+  .cover-mark{width:44px;height:44px;display:block;margin:26px 0 22px}
+  .cover-meta{
+    display:flex;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-meta span b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cartes concept ---------- */
+  .concept-card{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;border:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(14,27,44,.05);
+  }
+  .keyfact{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;color:var(--ink);
+  }
+  .keyfact b{font-weight:600}
+  .hub-illus{display:flex;justify-content:center;margin-top:14px}
+  .hub-cap{margin-top:8px;font-size:13px;color:var(--ink-soft);text-align:center}
+  .fee-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+  .fee-table th{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-soft);text-align:left;
+    padding:0 10px 6px;font-weight:600;
+  }
+  .fee-table td{
+    border-top:1px solid var(--line);padding:10px;vertical-align:top;color:var(--ink);
+  }
+  .fee-table td b{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cobalt-deep)}
+  .fee-table small{display:block;color:var(--ink-soft);font-size:12px;margin-top:2px}
+  .fee-note{margin-top:8px;font-size:12px;color:var(--ink-soft)}
+  .case{
+    margin-top:14px;padding:14px 16px;border-radius:12px;
+    background:#0E1B2C;color:#C9D4E4;font-size:14px;line-height:1.5;
+  }
+  .case b{color:#fff}
+  .case .case-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:#7FA0F0;margin-bottom:6px;
+  }
+
+  /* ---------- Moment interactif : le pari ---------- */
+  .bet{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px 14px;margin-top:14px;
+  }
+  .bet-q{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;
+    line-height:1.25;margin-bottom:14px;color:var(--ink);
+  }
+  .bet-val{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:40px;
+    text-align:center;color:var(--cobalt);line-height:1;margin:6px 0 2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .bet-val small{
+    display:block;font-size:11px;font-weight:400;letter-spacing:.08em;
+    color:var(--ink-soft);margin-top:6px;
+  }
+  input[type=range].bet-range{
+    -webkit-appearance:none;appearance:none;width:100%;height:34px;
+    background:transparent;margin-top:10px;cursor:pointer;
+  }
+  input[type=range].bet-range::-webkit-slider-runnable-track{
+    height:6px;border-radius:3px;background:linear-gradient(90deg,var(--cobalt),var(--mint));
+  }
+  input[type=range].bet-range::-moz-range-track{
+    height:6px;border-radius:3px;background:linear-gradient(90deg,var(--cobalt),var(--mint));
+  }
+  input[type=range].bet-range::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+    background:#fff;border:3px solid var(--cobalt);margin-top:-10px;
+    box-shadow:0 2px 8px rgba(14,27,44,.25);
+  }
+  input[type=range].bet-range::-moz-range-thumb{
+    width:20px;height:20px;border-radius:50%;
+    background:#fff;border:3px solid var(--cobalt);
+    box-shadow:0 2px 8px rgba(14,27,44,.25);
+  }
+  input[type=range].bet-range:disabled{opacity:.45;cursor:default}
+  .bet-scale{
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);
+    margin-top:-4px;
+  }
+  .flow-caption{
+    margin-top:12px;min-height:66px;padding:12px 14px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;line-height:1.5;color:var(--ink);text-align:left;
+  }
+  .flow-caption b{color:var(--cobalt-deep)}
+  .flow-btn{
+    margin-top:10px;width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--cobalt);
+    background:transparent;color:var(--cobalt);font-family:inherit;font-weight:600;font-size:14.5px;
+    cursor:pointer;
+  }
+  .flow-btn:active{background:#EDF1FB;transform:scale(.98)}
+  .flow-btn:disabled{opacity:.4;cursor:default}
+
+  /* ---------- Quiz ---------- */
+  .qnum{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .question{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;line-height:1.25;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:14.5px;color:var(--ink);
+    cursor:pointer;transition:border-color .2s, background .2s, transform .1s;
+  }
+  .opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .opt.correct{border-color:var(--mint);background:#E9F8F2;animation:popIn .35s ease}
+  .opt.wrong{border-color:var(--coral);background:#FCEEEB;animation:shake .3s ease}
+  @keyframes popIn{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  .opt:disabled{cursor:default}
+
+  /* ---------- Feedback sheet (façon Duolingo) ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;pointer-events:none;
+    transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  }
+  .sheet.show{transform:none;pointer-events:auto}
+  .sheet-inner{
+    width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(14,27,44,.18);
+  }
+  .sheet.good .sheet-inner{background:#E9F8F2}
+  .sheet.bad .sheet-inner{background:#FCEEEB}
+  .sheet-title{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .sheet.good .sheet-title{color:#0C6B4E}
+  .sheet.bad .sheet-title{color:#9C3527}
+  .sheet-text{font-size:14px;line-height:1.5}
+  .sheet.good .sheet-text{color:#0C6B4E}
+  .sheet.bad .sheet-text{color:#9C3527}
+  .sheet-text b{font-weight:600}
+  .sheet .cta{margin-top:16px}
+  .sheet.good .cta{background:var(--mint)}
+  .sheet.bad .cta{background:var(--coral)}
+
+  /* ---------- Recap / score ---------- */
+  .score-big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;
+    line-height:1;margin:10px 0 4px;
+  }
+  .score-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+  .stats{
+    display:flex;gap:10px;margin-top:18px;
+  }
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;display:block}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft)}
+  .recap-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .recap-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:14px;color:var(--ink);display:flex;gap:10px;
+  }
+  .recap-item::before{content:"→";color:var(--cobalt);font-weight:700;flex-shrink:0}
+  .recap-item.ok::before{content:"✓";color:var(--mint)}
+  .recap-item.ko::before{content:"✗";color:var(--coral)}
+  .teaser{
+    margin-top:20px;padding:15px 16px;border-radius:12px;background:#0E1B2C;color:#C9D4E4;
+    font-size:13.5px;
+  }
+  .teaser b{color:#fff}
+  .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+  .teaser form{display:flex;gap:8px;margin-top:14px}
+  .teaser input{
+    flex:1;min-width:0;font:inherit;font-size:14px;padding:11px 14px;border-radius:10px;
+    border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
+  }
+  .teaser input::placeholder{color:#7286A0}
+  .teaser input:focus{border-color:var(--mint)}
+  .teaser form button{
+    font:inherit;font-weight:600;font-size:14px;color:var(--ink);
+    background:var(--mint);border:0;border-radius:10px;padding:11px 14px;cursor:pointer;white-space:nowrap;
+  }
+  .teaser form button:disabled{opacity:.6}
+  .teaser .sub-note{font-size:11.5px;color:#7286A0;margin-top:8px}
+  .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
+  .teaser .sub-ok.show{display:block}
+
+  /* ---------- Encart « Mon avis » (voir commentaire [VOIX ?] à l'écran 7) ---------- */
+  .avis{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);
+  }
+  .avis .avis-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
+  /* ---------- Confetti (sans faute) ---------- */
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:12px;opacity:.95;border-radius:2px;
+    animation:fall 2.6s ease-in forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(105vh) rotate(540deg);opacity:.7}
+  }
+
+  /* ---------- CTA bas ---------- */
+  .cta-zone{margin-top:auto;padding-top:22px}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;
+    background:var(--cobalt);color:#fff;font-family:'Instrument Sans',sans-serif;
+    font-weight:600;font-size:16px;cursor:pointer;
+    transition:opacity .2s, background .2s, transform .1s;
+  }
+  .cta:disabled{opacity:.35;cursor:default}
+  .cta:not(:disabled):active{background:var(--cobalt-deep);transform:scale(.98)}
+  .cta.ghost{background:transparent;color:var(--cobalt);border:1.5px solid var(--cobalt);margin-top:10px}
+  .cta.ghost:not(:disabled):active{background:#EDF1FB}
+</style>
+</head>
+<body data-ep="s1e02">
+<div class="app">
+
+  <div class="topbar" id="topbar" style="visibility:hidden">
+    <span class="eyebrow">S1 · E02</span>
+    <div class="segments" id="segments"></div>
+    <span class="streak" id="streak"></span>
+  </div>
+
+  <!-- 0 · COVER -->
+  <section class="screen cover active" data-step="cover">
+    <div>
+      <div class="kicker">Micro-formation · Saison 1 · Épisode 02</div>
+      <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <defs>
+          <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1F4FD8"/>
+            <stop offset="100%" stop-color="#17B587"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="37" height="37" rx="9" fill="url(#markGrad)"/>
+        <rect x="9" y="11" width="22" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2.4"/>
+        <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
+        <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
+      </svg>
+      <h1>L'interchange</h1>
+      <p style="margin-top:14px">On vous a laissés sur un pari : sur <strong>60 € de courses</strong> payés par carte, combien filent en commissions ? Dans cet épisode : la réponse et pourquoi Bruxelles a fini par s'en mêler.</p>
+      <div class="cover-meta">
+        <span><b>5 min</b> · lecture</span>
+        <span><b>4</b> concepts</span>
+        <span><b>4</b> quiz</span>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" onclick="start()">Commencer</button>
+      <button class="cta ghost" id="resumebtn" style="display:none"></button>
+    </div>
+  </section>
+
+  <!-- 1 · CONCEPT : définition + sens du flux -->
+  <section class="screen" data-step="1">
+    <div class="concept-card">
+      <div class="kicker">Concept 1 / 4</div>
+      <h2>Une commission entre banques</h2>
+      <p>À chaque paiement carte, une commission circule entre les deux banques : <strong>l'interchange</strong>. Elle est versée par <strong>l'acquéreur</strong> (la banque du commerçant) à <strong>l'émetteur</strong> (la banque du client).</p>
+      <p>Concrètement, lors du règlement, l'émetteur reverse les 60 € <em>moins</em> l'interchange, la retenue se fait à la source, transaction par transaction.</p>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 360 196" width="100%" style="max-width:340px;display:block">
+          <rect width="360" height="196" rx="16" fill="#0E1B2C"/>
+          <rect x="20" y="40" width="136" height="60" rx="12" fill="#152944" stroke="#33517F" stroke-width="1"/>
+          <text x="88" y="66" text-anchor="middle" font-family="'Bricolage Grotesque',sans-serif" font-weight="700" font-size="14" fill="#FFFFFF">ÉMETTEUR</text>
+          <text x="88" y="84" text-anchor="middle" font-family="'Instrument Sans',sans-serif" font-size="10.5" fill="#C9D6E8">banque du client</text>
+          <rect x="204" y="40" width="136" height="60" rx="12" fill="#152944" stroke="#33517F" stroke-width="1"/>
+          <text x="272" y="66" text-anchor="middle" font-family="'Bricolage Grotesque',sans-serif" font-weight="700" font-size="14" fill="#FFFFFF">ACQUÉREUR</text>
+          <text x="272" y="84" text-anchor="middle" font-family="'Instrument Sans',sans-serif" font-size="10.5" fill="#C9D6E8">banque du commerçant</text>
+          <line x1="158" y1="70" x2="194" y2="70" stroke="#17B587" stroke-width="8"/>
+          <polygon points="194,60 210,70 194,80" fill="#17B587"/>
+          <text x="180" y="121" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11" letter-spacing="0.5" fill="#17B587">règlement : 60 € − interchange</text>
+          <line x1="88" y1="100" x2="88" y2="146" stroke="#E85C4A" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <rect x="26" y="146" width="124" height="28" rx="14" fill="#E85C4A"/>
+          <text x="88" y="164" text-anchor="middle" font-family="'Instrument Sans',sans-serif" font-weight="600" font-size="11" fill="#FFFFFF">l'interchange reste ici</text>
+        </svg>
+      </div>
+      <p class="hub-cap">Le règlement arrive déjà net : l'émetteur garde l'interchange à la source, sur chaque transaction.</p>
+      <div class="keyfact">💡 <b>À retenir :</b> l'interchange va exclusivement à l'émetteur. Le réseau touche les « scheme fees » (croisées dans l'épisode E01).</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 2 · QUIZ 1 -->
+  <section class="screen" data-step="2">
+    <div class="qnum">QUIZ 1 / 4</div>
+    <div class="question">L'interchange, c'est une commission versée…</div>
+    <div class="options" data-quiz="0" data-answer="1" data-next="3">
+      <button class="opt">par l'émetteur à l'acquéreur</button>
+      <button class="opt">par l'acquéreur à l'émetteur</button>
+      <button class="opt">par le commerçant au réseau</button>
+      <button class="opt">par le porteur à sa banque</button>
+    </div>
+  </section>
+
+  <!-- 3 · CONCEPT + INTERACTIF : le pari -->
+  <section class="screen" data-step="3">
+    <div class="concept-card" style="padding-bottom:16px">
+      <div class="kicker">Concept 2 / 4 · Le pari</div>
+      <h2>Combien, sur 60 € ?</h2>
+      <p>Vos 60 € de courses, payés avec une carte de débit française classique. Placez votre curseur sur le montant d'interchange que l'acquéreur va verser à l'émetteur, puis relâchez : la réponse s'affiche.</p>
+    </div>
+    <div class="bet">
+      <div class="bet-val"><span id="betval">1,50 €</span><small>VOTRE PARI · SUR 60 €</small></div>
+      <input type="range" class="bet-range" id="betrange" min="0" max="300" step="5" value="150" aria-label="Votre pari, en euros, entre 0 et 3 euros">
+      <div class="bet-scale"><span>0 €</span><span>1,50 €</span><span>3 €</span></div>
+      <div class="flow-caption" id="betcap" aria-live="polite">Déplacez le curseur, la réponse s'affiche quand vous relâchez.</div>
+      <div class="keyfact" id="betfact" style="display:none">💡 Ces centimes sont refacturés au commerçant : avec les scheme fees et la marge de l'acquéreur, ils forment sa commission carte, le <b>MSC</b> (Merchant Service Charge). Le porteur, lui, ne voit jamais cette ligne.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continuer</button></div>
+  </section>
+
+  <!-- 4 · QUIZ 2 -->
+  <section class="screen" data-step="4">
+    <div class="qnum">QUIZ 2 / 4</div>
+    <div class="question">Au bout de la chaîne, qui supporte économiquement l'interchange ?</div>
+    <div class="options" data-quiz="1" data-answer="3" data-next="5">
+      <button class="opt">L'acquéreur, sur sa marge</button>
+      <button class="opt">Le porteur, via ses frais bancaires</button>
+      <button class="opt">Personne : les flux s'annulent entre banques</button>
+      <button class="opt">Le commerçant, via sa commission carte (MSC)</button>
+    </div>
+  </section>
+
+  <!-- 5 · CONCEPT : pourquoi ça existe -->
+  <section class="screen" data-step="5">
+    <div class="concept-card">
+      <div class="kicker">Concept 3 / 4</div>
+      <h2>Pourquoi ce péage existe ?</h2>
+      <p>L'émetteur apporte la <strong>garantie de paiement</strong> pour le commerçant et une <strong>protection</strong> pour le porteur de carte. Une transaction autorisée = commerçant payé, même si le solde du client est débiteur ou que la carte a été volée. L'émetteur doit également protéger son client, et assurer des services anti-fraude, l'avance de trésorerie du débit différé et du crédit.</p>
+      <p>Cette garantie porte sur le montant de la transaction : plus il est élevé, plus le risque l'est. C'est pourquoi l'interchange est un <strong>pourcentage</strong>, et non un frais fixe.</p>
+      <p>L'interchange rémunère ces coûts, et incite les banques à émettre des cartes. Car un système de paiement est un <strong>marché à deux faces</strong> qui a besoin de clients équipés d'une carte et de commerçants qui l'acceptent. L'interchange est le curseur qui équilibre les deux.</p>
+      <div class="keyfact">💡 <b>Le barème est fixé par le réseau</b>, qui n'en touche pas un centime : publié, non négociable transaction par transaction, il varie selon le type de carte, le canal (proximité ou en ligne) et le pays.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 6 · QUIZ 3 -->
+  <section class="screen" data-step="6">
+    <div class="qnum">QUIZ 3 / 4</div>
+    <div class="question">Qui fixe le taux d'interchange appliqué à une transaction ?</div>
+    <div class="options" data-quiz="2" data-answer="0" data-next="7">
+      <button class="opt">Le réseau, via un barème publié</button>
+      <button class="opt">L'émetteur, librement</button>
+      <button class="opt">L'acquéreur, en négociation avec chaque commerçant</button>
+      <button class="opt">La Banque centrale européenne</button>
+    </div>
+  </section>
+
+  <!-- 7 · CONCEPT : Bruxelles / IFR -->
+  <section class="screen" data-step="7">
+    <div class="concept-card">
+      <div class="kicker">Concept 4 / 4 · L'angle Europe</div>
+      <h2>Pourquoi Bruxelles a dû s'en mêler</h2>
+      <p>Un réseau qui monte son interchange attire les émetteurs, qui émettent davantage de ses cartes. La concurrence jouait donc <strong>à l'envers</strong> : elle faisait monter des prix que les commerçants ne peuvent pas négocier. À l'échelle française, plus de 600 milliards d'euros sont payés par carte chaque année : une variation de 0,1 % signifie plus d'un demi-milliard d'euros par an.</p>
+      <p>2015 : le règlement européen <strong>IFR</strong> plafonne l'interchange des cartes de particuliers dans l'EEE : <strong>0,2 % en débit, 0,3 % en crédit</strong>, vos 0,12 € de tout à l'heure. En France, l'Autorité de la concurrence avait ouvert la voie dès 2011 sur les commissions CB.</p>
+      <div class="case">
+        <div class="case-kicker">Cas d'école · Le Brexit</div>
+        Sorti du champ de l'IFR, le Royaume-Uni a vu les commissions des paiements en ligne UK–EEE <b>multipliées par cinq</b> (0,3 % → 1,5 % en crédit). Colère des commerçants, enquête du régulateur : la démonstration de ce que le plafond empêche.
+      </div>
+      <table class="fee-table">
+        <tr><th>La transaction</th><th>Interchange</th></tr>
+        <tr>
+          <td>Carte EEE chez un commerçant EEE<small>même pays ou non : l'Espagnol qui paie à Paris</small></td>
+          <td><b>0,2 % / 0,3 %</b><small>plafond IFR</small></td>
+        </tr>
+        <tr>
+          <td>Carte émise hors EEE<small>« inter-régional » : UK, US, Chine…</small></td>
+          <td><b>libre</b><small>souvent plusieurs fois plus</small></td>
+        </tr>
+        <tr>
+          <td>Carte commerciale · réseau à 3 coins<small>cartes d'entreprise, AMEX</small></td>
+          <td><b>hors plafond</b><small>quel que soit le pays</small></td>
+        </tr>
+      </table>
+      <p class="fee-note">EEE = Union européenne + Islande, Liechtenstein, Norvège.</p>
+      <div class="keyfact">💡 Aux États-Unis, l'interchange crédit reste libre, souvent autour de 2 % : c'est lui qui finance le cashback des cartes américaines, un avantage en apparence gratuit, payé par les frais des commerçants et, in fine, par les prix en rayon.</div>
+      <!-- [VOIX ?] tranché (10/08) : pas d'encart « Mon avis » sur cet épisode. -->
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
+  </section>
+
+  <!-- 8 · QUIZ 4 -->
+  <section class="screen" data-step="8">
+    <div class="qnum">QUIZ 4 / 4</div>
+    <div class="question">Laquelle de ces cartes échappe aux plafonds européens de l'IFR ?</div>
+    <div class="options" data-quiz="3" data-answer="2" data-next="9">
+      <button class="opt">La carte de débit d'un particulier</button>
+      <button class="opt">La carte prépayée d'un particulier</button>
+      <button class="opt">La carte d'entreprise (commerciale)</button>
+      <button class="opt">Aucune : tout est plafonné dans l'EEE</button>
+    </div>
+  </section>
+
+  <!-- 9 · RECAP -->
+  <section class="screen" data-step="9">
+    <div>
+      <div class="kicker">Épisode terminé</div>
+      <div class="score-big" id="scoreval">–</div>
+      <div class="score-label" id="scoremsg">SCORE</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TEMPS</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>SÉRIE MAX</span></div>
+      </div>
+      <div class="recap-list" id="recaplist">
+        <div class="recap-item" data-q="0">L'interchange : versé par l'acquéreur (banque du commerçant) à l'émetteur (banque du porteur), sur chaque transaction.</div>
+        <div class="recap-item" data-q="1">Sur 60 € en débit : 0,12 €, refacturés au commerçant dans sa commission carte (le MSC). Le porteur ne le voit jamais.</div>
+        <div class="recap-item" data-q="2">Il rémunère la garantie de paiement portée par l'émetteur, d'où un pourcentage plutôt qu'un frais fixe ; le barème est fixé par le réseau, qui n'en touche rien.</div>
+        <div class="recap-item" data-q="3">IFR 2015 : 0,2 % débit / 0,3 % crédit dans l'EEE. Cartes commerciales, hors EEE et réseaux à 3 coins non plafonnés.</div>
+      </div>
+      <div class="teaser">
+        <div class="kicker">Prochain épisode</div>
+        <b>S1 · E03 · CB &amp; co-badgeage</b> – Presque toutes les cartes françaises portent deux réseaux sur la même puce, et à chaque paiement, un seul gagne. Qui choisit, qui perd, et pourquoi la carte française est une exception mondiale : au prochain épisode.
+        <form id="ep-signup" novalidate>
+          <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
+          <button type="submit">Recevoir E03</button>
+        </form>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
+        <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" id="sharebtn" onclick="shareScore()">Partager mon score</button>
+      <button class="cta ghost" onclick="location.reload()">Refaire l'épisode</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Feedback sheet -->
+<div class="sheet" id="sheet" aria-live="polite">
+  <div class="sheet-inner">
+    <div class="sheet-title" id="sheet-title"></div>
+    <div class="sheet-text" id="sheet-text"></div>
+    <button class="cta" id="sheet-cta">Continuer</button>
+  </div>
+</div>
+
+<script src="../assets/telemetry.js"></script>
+<script src="../assets/progress.js"></script>
+<script src="../assets/subscribe.js"></script>
+<script>
+  // Wrappers sûrs : si les assets ne chargent pas, l'épisode fonctionne quand même.
+  const PDT = window.PD || { track(){}, screen(){}, complete(){} };
+  const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open'); // ouverture de la cover, avant tout clic
+
+  let current = 0;
+  let score = 0;
+  let streakNow = 0, streakBest = 0;
+  let t0 = null;
+  const results = [null,null,null,null];
+  const order = ['cover','1','2','3','4','5','6','7','8','9'];
+
+  const segWrap = document.getElementById('segments');
+  for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
+
+  function start(){ t0 = Date.now(); PDP.save('s1e02', {completed:false}); PDT.track('ep_start'); go(1); }
+
+  function go(n){
+    current = n;
+    PDT.screen(order[n]);
+    if(n > 0 && order[n] !== '9'){
+      PDP.save('s1e02', {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+    }
+    document.getElementById('sheet').classList.remove('show','good','bad');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
+    document.getElementById('topbar').style.visibility = n===0 ? 'hidden' : 'visible';
+    document.querySelectorAll('.seg').forEach((s,i)=>{
+      s.classList.toggle('done', i < n-1);
+      s.classList.toggle('now', i === n-1);
+    });
+    if(order[n]==='9') showScore();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Quiz ----
+  const EXPLAIN = [
+    {good:"Exactement : la banque du commerçant paie celle du porteur, sur chaque transaction.",
+     bad:"L'interchange est versé <b>par l'acquéreur à l'émetteur</b> : la banque du commerçant paie la banque du client, sur chaque transaction."},
+    {good:"Refacturé au commerçant dans son MSC, lui seul le voit passer sur sa facture, jamais le porteur.",
+     bad:"C'est <b>le commerçant</b> qui le supporte, via sa commission carte (le MSC) : l'acquéreur refacture l'interchange, y ajoute les scheme fees et sa marge. Reste à savoir s'il finit dans les prix en rayon, les économistes en débattent encore."},
+    {good:"Le réseau fixe le barème, l'émetteur encaisse, le régulateur plafonne. Trois rôles, trois acteurs, à ne pas mélanger.",
+     bad:"C'est <b>le réseau</b> qui publie le barème… alors qu'il ne touche pas un centime d'interchange. L'émetteur encaisse, et depuis 2015 le régulateur européen plafonne."},
+    {good:"Les cartes commerciales sont hors du champ de l'IFR, comme les cartes émises hors EEE et les réseaux à 3 coins. D'où des commissions qui piquent sur ces cartes-là.",
+     bad:"Les <b>cartes d'entreprise</b> (commerciales) sont hors du champ de l'IFR, comme les cartes émises hors EEE et les réseaux à 3 coins. Les cartes prépayées de particuliers, elles, sont plafonnées comme le débit."}
+  ];
+  const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
+  const BAD_TITLES = ["Le sens piège","L'idée reçue classique","Pas tout à fait","Le détail qui coûte cher"];
+
+  document.querySelectorAll('.options').forEach(block=>{
+    const qi = +block.dataset.quiz;
+    const ans = +block.dataset.answer;
+    const next = +block.dataset.next;
+    block.querySelectorAll('.opt').forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const good = i===ans;
+        results[qi] = good;
+        PDT.track('quiz_answer', {quiz:qi, choice:i, correct:good});
+        if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); }
+        else { streakNow = 0; }
+        btn.classList.add(good?'correct':'wrong');
+        if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
+        if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
+        // streak chip
+        const st = document.getElementById('streak');
+        if(streakNow >= 2){ st.textContent = '✓ ×' + streakNow; st.classList.add('on'); }
+        else { st.classList.remove('on'); }
+        // feedback sheet
+        const sheet = document.getElementById('sheet');
+        document.getElementById('sheet-title').textContent =
+          good ? '✓ ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '✗ ' + BAD_TITLES[qi];
+        document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
+        const cta = document.getElementById('sheet-cta');
+        cta.textContent = next===9 ? 'Voir mon score' : 'Continuer';
+        cta.onclick = ()=>go(next);
+        sheet.classList.add('show', good?'good':'bad');
+        sheet.classList.remove(good?'bad':'good');
+      });
+    });
+  });
+
+  // ---- Le pari (moment interactif) ----
+  const ANSWER_CENTS = 12; // 60 € × 0,2 % (IFR, débit particulier)
+  const range = document.getElementById('betrange');
+  const betval = document.getElementById('betval');
+  let betDone = false;
+  function fmtCents(c){ return (c/100).toFixed(2).replace('.', ',') + ' €'; }
+  range.addEventListener('input', ()=>{ betval.textContent = fmtCents(+range.value); });
+  range.addEventListener('change', ()=>{ if(!betDone) revealBet(); });
+  function revealBet(){
+    betDone = true;
+    const g = +range.value;
+    PDT.track('interactive_used', {guess: g});
+    range.disabled = true;
+    let verdict;
+    if(g <= 5){
+      verdict = "Vous pariiez encore plus bas que la réalité, c'est rare : presque tout le monde surestime.";
+    } else if(g <= 20){
+      verdict = "Votre pari était remarquablement proche, on soupçonne un pro de l'interchange.";
+    } else if(g <= 60){
+      verdict = "Vous surestimiez, comme la plupart des gens.";
+    } else {
+      verdict = "Vous surestimiez d'environ ×" + Math.round(g/ANSWER_CENTS) + ", comme la grande majorité des parieurs.";
+    }
+    document.getElementById('betcap').innerHTML =
+      "<b>0,12 €.</b> C'est tout : <b>0,2 %</b> du montant, le plafond pour une carte de débit de particulier. En crédit : 0,18 € (0,3 %). " + verdict +
+      " D'où sortent ces pourcentages étrangement ronds ? Réponse au concept 4.";
+    document.getElementById('betfact').style.display = 'block';
+    document.getElementById('next-bet').disabled = false;
+  }
+
+  // ---- Score ----
+  function fmtTime(ms){
+    const s = Math.round(ms/1000);
+    return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+  }
+  function showScore(){
+    PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
+    PDP.save('s1e02', {completed:true, screen:9, score, streakBest, results});
+    document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const relire = missed.length===1 ? "RELISEZ LE CONCEPT "+missed[0]
+                 : "RELISEZ LES CONCEPTS "+missed.slice(0,-1).join(", ")+" ET "+missed[missed.length-1];
+    const msg = score===4 ? "SANS FAUTE – NIVEAU EXPERT" :
+                score>=3 ? "SOLIDE – "+relire+" ET C'EST PARFAIT" :
+                score>=2 ? "CORRECT – "+relire :
+                "À REVOIR – REFAITES L'ÉPISODE";
+    document.getElementById('scoremsg').textContent = msg;
+    document.getElementById('stat-score').textContent = score + '/4';
+    document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '–';
+    document.getElementById('stat-best').textContent = '×' + streakBest;
+    document.querySelectorAll('.recap-item').forEach(el=>{
+      const r = results[+el.dataset.q];
+      if(r===true) el.classList.add('ok');
+      if(r===false) el.classList.add('ko');
+    });
+    if(score===4) confetti();
+  }
+
+  function confetti(){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    const colors = ['#1F4FD8','#17B587','#E85C4A','#0E1B2C'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('i');
+      p.style.left = (Math.random()*100)+'%';
+      p.style.background = colors[i%4];
+      p.style.animationDelay = (Math.random()*0.9)+'s';
+      p.style.animationDuration = (2+Math.random()*1.4)+'s';
+      c.appendChild(p);
+    }
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+
+  // ---- Partage façon Wordle ----
+  function shareScore(){
+    const grid = results.map(r=>r?'🟩':'🟥').join('');
+    const time = t0 ? fmtTime(Date.now()-t0) : '';
+    const txt = `S1 · E02 · L'interchange – ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.\npaiement-decrypte.fr`;
+    const btn = document.getElementById('sharebtn');
+    const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile && navigator.share){
+      // Mobile : share sheet native (WhatsApp, app LinkedIn…)
+      navigator.share({text:txt}).catch(()=>{});
+    } else {
+      // Desktop : copie + composer LinkedIn pré-rempli (la share sheet OS n'apporte rien ici)
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).catch(()=>{});
+      }
+      btn.textContent = 'Copié ✓ – votre post LinkedIn est prêt';
+      setTimeout(()=>btn.textContent='Partager mon score', 3000);
+      window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
+    }
+    PDT.track('share', {score});
+  }
+
+  // ---- Abonnement fin d'épisode (subscribe.js) ----
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
+      var el = document.getElementById('ep-signup-ok');
+      el.textContent = ok
+        ? 'Presque fait ! Confirmez via l\'email qui vient de partir.'
+        : (msg || 'Une erreur est survenue – réessayez.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+      if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu — jamais l'email
+    });
+  }
+
+  // ---- Reprise (progress.js) ----
+  (function(){
+    const p = PDP.load('s1e02');
+    if(!p || p.completed || !(p.screen > 0)) return;
+    // Si l'écran sauvegardé est un quiz déjà répondu, on reprend à l'écran suivant.
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9}; // écran quiz -> écran suivant
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3}; // écran quiz -> index quiz
+    let target = p.screen;
+    if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){
+      target = QUIZ_NEXT[target];
+    }
+    const b = document.getElementById('resumebtn');
+    b.textContent = 'Reprendre où j\'en étais';
+    b.style.display = 'block';
+    b.onclick = ()=>{
+      score = p.score || 0;
+      streakBest = p.streakBest || 0;
+      (p.results || []).forEach((r,i)=>{ results[i] = r; });
+      t0 = Date.now() - (p.elapsed || 0);
+      PDT.track('resume', {screen: target});
+      go(target);
+    };
+  })();
+</script>
+</body>
+</html>

@@ -165,11 +165,11 @@
       } else if (data.message) {
         renderMessage('system-note', data.message);
       } else {
-        renderMessage('system-note', "Erreur inattendue — réessaie dans un instant.");
+        renderMessage('system-note', "Erreur inattendue, réessaie dans un instant.");
       }
     } catch (err) {
       typingEl.remove();
-      renderMessage('system-note', "Impossible de joindre l'assistant — vérifie ta connexion et réessaie.");
+      renderMessage('system-note', "Impossible de joindre l'assistant, vérifie ta connexion et réessaie.");
     } finally {
       setFormDisabled(false);
       inputEl.focus();

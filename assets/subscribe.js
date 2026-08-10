@@ -25,8 +25,8 @@ window.PDSubscribe = (function () {
       sending: form.dataset.sending || 'Envoi…',
       sent: form.dataset.sent || 'Envoyé ✓',
       invalid: form.dataset.msgInvalid || 'Entrez une adresse email valide.',
-      rejected: form.dataset.msgRejected || 'Inscription impossible — vérifiez l’adresse et réessayez.',
-      network: form.dataset.msgNetwork || 'Impossible d’envoyer — vérifiez votre connexion et réessayez.'
+      rejected: form.dataset.msgRejected || 'Inscription impossible, vérifiez l’adresse et réessayez.',
+      network: form.dataset.msgNetwork || 'Impossible d’envoyer, vérifiez votre connexion et réessayez.'
     };
     form.addEventListener('submit', function (e) {
       e.preventDefault();

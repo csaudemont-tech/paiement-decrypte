@@ -139,6 +139,55 @@
   .tag-opt-cat{font-family:var(--mono);font-size:10px;color:var(--ink-soft);flex:none}
   .tag-opt-empty{padding:10px 9px;font-size:13px;color:var(--ink-soft)}
 
+  /* ---- Build mode ---- */
+  .build-form{display:flex;flex-direction:column;gap:14px}
+  .build-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .build-load{display:flex;flex-direction:column;gap:6px}
+  .build-load label{font-size:13px;font-weight:600}
+  .build-load-row{display:flex;gap:8px}
+  .build-load-row input{
+    flex:1;min-width:0;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;
+    font-family:var(--mono);font-size:13px;color:var(--ink);background:#FAFBFD;
+  }
+  .build-load-row input:focus{outline:none;border-color:var(--cobalt)}
+  .build-load-hint{margin-top:0;min-height:16px}
+  .build-load-hint.error{color:var(--coral)}
+  .build-byte{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .build-byte-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .build-byte-label{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+  .build-byte-hex{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--cobalt-deep)}
+  .build-check{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;padding:5px 0;cursor:pointer}
+  .build-check input{margin-top:3px;flex:none;accent-color:var(--cobalt);width:16px;height:16px;cursor:pointer}
+  .build-enum-select{width:100%;font:inherit;font-size:13.5px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
+  .build-enum-select:focus{outline:none;border-color:var(--cobalt)}
+  .build-note{background:#FFF6E5;border:1px solid #F0D48A;border-radius:10px;padding:10px 12px;color:var(--ink-soft)}
+  .build-note p{margin:0 0 6px}
+  .build-note p:last-child{margin-bottom:0}
+  .build-note ul{margin:0 0 6px 18px;padding:0}
+  .build-note li{margin:2px 0}
+  .build-enum2-row{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+  .build-enum2-row label{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em}
+  .build-enum2-result{margin:2px 0 0;font-size:13.5px;font-weight:700;color:var(--cobalt-deep)}
+
+  /* ---- TAC: 3-column grid ---- */
+  .build-tac-colhead,.build-tac-row{display:grid;grid-template-columns:1fr 56px 56px 64px;align-items:center;gap:6px}
+  .build-tac-colhead{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);padding:0 14px 8px;text-align:center}
+  .build-tac-colhead span:first-child{text-align:left}
+  .build-tac-byte{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:8px}
+  .build-tac-row{font-size:13px;padding:5px 0}
+  .build-tac-row input{accent-color:var(--cobalt);width:16px;height:16px;cursor:pointer;justify-self:center}
+  .build-tac-outputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
+  .build-tac-output{background:#E9F8F2;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+  .build-tac-output .rawlabel{font-size:11.5px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .build-tac-output code{font-size:14px;font-weight:700;letter-spacing:.03em;font-family:var(--mono)}
+  .build-tac-load{display:flex;gap:6px}
+  .build-tac-load input{flex:1;min-width:0;font:inherit;font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-family:var(--mono)}
+  .build-tac-load input:focus{outline:none;border-color:var(--cobalt)}
+  .build-tac-load button{font-size:12px;padding:6px 10px}
+  .build-rawval{margin-top:2px;background:#E9F8F2;border-radius:12px;padding:14px 16px}
+  .build-rawval .rawlabel{margin-bottom:5px}
+  .build-rawval code{font-size:16px;font-weight:700;letter-spacing:.03em}
+
   /* ---- Exemples (discret, pas l'objectif principal de l'outil) ---- */
   .ex-title{font-size:12.5px;color:var(--ink-soft);margin:14px 0 0}
   .ex-links{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
@@ -150,6 +199,10 @@
   .ex-link:hover{color:var(--cobalt-deep)}
   .ex-sep{color:var(--ink-soft);font-size:12.5px}
   #ex-desc{font-size:12.5px;color:var(--ink-soft);margin-top:6px;min-height:16px}
+  #input-note{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-soft);margin-top:10px;padding:9px 12px;border-left:3px solid var(--cobalt);border-radius:8px;background:#EDF1FB}
+  #input-note .fmt{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);border:1px solid var(--cobalt);border-radius:20px;padding:2px 9px}
+  #input-note button{font:inherit;color:var(--cobalt);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+  #input-note button:hover{color:var(--cobalt-deep)}
 
   /* ---- Erreurs ---- */
   #errors{
@@ -375,11 +428,12 @@
   <div class="mode-row" role="tablist">
     <button type="button" class="mode-btn active" id="mode-stream" role="tab" aria-selected="true">Full TLV stream</button>
     <button type="button" class="mode-btn" id="mode-tag" role="tab" aria-selected="false">Decode a single tag</button>
+    <button type="button" class="mode-btn" id="mode-build" role="tab" aria-selected="false">Build a tag</button>
   </div>
 
   <div class="input-card">
     <div id="panel-stream">
-      <textarea id="hex-input" placeholder="Paste your hex stream here, spaces, line breaks and 0x prefixes are all fine.&#10;E.g.: 6F 20 84 07 A0 00 00 00 04 10 10 …" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+      <textarea id="hex-input" placeholder="Paste your stream here, hex or Base64, the format is detected automatically.&#10;E.g.: 6F 20 84 07 A0 00 00 00 04 10 10 …&#10;E.g.: byCEB6AAAAAEEBClFVAL…" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
       <div class="btn-row">
         <button type="button" class="btn" id="btn-parse">Decode</button>
         <button type="button" class="btn ghost" id="btn-clear">Clear</button>
@@ -389,6 +443,7 @@
       <p class="ex-title">Examples (all synthetic):</p>
       <div class="ex-links" id="examples"></div>
       <p id="ex-desc"></p>
+      <div id="input-note" hidden></div>
     </div>
 
     <div id="panel-tag" hidden>
@@ -404,6 +459,44 @@
           <button type="button" class="btn" id="btn-tag-decode">Decode this tag</button>
         </div>
         <p class="hint">A detailed decode of a single tag, TVR, AIP, CVM Results, currency…, no need to paste the whole stream. The share link works here too.</p>
+      </div>
+    </div>
+
+    <div id="panel-build" hidden>
+      <div class="build-form">
+        <div class="build-head">
+          <span class="tag-badge" id="build-tag-badge"></span>
+        </div>
+
+        <div class="tag-form">
+          <label for="build-tag-search">Tag to build</label>
+          <div class="tag-picker build-tag-picker">
+            <input type="text" id="build-tag-search" placeholder="Search by number (9F40) or by name (TTQ, TAC, capabilities…)" spellcheck="false" autocapitalize="off" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="build-tag-dropdown">
+            <div id="build-tag-dropdown" class="tag-dropdown" hidden role="listbox"></div>
+          </div>
+        </div>
+
+        <div class="hint build-note" id="build-note" hidden></div>
+
+        <div id="build-single-host">
+          <div class="build-load">
+            <label for="build-load-value">Start from an existing value (optional)</label>
+            <div class="build-load-row">
+              <input type="text" id="build-load-value" placeholder="e.g. E0F8C8" spellcheck="false" autocapitalize="off" autocomplete="off">
+              <button type="button" class="btn secondary" id="build-load-btn">Load</button>
+            </div>
+            <p class="hint build-load-hint" id="build-load-hint"></p>
+          </div>
+
+          <p class="hint" id="build-hint">Check the terminal's capabilities: the hex value updates live, ready to paste into a file or a terminal config. Bits not listed below are reserved (RFU) and stay at 0.</p>
+          <div id="build-fields"></div>
+          <div class="rawval build-rawval">
+            <span class="rawlabel">hex value (without the tag or the length)<button type="button" class="copy-btn" id="build-copy" data-copy="">Copy</button></span>
+            <code id="build-hex"></code>
+          </div>
+        </div>
+
+        <div id="build-multi-host" hidden></div>
       </div>
     </div>
   </div>
@@ -443,13 +536,33 @@
 
 </div>
 <script>
+/* === EMV_DICTIONARY:BEGIN === */
 /* ============================================================
-   Paiement Décrypté, EMV TLV Parser v3, données
-   Dictionnaire de tags, AID, bitfields, codes.
-   Sources : EMV 4.3 Book 3 (définitions de tags, TVR/TSI/CID,
-   Terminal Action Analysis), EMV Contactless Book C-2 Kernel 2
-   (qualificateurs TTQ/CTQ), connaissances publiques (AID réseaux).
-   Aucune donnée réelle : tous les exemples sont synthétiques.
+   Paiement Décrypté — dictionnaire EMV canonique (EN)
+   ============================================================
+   Miroir EN de a-publier/_shared/emv-dictionary.fr.js — mêmes
+   clés/structures, libellés utilisateur traduits en anglais,
+   commentaires laissés en français (convention du projet). Les
+   deux fichiers se resynchronisent manuellement : corriger la
+   donnée FR, traduire à la main dans ce fichier, relancer le
+   script de fusion sur les deux (voir plus bas).
+
+   SOURCE UNIQUE DE VÉRITÉ pour les données EMV en anglais,
+   partagées entre les outils EN du site (emv-parser-en pour
+   l'instant ; les autres outils n'ont pas encore de version EN).
+
+   RÈGLE D'OR : ne jamais éditer ce bloc de données dans un fichier
+   outil directement (repérable aux marqueurs EMV_DICTIONARY:BEGIN
+   / EMV_DICTIONARY:END). Éditer CE fichier-ci, puis lancer :
+     node a-publier/_shared/merge-emv-dictionary.js
+   Voir mémoire [[architecture-plateforme]], section « DICTIONNAIRE
+   EMV CANONIQUE », pour le contexte complet.
+
+   Contenu : identique à la version FR (voir son en-tête pour le
+   détail des tables et des sources). Aucune donnée réelle : tous
+   les exemples sont synthétiques.
+
+   Dernière synchro depuis emv-parser-en.html : round 8 (2026-08-09).
    ============================================================ */
 
 const EMV_AIDS = {
@@ -544,6 +657,58 @@ const TERMCAP_BITS = [
   [3,0x40,"Dynamic authentication (DDA)",'info'],
   [3,0x20,"Card capture possible",'info'],
   [3,0x08,"Combined authentication (CDA)",'info'],
+];
+
+/* Additional Terminal Capabilities (9F40), sourced from EMV 4.3 Book 4 Annex A3
+   (tables 28-32), 27 of 40 bits defined (5 bytes). Byte 2 has only 1 bit defined
+   (RFU otherwise). Mirrors ADDTERMCAP_BITS in the FR build. */
+const ADDTERMCAP_BITS = [
+  [1,0x80,"Cash advance",'info'],
+  [1,0x40,"Goods",'info'],
+  [1,0x20,"Services",'info'],
+  [1,0x10,"Cashback",'info'],
+  [1,0x08,"Inquiry",'info'],
+  [1,0x04,"Transfer",'info'],
+  [1,0x02,"Payment",'info'],
+  [1,0x01,"Administrative",'info'],
+  [2,0x80,"Cash deposit",'info'],
+  [3,0x80,"Numeric keys",'info'],
+  [3,0x40,"Alphabetic and special-character keys",'info'],
+  [3,0x20,"Command keys",'info'],
+  [3,0x10,"Function keys",'info'],
+  [4,0x80,"Print, attendant",'info'],
+  [4,0x40,"Print, cardholder",'info'],
+  [4,0x20,"Display, attendant",'info'],
+  [4,0x10,"Display, cardholder",'info'],
+  [4,0x02,"Code table 10",'info'],
+  [4,0x01,"Code table 9",'info'],
+  [5,0x80,"Code table 8",'info'],
+  [5,0x40,"Code table 7",'info'],
+  [5,0x20,"Code table 6",'info'],
+  [5,0x10,"Code table 5",'info'],
+  [5,0x08,"Code table 4",'info'],
+  [5,0x04,"Code table 3",'info'],
+  [5,0x02,"Code table 2",'info'],
+  [5,0x01,"Code table 1",'info'],
+];
+
+/* Terminal Transaction Qualifiers (9F66), contactless, sourced from EMV
+   Contactless Book A v2.11, Table 5-4: the generic Entry Point definition
+   (the one every kernel receives as "Copy of TTQ"), not a scheme-specific
+   variant. Mirrors TTQ_BITS in the FR build. */
+const TTQ_BITS = [
+  [1,0x80,"Mag-stripe mode supported",'info'],
+  [1,0x20,"EMV mode supported",'info'],
+  [1,0x10,"EMV contact chip supported",'info'],
+  [1,0x08,"Offline-only reader",'warn'],
+  [1,0x04,"Online PIN supported",'info'],
+  [1,0x02,"Signature supported",'info'],
+  [1,0x01,"Offline Data Authentication for Online Authorizations supported",'info'],
+  [2,0x80,"Online cryptogram required",'info'],
+  [2,0x40,"CVM required",'info'],
+  [2,0x20,"(Contact Chip) Offline PIN supported",'info'],
+  [3,0x80,"Issuer Update Processing supported",'info'],
+  [3,0x40,"Consumer Device CVM supported",'info'],
 ];
 
 const CVM_CODES = {
@@ -743,7 +908,7 @@ const EMV_TAGS = {
     p: "Local time of the transaction (HHMMSS), a companion to tag 9A." },
   '9F24': { n: "PAR, Payment Account Reference", cat: "Identification", dec: 'text',
     p: "A non-sensitive identifier (up to 29 alphanumeric characters) that links a tokenised PAN (mobile wallet, virtual card) back to its original PAN, without ever exposing that original PAN. A given PAR stays stable across all tokens issued from the same physical card, which lets a merchant or issuer reconcile a physical-card payment with a wallet payment with zero PCI exposure." },
-  '9F40': { n: "Additional Terminal Capabilities", cat: "Terminal",
+  '9F40': { n: "Additional Terminal Capabilities", cat: "Terminal", dec: 'addtermcap',
     p: "Companion to tag 9F33: supported transaction types (cash, purchase, withdrawal…) and the terminal's display/entry capabilities." },
   '9F41': { n: "Transaction Sequence Counter", cat: "Transaction", dec: 'counter',
     p: "Transaction counter on the terminal side, the terminal's counterpart to the card's ATC." },
@@ -792,7 +957,7 @@ const TAG_REFS = {
   '9F42': "ISO 4217 numeric (table generated via pycountry/CLDR)",
   '5F28': "ISO 3166-1 numeric (table generated via pycountry/CLDR)",
   '9F1A': "ISO 3166-1 numeric (table generated via pycountry/CLDR)",
-  '9F66': "EMVCo contactless specs (Book A / Entry Point)",
+  '9F66': "EMV Contactless Book A v2.11, Table 5-4 (Terminal Transaction Qualifiers), generic Entry Point baseline",
   '9F6E': "Outside the base spec, network-defined: Visa Payment Technology Standards Manual (FFI) and Mastercard M/Chip documentation (Third Party Data), public sources",
   '9F0A': "EMVCo Specification Bulletin 175 (ASRPD)",
   '5F30': "ISO/IEC 7813 (magnetic stripes)",
@@ -829,6 +994,20 @@ const TERM_TYPE = {
   '36': "Cardholder, personal terminal, offline only",
 };
 
+/* TERM_TYPE split into 2 axes for the "Build a tag" 9F35 selector: the 2-digit
+   code crosses "who controls the terminal" (1st digit) with "its environment"
+   (2nd digit, stable across categories). Mirrors TERM_TYPE_AXIS_A/B in the
+   FR build. */
+const TERM_TYPE_AXIS_A = { '1': "Financial institution", '2': "Merchant", '3': "Cardholder" };
+const TERM_TYPE_AXIS_B = {
+  '1': "Attended, online only",
+  '2': "Attended, offline (online capability)",
+  '3': "Attended, offline only",
+  '4': "Unattended, online only",
+  '5': "Unattended, offline (online capability)",
+  '6': "Unattended, offline only",
+};
+
 /* Form Factor Indicator (9F6E), Visa: byte 1 bits 5-1, form factor */
 const VISA_FFI_FORM = {
   0: "Standard card (ID-1, ISO 7810)", 1: "Mini-card", 2: "Non-card contactless form factor (fob, ring, sticker…)",
@@ -862,6 +1041,7 @@ const MC_DEVICE_TYPES = {
 /* Tables ISO 4217 / ISO 3166-1 numeriques, noms EN, traduites depuis la version FR (session EN) */
 const CURRENCY_DICT = {"008":{"code":"ALL","name":"Lek"},"012":{"code":"DZD","name":"Algerian Dinar"},"032":{"code":"ARS","name":"Argentine Peso"},"036":{"code":"AUD","name":"Australian Dollar"},"044":{"code":"BSD","name":"Bahamian Dollar"},"048":{"code":"BHD","name":"Bahraini Dinar"},"050":{"code":"BDT","name":"Taka"},"051":{"code":"AMD","name":"Armenian Dram"},"052":{"code":"BBD","name":"Barbados Dollar"},"060":{"code":"BMD","name":"Bermudian Dollar"},"064":{"code":"BTN","name":"Ngultrum"},"068":{"code":"BOB","name":"Boliviano"},"072":{"code":"BWP","name":"Pula"},"084":{"code":"BZD","name":"Belize Dollar"},"090":{"code":"SBD","name":"Solomon Islands Dollar"},"096":{"code":"BND","name":"Brunei Dollar"},"104":{"code":"MMK","name":"Kyat"},"108":{"code":"BIF","name":"Burundi Franc"},"116":{"code":"KHR","name":"Riel"},"124":{"code":"CAD","name":"Canadian Dollar"},"132":{"code":"CVE","name":"Cabo Verde Escudo"},"136":{"code":"KYD","name":"Cayman Islands Dollar"},"144":{"code":"LKR","name":"Sri Lanka Rupee"},"152":{"code":"CLP","name":"Chilean Peso"},"156":{"code":"CNY","name":"Yuan Renminbi"},"170":{"code":"COP","name":"Colombian Peso"},"174":{"code":"KMF","name":"Comorian Franc"},"188":{"code":"CRC","name":"Costa Rican Colon"},"192":{"code":"CUP","name":"Cuban Peso"},"203":{"code":"CZK","name":"Czech Koruna"},"208":{"code":"DKK","name":"Danish Krone"},"214":{"code":"DOP","name":"Dominican Peso"},"222":{"code":"SVC","name":"El Salvador Colon"},"230":{"code":"ETB","name":"Ethiopian Birr"},"232":{"code":"ERN","name":"Nakfa"},"238":{"code":"FKP","name":"Falkland Islands Pound"},"242":{"code":"FJD","name":"Fiji Dollar"},"262":{"code":"DJF","name":"Djibouti Franc"},"270":{"code":"GMD","name":"Dalasi"},"292":{"code":"GIP","name":"Gibraltar Pound"},"320":{"code":"GTQ","name":"Quetzal"},"324":{"code":"GNF","name":"Guinean Franc"},"328":{"code":"GYD","name":"Guyana Dollar"},"332":{"code":"HTG","name":"Gourde"},"340":{"code":"HNL","name":"Lempira"},"344":{"code":"HKD","name":"Hong Kong Dollar"},"348":{"code":"HUF","name":"Forint"},"352":{"code":"ISK","name":"Iceland Krona"},"356":{"code":"INR","name":"Indian Rupee"},"360":{"code":"IDR","name":"Rupiah"},"364":{"code":"IRR","name":"Iranian Rial"},"368":{"code":"IQD","name":"Iraqi Dinar"},"376":{"code":"ILS","name":"New Israeli Sheqel"},"388":{"code":"JMD","name":"Jamaican Dollar"},"392":{"code":"JPY","name":"Japanese Yen"},"396":{"code":"XAD","name":"Arab Accounting Dinar"},"398":{"code":"KZT","name":"Tenge"},"400":{"code":"JOD","name":"Jordanian Dinar"},"404":{"code":"KES","name":"Kenyan Shilling"},"408":{"code":"KPW","name":"North Korean Won"},"410":{"code":"KRW","name":"Won"},"414":{"code":"KWD","name":"Kuwaiti Dinar"},"417":{"code":"KGS","name":"Som"},"418":{"code":"LAK","name":"Lao Kip"},"422":{"code":"LBP","name":"Lebanese Pound"},"426":{"code":"LSL","name":"Loti"},"430":{"code":"LRD","name":"Liberian Dollar"},"434":{"code":"LYD","name":"Libyan Dinar"},"446":{"code":"MOP","name":"Pataca"},"454":{"code":"MWK","name":"Malawi Kwacha"},"458":{"code":"MYR","name":"Malaysian Ringgit"},"462":{"code":"MVR","name":"Rufiyaa"},"480":{"code":"MUR","name":"Mauritius Rupee"},"484":{"code":"MXN","name":"Mexican Peso"},"496":{"code":"MNT","name":"Tugrik"},"498":{"code":"MDL","name":"Moldovan Leu"},"504":{"code":"MAD","name":"Moroccan Dirham"},"512":{"code":"OMR","name":"Rial Omani"},"516":{"code":"NAD","name":"Namibia Dollar"},"524":{"code":"NPR","name":"Nepalese Rupee"},"532":{"code":"XCG","name":"Caribbean Guilder"},"533":{"code":"AWG","name":"Aruban Florin"},"548":{"code":"VUV","name":"Vatu"},"554":{"code":"NZD","name":"New Zealand Dollar"},"558":{"code":"NIO","name":"Cordoba Oro"},"566":{"code":"NGN","name":"Naira"},"578":{"code":"NOK","name":"Norwegian Krone"},"586":{"code":"PKR","name":"Pakistan Rupee"},"590":{"code":"PAB","name":"Balboa"},"598":{"code":"PGK","name":"Kina"},"600":{"code":"PYG","name":"Guarani"},"604":{"code":"PEN","name":"Sol"},"608":{"code":"PHP","name":"Philippine Peso"},"634":{"code":"QAR","name":"Qatari Rial"},"643":{"code":"RUB","name":"Russian Ruble"},"646":{"code":"RWF","name":"Rwanda Franc"},"654":{"code":"SHP","name":"Saint Helena Pound"},"682":{"code":"SAR","name":"Saudi Riyal"},"690":{"code":"SCR","name":"Seychelles Rupee"},"702":{"code":"SGD","name":"Singapore Dollar"},"704":{"code":"VND","name":"Dong"},"706":{"code":"SOS","name":"Somali Shilling"},"710":{"code":"ZAR","name":"Rand"},"728":{"code":"SSP","name":"South Sudanese Pound"},"748":{"code":"SZL","name":"Lilangeni"},"752":{"code":"SEK","name":"Swedish Krona"},"756":{"code":"CHF","name":"Swiss Franc"},"760":{"code":"SYP","name":"Syrian Pound"},"764":{"code":"THB","name":"Baht"},"776":{"code":"TOP","name":"Pa'anga"},"780":{"code":"TTD","name":"Trinidad and Tobago Dollar"},"784":{"code":"AED","name":"UAE Dirham"},"788":{"code":"TND","name":"Tunisian Dinar"},"800":{"code":"UGX","name":"Uganda Shilling"},"807":{"code":"MKD","name":"Denar"},"818":{"code":"EGP","name":"Egyptian Pound"},"826":{"code":"GBP","name":"Pound Sterling"},"834":{"code":"TZS","name":"Tanzanian Shilling"},"840":{"code":"USD","name":"US Dollar"},"858":{"code":"UYU","name":"Peso Uruguayo"},"860":{"code":"UZS","name":"Uzbekistan Sum"},"882":{"code":"WST","name":"Tala"},"886":{"code":"YER","name":"Yemeni Rial"},"901":{"code":"TWD","name":"New Taiwan Dollar"},"924":{"code":"ZWG","name":"Zimbabwe Gold"},"925":{"code":"SLE","name":"Leone"},"926":{"code":"VED","name":"Bolívar Soberano"},"927":{"code":"UYW","name":"Unidad Previsional"},"928":{"code":"VES","name":"Venezuelan Bolívar"},"929":{"code":"MRU","name":"Ouguiya"},"930":{"code":"STN","name":"Dobra"},"933":{"code":"BYN","name":"Belarusian Ruble"},"934":{"code":"TMT","name":"Turkmenistan New Manat"},"936":{"code":"GHS","name":"Ghana Cedi"},"938":{"code":"SDG","name":"Sudanese Pound"},"940":{"code":"UYI","name":"Uruguay Peso en Unidades Indexadas (UI)"},"941":{"code":"RSD","name":"Serbian Dinar"},"943":{"code":"MZN","name":"Mozambique Metical"},"944":{"code":"AZN","name":"Azerbaijan Manat"},"946":{"code":"RON","name":"Romanian Leu"},"947":{"code":"CHE","name":"WIR Euro"},"948":{"code":"CHW","name":"WIR Franc"},"949":{"code":"TRY","name":"Turkish Lira"},"950":{"code":"XAF","name":"CFA Franc BEAC"},"951":{"code":"XCD","name":"East Caribbean Dollar"},"952":{"code":"XOF","name":"CFA Franc BCEAO"},"953":{"code":"XPF","name":"CFP Franc"},"955":{"code":"XBA","name":"Bond Markets Unit European Composite Unit (EURCO)"},"956":{"code":"XBB","name":"Bond Markets Unit European Monetary Unit (E.M.U.-6)"},"957":{"code":"XBC","name":"Bond Markets Unit European Unit of Account 9 (E.U.A.-9)"},"958":{"code":"XBD","name":"Bond Markets Unit European Unit of Account 17 (E.U.A.-17)"},"959":{"code":"XAU","name":"Gold"},"960":{"code":"XDR","name":"SDR (Special Drawing Right)"},"961":{"code":"XAG","name":"Silver"},"962":{"code":"XPT","name":"Platinum"},"963":{"code":"XTS","name":"Codes specifically reserved for testing purposes"},"964":{"code":"XPD","name":"Palladium"},"965":{"code":"XUA","name":"ADB Unit of Account"},"967":{"code":"ZMW","name":"Zambian Kwacha"},"968":{"code":"SRD","name":"Surinam Dollar"},"969":{"code":"MGA","name":"Malagasy Ariary"},"970":{"code":"COU","name":"Unidad de Valor Real"},"971":{"code":"AFN","name":"Afghani"},"972":{"code":"TJS","name":"Somoni"},"973":{"code":"AOA","name":"Kwanza"},"976":{"code":"CDF","name":"Congolese Franc"},"977":{"code":"BAM","name":"Convertible Mark"},"978":{"code":"EUR","name":"Euro"},"979":{"code":"MXV","name":"Mexican Unidad de Inversion (UDI)"},"980":{"code":"UAH","name":"Hryvnia"},"981":{"code":"GEL","name":"Lari"},"984":{"code":"BOV","name":"Mvdol"},"985":{"code":"PLN","name":"Zloty"},"986":{"code":"BRL","name":"Brazilian Real"},"990":{"code":"CLF","name":"Unidad de Fomento"},"994":{"code":"XSU","name":"Sucre"},"997":{"code":"USN","name":"US Dollar (Next day)"},"999":{"code":"XXX","name":"The codes assigned for transactions where no currency is involved"}};
 const COUNTRY_DICT = {"004":"Afghanistan","008":"Albania","010":"Antarctica","012":"Algeria","016":"American Samoa","020":"Andorra","024":"Angola","028":"Antigua and Barbuda","031":"Azerbaijan","032":"Argentina","036":"Australia","040":"Austria","044":"Bahamas","048":"Bahrain","050":"Bangladesh","051":"Armenia","052":"Barbados","056":"Belgium","060":"Bermuda","064":"Bhutan","068":"Bolivia","070":"Bosnia and Herzegovina","072":"Botswana","074":"Bouvet Island","076":"Brazil","084":"Belize","086":"British Indian Ocean Territory","090":"Solomon Islands","092":"British Virgin Islands","096":"Brunei","100":"Bulgaria","104":"Myanmar","108":"Burundi","112":"Belarus","116":"Cambodia","120":"Cameroon","124":"Canada","132":"Cabo Verde","136":"Cayman Islands","140":"Central African Republic","144":"Sri Lanka","148":"Chad","152":"Chile","156":"China","158":"Taiwan","162":"Christmas Island","166":"Cocos (Keeling) Islands","170":"Colombia","174":"Comoros","175":"Mayotte","178":"Congo","180":"Congo (Democratic Republic of the)","184":"Cook Islands","188":"Costa Rica","191":"Croatia","192":"Cuba","196":"Cyprus","203":"Czechia","204":"Benin","208":"Denmark","212":"Dominica","214":"Dominican Republic","218":"Ecuador","222":"El Salvador","226":"Equatorial Guinea","231":"Ethiopia","232":"Eritrea","233":"Estonia","234":"Faroe Islands","238":"Falkland Islands","239":"South Georgia and the South Sandwich Islands","242":"Fiji","246":"Finland","248":"Åland Islands","250":"France","254":"French Guiana","258":"French Polynesia","260":"French Southern Territories","262":"Djibouti","266":"Gabon","268":"Georgia","270":"Gambia","275":"Palestine, State of","276":"Germany","288":"Ghana","292":"Gibraltar","296":"Kiribati","300":"Greece","304":"Greenland","308":"Grenada","312":"Guadeloupe","316":"Guam","320":"Guatemala","324":"Guinea","328":"Guyana","332":"Haiti","334":"Heard Island and McDonald Islands","336":"Holy See","340":"Honduras","344":"Hong Kong","348":"Hungary","352":"Iceland","356":"India","360":"Indonesia","364":"Iran","368":"Iraq","372":"Ireland","376":"Israel","380":"Italy","384":"Côte d'Ivoire","388":"Jamaica","392":"Japan","398":"Kazakhstan","400":"Jordan","404":"Kenya","408":"North Korea","410":"South Korea","414":"Kuwait","417":"Kyrgyzstan","418":"Laos","422":"Lebanon","426":"Lesotho","428":"Latvia","430":"Liberia","434":"Libya","438":"Liechtenstein","440":"Lithuania","442":"Luxembourg","446":"Macao","450":"Madagascar","454":"Malawi","458":"Malaysia","462":"Maldives","466":"Mali","470":"Malta","474":"Martinique","478":"Mauritania","480":"Mauritius","484":"Mexico","492":"Monaco","496":"Mongolia","498":"Moldova","499":"Montenegro","500":"Montserrat","504":"Morocco","508":"Mozambique","512":"Oman","516":"Namibia","520":"Nauru","524":"Nepal","528":"Netherlands","531":"Curaçao","533":"Aruba","534":"Sint Maarten (Dutch part)","535":"Bonaire, Sint Eustatius and Saba","540":"New Caledonia","548":"Vanuatu","554":"New Zealand","558":"Nicaragua","562":"Niger","566":"Nigeria","570":"Niue","574":"Norfolk Island","578":"Norway","580":"Northern Mariana Islands","581":"United States Minor Outlying Islands","583":"Micronesia","584":"Marshall Islands","585":"Palau","586":"Pakistan","591":"Panama","598":"Papua New Guinea","600":"Paraguay","604":"Peru","608":"Philippines","612":"Pitcairn","616":"Poland","620":"Portugal","624":"Guinea-Bissau","626":"Timor-Leste","630":"Puerto Rico","634":"Qatar","638":"Réunion","642":"Romania","643":"Russia","646":"Rwanda","652":"Saint Barthélemy","654":"Saint Helena","659":"Saint Kitts and Nevis","660":"Anguilla","662":"Saint Lucia","663":"Saint Martin (French part)","666":"Saint Pierre and Miquelon","670":"Saint Vincent and the Grenadines","674":"San Marino","678":"Sao Tome and Principe","682":"Saudi Arabia","686":"Senegal","688":"Serbia","690":"Seychelles","694":"Sierra Leone","702":"Singapore","703":"Slovakia","704":"Vietnam","705":"Slovenia","706":"Somalia","710":"South Africa","716":"Zimbabwe","724":"Spain","728":"South Sudan","729":"Sudan","732":"Western Sahara","740":"Suriname","744":"Svalbard and Jan Mayen","748":"Eswatini","752":"Sweden","756":"Switzerland","760":"Syria","762":"Tajikistan","764":"Thailand","768":"Togo","772":"Tokelau","776":"Tonga","780":"Trinidad and Tobago","784":"United Arab Emirates","788":"Tunisia","792":"Turkey","795":"Turkmenistan","796":"Turks and Caicos Islands","798":"Tuvalu","800":"Uganda","804":"Ukraine","807":"North Macedonia","818":"Egypt","826":"United Kingdom","831":"Guernsey","832":"Jersey","833":"Isle of Man","834":"Tanzania","840":"United States","850":"United States Virgin Islands","854":"Burkina Faso","858":"Uruguay","860":"Uzbekistan","862":"Venezuela","876":"Wallis and Futuna","882":"Samoa","887":"Yemen","894":"Zambia"};
+/* === EMV_DICTIONARY:END === */
 
 /* ============================================================
    Paiement Décrypté, EMV TLV Parser v3, moteur (sans DOM)
@@ -882,6 +1062,53 @@ function tagClass(tagHex) {
 
 function cleanHex(input) {
   return (input || '').toUpperCase().replace(/0X/g, '').replace(/[^0-9A-F]/g, '');
+}
+
+/* --- Input format detection ---
+   Many logs, APIs and terminal traces do not hand you hex but Base64 (the raw TLV
+   encoded in base 64 so it fits inside JSON or XML). normalizeInput() recognises
+   both and always returns hex to the parser.
+   Priority rule: if the string contains ONLY hex characters (separators and 0x
+   aside), it is hex. Otherwise we try Base64, standard (+ /) or URL-safe (- _),
+   padded or not. */
+function base64ToHex(b64) {
+  const bin = atob(b64);
+  let hex = '';
+  for (let i = 0; i < bin.length; i++) {
+    hex += bin.charCodeAt(i).toString(16).padStart(2, '0');
+  }
+  return hex.toUpperCase();
+}
+
+function normalizeInput(input) {
+  const raw = (input || '').trim();
+  if (!raw) return { hex: '', format: 'hex', note: '' };
+
+  // 1) Hex, common separators tolerated
+  const stripped = raw.replace(/0x/gi, '').replace(/[\s:;,._-]/g, '');
+  if (/^[0-9A-Fa-f]+$/.test(stripped)) {
+    return { hex: stripped.toUpperCase(), format: 'hex', note: '' };
+  }
+
+  // 2) Base64 (standard or URL-safe)
+  const b64 = raw.replace(/\s/g, '').replace(/-/g, '+').replace(/_/g, '/');
+  const core = b64.replace(/=+$/, '');
+  if (/^[A-Za-z0-9+/]+$/.test(core) && core.length >= 4 && core.length % 4 !== 1) {
+    try {
+      const hex = base64ToHex(core + '='.repeat((4 - core.length % 4) % 4));
+      if (hex.length >= 4) {
+        return { hex, format: 'base64', note: 'Base64 detected and decoded into ' + (hex.length / 2) + ' bytes.' };
+      }
+    } catch (e) { /* not usable Base64: fall back to hex */ }
+  }
+
+  // 3) Fallback: keep whatever looks like hex
+  const fallback = cleanHex(raw);
+  return {
+    hex: fallback,
+    format: 'hex',
+    note: fallback ? 'Non-hex characters were ignored in your input.' : ''
+  };
 }
 
 function hexToBytes(hex) {
@@ -1018,7 +1245,7 @@ function lookupAid(hex) {
 /* decodeValue(tagHex, valueHex) → { summary, details[] }
    summary : une ligne lisible ; details : lignes bit à bit / éléments */
 function decodeValue(tagHex, valueHex, DATA) {
-  const D = DATA || { EMV_AIDS, DF_NAMES, COUNTRY_CODES, CURRENCY_CODES, CURRENCY_DICT, COUNTRY_DICT, TVR_BITS, AIP_BITS, TSI_BITS, TERMCAP_BITS, CVM_CODES, CVM_CONDITIONS, CVM_RESULTS, ARC_CODES, EMV_TAGS, TX_TYPES, TAG_REFS };
+  const D = DATA || { EMV_AIDS, DF_NAMES, COUNTRY_CODES, CURRENCY_CODES, CURRENCY_DICT, COUNTRY_DICT, TVR_BITS, AIP_BITS, TSI_BITS, TERMCAP_BITS, ADDTERMCAP_BITS, TTQ_BITS, CVM_CODES, CVM_CONDITIONS, CVM_RESULTS, ARC_CODES, EMV_TAGS, TX_TYPES, TAG_REFS };
   const meta = D.EMV_TAGS[tagHex];
   const dec = meta && meta.dec;
   if (!dec) return null;
@@ -1173,18 +1400,13 @@ function decodeValue(tagHex, valueHex, DATA) {
         const r = decodeBits(valueHex, D.TERMCAP_BITS);
         return { summary: r.set.length ? `${r.set.length} capability(ies) declared` : "No capability declared", details: r.set.map(b => `✓ ${b.label}`), bits: r };
       }
+      case 'addtermcap': {
+        const r = decodeBits(valueHex, D.ADDTERMCAP_BITS);
+        return { summary: r.set.length ? `${r.set.length} capability(ies) declared` : "No capability declared", details: r.set.map(b => `✓ ${b.label}`), bits: r };
+      }
       case 'ttq': {
-        const bytes = hexToBytes(valueHex);
-        const d = [];
-        const b1 = bytes[0] || 0, b2 = bytes[1] || 0;
-        if (b1 & 0x20) d.push("✓ EMV mode supported");
-        if (b1 & 0x80) d.push("✓ Magstripe mode (MSD) supported");
-        if (b1 & 0x08) d.push("✓ Online-only terminal");
-        if (b1 & 0x04) d.push("✓ Online PIN supported");
-        if (b1 & 0x02) d.push("✓ Signature supported");
-        if (b2 & 0x80) d.push("⚠ Online authorisation required for this payment");
-        if (b2 & 0x40) d.push("⚠ CVM required for this payment");
-        return { summary: "Terminal's contactless announcements", details: d };
+        const r = decodeBits(valueHex, D.TTQ_BITS);
+        return { summary: r.set.length ? `${r.set.length} qualifier(s) declared` : "No qualifier declared", details: r.set.map(b => `✓ ${b.label}`), bits: r };
       }
       case 'ffi': {
         const bytes = hexToBytes(valueHex);
@@ -1246,7 +1468,7 @@ function decodeValue(tagHex, valueHex, DATA) {
    tacs : { denial, online, default } hex optionnels (saisie manuelle)
    Retourne une liste de sections { title, icon, sev, lines[] } + verdict */
 function buildExplainer(tags, tacs, DATA) {
-  const D = DATA || { EMV_AIDS, DF_NAMES, COUNTRY_CODES, CURRENCY_CODES, CURRENCY_DICT, COUNTRY_DICT, TVR_BITS, AIP_BITS, TSI_BITS, TERMCAP_BITS, CVM_CODES, CVM_CONDITIONS, CVM_RESULTS, ARC_CODES, EMV_TAGS, TX_TYPES, TAG_REFS };
+  const D = DATA || { EMV_AIDS, DF_NAMES, COUNTRY_CODES, CURRENCY_CODES, CURRENCY_DICT, COUNTRY_DICT, TVR_BITS, AIP_BITS, TSI_BITS, TERMCAP_BITS, ADDTERMCAP_BITS, TTQ_BITS, CVM_CODES, CVM_CONDITIONS, CVM_RESULTS, ARC_CODES, EMV_TAGS, TX_TYPES, TAG_REFS };
   const S = [];
   const has = t => tags[t] !== undefined;
   if (!has('95') && !has('82') && !has('9B') && !has('9F27') && !has('8A') && !has('9F34')) return null;
@@ -1370,7 +1592,7 @@ const EXAMPLES = [
     hex: '6F41840E325041592E5359532E4444463031A52FBF0C2C61104F07A00000004210105002434287010161184F07A0000000041010500A4D415354455243415244870102' },
 ];
 
-const BITFIELD_TABLES = { '82': null, '95': null, '9B': null, '9F33': null }; // rempli au chargement (tables globales)
+const BITFIELD_TABLES = { '82': null, '95': null, '9B': null, '9F33': null, '9F40': null, '9F66': null }; // rempli au chargement (tables globales)
 
 const $ = id => document.getElementById(id);
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -1380,6 +1602,9 @@ function bitTableFor(tagHex) {
   if (tagHex === '95') return TVR_BITS;
   if (tagHex === '9B') return TSI_BITS;
   if (tagHex === '9F33') return TERMCAP_BITS;
+  if (tagHex === '9F40') return ADDTERMCAP_BITS;
+  if (tagHex === '9F66') return TTQ_BITS;
+  if (tagHex === 'TAC') return TVR_BITS;
   return null;
 }
 
@@ -1588,9 +1813,39 @@ function renderExplainer(exp) {
 let lastHex = '';
 let lastTacs = null;
 
+function showInputNote(norm) {
+  const box = $('input-note');
+  if (!box) return;
+  if (!norm.note) { box.hidden = true; box.innerHTML = ''; return; }
+  box.innerHTML = '';
+  if (norm.format === 'base64') {
+    const badge = document.createElement('span');
+    badge.className = 'fmt';
+    badge.textContent = 'Base64';
+    box.appendChild(badge);
+  }
+  const txt = document.createElement('span');
+  txt.textContent = norm.note;
+  box.appendChild(txt);
+  if (norm.format === 'base64' && norm.hex) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = 'Replace my input with the hex';
+    btn.addEventListener('click', () => {
+      const ta = $('hex-input');
+      if (ta) { ta.value = norm.hex; ta.focus(); }
+      box.hidden = true;
+    });
+    box.appendChild(btn);
+  }
+  box.hidden = false;
+}
+
 function runParse(rawInput, opts) {
   opts = opts || {};
-  const hex = cleanHex(rawInput);
+  const norm = normalizeInput(rawInput);
+  const hex = norm.hex;
+  showInputNote(norm);
   const out = $('result');
   const errBox = $('errors');
   errBox.hidden = true; errBox.innerHTML = '';
@@ -1650,7 +1905,7 @@ let tagDropdownIndex = -1;
 const TAG_CAT_ORDER = ['Decision', 'Cardholder', 'Security', 'Transaction', 'Terminal', 'Identification', 'Structure'];
 /* La recherche filtre aussi sur la description (searchText) : les noms de tags sont en
    anglais (« Transaction Currency Code »), la description est en français (« devise »,
-   « code confidentiel »…) — sans ça, une recherche en français ne trouve presque rien. */
+   « code confidentiel »…), sans ça, une recherche en français ne trouve presque rien. */
 const TAG_LIST = Object.keys(EMV_TAGS)
   .map(t => ({ hex: t, name: EMV_TAGS[t].n, cat: EMV_TAGS[t].cat, searchText: `${t} ${EMV_TAGS[t].n} ${EMV_TAGS[t].p || ''}`.toUpperCase() }))
   .sort((a, b) => TAG_CAT_ORDER.indexOf(a.cat) - TAG_CAT_ORDER.indexOf(b.cat) || a.hex.localeCompare(b.hex));
@@ -1722,15 +1977,361 @@ function runSingleTag(tagHex, valueRaw) {
   if (typeof window.pdTrack === 'function') window.pdTrack('tool_interaction', { tool: 'emv-parser', mode: 'single-tag', tag: tagHex });
 }
 
+/* ---------- Mode « Construire un tag » ----------
+   Port de la version FR (emv-parser.html), logique identique octet pour
+   octet, chaînes utilisateur traduites en anglais, commentaires laissés en
+   français (convention du fichier). Voir emv-parser.html pour l'historique
+   complet des rounds. */
+
+/* Terminal Action Codes : configuration TERMINAL, jamais transmise par la
+   carte, contrairement à son équivalent côté carte/émetteur, l'IAC (Issuer
+   Action Code, tags 9F0D/9F0E/9F0F, déjà décodables plus haut via
+   case 'iac'), qui réutilise déjà exactement la même structure de bits.
+   Pas de tag BER-TLV standardisé pour le TAC (EMV 4.3 Book 3, §10.7) : d'où
+   cette clé pseudo (pas dans EMV_TAGS) plutôt qu'un vrai tag hexadécimal.
+   Réutilise TVR_BITS telle quelle (voir bitTableFor) : zéro table dupliquée. */
+const BUILD_PSEUDO_TAGS = {
+  'TAC': { n: "TAC (Denial / Online / Default), terminal config", p: "Three terminal configuration values, one per decision type, sharing the same bit catalog as the TVR." },
+};
+
+/* Type de formulaire de construction par tag :
+   'bits'  - checkboxes sur un masque de bits (défaut)
+   'enum2' - 2 listes déroulantes qui se combinent en un code (9F35 : qui
+             contrôle le terminal × son environnement, table TERM_TYPE)
+   'multi' - 3 colonnes de checkboxes partageant le même catalogue de bits,
+             produisant 3 valeurs hexadécimales indépendantes (TAC) */
+const BUILD_TAG_TYPE = { '9F35': 'enum2', 'TAC': 'multi' };
+function buildTypeOf(tagHex) { return BUILD_TAG_TYPE[tagHex] || 'bits'; }
+
+/* Libellé + fiche d'un tag ou pseudo-tag constructible, sans dupliquer
+   EMV_TAGS pour les vrais tags ni réinventer un format pour les pseudo-tags. */
+function buildTagMeta(tagHex) {
+  if (EMV_TAGS[tagHex]) return { optionLabel: `${tagHex}, ${EMV_TAGS[tagHex].n}`, badge: tagHex };
+  const pseudo = BUILD_PSEUDO_TAGS[tagHex];
+  return { optionLabel: pseudo.n, badge: tagHex };
+}
+
+const BUILD_TAGS = ['9F33', '9F40', '9F66', '9F35', 'TAC'];
+const BUILD_TAG_LEN = { '9F33': 3, '9F40': 5, '9F66': 4, '9F35': 1 };
+
+/* Avertissement affiché dans le formulaire de construction, tag par tag (visible
+   dans l'outil, pas seulement en commentaire de code, pour que « pourquoi pas de
+   sélecteur de réseau ici ? » ou « pourquoi 3 colonnes ? » ait une réponse sans
+   avoir à demander). */
+const BUILD_NOTES = {
+  '9F66': "Generic EMVCo table (Contactless Book A v2.11, Table 5-4), common to all contactless kernels, including Visa (Kernel 3), which receives it as-is as a “Copy of TTQ”. No scheme-specific variant (Visa Kernel 3 / Book C-3, UnionPay Kernel 7 / Book C-7 / qPBOC, Discover Kernel 6 / Book C-6) is sourced here yet: the bits listed “RFU” below could have a kernel-specific meaning not yet covered by this tool. No scheme selector until a single source has been verified.",
+  '9F35': "<p>Who controls the terminal?</p><ul><li>Financial institution means a bank branch if attended, or an ATM/banking automat if unattended.</li><li>Merchant, the most common case, means a regular cash register/POS terminal if attended, or a payment automat, fuel dispenser, or vending machine if unattended.</li><li>Cardholder, stays rare, means equipment owned by the cardholder (home terminal, PC, set-top box), always unattended.</li></ul><p>Source: EMV 4.3 Book 4, §5.1 Terminal Types and Annex A.</p>",
+  'TAC': "TERMINAL configuration, never transmitted by the card and not carried on a standardized EMV tag (EMV 4.3 Book 3, §10.7 Terminal Action Analysis). The 3 columns below share exactly the same bit catalog as the TVR (tag 95), the format is identical per the spec, but Denial / Online / Default remain 3 independent settings: the terminal can, for example, block offline on a given condition (TAC-Denial) without forcing an online transaction on that same condition (TAC-Online).",
+};
+
+function groupBitsByByte(table) {
+  const groups = {};
+  for (const [byteIdx, mask, label] of table) {
+    let bit = 0; for (let n = 1; n <= 8; n++) if (mask === (1 << (n - 1))) bit = n;
+    (groups[byteIdx] = groups[byteIdx] || []).push({ bit, mask, label });
+  }
+  Object.values(groups).forEach(g => g.sort((a, b) => b.bit - a.bit));
+  return groups;
+}
+
+/* Longueur en octets : voir BUILD_TAG_LEN, défini plus haut avec BUILD_TAGS.
+   Ne PAS la déduire du plus grand octet présent dans la table de bits, ça
+   fonctionne par coïncidence pour 9F33/9F40 (dernier octet toujours avec un
+   bit défini) mais casse pour 9F66 (octet 4 entièrement RFU, Book A Table 5-4). */
+
+function updateBuildHex(tagHex) {
+  const type = buildTypeOf(tagHex);
+  let hex;
+  if (type === 'enum2') {
+    const a = $('build-enum2-a').value, b = $('build-enum2-b').value;
+    const code = (a + b).toUpperCase();
+    const hexSpan = $('build-byte-hex-1');
+    if (hexSpan) hexSpan.textContent = code;
+    const resEl = $('build-enum2-result');
+    if (resEl) resEl.textContent = TERM_TYPE[code] ? `= ${code} - ${TERM_TYPE[code]}` : `Combination ${code} is not listed in Table 24.`;
+    hex = code;
+  } else {
+    const nBytes = BUILD_TAG_LEN[tagHex];
+    const bytes = [];
+    for (let i = 1; i <= nBytes; i++) {
+      let v = 0;
+      $('build-fields').querySelectorAll(`input[data-byte="${i}"]:checked`).forEach(cb => { v |= Number(cb.dataset.mask); });
+      bytes.push(v);
+      const hexSpan = $('build-byte-hex-' + i);
+      if (hexSpan) hexSpan.textContent = v.toString(16).toUpperCase().padStart(2, '0');
+    }
+    hex = bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
+  }
+  $('build-hex').textContent = hex;
+  $('build-copy').setAttribute('data-copy', hex);
+}
+
+/* Remplit la 2ème liste (environnement) du sélecteur 9F35 en fonction de la
+   1ère (qui contrôle le terminal) : seules les combinaisons qui existent
+   réellement dans TERM_TYPE sont proposées (ex. « Cardholder » n'a que les 3
+   variantes « unattended », jamais « attended »). */
+function populateEnum2Axis2() {
+  const a = $('build-enum2-a').value;
+  const sel = $('build-enum2-b');
+  const prev = sel.value;
+  const validB = Object.keys(TERM_TYPE_AXIS_B).filter(b => TERM_TYPE[a + b]);
+  sel.innerHTML = validB.map(b => `<option value="${b}">${esc(TERM_TYPE_AXIS_B[b])}</option>`).join('');
+  if (validB.includes(prev)) sel.value = prev;
+}
+
+function renderBuildForm(tagHex) {
+  $('build-tag-badge').textContent = buildTagMeta(tagHex).badge;
+  const type = buildTypeOf(tagHex);
+  $('build-single-host').hidden = type === 'multi';
+  $('build-multi-host').hidden = type !== 'multi';
+  if (type === 'multi') {
+    renderTacForm();
+    $('build-note').innerHTML = BUILD_NOTES[tagHex] || '';
+    $('build-note').hidden = !BUILD_NOTES[tagHex];
+    return;
+  }
+  let html = '';
+  if (type === 'enum2') {
+    $('build-hint').textContent = "Choose who controls the terminal, then its environment: the two combine into a single code, ready to paste into a file or a terminal config.";
+    html = `<div class="build-byte"><div class="build-byte-head"><span class="build-byte-label">Byte 1</span><span class="build-byte-hex" id="build-byte-hex-1">00</span></div>` +
+      `<div class="build-enum2-row"><label for="build-enum2-a">Who controls the terminal</label><select id="build-enum2-a" class="build-enum-select">` +
+      Object.entries(TERM_TYPE_AXIS_A).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join('') +
+      `</select></div>` +
+      `<div class="build-enum2-row"><label for="build-enum2-b">Environment</label><select id="build-enum2-b" class="build-enum-select"></select></div>` +
+      `<p class="build-enum2-result" id="build-enum2-result"></p>` +
+      `</div>`;
+    $('build-fields').innerHTML = html;
+    populateEnum2Axis2();
+    $('build-enum2-a').addEventListener('change', () => { populateEnum2Axis2(); updateBuildHex(tagHex); });
+    $('build-enum2-b').addEventListener('change', () => updateBuildHex(tagHex));
+  } else {
+    $('build-hint').textContent = "Check the terminal's capabilities: the hex value updates live, ready to paste into a file or a terminal config. Bits not listed below are reserved (RFU) and stay at 0.";
+    const groups = groupBitsByByte(bitTableFor(tagHex));
+    const nBytes = BUILD_TAG_LEN[tagHex];
+    for (let i = 1; i <= nBytes; i++) {
+      const bits = groups[i] || [];
+      html += `<div class="build-byte"><div class="build-byte-head"><span class="build-byte-label">Byte ${i}</span><span class="build-byte-hex" id="build-byte-hex-${i}">00</span></div>`;
+      bits.forEach(b => {
+        html += `<label class="build-check"><input type="checkbox" data-byte="${i}" data-mask="${b.mask}"><span>${esc(b.label)}</span></label>`;
+      });
+      html += `</div>`;
+    }
+    $('build-fields').innerHTML = html;
+    $('build-fields').querySelectorAll('input[type=checkbox]').forEach(cb => {
+      cb.addEventListener('change', () => updateBuildHex(tagHex));
+    });
+  }
+  updateBuildHex(tagHex);
+  const note = BUILD_NOTES[tagHex];
+  $('build-note').hidden = !note;
+  $('build-note').innerHTML = note || '';
+  /* Changer de tag invalide toute valeur de départ chargée (longueur en octets différente) */
+  $('build-load-value').value = '';
+  $('build-load-hint').textContent = '';
+  $('build-load-hint').classList.remove('error');
+}
+
+/* Repartir d'une valeur existante : coche les cases (ou sélectionne les options,
+   en mode enum2) correspondantes plutôt que de tout remettre à 0, pour
+   l'itération sur une config déjà en place. Non utilisé en mode 'multi'
+   (TAC) : chacune de ses 3 colonnes a son propre chargeur, voir loadTacValue. */
+function loadBuildValue(tagHex) {
+  const hex = cleanHex($('build-load-value').value);
+  const hintEl = $('build-load-hint');
+  const nBytes = BUILD_TAG_LEN[tagHex];
+  if (!hex) { hintEl.textContent = ''; hintEl.classList.remove('error'); return; }
+  if (hex.length !== nBytes * 2) {
+    hintEl.textContent = `${tagHex} is ${nBytes} bytes (${nBytes * 2} hex characters expected), ${hex.length} received.`;
+    hintEl.classList.add('error');
+    return;
+  }
+  if (buildTypeOf(tagHex) === 'enum2') {
+    const code = hex.toUpperCase();
+    if (!TERM_TYPE[code]) {
+      hintEl.textContent = `Code ${code} is not listed (Table 24, EMV 4.3 Book 4 Annex A1).`;
+      hintEl.classList.add('error');
+      return;
+    }
+    hintEl.classList.remove('error');
+    $('build-enum2-a').value = code[0];
+    populateEnum2Axis2();
+    $('build-enum2-b').value = code[1];
+    updateBuildHex(tagHex);
+    hintEl.textContent = 'Value loaded.';
+    return;
+  }
+  hintEl.classList.remove('error');
+  const bytes = [];
+  for (let i = 0; i < hex.length; i += 2) bytes.push(parseInt(hex.slice(i, i + 2), 16));
+  $('build-fields').querySelectorAll('input[type=checkbox]').forEach(cb => {
+    const byteIdx = Number(cb.dataset.byte);
+    const mask = Number(cb.dataset.mask);
+    cb.checked = !!((bytes[byteIdx - 1] || 0) & mask);
+  });
+  updateBuildHex(tagHex);
+  hintEl.textContent = 'Value loaded, edit the fields below.';
+}
+
+/* ---------- TAC : formulaire à 3 colonnes (Denial/Online/Default) ----------
+   Un seul catalogue de bits (TVR_BITS, comme le décodeur tvr/iac) rendu une
+   fois, avec 3 checkboxes par ligne au lieu d'une, et 3 valeurs hexadécimales
+   + 3 chargeurs indépendants en sortie, un par colonne. */
+const TAC_COLS = [['denial', 'Denial'], ['online', 'Online'], ['default', 'Default']];
+
+function renderTacForm() {
+  const groups = groupBitsByByte(TVR_BITS);
+  let html = `<div class="build-tac-colhead"><span>Condition (TVR bit)</span>${TAC_COLS.map(([, l]) => `<span>${l}</span>`).join('')}</div>`;
+  for (let i = 1; i <= 5; i++) {
+    const bits = groups[i] || [];
+    html += `<div class="build-tac-byte"><div class="build-byte-head"><span class="build-byte-label">Byte ${i}</span></div>`;
+    bits.forEach(b => {
+      html += `<div class="build-tac-row"><span>${esc(b.label)}</span>` +
+        TAC_COLS.map(([c]) => `<input type="checkbox" data-col="${c}" data-byte="${i}" data-mask="${b.mask}">`).join('') +
+        `</div>`;
+    });
+    html += `</div>`;
+  }
+  html += `<div class="build-tac-outputs">` + TAC_COLS.map(([c, label]) => `
+    <div class="build-tac-output">
+      <div class="build-tac-load"><input type="text" id="build-tac-load-${c}" placeholder="start from an existing value"><button type="button" class="btn secondary" id="build-tac-load-btn-${c}">Load</button></div>
+      <span class="rawlabel">TAC-${label}<button type="button" class="copy-btn" id="build-tac-copy-${c}" data-copy="">Copy</button></span>
+      <code id="build-tac-hex-${c}"></code>
+      <p class="hint build-load-hint" id="build-tac-hint-${c}"></p>
+    </div>`).join('') + `</div>`;
+  $('build-multi-host').innerHTML = html;
+  $('build-multi-host').querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', updateTacHex);
+  });
+  TAC_COLS.forEach(([c]) => {
+    $('build-tac-load-btn-' + c).addEventListener('click', () => loadTacValue(c));
+    $('build-tac-load-' + c).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); loadTacValue(c); } });
+  });
+  updateTacHex();
+}
+
+function updateTacHex() {
+  TAC_COLS.forEach(([c]) => {
+    const bytes = [];
+    for (let i = 1; i <= 5; i++) {
+      let v = 0;
+      $('build-multi-host').querySelectorAll(`input[data-col="${c}"][data-byte="${i}"]:checked`).forEach(cb => { v |= Number(cb.dataset.mask); });
+      bytes.push(v);
+    }
+    const hex = bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
+    $('build-tac-hex-' + c).textContent = hex;
+    $('build-tac-copy-' + c).setAttribute('data-copy', hex);
+  });
+}
+
+function loadTacValue(col) {
+  const hex = cleanHex($('build-tac-load-' + col).value);
+  const hintEl = $('build-tac-hint-' + col);
+  if (!hex) { hintEl.textContent = ''; hintEl.classList.remove('error'); return; }
+  if (hex.length !== 10) {
+    hintEl.textContent = `5 bytes expected (10 hex characters), ${hex.length} received.`;
+    hintEl.classList.add('error');
+    return;
+  }
+  hintEl.classList.remove('error');
+  const bytes = [];
+  for (let i = 0; i < hex.length; i += 2) bytes.push(parseInt(hex.slice(i, i + 2), 16));
+  $('build-multi-host').querySelectorAll(`input[data-col="${col}"]`).forEach(cb => {
+    const byteIdx = Number(cb.dataset.byte), mask = Number(cb.dataset.mask);
+    cb.checked = !!((bytes[byteIdx - 1] || 0) & mask);
+  });
+  updateTacHex();
+  hintEl.textContent = 'Value loaded.';
+}
+
+/* ---------- Sélecteur de tag à construire : même UX que « Décoder un tag
+   seul » (tag-search/tag-dropdown), scopée aux seuls tags constructibles. ---------- */
+const BUILD_TAG_LIST = BUILD_TAGS.map(t => {
+  const meta = buildTagMeta(t);
+  const p = EMV_TAGS[t] ? (EMV_TAGS[t].p || '') : (BUILD_PSEUDO_TAGS[t] ? BUILD_PSEUDO_TAGS[t].p : '');
+  return { hex: t, name: meta.optionLabel, searchText: `${t} ${meta.optionLabel} ${p}`.toUpperCase() };
+});
+let selectedBuildTagHex = BUILD_TAGS[0];
+let buildTagDropdownIndex = -1;
+
+function filterBuildTags(query) {
+  const q = query.trim().toUpperCase();
+  if (!q) return BUILD_TAG_LIST;
+  return BUILD_TAG_LIST.filter(t => t.searchText.includes(q));
+}
+
+function renderBuildTagDropdown(query) {
+  const dd = $('build-tag-dropdown');
+  const results = filterBuildTags(query);
+  buildTagDropdownIndex = -1;
+  dd.innerHTML = results.length
+    ? results.map(t =>
+        `<button type="button" class="tag-opt" role="option" data-tag="${t.hex}">` +
+        `<span class="tag-opt-hex">${esc(t.hex)}</span>` +
+        `<span class="tag-opt-name">${esc(t.name)}</span>` +
+        `</button>`
+      ).join('')
+    : `<div class="tag-opt-empty">No buildable tag matches.</div>`;
+  dd.hidden = false;
+  $('build-tag-search').setAttribute('aria-expanded', 'true');
+}
+
+function closeBuildTagDropdown() {
+  $('build-tag-dropdown').hidden = true;
+  $('build-tag-search').setAttribute('aria-expanded', 'false');
+}
+
+function moveBuildTagDropdownActive(delta) {
+  const opts = [...document.querySelectorAll('#build-tag-dropdown .tag-opt')];
+  if (!opts.length) return;
+  buildTagDropdownIndex = (buildTagDropdownIndex + delta + opts.length) % opts.length;
+  opts.forEach((o, i) => o.classList.toggle('active', i === buildTagDropdownIndex));
+  opts[buildTagDropdownIndex].scrollIntoView({ block: 'nearest' });
+}
+
+function setSelectedBuildTag(hex) {
+  selectedBuildTagHex = hex;
+  $('build-tag-search').value = buildTagMeta(hex).optionLabel;
+  renderBuildForm(hex);
+}
+
+function initBuildTagSearch() {
+  setSelectedBuildTag(selectedBuildTagHex);
+  const s = $('build-tag-search');
+  s.addEventListener('focus', () => { s.select(); renderBuildTagDropdown(''); });
+  s.addEventListener('input', () => renderBuildTagDropdown(s.value));
+  s.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeBuildTagDropdown(); s.blur(); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); if ($('build-tag-dropdown').hidden) renderBuildTagDropdown(s.value); moveBuildTagDropdownActive(1); return; }
+    if (e.key === 'ArrowUp') { e.preventDefault(); if ($('build-tag-dropdown').hidden) renderBuildTagDropdown(s.value); moveBuildTagDropdownActive(-1); return; }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const opts = [...document.querySelectorAll('#build-tag-dropdown .tag-opt')];
+      const pick = buildTagDropdownIndex >= 0 ? opts[buildTagDropdownIndex] : opts[0];
+      if (pick) { setSelectedBuildTag(pick.getAttribute('data-tag')); closeBuildTagDropdown(); }
+    }
+  });
+  $('build-tag-dropdown').addEventListener('click', e => {
+    const btn = e.target.closest('.tag-opt');
+    if (!btn) return;
+    setSelectedBuildTag(btn.getAttribute('data-tag'));
+    closeBuildTagDropdown();
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.build-tag-picker')) closeBuildTagDropdown();
+  });
+  $('build-load-btn').addEventListener('click', () => loadBuildValue(selectedBuildTagHex));
+  $('build-load-value').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); loadBuildValue(selectedBuildTagHex); }
+  });
+}
+
 /* ---------- Bascule de mode ---------- */
 function setMode(mode) {
-  const isStream = mode === 'stream';
-  $('panel-stream').hidden = !isStream;
-  $('panel-tag').hidden = isStream;
-  $('mode-stream').classList.toggle('active', isStream);
-  $('mode-tag').classList.toggle('active', !isStream);
-  $('mode-stream').setAttribute('aria-selected', isStream ? 'true' : 'false');
-  $('mode-tag').setAttribute('aria-selected', !isStream ? 'true' : 'false');
+  ['stream', 'tag', 'build'].forEach(m => {
+    $('panel-' + m).hidden = m !== mode;
+    $('mode-' + m).classList.toggle('active', m === mode);
+    $('mode-' + m).setAttribute('aria-selected', m === mode ? 'true' : 'false');
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1786,8 +2387,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!e.target.closest('.tag-picker')) closeTagDropdown();
   });
 
+  /* Mode « construire » : même UX de recherche que « décoder un tag seul » */
+  initBuildTagSearch();
+
   $('mode-stream').addEventListener('click', () => setMode('stream'));
   $('mode-tag').addEventListener('click', () => setMode('tag'));
+  $('mode-build').addEventListener('click', () => setMode('build'));
 
   $('btn-parse').addEventListener('click', () => { $('ex-desc').textContent = ''; runParse(input.value); });
   input.addEventListener('keydown', e => {
@@ -1795,6 +2400,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   $('btn-clear').addEventListener('click', () => {
     input.value = ''; $('ex-desc').textContent = '';
+    if ($('input-note')) { $('input-note').hidden = true; $('input-note').innerHTML = ''; }
     $('result').hidden = true; $('explainer').hidden = true; $('errors').hidden = true;
     $('permalink-bar').hidden = true; $('verdict').hidden = true; $('results-grid').hidden = true; $('single-result').hidden = true;
     try { history.replaceState(null, '', location.pathname); } catch (e) {}

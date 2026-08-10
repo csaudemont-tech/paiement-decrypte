@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ma boîte à outils – Paiement Décrypté</title>
-<meta name="description" content="Des outils gratuits pour le terrain paiement : décodeur EMV TLV, et bientôt un explorateur NEXO Acquirer et un décodeur de configuration NEXO. Rien à installer, tout tourne dans votre navigateur.">
-<link rel="canonical" href="https://paiement-decrypte.fr/outils/">
+<title>My Toolkit – Payment Decrypted</title>
+<meta name="description" content="Free tools for the payments field: EMV TLV decoder, and soon a NEXO Acquirer explorer and a NEXO config decoder. Nothing to install, everything runs in your browser.">
+<link rel="canonical" href="https://paiement-decrypte.fr/en/outils/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Paiement Décrypté">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:url" content="https://paiement-decrypte.fr/outils/">
-<meta property="og:title" content="Ma boîte à outils – Paiement Décrypté">
-<meta property="og:description" content="Des outils gratuits pour le terrain paiement : décodeur EMV TLV, et d'autres à venir.">
-<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<meta property="og:site_name" content="Payment Decrypted">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/en/outils/">
+<meta property="og:title" content="My Toolkit – Payment Decrypted">
+<meta property="og:description" content="Free tools for the payments field: EMV TLV decoder, and more to come.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="627">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-en.png">
 <link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/">
 <link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/">
-<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 
 <style>
-  @font-face{font-family:'Bricolage Grotesque';src:url('../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
-  @font-face{font-family:'Instrument Sans';src:url('../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
-  @font-face{font-family:'JetBrains Mono';src:url('../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  @font-face{font-family:'Bricolage Grotesque';src:url('../../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
   :root{
     --bg:#F2F4F8;
     --ink:#0E1B2C;
@@ -145,7 +146,7 @@
   footer b{color:var(--ink);font-weight:600}
 </style>
 </head>
-<body data-ep="outils">
+<body data-ep="outils-en">
 <div class="app">
 
   <div class="masthead">
@@ -161,65 +162,68 @@
       <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
       <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
     </svg>
-    <span class="eyebrow">Paiement Décrypté</span>
+    <span class="eyebrow">Payment Decrypted</span>
     <div class="masthead-right">
-      <a class="formation-nav" href="../">Ma formation</a>
-      <a class="lang" href="../en/outils/" hreflang="en">EN</a>
+      <a class="formation-nav" href="../">My Training</a>
+      <a class="lang" href="../../outils/" hreflang="fr">FR</a>
     </div>
   </div>
 
-  <h1>Ma boîte à outils</h1>
+  <h1>My Toolkit</h1>
   <p class="lede">
-    Des outils gratuits, pensés pour le terrain : décoder, comprendre, vérifier.
-    Pas de compte, pas de traceur, tout tourne dans votre navigateur.
+    Free tools, built for the field: decode, understand, verify.
+    No account, no tracker, everything runs in your browser.
   </p>
 
   <section class="section">
     <div class="grid">
       <a class="card tool" href="emv-parser.html">
-        <p class="card-eyebrow"><span>OUTIL</span></p>
-        <h3>Décodeur EMV TLV</h3>
-        <p>Décode un flux TLV tag par tag, avec un encodeur intégré (repartir d'une valeur).</p>
-        <span class="card-cta">Ouvrir l'outil</span>
+        <p class="card-eyebrow"><span>TOOL</span></p>
+        <h3>EMV TLV Decoder</h3>
+        <p>Decode a TLV stream tag by tag, with a built-in encoder (start from a value).</p>
+        <span class="card-cta">Open the tool</span>
       </a>
 
       <div class="card tool locked" aria-disabled="true">
-        <p class="card-eyebrow"><span>OUTIL</span></p>
+        <p class="card-eyebrow"><span>TOOL</span></p>
         <h3>NEXO Acquirer Explainer</h3>
-        <p>Explore les messages du protocole NEXO côté acquéreur, message par message.</p>
-        <span class="badge">À VENIR</span>
+        <p>Explore NEXO protocol messages on the acquirer side, message by message.</p>
+        <span class="badge">COMING SOON</span>
       </div>
 
       <div class="card tool locked" aria-disabled="true">
-        <p class="card-eyebrow"><span>OUTIL</span></p>
-        <h3>Décodeur config NEXO</h3>
-        <p>Lecture claire d'un fichier de configuration terminal.</p>
-        <span class="badge">À VENIR</span>
+        <p class="card-eyebrow"><span>TOOL</span></p>
+        <h3>NEXO Config Decoder</h3>
+        <p>Clear reading of a terminal configuration file.</p>
+        <span class="badge">COMING SOON</span>
       </div>
     </div>
   </section>
 
-  <section class="signup" id="inscription">
-    <h2>Restez informé·e de nos actualités.</h2>
-    <p>Nouveaux épisodes, nouveaux outils, rien d'autre. Désinscription en un clic.</p>
-    <!-- KIT_FORM : branché sur le formulaire Kit n°9768048 (session 4) -->
-    <form id="signup-form" novalidate>
-      <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
-      <button type="submit">Me prévenir</button>
+  <section class="signup" id="subscribe">
+    <h2>Stay in the loop.</h2>
+    <p>New episodes, new tools, nothing else. One-click unsubscribe.</p>
+    <form id="signup-form" novalidate data-kit-form="9773354"
+          data-sending="Sending&hellip;" data-sent="Sent &#10003;"
+          data-msg-invalid="Please enter a valid email address."
+          data-msg-rejected="Subscription failed, check the address and try again."
+          data-msg-network="Couldn&rsquo;t send, check your connection and try again.">
+      <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
+      <button type="submit">Notify me</button>
     </form>
     <p class="ok" id="signup-ok" role="status"></p>
-    <p class="note">Double opt-in : vous confirmerez votre adresse par email. Désinscription en un clic.</p>
+    <p class="note">Double opt-in: you&rsquo;ll confirm your address by email. One-click unsubscribe.</p>
   </section>
 
   <footer>
-    <p>Données : ce site mesure des statistiques d'usage <b>anonymes</b>, sans cookie ni traceur. Email : collecté uniquement via le formulaire ci-dessus, avec double confirmation ; désinscription en un clic dans chaque envoi.</p>
-    <p>Une id&eacute;e d'&eacute;pisode ou d'outil&nbsp;? &Eacute;crivez &agrave; <a href="mailto:bonjour@paiement-decrypte.fr?subject=Proposition%20de%20sujet" style="color:var(--cobalt)">bonjour@paiement-decrypte.fr</a>.</p>
-    <p>© 2026 Paiement Décrypté</p>
+    <p>Data: this site collects <b>anonymous</b> usage statistics only, with no cookies or trackers. Email: collected solely via the form above, with double confirmation; one-click unsubscribe in every email.</p>
+    <p>Got an episode or tool idea? Write to <a href="mailto:bonjour@paiement-decrypte.fr?subject=Topic%20suggestion" style="color:var(--cobalt)">bonjour@paiement-decrypte.fr</a>.</p>
+    <p>&copy; 2026 Paiement D&eacute;crypt&eacute; &middot; <a href="../../outils/" style="color:inherit">Version fran&ccedil;aise</a></p>
   </footer>
 
 </div>
-<script src="../assets/telemetry.js"></script>
-<script src="../assets/subscribe.js"></script>
+<script src="../../assets/telemetry.js"></script>
+<script src="../../assets/subscribe.js"></script>
 <script>
   if(window.PD) PD.track('page_open');
   if(window.PDSubscribe){
@@ -227,8 +231,8 @@
       if(ok && window.PD) PD.track('subscribe_ok');
       var el = document.getElementById('signup-ok');
       el.textContent = ok
-        ? 'Presque fait ! Ouvrez votre boîte mail et cliquez sur le lien de confirmation.'
-        : (msg || 'Une erreur est survenue – réessayez.');
+        ? 'Almost there! Check your inbox and click the confirmation link.'
+        : (msg || 'Something went wrong — please try again.');
       el.style.color = ok ? '' : '#E85C4A';
       el.classList.add('show');
     });
