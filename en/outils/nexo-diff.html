@@ -133,18 +133,526 @@
   <div id="results"></div>
 </div>
 
-<script src="https://paiement-decrypte.fr/assets/js/emv-dictionary.js"></script>
+<script>
+/* === EMV_DICTIONARY:BEGIN === */
+/* ============================================================
+   Paiement Décrypté — dictionnaire EMV canonique (EN)
+   ============================================================
+   Miroir EN de a-publier/_shared/emv-dictionary.fr.js — mêmes
+   clés/structures, libellés utilisateur traduits en anglais,
+   commentaires laissés en français (convention du projet). Les
+   deux fichiers se resynchronisent manuellement : corriger la
+   donnée FR, traduire à la main dans ce fichier, relancer le
+   script de fusion sur les deux (voir plus bas).
+
+   SOURCE UNIQUE DE VÉRITÉ pour les données EMV en anglais,
+   partagées entre les outils EN du site (emv-parser-en pour
+   l'instant ; les autres outils n'ont pas encore de version EN).
+
+   RÈGLE D'OR : ne jamais éditer ce bloc de données dans un fichier
+   outil directement (repérable aux marqueurs EMV_DICTIONARY:BEGIN
+   / EMV_DICTIONARY:END). Éditer CE fichier-ci, puis lancer :
+     node a-publier/_shared/merge-emv-dictionary.js
+   Voir mémoire [[architecture-plateforme]], section « DICTIONNAIRE
+   EMV CANONIQUE », pour le contexte complet.
+
+   Contenu : identique à la version FR (voir son en-tête pour le
+   détail des tables et des sources). Aucune donnée réelle : tous
+   les exemples sont synthétiques.
+
+   Dernière synchro depuis emv-parser-en.html : round 8 (2026-08-09).
+   ============================================================ */
+
+const EMV_AIDS = {
+  'A0000000031010': { reseau: 'Visa', produit: 'Visa credit/debit' },
+  'A0000000032010': { reseau: 'Visa', produit: 'Visa Electron' },
+  'A0000000032020': { reseau: 'Visa', produit: 'V PAY' },
+  'A0000000041010': { reseau: 'Mastercard', produit: 'Mastercard credit/debit' },
+  'A0000000043060': { reseau: 'Mastercard', produit: 'Maestro' },
+  'A0000000250104': { reseau: 'American Express', produit: 'Amex' },
+  'A00000002501':   { reseau: 'American Express', produit: 'Amex' },
+  'A0000000421010': { reseau: 'CB', produit: 'CB (Cartes Bancaires, French domestic scheme), credit/debit', fr: true },
+  'A0000000422010': { reseau: 'CB', produit: 'CB (Cartes Bancaires, French domestic scheme), debit', fr: true },
+  'A0000001523010': { reseau: 'Discover', produit: 'Discover/Diners' },
+  'A0000003330101': { reseau: 'UnionPay', produit: 'UnionPay debit' },
+  'A0000003330102': { reseau: 'UnionPay', produit: 'UnionPay credit' },
+  'A0000000651010': { reseau: 'JCB', produit: 'JCB' },
+};
+
+const DF_NAMES = {
+  '315041592E5359532E4444463031': 'PSE, "1PAY.SYS.DDF01" (contact selection)',
+  '325041592E5359532E4444463031': 'PPSE, "2PAY.SYS.DDF01" (contactless selection)',
+};
+
+const COUNTRY_CODES = { '0250': 'France', '0840': 'United States', '0826': 'United Kingdom', '0276': 'Germany', '0056': 'Belgium', '0724': 'Spain', '0380': 'Italy', '0756': 'Switzerland', '0442': 'Luxembourg', '0620': 'Portugal', '0528': 'Netherlands' };
+const CURRENCY_CODES = { '0978': 'EUR (euro)', '0840': 'USD (US dollar)', '0826': 'GBP (pound sterling)', '0756': 'CHF (Swiss franc)', '0392': 'JPY (yen)' };
+
+/* ---------- Bitfields ---------- */
+/* Chaque entrée : [octet (1-based), masque, libellé, gravité]
+   gravité : 'info' | 'warn' | 'bad', pilote la couleur et la narration */
+
+const TVR_BITS = [
+  [1,0x80,"Offline data authentication not performed",'warn'],
+  [1,0x40,"SDA failed (static authentication)",'bad'],
+  [1,0x20,"ICC data missing",'warn'],
+  [1,0x10,"Card on terminal exception file",'bad'],
+  [1,0x08,"DDA failed (dynamic authentication)",'bad'],
+  [1,0x04,"CDA failed (combined authentication)",'bad'],
+  [2,0x80,"ICC and terminal have different application versions",'info'],
+  [2,0x40,"Expired application",'bad'],
+  [2,0x20,"Application not yet effective (future effective date)",'warn'],
+  [2,0x10,"Requested service not allowed for card product",'warn'],
+  [2,0x08,"New card (first use)",'info'],
+  [3,0x80,"Cardholder verification was not successful",'bad'],
+  [3,0x40,"Unrecognised CVM",'warn'],
+  [3,0x20,"PIN Try Limit exceeded",'bad'],
+  [3,0x10,"PIN entry required but PIN pad not present or not working",'warn'],
+  [3,0x08,"PIN entry required, PIN pad present, but PIN was not entered",'warn'],
+  [3,0x04,"Online PIN entered",'info'],
+  [4,0x80,"Transaction exceeds floor limit",'info'],
+  [4,0x40,"Lower consecutive offline limit exceeded",'warn'],
+  [4,0x20,"Upper consecutive offline limit exceeded",'warn'],
+  [4,0x10,"Transaction selected randomly for online processing",'info'],
+  [4,0x08,"Merchant forced transaction online",'info'],
+  [5,0x80,"Default TDOL used",'info'],
+  [5,0x40,"Issuer authentication failed",'bad'],
+  [5,0x20,"Script processing failed before final GENERATE AC",'warn'],
+  [5,0x10,"Script processing failed after final GENERATE AC",'warn'],
+];
+
+const AIP_BITS = [
+  [1,0x40,"SDA supported (static authentication)",'info'],
+  [1,0x20,"DDA supported (dynamic authentication)",'info'],
+  [1,0x10,"Cardholder verification supported (CVM)",'info'],
+  [1,0x08,"Terminal risk management to be performed",'info'],
+  [1,0x04,"Issuer authentication supported",'info'],
+  [1,0x02,"On-device cardholder verification (CDCVM) supported",'info'],
+  [1,0x01,"CDA supported (combined authentication)",'info'],
+  [2,0x80,"MSD mode supported (contactless, legacy)",'info'],
+  [2,0x02,"Relay resistance protocol supported (contactless, Kernel 2)",'info'],
+];
+
+const TSI_BITS = [
+  [1,0x80,"Offline data authentication performed",'info'],
+  [1,0x40,"Cardholder verification performed",'info'],
+  [1,0x20,"Card risk management performed",'info'],
+  [1,0x10,"Issuer authentication performed",'info'],
+  [1,0x08,"Terminal risk management performed",'info'],
+  [1,0x04,"Issuer script processing performed",'info'],
+];
+
+
+const TERMCAP_BITS = [
+  [1,0x80,"Manual key entry (terminal keypad)",'info'],
+  [1,0x40,"Magnetic stripe read",'info'],
+  [1,0x20,"Contact chip read",'info'],
+  [2,0x80,"Plaintext offline PIN verified by the card",'info'],
+  [2,0x40,"Enciphered PIN verified online",'info'],
+  [2,0x20,"Handwritten signature (paper)",'info'],
+  [2,0x10,"Enciphered offline PIN verified by the card",'info'],
+  [2,0x08,"No CVM required",'info'],
+  [3,0x80,"Static authentication (SDA)",'info'],
+  [3,0x40,"Dynamic authentication (DDA)",'info'],
+  [3,0x20,"Card capture possible",'info'],
+  [3,0x08,"Combined authentication (CDA)",'info'],
+];
+
+/* Additional Terminal Capabilities (9F40), sourced from EMV 4.3 Book 4 Annex A3
+   (tables 28-32), 27 of 40 bits defined (5 bytes). Byte 2 has only 1 bit defined
+   (RFU otherwise). Mirrors ADDTERMCAP_BITS in the FR build. */
+const ADDTERMCAP_BITS = [
+  [1,0x80,"Cash advance",'info'],
+  [1,0x40,"Goods",'info'],
+  [1,0x20,"Services",'info'],
+  [1,0x10,"Cashback",'info'],
+  [1,0x08,"Inquiry",'info'],
+  [1,0x04,"Transfer",'info'],
+  [1,0x02,"Payment",'info'],
+  [1,0x01,"Administrative",'info'],
+  [2,0x80,"Cash deposit",'info'],
+  [3,0x80,"Numeric keys",'info'],
+  [3,0x40,"Alphabetic and special-character keys",'info'],
+  [3,0x20,"Command keys",'info'],
+  [3,0x10,"Function keys",'info'],
+  [4,0x80,"Print, attendant",'info'],
+  [4,0x40,"Print, cardholder",'info'],
+  [4,0x20,"Display, attendant",'info'],
+  [4,0x10,"Display, cardholder",'info'],
+  [4,0x02,"Code table 10",'info'],
+  [4,0x01,"Code table 9",'info'],
+  [5,0x80,"Code table 8",'info'],
+  [5,0x40,"Code table 7",'info'],
+  [5,0x20,"Code table 6",'info'],
+  [5,0x10,"Code table 5",'info'],
+  [5,0x08,"Code table 4",'info'],
+  [5,0x04,"Code table 3",'info'],
+  [5,0x02,"Code table 2",'info'],
+  [5,0x01,"Code table 1",'info'],
+];
+
+/* Terminal Transaction Qualifiers (9F66), contactless, sourced from EMV
+   Contactless Book A v2.11, Table 5-4: the generic Entry Point definition
+   (the one every kernel receives as "Copy of TTQ"), not a scheme-specific
+   variant. Mirrors TTQ_BITS in the FR build. */
+const TTQ_BITS = [
+  [1,0x80,"Mag-stripe mode supported",'info'],
+  [1,0x20,"EMV mode supported",'info'],
+  [1,0x10,"EMV contact chip supported",'info'],
+  [1,0x08,"Offline-only reader",'warn'],
+  [1,0x04,"Online PIN supported",'info'],
+  [1,0x02,"Signature supported",'info'],
+  [1,0x01,"Offline Data Authentication for Online Authorizations supported",'info'],
+  [2,0x80,"Online cryptogram required",'info'],
+  [2,0x40,"CVM required",'info'],
+  [2,0x20,"(Contact Chip) Offline PIN supported",'info'],
+  [3,0x80,"Issuer Update Processing supported",'info'],
+  [3,0x40,"Consumer Device CVM supported",'info'],
+];
+
+const CVM_CODES = {
+  0x00: "Fail CVM processing",
+  0x01: "Plaintext offline PIN, verified by the card",
+  0x02: "Online PIN (verified by the issuer)",
+  0x03: "Plaintext offline PIN + paper signature",
+  0x04: "Enciphered offline PIN, verified by the card",
+  0x05: "Enciphered offline PIN + paper signature",
+  0x1E: "Paper signature",
+  0x1F: "No CVM required",
+  0x3F: "No CVM performed",
+};
+
+const CVM_CONDITIONS = {
+  0x00: "Always",
+  0x01: "If unattended cash",
+  0x02: "If not unattended cash and not manual cash and not purchase with cashback",
+  0x03: "If the terminal supports this CVM method",
+  0x04: "If manual cash",
+  0x05: "If purchase with cashback",
+  0x06: "If amount (application currency) under value X",
+  0x07: "If amount (application currency) over value X",
+  0x08: "If amount (application currency) under value Y",
+  0x09: "If amount (application currency) over value Y",
+};
+
+const CVM_RESULTS = { 0x00: "Unknown (e.g. signature: the terminal can't tell)", 0x01: "Failed", 0x02: "Successful" };
+
+const ARC_CODES = {
+  '00': { txt: "Approved", ok: true },
+  '01': { txt: "Refer to card issuer (call)", ok: false },
+  '02': { txt: "Refer to card issuer, special conditions", ok: false },
+  '05': { txt: "Do not honour", ok: false },
+  '51': { txt: "Insufficient funds", ok: false },
+  '54': { txt: "Expired card", ok: false },
+  '55': { txt: "Incorrect PIN", ok: false },
+  'Y1': { txt: "Offline approved (the transaction did not go online)", ok: true },
+  'Z1': { txt: "Offline decline", ok: false },
+  'Y3': { txt: "Unable to go online, offline approved", ok: true },
+  'Z3': { txt: "Unable to go online, offline decline", ok: false },
+};
+
+/* ---------- Dictionnaire de tags ----------
+   n = nom, cat = catégorie, p = explication pédagogique,
+   ep = épisode lié {label, href|null}, dec = décodeur spécial */
+
+const EP_RESEAUX = { label: "S1E01 · Visa, Mastercard, CB: what does a network actually do?", href: "/en/episodes/s1e01.html" };
+const EP_AUTORISATION = { label: "S1E07 · Authorisation (coming soon)", href: null };
+
+const EMV_TAGS = {
+  '4F': { n: "AID, application identifier", cat: "Identification", dec: 'aid', ep: EP_RESEAUX,
+    p: "The AID identifies the payment application on the chip: the first 5 bytes (RID) designate the network (Visa, Mastercard, CB…), the rest specifies the product. A French co-badged card typically carries two AIDs: CB and Visa or Mastercard." },
+  '50': { n: "Application Label", cat: "Identification", dec: 'text',
+    p: "The application name as the card offers it for display (e.g. \"CB\", \"VISA\"). This is the label a terminal shows when it asks the customer to choose between the brands on a co-badged card." },
+  '57': { n: "Track 2 Equivalent Data", cat: "Identification", dec: 'track2',
+    p: "Reproduces the data from the old magnetic stripe: PAN, expiry date, service code. Separator \"D\". Present for compatibility with legacy systems, this is sensitive (PCI) data: never paste a real capture here." },
+  '5A': { n: "PAN, card number", cat: "Identification", dec: 'pan',
+    p: "The card number encoded in BCD. Sensitive PCI data: in logs and tools it must always be masked or truncated (first 6 + last 4 digits at most)." },
+  '5F20': { n: "Cardholder Name", cat: "Identification", dec: 'text',
+    p: "The cardholder's name as embossed. Often filled with generic values on recent cards (\"/\" or spaces) to limit exposure of personal data." },
+  '5F24': { n: "Application Expiration Date", cat: "Identification", dec: 'date',
+    p: "The application's expiry date (YYMMDD). This is what the terminal compares against today's date, the TVR's \"expired application\" bit comes from this check." },
+  '5F25': { n: "Application Effective Date", cat: "Identification", dec: 'date',
+    p: "Start-of-validity date (YYMMDD). A card used before this date triggers the TVR's \"application not yet effective\" bit." },
+  '5F28': { n: "Issuer Country Code", cat: "Identification", dec: 'country',
+    p: "Country of the issuing bank (ISO 3166 numeric). Used in particular to distinguish domestic from international transactions, which changes interchange and routing rules." },
+  '5F2A': { n: "Transaction Currency Code", cat: "Transaction", dec: 'currency',
+    p: "Currency of the transaction (ISO 4217 numeric). 0978 = euro. If it differs from the card's currency, you're in dynamic currency conversion (DCC) territory." },
+  '5F2D': { n: "Language Preference", cat: "Identification", dec: 'text',
+    p: "The cardholder's preferred languages (ISO 639 codes), in order of preference. This tag is why a terminal shows \"SAISISSEZ VOTRE CODE\" rather than \"ENTER PIN\" to a French cardholder." },
+  '5F34': { n: "PAN Sequence Number", cat: "Identification",
+    p: "Distinguishes multiple cards carrying the same PAN (reissue, primary/secondary card). Essential on the issuer side to look up the card's correct cryptographic keys." },
+  '61': { n: "Application Template", cat: "Structure", constructed: true, ep: EP_RESEAUX,
+    p: "Container for one directory entry: a candidate application (AID + label + priority). In the PPSE of a co-badged card you'll see two 61 templates, one per brand. Order and tag 87 decide priority." },
+  '6F': { n: "FCI Template, response to SELECT", cat: "Structure", constructed: true,
+    p: "The card's response to a SELECT command: it announces the selected file (84) and its metadata (A5). This is the starting point of every EMV transaction." },
+  '70': { n: "Record Template", cat: "Structure", constructed: true,
+    p: "Generic wrapper for records read via READ RECORD: the card's application data (PAN, dates, CVM lists, certificates…) live inside these records." },
+  '77': { n: "Response Template Format 2", cat: "Structure", constructed: true,
+    p: "TLV-explicit response format, typically the response to GENERATE AC: cryptogram (9F26), cryptogram type (9F27), ATC (9F36), IAD (9F10)." },
+  '80': { n: "Response Template Format 1", cat: "Structure",
+    p: "Compact response format: values are concatenated WITHOUT TLV structure, in an order mandated by the command. Classic beginner trap: it doesn't parse like TLV, the order comes from the spec." },
+  '82': { n: "AIP, Application Interchange Profile", cat: "Decision", dec: 'aip',
+    p: "The card announces here what it can do: which offline authentications (SDA/DDA/CDA), whether it supports cardholder verification, issuer authentication… The terminal adapts the whole transaction to this profile. 2 bytes of flags." },
+  '84': { n: "DF Name, selected file name", cat: "Identification", dec: 'dfname', ep: EP_RESEAUX,
+    p: "Name of the selected directory or application. \"2PAY.SYS.DDF01\" = contactless selection directory (PPSE); otherwise it's generally the AID of the chosen application." },
+  '87': { n: "Application Priority Indicator", cat: "Identification",
+    p: "One byte that settles two things in the application directory (each candidate application is listed there in an Application Template, tag 61): the high-order bit (b8) indicates whether explicit cardholder confirmation is required before selecting this application (1 = yes); the 4 low-order bits give the priority rank, from 1 (highest priority) to 15, with 0 meaning the issuer expresses no preference among several applications. On a co-badged card in France, the merchant can configure its display preference, but the customer keeps the right to choose the brand (IFR regulation, art. 8)." },
+  '88': { n: "SFI, Short File Identifier", cat: "Structure",
+    p: "Short identifier for the file where the directory's records are read. A plumbing detail of application selection, useful when stepping through a SELECT PSE by hand." },
+  '8A': { n: "ARC, Authorisation Response Code", cat: "Decision", dec: 'arc', ep: EP_AUTORISATION,
+    p: "The verdict from the authorisation circuit, 2 characters: 00 = approved, 05 = declined… The Y1/Z1/Y3/Z3 codes are generated by the terminal itself when the transaction is decided offline. Don't confuse this with the cryptogram: the ARC is the verdict, the cryptogram is the proof." },
+  '8C': { n: "CDOL1, Card Risk Management DOL 1", cat: "Decision", dec: 'dol',
+    p: "The card's shopping list for the first GENERATE AC: which terminal tags (amount, TVR, date, nonce…) it requires, and in what order. The terminal concatenates them WITHOUT tags, which is why you can't parse CDOL data as TLV." },
+  '8D': { n: "CDOL2, Card Risk Management DOL 2", cat: "Decision", dec: 'dol',
+    p: "Same principle as CDOL1, for the second GENERATE AC (after the online authorisation result comes back): the card typically asks here for the ARC and the issuer authentication results." },
+  '8E': { n: "CVM List, cardholder verification methods list", cat: "Cardholder", dec: 'cvmlist',
+    p: "The cardholder verification policy, written into the card by the issuer: a sequence of \"method + condition\" rules evaluated in order. Typical example in France: enciphered offline PIN, else online PIN, else signature." },
+  '8F': { n: "CA Public Key Index", cat: "Security",
+    p: "Index of the certificate authority's public key (per network) that the terminal must use to walk up the certificate chain. If the terminal doesn't have this key in store, offline authentication fails, the corresponding TVR bit is set." },
+  '90': { n: "Issuer Public Key Certificate", cat: "Security",
+    p: "Certificate for the issuer's public key, signed by the network's CA. The first link in the offline trust chain: CA → issuer → card." },
+  '92': { n: "Issuer Public Key Remainder", cat: "Security",
+    p: "The remainder of the issuer's public key that didn't fit in certificate 90. Concatenated to reconstruct the full key." },
+  '93': { n: "Signed Static Application Data", cat: "Security",
+    p: "The card's static data signed by the issuer, the core of SDA. Weak by design (replayable): this is why SDA was superseded by DDA/CDA." },
+  '94': { n: "AFL, Application File Locator", cat: "Structure", dec: 'afl',
+    p: "The card tells the terminal which records to read (file, range, and which ones take part in offline authentication). Read in groups of 4 bytes: SFI, first record, last record, number of records covered by signature." },
+  '95': { n: "TVR, Terminal Verification Results", cat: "Decision", dec: 'tvr', ep: EP_AUTORISATION,
+    p: "The terminal's logbook: 5 bytes of flags, each recording a check that failed or an event (failed authentication, expired card, floor limit exceeded…). Cross-referenced with the TAC/IAC thresholds, THIS is what decides whether the transaction goes offline, online, or gets declined. The single most valuable tag in a transaction log." },
+  '9A': { n: "Transaction Date", cat: "Transaction", dec: 'date',
+    p: "Date of the transaction on the terminal side (YYMMDD). Feeds into the cryptogram calculation, an inconsistent date and the cryptogram no longer verifies." },
+  '9B': { n: "TSI, Transaction Status Information", cat: "Decision", dec: 'tsi',
+    p: "TVR's companion: which steps were ATTEMPTED (authentication, cardholder verification, scripts…). The TVR says \"what went wrong\", the TSI says \"what was done\". Read the two together." },
+  '9C': { n: "Transaction Type", cat: "Transaction", dec: 'txtype',
+    p: "Type of operation (ISO 8583 processing code): 00 = purchase, 01 = cash withdrawal, 09 = purchase with cashback, 20 = refund…" },
+  '9F02': { n: "Amount, Authorised", cat: "Transaction", dec: 'amount',
+    p: "Transaction amount in BCD, in the currency's smallest unit (cents for the euro). 000000010000 = 100.00. The amount is part of the data signed inside the cryptogram." },
+  '9F03': { n: "Amount, Other", cat: "Transaction", dec: 'amount',
+    p: "A second amount, distinct from the main amount (9F02), whose exact meaning depends on terminal/issuer context: most often a cashback amount, but sometimes a service fee or a tip. Zero in the vast majority of French transactions." },
+  '9F06': { n: "AID (terminal)", cat: "Identification", dec: 'aid', ep: EP_RESEAUX,
+    p: "The AID as seen on the terminal side (during selection). Same meaning as tag 4F on the card side." },
+  '9F07': { n: "Application Usage Control", cat: "Decision",
+    p: "Usage restrictions set by the issuer: is the card valid abroad? at ATMs? for cashback? The terminal checks these against context, a disallowed use sets the TVR's \"service not allowed\" bit." },
+  '9F08': { n: "Application Version Number (card)", cat: "Identification",
+    p: "Version of the application spec supported by the card. Compared against the terminal's (9F09), a mismatch sets a TVR bit, generally without blocking the transaction." },
+  '9F09': { n: "Application Version Number (terminal)", cat: "Terminal",
+    p: "Version of the application spec on the terminal kernel side." },
+  '9F0D': { n: "IAC, Default", cat: "Decision", dec: 'iac',
+    p: "The issuer's fallback thresholds: if the transaction should have gone online but the terminal can't (offline), these bits say what to decline. Read as a mask applied to the TVR." },
+  '9F0E': { n: "IAC, Denial", cat: "Decision", dec: 'iac',
+    p: "The issuer's hard-decline thresholds: any bit shared between this mask and the TVR means an immediate offline decline, without even attempting to go online. A cautious issuer would put, say, \"expired card\" here." },
+  '9F0F': { n: "IAC, Online", cat: "Decision", dec: 'iac',
+    p: "The issuer's go-online thresholds: any bit shared with the TVR sends the transaction to online authorisation. In France almost all transactions go online anyway, so these masks matter most where offline is common." },
+  '9F10': { n: "IAD, Issuer Application Data", cat: "Security",
+    p: "Issuer-proprietary data returned with the cryptogram: card risk management results (CVR), internal counters… The exact format depends on the network and application profile, the most \"black box\" tag in a GENERATE AC response." },
+  '9F12': { n: "Application Preferred Name", cat: "Identification", dec: 'text',
+    p: "The application's preferred display name, possibly in a dedicated character set (9F11). Takes precedence over tag 50 if the terminal can display it." },
+  '9F1A': { n: "Terminal Country Code", cat: "Terminal", dec: 'country',
+    p: "Country of the terminal (ISO 3166). Compared against the issuer country (5F28) to determine domestic vs international." },
+  '9F1E': { n: "IFD Serial Number", cat: "Terminal", dec: 'text',
+    p: "The reader's serial number. Physically identifies the device in logs, data to anonymise before sharing any capture." },
+  '9F26': { n: "AC, Application Cryptogram", cat: "Security",
+    p: "THE cryptographic proof of the transaction: a MAC computed by the chip with its secret keys. The exact list of data feeding this calculation isn't fixed: the card itself chooses it, transaction by transaction, via the CDOL1 (8C) and CDOL2 (8D) tags, and it almost always includes the amount, the date and the TVR. In a stream that contains an 8C or an 8D, open it: you'll see the exact list this card requested for this cryptogram. Unforgeable without the card's key, the issuer verifies it to authenticate the transaction. Its type (ARQC/TC/AAC) is given by tag 9F27." },
+  '9F27': { n: "CID, Cryptogram Information Data", cat: "Decision", dec: 'cid', ep: EP_AUTORISATION,
+    p: "The type of cryptogram returned by the card, i.e. its decision: AAC = decline, TC = offline approval, ARQC = \"ask the issuer\". The card can be stricter than the terminal, never more lenient." },
+  '9F32': { n: "Issuer Public Key Exponent", cat: "Security",
+    p: "Public exponent of the issuer key (3 or 65537). Together with certificate 90 and remainder 92, it lets you reconstruct the full public key." },
+  '9F33': { n: "Terminal Capabilities", cat: "Terminal", dec: 'termcap',
+    p: "What the terminal can do, in 3 bytes: card entry modes, supported CVMs, offline authentications. An ATM and a restaurant's card terminal don't share the same profile." },
+  '9F34': { n: "CVM Results", cat: "Cardholder", dec: 'cvmres',
+    p: "The result of cardholder verification: which method was applied (from CVM List 8E), under what condition, and whether it succeeded. An essential companion to the TVR for understanding a PIN-related decline." },
+  '9F35': { n: "Terminal Type", cat: "Terminal", dec: 'termtype',
+    p: "A 2-digit code that crosses two axes: who controls the terminal (financial institution, merchant, cardholder) and its environment (attended or not, ability to go online). The vast majority of attended merchant terminals in France fall in the 21-23 range; the exact value depending on offline capability depends on the acquirer contract." },
+  '9F36': { n: "ATC, Application Transaction Counter", cat: "Security", dec: 'counter',
+    p: "A counter incremented by the chip on every transaction. It stops an intercepted transaction from being replayed as-is: since it feeds into the cryptogram calculation, no two transactions ever produce the same one. An abnormal jump in ATC is a fraud signal on the issuer side." },
+  '9F37': { n: "Unpredictable Number", cat: "Security",
+    p: "The terminal's nonce: randomness injected into the cryptogram calculation to prevent pre-computation and replay. A predictable UN has already broken the security of entire terminal fleets, a classic audit point." },
+  '9F38': { n: "PDOL, Processing Options DOL", cat: "Structure", dec: 'dol',
+    p: "The list of terminal data the card wants to receive right from GET PROCESSING OPTIONS. Same logic as the CDOLs: tag references, and the values then travel without structure." },
+  '9F42': { n: "Application Currency Code", cat: "Identification", dec: 'currency',
+    p: "The card application's reference currency (the one used by its internal offline counters)." },
+  '9F44': { n: "Application Currency Exponent", cat: "Identification",
+    p: "Position of the decimal separator for the application's currency (2 for the euro)." },
+  '9F45': { n: "Data Authentication Code", cat: "Security",
+    p: "Code produced by SDA authentication, stored for use in DOLs. Legacy, rare on modern cards." },
+  '9F46': { n: "ICC Public Key Certificate", cat: "Security",
+    p: "Certificate for the card's public key, signed by the issuer. The last link in the CA → issuer → card chain, used by DDA/CDA." },
+  '9F47': { n: "ICC Public Key Exponent", cat: "Security",
+    p: "Public exponent of the card's key." },
+  '9F48': { n: "ICC Public Key Remainder", cat: "Security",
+    p: "Remainder of the card's public key that didn't fit in certificate 9F46." },
+  '9F4A': { n: "SDA Tag List", cat: "Security",
+    p: "List of extra tags included in the statically signed data, in practice almost always the AIP (82), to prevent it from being tampered with." },
+  '9F4B': { n: "Signed Dynamic Application Data", cat: "Security",
+    p: "The dynamic signature produced by the card during DDA/CDA: it notably covers the terminal's nonce, proving the card is live and present, which SDA could never prove." },
+  '9F66': { n: "TTQ, Terminal Transaction Qualifiers", cat: "Terminal", dec: 'ttq',
+    p: "In contactless: the terminal announces to the card what it supports and requires (EMV mode, online PIN, signature, CDCVM…). The first negotiation of a tap." },
+  '9F6C': { n: "CTQ, Card Transaction Qualifiers", cat: "Decision",
+    p: "The card's response to the TTQ in contactless: its own requirements (ask for online PIN, fall back to contact…)." },
+  '71': { n: "Issuer Script Template 1", cat: "Security",
+    p: "A command sent by the issuer to the card via the terminal, executed before the final GENERATE AC: block the application, reset the PIN try counter… This is the remote card-management channel." },
+  '72': { n: "Issuer Script Template 2", cat: "Security",
+    p: "Same principle as tag 71, but executed after the final GENERATE AC." },
+  '91': { n: "Issuer Authentication Data", cat: "Security",
+    p: "Data returned by the issuer (ARPC + code) letting the card verify that the authorisation response genuinely came from it, authentication in the other direction." },
+  '97': { n: "TDOL, Transaction Certificate DOL", cat: "Structure", dec: 'dol',
+    p: "List of data to include in the TC Hash calculation. Rare in practice, hence the TVR's \"default TDOL used\" bit." },
+  '98': { n: "TC Hash Value", cat: "Security",
+    p: "A hash of the transaction data, little used in modern deployments." },
+  '99': { n: "Transaction PIN Data", cat: "Cardholder",
+    p: "The PIN, enciphered in transit to the card for offline verification. Must NEVER appear in the clear in a log." },
+  '9D': { n: "DDF Name", cat: "Structure",
+    p: "Name of a directory file for directory-based selection (the legacy PSE method)." },
+  '9F21': { n: "Transaction Time", cat: "Transaction",
+    p: "Local time of the transaction (HHMMSS), a companion to tag 9A." },
+  '9F24': { n: "PAR, Payment Account Reference", cat: "Identification", dec: 'text',
+    p: "A non-sensitive identifier (up to 29 alphanumeric characters) that links a tokenised PAN (mobile wallet, virtual card) back to its original PAN, without ever exposing that original PAN. A given PAR stays stable across all tokens issued from the same physical card, which lets a merchant or issuer reconcile a physical-card payment with a wallet payment with zero PCI exposure." },
+  '9F40': { n: "Additional Terminal Capabilities", cat: "Terminal", dec: 'addtermcap',
+    p: "Companion to tag 9F33: supported transaction types (cash, purchase, withdrawal…) and the terminal's display/entry capabilities." },
+  '9F41': { n: "Transaction Sequence Counter", cat: "Transaction", dec: 'counter',
+    p: "Transaction counter on the terminal side, the terminal's counterpart to the card's ATC." },
+  '5F36': { n: "Transaction Currency Exponent", cat: "Transaction",
+    p: "Number of decimal places for the transaction currency (2 for the euro: amounts travel in cents)." },
+  '5F30': { n: "Service Code", cat: "Identification",
+    p: "A service code inherited from magnetic stripes (ISO/IEC 7813): interchange conditions, authorisation restrictions, PIN requirements. The chip has its own controls, but this code is still read by legacy systems." },
+  '9F0A': { n: "ASRPD, Application Selection Registered Proprietary Data", cat: "Identification",
+    p: "An identifier registered with EMVCo (Spec Bulletin 175) letting a market or issuer expose a proprietary feature during application selection. The content depends on the entity that registered the ID, not decodable without their documentation." },
+  '9F6E': { n: "FFI, Form Factor Indicator", cat: "Terminal", dec: 'ffi',
+    p: "Outside the base EMV spec: its meaning depends on the network. At Visa, it's the Form Factor Indicator, 4 bytes describing the payment form factor (card, mobile, wearable…) and its capabilities. At Mastercard, the same tag carries Third Party Data, a variable-length format (country, identifier, form factor type). The tool detects the format from the value's length and decodes both." },
+  'A5': { n: "FCI Proprietary Template", cat: "Structure", constructed: true,
+    p: "The \"metadata\" part of the SELECT response: labels, priority, PDOL, proprietary data (BF0C). This is where a co-badged card lists its applications." },
+  'BF0C': { n: "FCI Issuer Discretionary Data", cat: "Structure", constructed: true,
+    p: "The issuer's discretionary area within the FCI, directory entries (61) live here, along with proprietary network or domestic tags (including some unpublished CB tags)." },
+};
+
+/* Une phrase de contexte par catégorie, affichée en info-bulle sur le badge
+   (feedback : le badge seul, sans définition, n'apprend rien) */
+const CAT_HELP = {
+  "Identification": "Identifies the card, the application or the cardholder (PAN, AID, labels…).",
+  "Structure": "Organises EMV data (TLV containers, response templates), carries no business meaning on its own.",
+  "Transaction": "Describes the operation in progress: amount, currency, date, type.",
+  "Decision": "Drives or reveals a transaction decision (offline, online, decline).",
+  "Cardholder": "About cardholder verification: PIN, signature, biometrics.",
+  "Security": "Used for cryptographic authentication: keys, certificates, cryptograms.",
+  "Terminal": "Describes the terminal's capabilities or settings, not the card's.",
+};
+
+/* Sourcing references per tag ("sourced dictionary" pillar) */
+const TAG_REFS = {
+  '87': "EMV 4.3 Book 1, §11.3.4",
+  '9F24': "EMVCo, Payment Account Reference (PAR), public specification now maintained by the networks",
+  '82': "EMV 4.3 Book 3, Annex C1 (+ Book C-2 Kernel 2 for byte 2)",
+  '95': "EMV 4.3 Book 3, Annex C5",
+  '9B': "EMV 4.3 Book 3, Annex C6",
+  '8E': "EMV 4.3 Book 3, Annex C3",
+  '9F34': "EMV 4.3 Book 3, Annex C3 (CVM Results)",
+  '9F33': "EMV 4.3 Book 4, Annex A2",
+  '9F40': "EMV 4.3 Book 4, Annex A3",
+  '9F27': "EMV 4.3 Book 3, §6.5.5 (CID)",
+  '9F0D': "EMV 4.3 Book 3, §10.7 (Terminal Action Analysis)",
+  '9F0E': "EMV 4.3 Book 3, §10.7 (Terminal Action Analysis)",
+  '9F0F': "EMV 4.3 Book 3, §10.7 (Terminal Action Analysis)",
+  '5F2A': "ISO 4217 numeric (table generated via pycountry/CLDR)",
+  '9F42': "ISO 4217 numeric (table generated via pycountry/CLDR)",
+  '5F28': "ISO 3166-1 numeric (table generated via pycountry/CLDR)",
+  '9F1A': "ISO 3166-1 numeric (table generated via pycountry/CLDR)",
+  '9F66': "EMV Contactless Book A v2.11, Table 5-4 (Terminal Transaction Qualifiers), generic Entry Point baseline",
+  '9F6E': "Outside the base spec, network-defined: Visa Payment Technology Standards Manual (FFI) and Mastercard M/Chip documentation (Third Party Data), public sources",
+  '9F0A': "EMVCo Specification Bulletin 175 (ASRPD)",
+  '5F30': "ISO/IEC 7813 (magnetic stripes)",
+};
+
+/* Transaction types (9C) */
+const TX_TYPES = { '00': "Purchase", '01': "Cash withdrawal / cash advance", '09': "Purchase with cashback", '20': "Refund", '30': "Balance inquiry", '17': "Cash disbursement at a counter" };
+
+/* Possible card decisions (CID, tag 9F27): the readable text comes before the acronym */
+const CID_LABELS = {
+  'AAC': "Declined by the card",
+  'TC': "Offline approval",
+  'ARQC': "Online authorisation requested",
+  'RFU/AAR': "Reserved value",
+};
+
+/* Terminal Type (9F35), EMV 4.3 Book 4 §12.2 Annex A1, Table 24: 2 digits, who controls the
+   terminal × its environment. Verified by Charles against the spec text (excerpt supplied 09/08). */
+const TERM_TYPE = {
+  '11': "Financial institution, attended, online only",
+  '12': "Financial institution, attended, offline with online capability",
+  '13': "Financial institution, attended, offline only",
+  '14': "Financial institution, unattended, online only",
+  '15': "Financial institution, unattended, offline with online capability",
+  '16': "Financial institution, unattended, offline only",
+  '21': "Merchant, attended, online only",
+  '22': "Merchant, attended, offline with online capability",
+  '23': "Merchant, attended, offline only",
+  '24': "Merchant, unattended (self-service), online only",
+  '25': "Merchant, unattended (self-service), offline with online capability",
+  '26': "Merchant, unattended (self-service), offline only",
+  '34': "Cardholder, personal terminal, online only",
+  '35': "Cardholder, personal terminal, offline with online capability",
+  '36': "Cardholder, personal terminal, offline only",
+};
+
+/* TERM_TYPE split into 2 axes for the "Build a tag" 9F35 selector: the 2-digit
+   code crosses "who controls the terminal" (1st digit) with "its environment"
+   (2nd digit, stable across categories). Mirrors TERM_TYPE_AXIS_A/B in the
+   FR build. */
+const TERM_TYPE_AXIS_A = { '1': "Financial institution", '2': "Merchant", '3': "Cardholder" };
+const TERM_TYPE_AXIS_B = {
+  '1': "Attended, online only",
+  '2': "Attended, offline (online capability)",
+  '3': "Attended, offline only",
+  '4': "Unattended, online only",
+  '5': "Unattended, offline (online capability)",
+  '6': "Unattended, offline only",
+};
+
+/* Form Factor Indicator (9F6E), Visa: byte 1 bits 5-1, form factor */
+const VISA_FFI_FORM = {
+  0: "Standard card (ID-1, ISO 7810)", 1: "Mini-card", 2: "Non-card contactless form factor (fob, ring, sticker…)",
+  3: "Consumer mobile phone", 4: "Wrist-worn device (watch, bracelet…)",
+};
+/* Form Factor Indicator (9F6E), Mastercard Third Party Data: Device Type (2 ASCII characters) */
+const MC_DEVICE_TYPES = {
+  '00': "Card", '01': "Mobile network operator-controlled removable secure element (SIM/UICC)", '02': "Key fob",
+  '03': "Watch with fixed secure element, not operator-controlled", '04': "Mobile tag", '05': "Wristband",
+  '06': "Phone case or sleeve", '07': "Mobile phone with fixed secure element, operator-controlled",
+  '08': "Non-operator-controlled removable secure element (e.g. memory card)",
+  '09': "Mobile phone with fixed secure element, not operator-controlled",
+  '10': "Operator-controlled removable secure element, for tablet/e-reader",
+  '11': "Tablet/e-reader with fixed secure element, operator-controlled",
+  '12': "Non-operator removable secure element, for tablet/e-reader",
+  '13': "Tablet/e-reader with fixed secure element, not operator-controlled",
+  '14': "Mobile phone, payment application in the host processor",
+  '15': "Tablet/e-reader, payment application in the host processor",
+  '16': "Mobile phone, payment application in a trusted execution environment (TEE)",
+  '17': "Tablet/e-reader, payment application in a trusted execution environment (TEE)",
+  '18': "Watch, payment application in a trusted execution environment (TEE)",
+  '19': "Watch, payment application in the host processor",
+  '20': "Card", '21': "Mobile phone", '22': "Tablet / e-reader", '23': "Watch / wristband",
+  '24': "Sticker", '25': "PC or laptop", '26': "Phone case or sleeve",
+  '27': "Key fob or mobile tag", '28': "Jewellery (ring, bracelet, cufflinks)",
+  '29': "Fashion accessory (bag, charm, glasses)", '30': "Clothing", '31': "Household appliance",
+  '32': "Vehicle", '33': "Media/gaming device", '34': "Virtual reality headset",
+};
+
+
+/* Tables ISO 4217 / ISO 3166-1 numeriques, noms EN, traduites depuis la version FR (session EN) */
+const CURRENCY_DICT = {"008":{"code":"ALL","name":"Lek"},"012":{"code":"DZD","name":"Algerian Dinar"},"032":{"code":"ARS","name":"Argentine Peso"},"036":{"code":"AUD","name":"Australian Dollar"},"044":{"code":"BSD","name":"Bahamian Dollar"},"048":{"code":"BHD","name":"Bahraini Dinar"},"050":{"code":"BDT","name":"Taka"},"051":{"code":"AMD","name":"Armenian Dram"},"052":{"code":"BBD","name":"Barbados Dollar"},"060":{"code":"BMD","name":"Bermudian Dollar"},"064":{"code":"BTN","name":"Ngultrum"},"068":{"code":"BOB","name":"Boliviano"},"072":{"code":"BWP","name":"Pula"},"084":{"code":"BZD","name":"Belize Dollar"},"090":{"code":"SBD","name":"Solomon Islands Dollar"},"096":{"code":"BND","name":"Brunei Dollar"},"104":{"code":"MMK","name":"Kyat"},"108":{"code":"BIF","name":"Burundi Franc"},"116":{"code":"KHR","name":"Riel"},"124":{"code":"CAD","name":"Canadian Dollar"},"132":{"code":"CVE","name":"Cabo Verde Escudo"},"136":{"code":"KYD","name":"Cayman Islands Dollar"},"144":{"code":"LKR","name":"Sri Lanka Rupee"},"152":{"code":"CLP","name":"Chilean Peso"},"156":{"code":"CNY","name":"Yuan Renminbi"},"170":{"code":"COP","name":"Colombian Peso"},"174":{"code":"KMF","name":"Comorian Franc"},"188":{"code":"CRC","name":"Costa Rican Colon"},"192":{"code":"CUP","name":"Cuban Peso"},"203":{"code":"CZK","name":"Czech Koruna"},"208":{"code":"DKK","name":"Danish Krone"},"214":{"code":"DOP","name":"Dominican Peso"},"222":{"code":"SVC","name":"El Salvador Colon"},"230":{"code":"ETB","name":"Ethiopian Birr"},"232":{"code":"ERN","name":"Nakfa"},"238":{"code":"FKP","name":"Falkland Islands Pound"},"242":{"code":"FJD","name":"Fiji Dollar"},"262":{"code":"DJF","name":"Djibouti Franc"},"270":{"code":"GMD","name":"Dalasi"},"292":{"code":"GIP","name":"Gibraltar Pound"},"320":{"code":"GTQ","name":"Quetzal"},"324":{"code":"GNF","name":"Guinean Franc"},"328":{"code":"GYD","name":"Guyana Dollar"},"332":{"code":"HTG","name":"Gourde"},"340":{"code":"HNL","name":"Lempira"},"344":{"code":"HKD","name":"Hong Kong Dollar"},"348":{"code":"HUF","name":"Forint"},"352":{"code":"ISK","name":"Iceland Krona"},"356":{"code":"INR","name":"Indian Rupee"},"360":{"code":"IDR","name":"Rupiah"},"364":{"code":"IRR","name":"Iranian Rial"},"368":{"code":"IQD","name":"Iraqi Dinar"},"376":{"code":"ILS","name":"New Israeli Sheqel"},"388":{"code":"JMD","name":"Jamaican Dollar"},"392":{"code":"JPY","name":"Japanese Yen"},"396":{"code":"XAD","name":"Arab Accounting Dinar"},"398":{"code":"KZT","name":"Tenge"},"400":{"code":"JOD","name":"Jordanian Dinar"},"404":{"code":"KES","name":"Kenyan Shilling"},"408":{"code":"KPW","name":"North Korean Won"},"410":{"code":"KRW","name":"Won"},"414":{"code":"KWD","name":"Kuwaiti Dinar"},"417":{"code":"KGS","name":"Som"},"418":{"code":"LAK","name":"Lao Kip"},"422":{"code":"LBP","name":"Lebanese Pound"},"426":{"code":"LSL","name":"Loti"},"430":{"code":"LRD","name":"Liberian Dollar"},"434":{"code":"LYD","name":"Libyan Dinar"},"446":{"code":"MOP","name":"Pataca"},"454":{"code":"MWK","name":"Malawi Kwacha"},"458":{"code":"MYR","name":"Malaysian Ringgit"},"462":{"code":"MVR","name":"Rufiyaa"},"480":{"code":"MUR","name":"Mauritius Rupee"},"484":{"code":"MXN","name":"Mexican Peso"},"496":{"code":"MNT","name":"Tugrik"},"498":{"code":"MDL","name":"Moldovan Leu"},"504":{"code":"MAD","name":"Moroccan Dirham"},"512":{"code":"OMR","name":"Rial Omani"},"516":{"code":"NAD","name":"Namibia Dollar"},"524":{"code":"NPR","name":"Nepalese Rupee"},"532":{"code":"XCG","name":"Caribbean Guilder"},"533":{"code":"AWG","name":"Aruban Florin"},"548":{"code":"VUV","name":"Vatu"},"554":{"code":"NZD","name":"New Zealand Dollar"},"558":{"code":"NIO","name":"Cordoba Oro"},"566":{"code":"NGN","name":"Naira"},"578":{"code":"NOK","name":"Norwegian Krone"},"586":{"code":"PKR","name":"Pakistan Rupee"},"590":{"code":"PAB","name":"Balboa"},"598":{"code":"PGK","name":"Kina"},"600":{"code":"PYG","name":"Guarani"},"604":{"code":"PEN","name":"Sol"},"608":{"code":"PHP","name":"Philippine Peso"},"634":{"code":"QAR","name":"Qatari Rial"},"643":{"code":"RUB","name":"Russian Ruble"},"646":{"code":"RWF","name":"Rwanda Franc"},"654":{"code":"SHP","name":"Saint Helena Pound"},"682":{"code":"SAR","name":"Saudi Riyal"},"690":{"code":"SCR","name":"Seychelles Rupee"},"702":{"code":"SGD","name":"Singapore Dollar"},"704":{"code":"VND","name":"Dong"},"706":{"code":"SOS","name":"Somali Shilling"},"710":{"code":"ZAR","name":"Rand"},"728":{"code":"SSP","name":"South Sudanese Pound"},"748":{"code":"SZL","name":"Lilangeni"},"752":{"code":"SEK","name":"Swedish Krona"},"756":{"code":"CHF","name":"Swiss Franc"},"760":{"code":"SYP","name":"Syrian Pound"},"764":{"code":"THB","name":"Baht"},"776":{"code":"TOP","name":"Pa'anga"},"780":{"code":"TTD","name":"Trinidad and Tobago Dollar"},"784":{"code":"AED","name":"UAE Dirham"},"788":{"code":"TND","name":"Tunisian Dinar"},"800":{"code":"UGX","name":"Uganda Shilling"},"807":{"code":"MKD","name":"Denar"},"818":{"code":"EGP","name":"Egyptian Pound"},"826":{"code":"GBP","name":"Pound Sterling"},"834":{"code":"TZS","name":"Tanzanian Shilling"},"840":{"code":"USD","name":"US Dollar"},"858":{"code":"UYU","name":"Peso Uruguayo"},"860":{"code":"UZS","name":"Uzbekistan Sum"},"882":{"code":"WST","name":"Tala"},"886":{"code":"YER","name":"Yemeni Rial"},"901":{"code":"TWD","name":"New Taiwan Dollar"},"924":{"code":"ZWG","name":"Zimbabwe Gold"},"925":{"code":"SLE","name":"Leone"},"926":{"code":"VED","name":"Bolívar Soberano"},"927":{"code":"UYW","name":"Unidad Previsional"},"928":{"code":"VES","name":"Venezuelan Bolívar"},"929":{"code":"MRU","name":"Ouguiya"},"930":{"code":"STN","name":"Dobra"},"933":{"code":"BYN","name":"Belarusian Ruble"},"934":{"code":"TMT","name":"Turkmenistan New Manat"},"936":{"code":"GHS","name":"Ghana Cedi"},"938":{"code":"SDG","name":"Sudanese Pound"},"940":{"code":"UYI","name":"Uruguay Peso en Unidades Indexadas (UI)"},"941":{"code":"RSD","name":"Serbian Dinar"},"943":{"code":"MZN","name":"Mozambique Metical"},"944":{"code":"AZN","name":"Azerbaijan Manat"},"946":{"code":"RON","name":"Romanian Leu"},"947":{"code":"CHE","name":"WIR Euro"},"948":{"code":"CHW","name":"WIR Franc"},"949":{"code":"TRY","name":"Turkish Lira"},"950":{"code":"XAF","name":"CFA Franc BEAC"},"951":{"code":"XCD","name":"East Caribbean Dollar"},"952":{"code":"XOF","name":"CFA Franc BCEAO"},"953":{"code":"XPF","name":"CFP Franc"},"955":{"code":"XBA","name":"Bond Markets Unit European Composite Unit (EURCO)"},"956":{"code":"XBB","name":"Bond Markets Unit European Monetary Unit (E.M.U.-6)"},"957":{"code":"XBC","name":"Bond Markets Unit European Unit of Account 9 (E.U.A.-9)"},"958":{"code":"XBD","name":"Bond Markets Unit European Unit of Account 17 (E.U.A.-17)"},"959":{"code":"XAU","name":"Gold"},"960":{"code":"XDR","name":"SDR (Special Drawing Right)"},"961":{"code":"XAG","name":"Silver"},"962":{"code":"XPT","name":"Platinum"},"963":{"code":"XTS","name":"Codes specifically reserved for testing purposes"},"964":{"code":"XPD","name":"Palladium"},"965":{"code":"XUA","name":"ADB Unit of Account"},"967":{"code":"ZMW","name":"Zambian Kwacha"},"968":{"code":"SRD","name":"Surinam Dollar"},"969":{"code":"MGA","name":"Malagasy Ariary"},"970":{"code":"COU","name":"Unidad de Valor Real"},"971":{"code":"AFN","name":"Afghani"},"972":{"code":"TJS","name":"Somoni"},"973":{"code":"AOA","name":"Kwanza"},"976":{"code":"CDF","name":"Congolese Franc"},"977":{"code":"BAM","name":"Convertible Mark"},"978":{"code":"EUR","name":"Euro"},"979":{"code":"MXV","name":"Mexican Unidad de Inversion (UDI)"},"980":{"code":"UAH","name":"Hryvnia"},"981":{"code":"GEL","name":"Lari"},"984":{"code":"BOV","name":"Mvdol"},"985":{"code":"PLN","name":"Zloty"},"986":{"code":"BRL","name":"Brazilian Real"},"990":{"code":"CLF","name":"Unidad de Fomento"},"994":{"code":"XSU","name":"Sucre"},"997":{"code":"USN","name":"US Dollar (Next day)"},"999":{"code":"XXX","name":"The codes assigned for transactions where no currency is involved"}};
+const COUNTRY_DICT = {"004":"Afghanistan","008":"Albania","010":"Antarctica","012":"Algeria","016":"American Samoa","020":"Andorra","024":"Angola","028":"Antigua and Barbuda","031":"Azerbaijan","032":"Argentina","036":"Australia","040":"Austria","044":"Bahamas","048":"Bahrain","050":"Bangladesh","051":"Armenia","052":"Barbados","056":"Belgium","060":"Bermuda","064":"Bhutan","068":"Bolivia","070":"Bosnia and Herzegovina","072":"Botswana","074":"Bouvet Island","076":"Brazil","084":"Belize","086":"British Indian Ocean Territory","090":"Solomon Islands","092":"British Virgin Islands","096":"Brunei","100":"Bulgaria","104":"Myanmar","108":"Burundi","112":"Belarus","116":"Cambodia","120":"Cameroon","124":"Canada","132":"Cabo Verde","136":"Cayman Islands","140":"Central African Republic","144":"Sri Lanka","148":"Chad","152":"Chile","156":"China","158":"Taiwan","162":"Christmas Island","166":"Cocos (Keeling) Islands","170":"Colombia","174":"Comoros","175":"Mayotte","178":"Congo","180":"Congo (Democratic Republic of the)","184":"Cook Islands","188":"Costa Rica","191":"Croatia","192":"Cuba","196":"Cyprus","203":"Czechia","204":"Benin","208":"Denmark","212":"Dominica","214":"Dominican Republic","218":"Ecuador","222":"El Salvador","226":"Equatorial Guinea","231":"Ethiopia","232":"Eritrea","233":"Estonia","234":"Faroe Islands","238":"Falkland Islands","239":"South Georgia and the South Sandwich Islands","242":"Fiji","246":"Finland","248":"Åland Islands","250":"France","254":"French Guiana","258":"French Polynesia","260":"French Southern Territories","262":"Djibouti","266":"Gabon","268":"Georgia","270":"Gambia","275":"Palestine, State of","276":"Germany","288":"Ghana","292":"Gibraltar","296":"Kiribati","300":"Greece","304":"Greenland","308":"Grenada","312":"Guadeloupe","316":"Guam","320":"Guatemala","324":"Guinea","328":"Guyana","332":"Haiti","334":"Heard Island and McDonald Islands","336":"Holy See","340":"Honduras","344":"Hong Kong","348":"Hungary","352":"Iceland","356":"India","360":"Indonesia","364":"Iran","368":"Iraq","372":"Ireland","376":"Israel","380":"Italy","384":"Côte d'Ivoire","388":"Jamaica","392":"Japan","398":"Kazakhstan","400":"Jordan","404":"Kenya","408":"North Korea","410":"South Korea","414":"Kuwait","417":"Kyrgyzstan","418":"Laos","422":"Lebanon","426":"Lesotho","428":"Latvia","430":"Liberia","434":"Libya","438":"Liechtenstein","440":"Lithuania","442":"Luxembourg","446":"Macao","450":"Madagascar","454":"Malawi","458":"Malaysia","462":"Maldives","466":"Mali","470":"Malta","474":"Martinique","478":"Mauritania","480":"Mauritius","484":"Mexico","492":"Monaco","496":"Mongolia","498":"Moldova","499":"Montenegro","500":"Montserrat","504":"Morocco","508":"Mozambique","512":"Oman","516":"Namibia","520":"Nauru","524":"Nepal","528":"Netherlands","531":"Curaçao","533":"Aruba","534":"Sint Maarten (Dutch part)","535":"Bonaire, Sint Eustatius and Saba","540":"New Caledonia","548":"Vanuatu","554":"New Zealand","558":"Nicaragua","562":"Niger","566":"Nigeria","570":"Niue","574":"Norfolk Island","578":"Norway","580":"Northern Mariana Islands","581":"United States Minor Outlying Islands","583":"Micronesia","584":"Marshall Islands","585":"Palau","586":"Pakistan","591":"Panama","598":"Papua New Guinea","600":"Paraguay","604":"Peru","608":"Philippines","612":"Pitcairn","616":"Poland","620":"Portugal","624":"Guinea-Bissau","626":"Timor-Leste","630":"Puerto Rico","634":"Qatar","638":"Réunion","642":"Romania","643":"Russia","646":"Rwanda","652":"Saint Barthélemy","654":"Saint Helena","659":"Saint Kitts and Nevis","660":"Anguilla","662":"Saint Lucia","663":"Saint Martin (French part)","666":"Saint Pierre and Miquelon","670":"Saint Vincent and the Grenadines","674":"San Marino","678":"Sao Tome and Principe","682":"Saudi Arabia","686":"Senegal","688":"Serbia","690":"Seychelles","694":"Sierra Leone","702":"Singapore","703":"Slovakia","704":"Vietnam","705":"Slovenia","706":"Somalia","710":"South Africa","716":"Zimbabwe","724":"Spain","728":"South Sudan","729":"Sudan","732":"Western Sahara","740":"Suriname","744":"Svalbard and Jan Mayen","748":"Eswatini","752":"Sweden","756":"Switzerland","760":"Syria","762":"Tajikistan","764":"Thailand","768":"Togo","772":"Tokelau","776":"Tonga","780":"Trinidad and Tobago","784":"United Arab Emirates","788":"Tunisia","792":"Turkey","795":"Turkmenistan","796":"Turks and Caicos Islands","798":"Tuvalu","800":"Uganda","804":"Ukraine","807":"North Macedonia","818":"Egypt","826":"United Kingdom","831":"Guernsey","832":"Jersey","833":"Isle of Man","834":"Tanzania","840":"United States","850":"United States Virgin Islands","854":"Burkina Faso","858":"Uruguay","860":"Uzbekistan","862":"Venezuela","876":"Wallis and Futuna","882":"Samoa","887":"Yemen","894":"Zambia"};
+/* === EMV_DICTIONARY:END === */
+</script>
 <script>
 /* ============================================================
    nexo/OSCAR diff - engine
-   Reuses TERMCAP_BITS / ATC_BITS / TVR_BITS / EMV_AIDS /
-   COUNTRY_DICT / CURRENCY_DICT from emv-dictionary.js, loaded
-   just above: same source as emv-parser and nexo-config.
-   NOTE: that shared dictionary file only has French labels
-   (network/product names, country and currency names) - no EN
-   variant exists for it yet, so those specific lookups still
-   render in French even on this English page. Everything else
-   (chrome, labels, messages) is English.
+   Reuses TERMCAP_BITS / ADDTERMCAP_BITS / TVR_BITS / EMV_AIDS /
+   COUNTRY_DICT / CURRENCY_DICT from the canonical EMV dictionary,
+   merged just above between the EMV_DICTIONARY markers (source:
+   a-publier/_shared/emv-dictionary.en.js, same source as
+   emv-parser-en). Never edit that block here: edit the canonical
+   source, then re-run
+   node a-publier/_shared/merge-emv-dictionary.js
+   All lookups (network/product names, country and currency names)
+   render in English, like the rest of the page.
    ============================================================ */
 
 /* Labels for known OSCAR blocks (schemas.artifact.pl/oscarv4 schema) */
@@ -258,15 +766,15 @@ function decodeBitsSingle(hex, table) {
    set, act". So TVR_BITS is reused as-is, no new table needed. */
 const FIELD_DECODERS = {
   terminalCapabilities: TERMCAP_BITS,
-  additionalTerminalCapabilities: ATC_BITS,
+  additionalTerminalCapabilities: ADDTERMCAP_BITS,
   tacDefault: TVR_BITS,
   tacDenial: TVR_BITS,
   tacOnline: TVR_BITS,
 };
 
-/* Direct lookups (not a bitfield) reusing the shared dictionary.
-   NOTE: EMV_AIDS/COUNTRY_DICT/CURRENCY_DICT values are French-only
-   in the current shared dictionary file (see note at the top). */
+/* Direct lookups (not a bitfield) reusing the canonical dictionary.
+   EMV_AIDS/COUNTRY_DICT/CURRENCY_DICT come from the EN source, so
+   their labels render in English. */
 function scalarLookup(fieldName, value) {
   if (!value || typeof value !== 'string') return null;
   if (fieldName === 'aid') {
