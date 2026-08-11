@@ -119,6 +119,17 @@
     font-size:14.5px;color:var(--ink);
   }
   .keyfact b{font-weight:600}
+
+  /* ---------- Bloc voix ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);line-height:1.5;
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
   .hub-illus{display:flex;justify-content:center;margin-top:14px}
   .hub-cap{margin-top:8px;font-size:13px;color:var(--ink-soft);text-align:center}
 
@@ -348,12 +359,12 @@
   <!-- 2 · QUIZ 1 -->
   <section class="screen" data-step="2">
     <div class="qnum">QUIZ 1 / 4</div>
-    <div class="question">Lequel de ces rôles est bien celui d'un réseau de paiement ?</div>
-    <div class="options" data-quiz="0" data-answer="2" data-next="3">
-      <button class="opt">Accorder un crédit au porteur de la carte</button>
-      <button class="opt">Émettre la carte physique du client</button>
-      <button class="opt">Définir les règles communes du réseau</button>
-      <button class="opt">Détenir l'argent de la transaction</button>
+    <div class="question">Un paiement est refusé. Qui a pris la décision&nbsp;?</div>
+    <div class="options" data-quiz="0" data-answer="1" data-next="3">
+      <button class="opt">Le réseau, qui contrôle chaque transaction avant de la transmettre</button>
+      <button class="opt">L'émetteur. Réseau et acquéreur peuvent refuser aussi, mais sur des motifs techniques</button>
+      <button class="opt">L'acquéreur, puisqu'il a le contrat avec le commerçant</button>
+      <button class="opt">Le réseau si la carte est étrangère, l'émetteur si elle est domestique</button>
     </div>
   </section>
 
@@ -381,12 +392,12 @@
   <!-- 4 · QUIZ 2 -->
   <section class="screen" data-step="4">
     <div class="qnum">QUIZ 2 / 4</div>
-    <div class="question">Dans le modèle à 4 coins, qui achemine la demande d'autorisation entre l'acquéreur et l'émetteur ?</div>
+    <div class="question">Sur les 60 € payés, combien transitent par les comptes du réseau&nbsp;?</div>
     <div class="options" data-quiz="1" data-answer="2" data-next="5">
-      <button class="opt">Le porteur, directement</button>
-      <button class="opt">Le marchand, via son terminal</button>
-      <button class="opt">Le réseau (scheme)</button>
-      <button class="opt">La banque centrale</button>
+      <button class="opt">60 € : c'est lui qui achemine la transaction</button>
+      <button class="opt">Une commission seulement, prélevée au passage</button>
+      <button class="opt">0 € : le réseau transporte l'information, l'argent circule entre les banques</button>
+      <button class="opt">60 €, mais uniquement pour les paiements internationaux</button>
     </div>
   </section>
 
@@ -395,11 +406,17 @@
     <div class="concept-card">
       <div class="kicker">Concept 3 / 4</div>
       <h2>Concrètement, un réseau vend 4 choses</h2>
-      <p><strong>1 · Des règles communes.</strong> Formats de messages, sécurité, délais : tout le monde parle la même langue, partout dans le monde.</p>
+      <p><strong>1 · Des règles communes.</strong> Formats de messages, sécurité, délais : tout le monde parle la même langue, partout dans le monde. Et ces règles bougent en continu : Visa et Mastercard diffusent à leurs membres, plusieurs fois par mois, des bulletins d'évolution que le public ne voit jamais.</p>
       <p><strong>2 · La compensation.</strong> Il calcule qui doit combien à qui chaque jour entre des milliers de banques, et orchestre le règlement.</p>
       <p><strong>3 · L'arbitrage.</strong> Litige, fraude, chargeback : quand un porteur (le client) conteste un paiement, c'est le règlement du réseau qui tranche entre émetteur et acquéreur.</p>
       <p><strong>4 · La marque.</strong> La notoriété et l'acceptation du réseau : plus une marque est reconnue et acceptée dans le monde, plus elle a de valeur pour les banques et les commerçants. Visa et Mastercard communiquent d'ailleurs sur le nombre de pays où leur carte est acceptée – c'est leur indicateur phare.</p>
       <div class="keyfact">💡 <b>Son revenu :</b> les frais de réseau (les « scheme fees »), facturés aux banques membres – à ne pas confondre avec l'interchange, qui va à l'émetteur.</div>
+
+      <!-- [VOIX ?] 11/08 : bloc voix de l'épisode, matière de Charles (atelier schemes). Validé par lui, chute comprise. -->
+      <div class="voix">
+        <div class="voix-kicker">Ce qui compte vraiment</div>
+        On imagine que le réseau prend la plus grosse part de la commission carte. C'est l'inverse : sa part est mineure, les banques en prennent bien davantage. Sa force est ailleurs, dans un volume qu'aucune banque n'atteint et dans un modèle qui coûte peu par transaction et n'en porte ni le risque de crédit ni celui de la fraude. C'est ce qui rend ces sociétés aussi rentables sans jamais toucher à l'argent.
+      </div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
   </section>
@@ -407,12 +424,12 @@
   <!-- 6 · QUIZ 3 -->
   <section class="screen" data-step="6">
     <div class="qnum">QUIZ 3 / 4</div>
-    <div class="question">Un client conteste un paiement (chargeback). Selon les règles de quel acteur le litige est-il tranché ?</div>
-    <div class="options" data-quiz="2" data-answer="2" data-next="7">
-      <button class="opt">La banque du marchand</button>
-      <button class="opt">La Banque centrale européenne</button>
-      <button class="opt">Le réseau (scheme) utilisé pour la transaction</button>
-      <button class="opt">Le fabricant du terminal</button>
+    <div class="question">Un commerçant français veut accepter UnionPay. À qui doit-il s'adresser&nbsp;?</div>
+    <div class="options" data-quiz="2" data-answer="1" data-next="7">
+      <button class="opt">À UnionPay, pour signer un contrat d'acceptation</button>
+      <button class="opt">À son acquéreur : un commerçant n'adhère jamais à un réseau, il passe par un membre</button>
+      <button class="opt">Au GIE CB, qui centralise l'acceptation des réseaux étrangers en France</button>
+      <button class="opt">À personne : accepter Visa entraîne l'acceptation d'UnionPay</button>
     </div>
   </section>
 
@@ -529,17 +546,17 @@
 
   // ---- Quiz ----
   const EXPLAIN = [
-    {good:"Exactement : fixer les règles du jeu, c'est le cœur du métier d'un réseau – avec la marque et l'infrastructure qui va avec.",
-     bad:"La bonne réponse : <b>définir les règles communes du réseau</b>. Un scheme n'accorde pas de crédit, ne détient pas l'argent et n'émet pas de carte – ça, c'est le rôle des banques (émetteur et acquéreur)."},
-    {good:"Exactement : le réseau achemine chaque demande d'autorisation de l'acquéreur vers l'émetteur, en une poignée de centaines de millisecondes.",
-     bad:"C'est le <b>réseau (scheme)</b> qui achemine la demande : l'acquéreur l'envoie, le réseau la route vers l'émetteur, qui répond par l'autorisation ou le refus."},
-    {good:"Chaque réseau publie son règlement litiges – c'est lui l'arbitre entre émetteur et acquéreur.",
-     bad:"C'est le <b>règlement du réseau</b> qui s'applique. Visa, Mastercard et CB ont chacun leurs procédures de chargeback qui s'imposent aux banques membres."},
+    {good:"La décision de payer appartient à la banque du client : c'est elle qui voit le solde, le plafond et le risque. Le réseau et l'acquéreur peuvent refuser aussi, mais sur des motifs techniques, format ou délai dépassé. Ce n'est pas le même refus.",
+     bad:"C'est <b>l'émetteur</b> qui décide de payer ou non : lui seul voit le solde, le plafond et le risque. Le réseau et l'acquéreur peuvent refuser eux aussi, mais pour des motifs techniques, jamais parce que le compte est à sec."},
+    {good:"Zéro. Le réseau transporte l'information, pas les fonds. Il vit de ce qu'il facture aux banques, pas de ce qu'il achemine.",
+     bad:"<b>0 €.</b> Le réseau transporte l'information, pas les fonds : l'argent circule entre les banques. Comment il calcule qui doit combien à qui, c'est le concept suivant."},
+    {good:"Les membres d'un réseau sont des banques et des établissements de paiement, jamais des commerçants. Et tous les acquéreurs ne portent pas tous les réseaux : Visa et Mastercard sont incontournables, les autres dépendent du volume qu'ils représentent.",
+     bad:"Il passe par <b>son acquéreur</b>. Un commerçant n'adhère jamais à un réseau : les membres sont des banques et des établissements de paiement. Et tous les acquéreurs ne portent pas tous les réseaux, Visa et Mastercard mis à part."},
     {good:"Depuis le règlement IFR de 2015, le choix exprimé par le consommateur prime toujours sur la priorité définie par l'acquéreur.",
      bad:"Le terminal suit une <b>liste de priorité définie par l'acquéreur</b> (la banque du marchand) – mais depuis le <b>règlement européen IFR (2015)</b>, dès que le consommateur exprime un choix de marque, c'est son choix qui prime."}
   ];
   const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
-  const BAD_TITLES = ["Le piège classique","Contre-intuitif – vous n'êtes pas seul","Pas tout à fait","Surprenant, non ?"];
+  const BAD_TITLES = ["Le vrai décideur","L'argent ne passe pas par là","Pas au bon guichet","Surprenant, non ?"];
 
   document.querySelectorAll('.options').forEach(block=>{
     const qi = +block.dataset.quiz;

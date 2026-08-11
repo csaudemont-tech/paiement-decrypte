@@ -120,6 +120,17 @@
     font-size:14.5px;color:var(--ink);
   }
   .keyfact b{font-weight:600}
+
+  /* ---------- Voice block ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);line-height:1.5;
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
   .hub-illus{display:flex;justify-content:center;margin-top:14px}
   .hub-cap{margin-top:8px;font-size:13px;color:var(--ink-soft);text-align:center}
 
@@ -349,12 +360,12 @@
   <!-- 2 · QUIZ 1 -->
   <section class="screen" data-step="2">
     <div class="qnum">QUIZ 1 / 4</div>
-    <div class="question">Which of these is NOT a scheme's role?</div>
+    <div class="question">A payment is declined. Who made that call?</div>
     <div class="options" data-quiz="0" data-answer="1" data-next="3">
-      <button class="opt">Setting the network's rules</button>
-      <button class="opt">Granting credit to the cardholder</button>
-      <button class="opt">Setting default interchange rates</button>
-      <button class="opt">Managing the brand and its acceptance</button>
+      <button class="opt">The scheme, which screens every transaction before passing it on</button>
+      <button class="opt">The issuer. Scheme and acquirer can decline too, but on technical grounds</button>
+      <button class="opt">The acquirer, since it holds the contract with the merchant</button>
+      <button class="opt">The scheme for foreign cards, the issuer for domestic ones</button>
     </div>
   </section>
 
@@ -382,12 +393,12 @@
   <!-- 4 · QUIZ 2 -->
   <section class="screen" data-step="4">
     <div class="qnum">QUIZ 2 / 4</div>
-    <div class="question">In the four-party model, who pays interchange, and to whom?</div>
-    <div class="options" data-quiz="1" data-answer="1" data-next="5">
-      <button class="opt">The cardholder → to the issuer</button>
-      <button class="opt">The acquirer → to the issuer</button>
-      <button class="opt">The issuer → to the acquirer</button>
-      <button class="opt">The merchant → to the scheme</button>
+    <div class="question">Of the €60 paid, how much passes through the scheme's own accounts?</div>
+    <div class="options" data-quiz="1" data-answer="2" data-next="5">
+      <button class="opt">€60: it is the one carrying the transaction</button>
+      <button class="opt">A fee only, taken along the way</button>
+      <button class="opt">€0: the scheme carries the information, the money moves between banks</button>
+      <button class="opt">€60, but only on international payments</button>
     </div>
   </section>
 
@@ -396,11 +407,17 @@
     <div class="concept-card">
       <div class="kicker">Concept 3 / 4</div>
       <h2>Concretely, a scheme sells 4 things</h2>
-      <p><strong>1 · Common rules.</strong> Message formats, security, timelines: everyone speaks the same language, everywhere in the world.</p>
+      <p><strong>1 · Common rules.</strong> Message formats, security, timelines: everyone speaks the same language, everywhere in the world. And those rules keep moving: Visa and Mastercard send their members, several times a month, bulletins of changes the public never sees.</p>
       <p><strong>2 · Clearing.</strong> It works out who owes what to whom, every day, across thousands of banks, and orchestrates settlement.</p>
       <p><strong>3 · Arbitration.</strong> Disputes, fraud, chargebacks: the scheme's rulebook decides between issuer and acquirer.</p>
-      <p><strong>4 · The brand.</strong> The logo on the shop window that guarantees the cardholder their card will work.</p>
+      <p><strong>4 · The brand.</strong> The scheme's recognition and acceptance: the more a brand is known and accepted around the world, the more valuable it is to banks and merchants. Visa and Mastercard both headline the number of countries where their cards are accepted, it is their flagship metric.</p>
       <div class="keyfact">💡 <b>Its revenue:</b> scheme fees, charged to member banks, not to be confused with interchange, which goes to the issuer.</div>
+
+      <!-- [VOIX ?] Aug 11: the episode's voice block, Charles's own material (schemes workshop). Approved by him, closing line included. -->
+      <div class="voix">
+        <div class="voix-kicker">What actually matters</div>
+        We assume the scheme takes the biggest share of the card fee. It is the opposite: its share is the minor one, banks take far more. Its strength lies elsewhere, in a volume no single bank can reach and in a model that costs little per transaction and carries neither the credit risk nor the fraud risk. That is what makes these companies so profitable without ever touching the money.
+      </div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(6)">Check I've got it</button></div>
   </section>
@@ -408,12 +425,12 @@
   <!-- 6 · QUIZ 3 -->
   <section class="screen" data-step="6">
     <div class="qnum">QUIZ 3 / 4</div>
-    <div class="question">A customer disputes a payment (chargeback). Whose rules govern the dispute?</div>
-    <div class="options" data-quiz="2" data-answer="2" data-next="7">
-      <button class="opt">The merchant's bank's</button>
-      <button class="opt">The European Central Bank's</button>
-      <button class="opt">Those of the scheme used for the transaction</button>
-      <button class="opt">The terminal manufacturer's</button>
+    <div class="question">A French merchant wants to accept UnionPay. Who should it turn to?</div>
+    <div class="options" data-quiz="2" data-answer="1" data-next="7">
+      <button class="opt">UnionPay, to sign an acceptance contract</button>
+      <button class="opt">Its acquirer: a merchant never joins a scheme, it goes through a member</button>
+      <button class="opt">The CB consortium, which centralises foreign scheme acceptance in France</button>
+      <button class="opt">No one: accepting Visa automatically brings UnionPay along</button>
     </div>
   </section>
 
@@ -437,7 +454,7 @@
       <button class="opt">The card issuer</button>
       <button class="opt">The most expensive scheme</button>
       <button class="opt">The consumer, if they express a choice</button>
-      <button class="opt">The terminal, at random</button>
+      <button class="opt">The terminal, following a priority set by the acquirer</button>
     </div>
   </section>
 
@@ -534,17 +551,17 @@
 
   // ---- Quiz ----
   const EXPLAIN = [
-    {good:"Credit is the issuer's job – the cardholder's bank. The scheme doesn't lend a cent.",
-     bad:"Credit is granted by the <b>issuer</b> (the cardholder's bank). The scheme sets the rules, default interchange rates and manages the brand – but never touches the customer's money."},
-    {good:"The acquirer pays interchange to the issuer – a cost the merchant finds again in its fees.",
-     bad:"The <b>acquirer pays interchange to the issuer</b>, on every transaction. It then passes it on to the merchant inside the merchant service charge (MSC)."},
-    {good:"Each scheme publishes its dispute rulebook – it's the referee between issuer and acquirer.",
-     bad:"The <b>scheme's rulebook</b> applies. Visa, Mastercard and CB each have chargeback procedures that bind their member banks."},
+    {good:"The decision to pay belongs to the cardholder's bank: it alone sees the balance, the limit and the risk. Scheme and acquirer can decline too, but on technical grounds, a bad format or a timeout. That is a different kind of decline.",
+     bad:"The <b>issuer</b> decides whether to pay: it alone sees the balance, the limit and the risk. Scheme and acquirer can decline too, but on technical grounds, never because the account is empty."},
+    {good:"Zero. The scheme carries the information, not the funds. It lives on what it charges banks, not on what it moves.",
+     bad:"<b>€0.</b> The scheme carries the information, not the funds: the money moves between banks. How it works out who owes what is the next concept."},
+    {good:"A scheme's members are banks and payment institutions, never merchants. And not every acquirer supports every scheme: Visa and Mastercard are unavoidable, the others depend on the volume they represent.",
+     bad:"It goes through <b>its acquirer</b>. A merchant never joins a scheme: members are banks and payment institutions. And not every acquirer supports every scheme, Visa and Mastercard aside."},
     {good:"Since the 2015 IFR, the consumer's expressed choice overrides the merchant's default.",
      bad:"Under the <b>EU Interchange Fee Regulation (IFR, 2015)</b>, if the consumer expresses a brand choice, that choice prevails. The merchant can only pre-set a default priority."}
   ];
   const GOOD_TITLES = ["Correct!","Nice one!","Flawless!","Exactly!"];
-  const BAD_TITLES = ["The classic trap","Counter-intuitive – you're not alone","Not quite","Surprising, right?"];
+  const BAD_TITLES = ["Who actually decides","The money doesn't go there","Wrong counter","Surprising, right?"];
 
   document.querySelectorAll('.options').forEach(block=>{
     const qi = +block.dataset.quiz;
