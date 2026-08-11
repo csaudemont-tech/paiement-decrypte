@@ -144,6 +144,17 @@
     text-transform:uppercase;color:#7FA0F0;margin-bottom:6px;
   }
 
+  /* ---------- Voice block ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);line-height:1.5;
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
   /* ---------- Moment interactif : le pari ---------- */
   .bet{
     background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
@@ -294,16 +305,6 @@
   .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
   .teaser .sub-ok.show{display:block}
 
-  /* ---------- Encart « Mon avis » (voir commentaire [VOIX ?] à l'écran 7) ---------- */
-  .avis{
-    margin-top:16px;padding:14px 16px;border-radius:12px;
-    background:#FDF3F1;border-left:3px solid var(--coral);
-    font-size:14.5px;color:var(--ink);
-  }
-  .avis .avis-kicker{
-    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
-  }
 
   /* ---------- Confetti (sans faute) ---------- */
   .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
@@ -401,12 +402,12 @@
   <!-- 2 · QUIZ 1 -->
   <section class="screen" data-step="2">
     <div class="qnum">QUIZ 1 / 4</div>
-    <div class="question">Interchange is a fee paid…</div>
+    <div class="question">“Visa takes a percentage on every payment.” What is wrong with that?</div>
     <div class="options" data-quiz="0" data-answer="1" data-next="3">
-      <button class="opt">by the issuer to the acquirer</button>
-      <button class="opt">by the acquirer to the issuer</button>
-      <button class="opt">by the merchant to the scheme</button>
-      <button class="opt">by the cardholder to their bank</button>
+      <button class="opt">Nothing: that is exactly what interchange is</button>
+      <button class="opt">The percentage goes to the cardholder's bank; the scheme bills its own fees, on a completely different scale</button>
+      <button class="opt">Right recipient, wrong rate: it is 0.2% at most</button>
+      <button class="opt">Nothing goes by percentage: schemes and banks alike bill per transaction</button>
     </div>
   </section>
 
@@ -424,18 +425,22 @@
       <div class="flow-caption" id="betcap" aria-live="polite">Move the slider, the answer appears when you release.</div>
       <div class="keyfact" id="betfact" style="display:none">💡 Those cents are passed on to the merchant: together with scheme fees and the acquirer's margin, they form its card fee, the <b>MSC</b> (Merchant Service Charge). The cardholder never sees this line.</div>
     </div>
+    <div class="voix">
+      <div class="voix-kicker">What actually matters</div>
+      IC++ or blended? IC++ is cleaner: interchange, scheme fees and margin each appear separately. It is also more complex, and plenty of merchants misread it. Blended gives a single rate, simple and predictable on the merchant side, but it hides the margin and pushes the risk onto the acquirer, who absorbs any drift in the card mix. To negotiate a blended rate without getting it wrong, you first need to know your own mix.
+    </div>
     <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continue</button></div>
   </section>
 
   <!-- 4 · QUIZ 2 -->
   <section class="screen" data-step="4">
     <div class="qnum">QUIZ 2 / 4</div>
-    <div class="question">At the end of the chain, who actually bears interchange?</div>
-    <div class="options" data-quiz="1" data-answer="3" data-next="5">
-      <button class="opt">The acquirer, out of its margin</button>
-      <button class="opt">The cardholder, through bank fees</button>
-      <button class="opt">No one: the flows cancel out between banks</button>
-      <button class="opt">The merchant, through its card fee (MSC)</button>
+    <div class="question">A merchant looks at its card fee and says: “that is all for my bank.” How much actually goes to it?</div>
+    <div class="options" data-quiz="1" data-answer="2" data-next="5">
+      <button class="opt">All of it: the bank is the one invoicing</button>
+      <button class="opt">The largest share, the rest going to the scheme</button>
+      <button class="opt">Its margin only: part goes back as interchange to the cardholder's bank, another part as scheme fees</button>
+      <button class="opt">None: the bank earns on the business account instead</button>
     </div>
   </section>
 
@@ -455,12 +460,12 @@
   <!-- 6 · QUIZ 3 -->
   <section class="screen" data-step="6">
     <div class="qnum">QUIZ 3 / 4</div>
-    <div class="question">Who sets the interchange rate applied to a transaction?</div>
-    <div class="options" data-quiz="2" data-answer="0" data-next="7">
-      <button class="opt">The scheme, through a published schedule</button>
-      <button class="opt">The issuer, freely</button>
-      <button class="opt">The acquirer, negotiated with each merchant</button>
-      <button class="opt">The European Central Bank</button>
+    <div class="question">A customer pays at a merchant, and both bank with the same institution. What happens to the interchange?</div>
+    <div class="options" data-quiz="2" data-answer="1" data-next="7">
+      <button class="opt">There is none: with no transfer between banks, the fee has no reason to exist</button>
+      <button class="opt">It is charged as usual, and the bank pays it to itself</button>
+      <button class="opt">It is reduced, since only one bank is involved</button>
+      <button class="opt">It goes to the scheme, which settles the case</button>
     </div>
   </section>
 
@@ -482,17 +487,17 @@
           <td><b>0.2% / 0.3%</b><small>IFR cap</small></td>
         </tr>
         <tr>
-          <td>Card issued outside the EEA<small>“inter-regional”: UK, US, China…</small></td>
-          <td><b>unregulated</b><small>often several times more</small></td>
+          <td>Consumer card issued outside the EEA<small>“inter-regional”: UK, US, China…</small></td>
+          <td><b>1.15% / 1.5%</b><small>online; 0.2% / 0.3% card present</small></td>
         </tr>
         <tr>
           <td>Commercial card · three-party scheme<small>corporate cards, AMEX</small></td>
           <td><b>outside the caps</b><small>whatever the country</small></td>
         </tr>
       </table>
-      <p class="fee-note">EEA = the European Union + Iceland, Liechtenstein and Norway.</p>
+      <p class="fee-note">EEA = the European Union + Iceland, Liechtenstein and Norway. The caps outside the EEA do not come from the IFR but from commitments Visa and Mastercard gave the European Commission in 2019, extended to 2029: that is the 1.5% in the Brexit case above.</p>
       <div class="keyfact">💡 In the United States, credit interchange remains unregulated, often around 2%: it funds the cashback on American cards, a seemingly free perk, paid for through merchant fees and, ultimately, retail prices.</div>
-      <!-- [VOIX ?] settled (Aug 10) — no "My take" box on this episode. -->
+      <!-- [VOIX ?] Aug 11: this episode's voice block is "What actually matters" (IC++ / blended), on screen 3. Charles's material and call. -->
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(8)">Last question</button></div>
   </section>
@@ -500,12 +505,12 @@
   <!-- 8 · QUIZ 4 -->
   <section class="screen" data-step="8">
     <div class="qnum">QUIZ 4 / 4</div>
-    <div class="question">Which of these cards escapes the European IFR caps?</div>
-    <div class="options" data-quiz="3" data-answer="2" data-next="9">
-      <button class="opt">A consumer debit card</button>
-      <button class="opt">A consumer prepaid card</button>
-      <button class="opt">A corporate (commercial) card</button>
-      <button class="opt">None: everything is capped in the EEA</button>
+    <div class="question">A French merchant accepts a Belgian debit card. Compared with a French card of the same type, interchange is:</div>
+    <div class="options" data-quiz="3" data-answer="1" data-next="9">
+      <button class="opt">Higher: it is a foreign card</button>
+      <button class="opt">Identical: Belgium is in the EEA, the IFR cap applies the same way</button>
+      <button class="opt">Higher, but framed by a bilateral agreement</button>
+      <button class="opt">Unregulated: the caps only apply domestically</button>
     </div>
   </section>
 
@@ -524,7 +529,7 @@
         <div class="recap-item" data-q="0">Interchange: paid by the acquirer (merchant's bank) to the issuer (cardholder's bank), on every transaction.</div>
         <div class="recap-item" data-q="1">On €60 debit: €0.12, passed on to the merchant inside its card fee (the MSC). The cardholder never sees it.</div>
         <div class="recap-item" data-q="2">It pays for the issuer's payment guarantee, hence a percentage rather than a flat fee; the schedule is set by the scheme, which keeps none of it.</div>
-        <div class="recap-item" data-q="3">IFR 2015: 0.2% debit / 0.3% credit in the EEA. Commercial cards, non-EEA cards and three-party schemes uncapped.</div>
+        <div class="recap-item" data-q="3">IFR 2015: 0.2% debit / 0.3% credit in the EEA. Outside the EEA, the 2019 Visa/Mastercard commitments cap it instead, far higher. Commercial cards and three-party schemes: uncapped.</div>
       </div>
       <div class="teaser">
         <div class="kicker">Next episode</div>
@@ -558,9 +563,9 @@
   </div>
 </div>
 
-<script src="../../assets/telemetry.js?v=fcc905e6"></script>
-<script src="../../assets/progress.js?v=48464c83"></script>
-<script src="../../assets/subscribe.js?v=52a6ee36"></script>
+<script src="../../assets/telemetry.js?v=4b17031c"></script>
+<script src="../../assets/progress.js?v=d99060c2"></script>
+<script src="../../assets/subscribe.js?v=d1cf0f38"></script>
 <script>
   // Safe wrappers: the episode still works if the assets fail to load.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
@@ -599,17 +604,17 @@
 
   // ---- Quiz ----
   const EXPLAIN = [
-    {good:"Exactly: the merchant's bank pays the cardholder's bank, on every transaction.",
-     bad:"Interchange is paid <b>by the acquirer to the issuer</b>: the merchant's bank pays the customer's bank, on every transaction."},
-    {good:"Passed on to the merchant inside the MSC — the merchant is the only one who ever sees it, never the cardholder.",
-     bad:"The <b>merchant</b> bears it, through its card fee (the MSC): the acquirer passes interchange on, adding scheme fees and its own margin. Whether it ends up in retail prices is a debate economists haven't settled."},
-    {good:"The scheme sets the schedule, the issuer collects, the regulator caps. Three roles, three players — don't mix them up.",
-     bad:"The <b>scheme</b> publishes the schedule… while not keeping a cent of interchange. The issuer collects, and since 2015 the EU regulator caps."},
-    {good:"Commercial cards sit outside the IFR — like cards issued outside the EEA and three-party schemes. Hence fees that sting on those cards.",
-     bad:"<b>Corporate (commercial) cards</b> sit outside the IFR's scope, like cards issued outside the EEA and three-party schemes. Consumer prepaid cards are capped like debit."}
+    {good:"The scheme keeps nothing of interchange. It does bill its own fees to banks, but they amount to a fraction of that percentage: its strength is not the fee, it is the volume no single bank can match.",
+     bad:"The percentage goes to <b>the cardholder's bank</b>, not to the scheme. Schemes do bill their own fees to banks, partly fixed per message, partly proportional, but on nothing like the same scale as interchange."},
+    {good:"The bank keeps its margin, not the whole line. A single blended rate, simple and readable, sustains the opposite impression.",
+     bad:"The merchant does not pay it all to its own bank: a large part goes back as <b>interchange to the cardholder's bank</b>, another part as scheme fees. A single blended rate sustains the opposite impression."},
+    {good:"The money never left the institution, and the fee is still counted. It is also why a bank with many cards and many merchants can be more aggressive on acquiring: on those transactions, it loses nothing.",
+     bad:"It <b>is</b> charged: the bank pays it to itself, even though the money never left the institution. It is also why a bank with many cards and many merchants can be more aggressive on acquiring."},
+    {good:"Belgium is in the EEA: same cap as a French card. The “foreign card, so pricier” reflex only starts to hold beyond the EEA.",
+     bad:"Belgium is in the <b>EEA</b>: the IFR cap applies exactly as it would on a French card. The “foreign card, so pricier” reflex only starts to hold beyond the EEA."}
   ];
   const GOOD_TITLES = ["Correct!","Nice one!","Flawless!","Exactly!"];
-  const BAD_TITLES = ["The direction trap","The classic misconception","Not quite","The costly detail"];
+  const BAD_TITLES = ["The most common mix-up","The single-rate illusion","Counter-intuitive","The “foreign card” reflex"];
 
   document.querySelectorAll('.options').forEach(block=>{
     const qi = +block.dataset.quiz;
@@ -657,13 +662,13 @@
     range.disabled = true;
     let verdict;
     if(g <= 5){
-      verdict = "You bet even lower than reality — rare: nearly everyone overestimates.";
+      verdict = "You bet even lower than reality, rare: nearly everyone overestimates.";
     } else if(g <= 20){
-      verdict = "Remarkably close — we suspect an interchange pro.";
+      verdict = "Remarkably close, we suspect an interchange pro.";
     } else if(g <= 60){
-      verdict = "You overestimated — like most people.";
+      verdict = "You overestimated, like most people.";
     } else {
-      verdict = "You overestimated by about ×" + Math.round(g/ANSWER_CENTS) + " — like the vast majority of bettors.";
+      verdict = "You overestimated by about ×" + Math.round(g/ANSWER_CENTS) + ", like the vast majority of bettors.";
     }
     document.getElementById('betcap').innerHTML =
       "<b>€0.12.</b> That's it: <b>0.2%</b> of the amount, the cap for a consumer debit card. Credit: €0.18 (0.3%). " + verdict +
@@ -684,9 +689,9 @@
     const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
     const revisit = missed.length===1 ? "REVISIT CONCEPT "+missed[0]
                   : "REVISIT CONCEPTS "+missed.slice(0,-1).join(", ")+" AND "+missed[missed.length-1];
-    const msg = score===4 ? "PERFECT — EXPERT LEVEL" :
-                score>=3 ? "SOLID — "+revisit+" AND YOU'RE THERE" :
-                score>=2 ? "FAIR — "+revisit :
+    const msg = score===4 ? "PERFECT – EXPERT LEVEL" :
+                score>=3 ? "SOLID – "+revisit+" AND YOU'RE THERE" :
+                score>=2 ? "FAIR – "+revisit :
                 "WORTH A REPLAY";
     document.getElementById('scoremsg').textContent = msg;
     document.getElementById('stat-score').textContent = score + '/4';
@@ -720,7 +725,7 @@
   function shareScore(){
     const grid = results.map(r=>r?'🟩':'🟥').join('');
     const time = t0 ? fmtTime(Date.now()-t0) : '';
-    const txt = `S1 · E02 · Interchange — ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.\npaiement-decrypte.fr/en/`;
+    const txt = `S1 · E02 · Interchange – ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.\npaiement-decrypte.fr/en/`;
     const btn = document.getElementById('sharebtn');
     const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if(isMobile && navigator.share){
@@ -731,7 +736,7 @@
       if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(txt).catch(()=>{});
       }
-      btn.textContent = 'Copied ✓ — your LinkedIn post is ready';
+      btn.textContent = 'Copied ✓ – your LinkedIn post is ready';
       setTimeout(()=>btn.textContent='Share my score', 3000);
       window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
     }
@@ -744,10 +749,10 @@
       var el = document.getElementById('ep-signup-ok');
       el.textContent = ok
         ? 'Almost there! Confirm via the email we just sent.'
-        : (msg || 'Something went wrong — please try again.');
+        : (msg || 'Something went wrong – please try again.');
       el.style.color = ok ? '' : '#E85C4A';
       el.classList.add('show');
-      if(ok) PDT.track('subscribe_ok'); // the fact a signup happened — never the email itself
+      if(ok) PDT.track('subscribe_ok'); // the fact a signup happened – never the email itself
     });
   }
 

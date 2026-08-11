@@ -94,7 +94,9 @@
   .decoded{font-family:var(--sans);font-size:11.5px;color:var(--ink-soft);margin-top:2px}
   .decoded .plus{color:#0E7A54}
   .decoded .minus{color:#B0442F}
-  .unsourced{font-size:10.5px;color:var(--amber);font-family:var(--sans)}
+  .specref{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:.02em;margin-top:2px}
+  .group-head h2 .spec{font-family:var(--sans);font-weight:500;font-size:11px;color:var(--muted);letter-spacing:0;text-transform:none;margin-left:8px}
+  .group-head h2 .spec.editor{color:var(--amber)}
 
   .empty{color:var(--ink-soft);font-size:13.5px;padding:20px 0}
 </style>
@@ -104,7 +106,7 @@
   <div class="tool-back"><a href="https://paiement-decrypte.fr/en/outils/">&larr; Back to the toolkit</a><a class="lang" href="https://paiement-decrypte.fr/outils/nexo-diff.html" hreflang="fr">FR</a></div>
   <div class="kicker">Payment Decrypted · free tool, 100% in your browser</div>
   <h1>nexo/OSCAR diff - compare two terminal config files</h1>
-  <p class="lede"><b>Paste or load two files</b> (OSCAR schema <code>schemas.artifact.pl/oscarv4</code>, blocks e0-f0): the comparator groups repeated blocks by their natural key (AID, RID, TAID, BIN…), detects when a record was simply <b>moved</b> (e.g. an application profile renumbered) instead of showing it as a separate add and remove, and decodes the already-sourced bit fields (terminalCapabilities, additionalTerminalCapabilities, TAC) using the same dictionary as nexo-config and emv-parser. Blocks with no difference stay collapsed by default.</p>
+  <p class="lede"><b>Paste or load two files</b> (OSCAR schema <code>schemas.artifact.pl/oscarv4</code>, blocks e0-f2): the comparator groups repeated blocks by their natural key (AID, RID, TAID, BIN…), detects when a record was simply <b>moved</b> (e.g. an application profile renumbered) instead of showing it as a separate add and remove, and decodes the already-sourced bit fields (terminalCapabilities, additionalTerminalCapabilities, TAC) using the same dictionary as nexo-config and emv-parser. Blocks with no difference stay collapsed by default. Blocks are named after the nexo FAST data dictionary (Part 1 v3.3, section 13.3): a sepaConfig file is the nexo tag tree serialised as XML, not a proprietary format. Blocks with no nexo equivalent are flagged as vendor groupings.</p>
 
   <div class="privacy"><b>Everything runs in your browser.</b> Pasted or loaded files are never sent to a server - parsing and diffing run in client-side JS only. Useful since these files often contain real merchant/acquirer identifiers.</div>
 
@@ -136,9 +138,9 @@
 <script>
 /* === EMV_DICTIONARY:BEGIN === */
 /* ============================================================
-   Paiement Décrypté — dictionnaire EMV canonique (EN)
+   Paiement Décrypté – dictionnaire EMV canonique (EN)
    ============================================================
-   Miroir EN de a-publier/_shared/emv-dictionary.fr.js — mêmes
+   Miroir EN de a-publier/_shared/emv-dictionary.fr.js – mêmes
    clés/structures, libellés utilisateur traduits en anglais,
    commentaires laissés en français (convention du projet). Les
    deux fichiers se resynchronisent manuellement : corriger la
@@ -655,23 +657,63 @@ const COUNTRY_DICT = {"004":"Afghanistan","008":"Albania","010":"Antarctica","01
    render in English, like the rest of the page.
    ============================================================ */
 
-/* Labels for known OSCAR blocks (schemas.artifact.pl/oscarv4 schema) */
+/* OSCAR blocks. A sepaConfig file is not a vendor format: it is the
+   nexo FAST constructed-data tag tree serialised as XML. The labels below
+   therefore use the normative name from the nexo FAST data dictionary
+   (Part 1 v3.3, section 13.3). e0 / e1 / e6 have no matching tag: they are
+   vendor-specific groupings, flagged as such on screen rather than passed
+   off as nexo. */
 const BLOCK_LABELS = {
   e0: "Terminal identity",
   e1: "Terminal parameters",
-  e2: "Application profiles by AID",
-  e3: "CA public keys (by RID)",
-  e4: "Services",
-  e5: "Application selection (TAID)",
-  e6: "Profiles by scheme / acquirer",
-  e7: "BIN prefixes",
-  e8: "Profiles by BIN",
+  e2: "Application profile selection (chip)",
+  e3: "Certification authority public keys",
+  e4: "Service settings",
+  e5: "Terminal list of AID",
+  e6: "Parameters per application profile",
+  e7: "Terminal list of BID",
+  e8: "Application profile selection (non chip)",
+  e9: "Exception file",
+  ea: "Limit sets",
+  eb: "Default kernel and label, per AID",
+  ec: "AID-kernel combinations and parameters",
+  ed: "Acquirer parameters",
+  ee: "AID preference table",
+  ef: "Additional data elements",
+  f0: "EEA processing",
+  f1: "EEA-only AIDs",
+  f2: "BINs excluded from DCC",
 };
 
+/* nexo FAST tag and normative name (Part 1 v3.3, section 13.3). Used as a
+   header annotation: we NAME the tag and its definition, we do not
+   reproduce any coding table from the spec (nexo licence). */
+const BLOCK_SPEC = {
+  e2: ['E2', 'Application Profile Selection Table'],
+  e3: ['E3', 'Certification Authority (CA) Public Key Table'],
+  e4: ['E4', 'Service Settings Table'],
+  e5: ['E5', 'Terminal List of AID'],
+  e7: ['E7', 'Terminal List of BID'],
+  e8: ['E8', 'Application Profile Selection Table Non Chip'],
+  e9: ['E9', 'Exception File'],
+  ea: ['EA', 'Limit Set List'],
+  eb: ['EB', 'Default Kernel ID & Application Label per AID'],
+  ec: ['EC', 'Combinations List & Parameters'],
+  ed: ['ED', 'Acquirer Parameter Table'],
+  ee: ['EE', 'AID Preference Table'],
+  ef: ['EF', 'Additional Data Elements'],
+  f0: ['F0', 'EEA Process Table'],
+  f1: ['F1', 'EEA-only List of AID'],
+  f2: ['F2', 'DCC Excluded BIN List'],
+};
+
+/* Blocks with no nexo dictionary equivalent: vendor groupings. */
+const EDITOR_ONLY_BLOCKS = new Set(['e0', 'e1', 'e6']);
+
 /* Correlation key per block type: which fields identify "the same
-   record" from one file to another. Blocks not listed: generic
-   fallback (first field found). No standard EMV tag behind these
-   keys - this is the observed OSCAR structure, not a public standard. */
+   record" from one file to the other. Keys follow the structure of each
+   nexo FAST table (an entry is identified by its AID, its RID, its BID,
+   its AID + kernel pair...). Blocks not listed: generic fallback below. */
 const KEY_FIELDS = {
   e2: ['aid', 'applicationProfileNumber'],
   e3: ['rid', 'caPublicKeyIndex'],
@@ -680,11 +722,36 @@ const KEY_FIELDS = {
   e6: ['applicationProfileNumber'],
   e7: ['bid'],
   e8: ['bid', 'applicationProfileNumber'],
+  eb: ['terminalAid', 'kernelId'],
+  ec: ['aid', 'kernelId'],
+  ed: ['acquirerNumber'],
+  f0: ['entryType', 'cardAid'],
 };
 
-/* Fields identified in nexo-config as not sourced: shown as-is
-   (before/after) but without pretending to decode them. */
-const UNSOURCED_FIELDS = new Set(['configuredServices', 'defaultCardService']);
+/* Present in EVERY record with the same value: unusable as a key, and the
+   cause of a silent collapse (every record of a block with no defined key
+   folded into a single one). */
+const NON_DISCRIMINANT_FIELDS = new Set(['versionOfTheParameterSet']);
+
+/* Configuration fields whose nexo FAST tag is identified (Part 1 v3.3,
+   section 13.3). We show the tag and its normative name next to the
+   field: this is a bibliographic reference, not a reproduction of the
+   bit-level coding, which stays under nexo licence. Values are therefore
+   shown as-is (before / after), without decoding. */
+const FIELD_SPEC_REFS = {
+  configuredServices: ['DF67', 'Configured Services'],
+  defaultCardService: ['DF17', 'Default Card Service'],
+  eeaProcessSettings: ['DF52', 'EEA Process Settings'],
+  applicationProfileSettings: ['DF27', 'Application Profile Settings (APS)'],
+  applicationProfileSettingsForCancellation: ['DF28', 'Application Profile Settings for Cancellation (APSC)'],
+  applicationProfileNumber: ['DF19', 'Application Profile Number'],
+  serviceSettings: ['DF10', 'Service Settings'],
+  allowedServiceStartEvents: ['DF11', 'Allowed Service Start Events'],
+};
+function specRefHtml(name) {
+  const r = FIELD_SPEC_REFS[name];
+  return r ? `<div class="specref" title="${esc(r[1])}">nexo FAST ${esc(r[0])}</div>` : '';
+}
 
 function fieldValueToString(v) {
   if (v == null) return '∅';
@@ -727,8 +794,30 @@ function parseOscarXml(xmlText) {
 function keyOf(tag, fields) {
   const kf = KEY_FIELDS[tag];
   if (kf) return kf.map(k => fieldValueToString(fields[k])).join(' / ');
-  const firstName = Object.keys(fields)[0];
-  return firstName ? `${firstName}=${fieldValueToString(fields[firstName])}` : '(block with no field)';
+  /* Fallback: block with no known business key. Fields that are identical
+     everywhere are discarded, otherwise every record would share the same
+     key and overwrite one another. */
+  const names = Object.keys(fields).filter(n => !NON_DISCRIMINANT_FIELDS.has(n));
+  if (!names.length) return '(block with no discriminating field)';
+  /* A single field: almost always the entry identifier (limitSetId,
+     serviceIdentifier...). Taking several would change the key as soon
+     as a VALUE moves, and the same record would show up as removed +
+     added instead of changed. */
+  return `${names[0]}=${fieldValueToString(fields[names[0]])}`;
+}
+
+/* Two records of the same block may carry the same key (exact duplicate in
+   the file, or a weakly discriminating fallback key). They get suffixed
+   instead of overwriting each other: a real duplicate must show up in the
+   diff, not vanish. */
+function indexByKey(tag, list) {
+  const m = new Map();
+  for (const b of list) {
+    let k = keyOf(tag, b.fields);
+    if (m.has(k)) { let n = 2; while (m.has(`${k} #${n}`)) n++; k = `${k} #${n}`; }
+    m.set(k, b.fields);
+  }
+  return m;
 }
 
 function groupByTag(blocks) {
@@ -811,7 +900,6 @@ function diffFields(fieldsA, fieldsB) {
       const lb = scalarLookup(name, typeof b === 'string' ? b : null);
       if (la || lb) row.lookup = { before: la, after: lb };
     }
-    if (UNSOURCED_FIELDS.has(name)) row.unsourced = true;
     rows.push(row);
   }
   rows.sort((x, y) => x.name.localeCompare(y.name));
@@ -864,17 +952,29 @@ function reconcileMoves(removedList, addedList) {
 function diffOscar(blocksA, blocksB) {
   const gA = groupByTag(blocksA), gB = groupByTag(blocksB);
   const allTags = [...new Set([...Object.keys(gA), ...Object.keys(gB)])];
+  /* Les noms de blocs sont des tags hexa (e0..f2) : 'eb' doit se ranger
+     entre 'ea' et 'ec', pas partir en tri alphabetique separe. */
   allTags.sort((x, y) => {
-    const ox = parseInt(x.slice(1), 10), oy = parseInt(y.slice(1), 10);
-    if (!isNaN(ox) && !isNaN(oy)) return ox - oy;
+    const hx = /^[0-9a-f]{2}$/i.test(x) ? parseInt(x, 16) : NaN;
+    const hy = /^[0-9a-f]{2}$/i.test(y) ? parseInt(y, 16) : NaN;
+    if (!isNaN(hx) && !isNaN(hy)) return hx - hy;
+    if (!isNaN(hx)) return -1;
+    if (!isNaN(hy)) return 1;
     return x.localeCompare(y);
   });
 
   const groups = [];
   for (const tag of allTags) {
     const listA = gA[tag] || [], listB = gB[tag] || [];
-    const mapA = new Map(listA.map(b => [keyOf(tag, b.fields), b.fields]));
-    const mapB = new Map(listB.map(b => [keyOf(tag, b.fields), b.fields]));
+    /* Block present at most once on each side (e0, e1: terminal-level
+       parameters): it has to be the same record, so it does not go through
+       a content-based key - otherwise a plain value change would make it
+       show up as removed + added. */
+    const singleton = listA.length <= 1 && listB.length <= 1;
+    const mapA = singleton ? new Map(listA.map(b => ['(single record)', b.fields]))
+                           : indexByKey(tag, listA);
+    const mapB = singleton ? new Map(listB.map(b => ['(single record)', b.fields]))
+                           : indexByKey(tag, listB);
     const allKeys = [...new Set([...mapA.keys(), ...mapB.keys()])];
 
     const records = [];
@@ -914,6 +1014,15 @@ function diffOscar(blocksA, blocksB) {
 
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
+/* Block header annotation: sourced nexo tag, or an explicit note that the
+   block is a vendor grouping with no nexo equivalent. */
+function blockSpecHtml(tag) {
+  const sp = BLOCK_SPEC[tag];
+  if (sp) return `<span class="spec">nexo FAST ${esc(sp[0])} &middot; ${esc(sp[1])}</span>`;
+  if (EDITOR_ONLY_BLOCKS.has(tag)) return `<span class="spec editor">vendor grouping, not a nexo tag</span>`;
+  return '';
+}
+
 function renderBitsDiff(bd) {
   if (!bd || (!bd.added.length && !bd.removed.length)) return '';
   const parts = [];
@@ -925,7 +1034,7 @@ function renderBitsDiff(bd) {
 function renderRecordRows(rows) {
   return `<table class="fields"><tbody>${rows.map(r => `
     <tr>
-      <td class="fname">${esc(r.name)}${r.unsourced ? '<div class="unsourced">not sourced</div>' : ''}</td>
+      <td class="fname">${esc(r.name)}${specRefHtml(r.name)}</td>
       <td class="before">${esc(r.beforeStr)}</td>
       <td class="arrow">→</td>
       <td class="after">${esc(r.afterStr)}${r.lookup && r.lookup.after ? `<div class="decoded">${esc(r.lookup.after)}</div>` : ''}${renderBitsDiff(r.bitsDiff)}</td>
@@ -944,7 +1053,7 @@ function renderWholeRecord(fields, status) {
       const l = scalarLookup(name, typeof v === 'string' ? v : null);
       if (l) extra = `<div class="decoded">${esc(l)}</div>`;
     }
-    if (UNSOURCED_FIELDS.has(name)) extra += '<div class="unsourced">not sourced</div>';
+    extra += specRefHtml(name);
     return { name, afterStr: fieldValueToString(v), extra };
   });
   return `<table class="fields"><tbody>${rows.map(r => `
@@ -972,7 +1081,7 @@ function renderGroup(g, idx) {
   return `
   <div class="group ${hasChanges ? 'open' : 'closed'}" id="${bodyId}-wrap">
     <div class="group-head" onclick="toggleGroup('${bodyId}-wrap')">
-      <h2>${esc(g.label)} <span class="tag">${esc(g.tag)}</span></h2>
+      <h2>${esc(g.label)} <span class="tag">${esc(g.tag)}</span>${blockSpecHtml(g.tag)}</h2>
       <div style="display:flex;align-items:center;gap:14px">
         <div class="counts">
           <span>${g.nUnchanged} unchanged</span>

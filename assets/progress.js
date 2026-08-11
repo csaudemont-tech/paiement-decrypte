@@ -1,9 +1,9 @@
 /* ============================================================
-   Paiement Décrypté — progression locale
+   Paiement Décrypté – progression locale
    ------------------------------------------------------------
    localStorage uniquement : la progression vit dans LE navigateur
    du visiteur, rien ne quitte son appareil. Pas de compte, pas de
-   synchronisation — c'est un confort de reprise, une donnée jetable.
+   synchronisation – c'est un confort de reprise, une donnée jetable.
    ============================================================ */
 window.PDProgress = (function () {
   'use strict';

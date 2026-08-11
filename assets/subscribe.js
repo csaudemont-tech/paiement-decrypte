@@ -1,8 +1,8 @@
 /* ============================================================
-   Paiement Décrypté — inscription newsletter (Kit)
+   Paiement Décrypté – inscription newsletter (Kit)
    ------------------------------------------------------------
    Envoie l'email au formulaire Kit n°9768048 (double opt-in).
-   L'email part UNIQUEMENT vers Kit — jamais vers la télémétrie :
+   L'email part UNIQUEMENT vers Kit – jamais vers la télémétrie :
    la séparation identité / mesure est un choix RGPD du cadrage.
    Réponses gérées : success (confirmation à l'écran),
    quarantined (redirection vers la vérification anti-bot Kit),

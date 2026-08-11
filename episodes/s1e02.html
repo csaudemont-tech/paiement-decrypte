@@ -143,6 +143,17 @@
     text-transform:uppercase;color:#7FA0F0;margin-bottom:6px;
   }
 
+  /* ---------- Bloc voix ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);line-height:1.5;
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
   /* ---------- Moment interactif : le pari ---------- */
   .bet{
     background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
@@ -293,16 +304,6 @@
   .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
   .teaser .sub-ok.show{display:block}
 
-  /* ---------- Encart « Mon avis » (voir commentaire [VOIX ?] à l'écran 7) ---------- */
-  .avis{
-    margin-top:16px;padding:14px 16px;border-radius:12px;
-    background:#FDF3F1;border-left:3px solid var(--coral);
-    font-size:14.5px;color:var(--ink);
-  }
-  .avis .avis-kicker{
-    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
-  }
 
   /* ---------- Confetti (sans faute) ---------- */
   .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
@@ -400,12 +401,12 @@
   <!-- 2 · QUIZ 1 -->
   <section class="screen" data-step="2">
     <div class="qnum">QUIZ 1 / 4</div>
-    <div class="question">L'interchange, c'est une commission versée…</div>
+    <div class="question">« Sur chaque paiement, Visa prend un pourcentage. » Qu'est-ce qui cloche&nbsp;?</div>
     <div class="options" data-quiz="0" data-answer="1" data-next="3">
-      <button class="opt">par l'émetteur à l'acquéreur</button>
-      <button class="opt">par l'acquéreur à l'émetteur</button>
-      <button class="opt">par le commerçant au réseau</button>
-      <button class="opt">par le porteur à sa banque</button>
+      <button class="opt">Rien : c'est justement l'interchange</button>
+      <button class="opt">Le pourcentage va à la banque du porteur, le réseau facture ses propres frais, d'un tout autre ordre de grandeur</button>
+      <button class="opt">Le destinataire est bon, le taux non : c'est 0,2 % maximum</button>
+      <button class="opt">Rien ne part en pourcentage : réseau comme banques facturent au nombre de transactions</button>
     </div>
   </section>
 
@@ -423,18 +424,22 @@
       <div class="flow-caption" id="betcap" aria-live="polite">Déplacez le curseur, la réponse s'affiche quand vous relâchez.</div>
       <div class="keyfact" id="betfact" style="display:none">💡 Ces centimes sont refacturés au commerçant : avec les scheme fees et la marge de l'acquéreur, ils forment sa commission carte, le <b>MSC</b> (Merchant Service Charge). Le porteur, lui, ne voit jamais cette ligne.</div>
     </div>
+    <div class="voix">
+      <div class="voix-kicker">Ce qui compte vraiment</div>
+      IC++ ou blended&nbsp;? L'IC++ est plus propre : interchange, frais de réseau et marge apparaissent séparément. Il est aussi plus complexe, et beaucoup de commerçants le lisent mal. Le blended donne un taux unique, simple et prévisible côté commerçant, mais il masque la marge et fait porter le risque à l'acquéreur, qui encaisse la dérive du mix de cartes. Pour négocier un blended sans se tromper, il faut d'abord connaître son propre mix.
+    </div>
     <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continuer</button></div>
   </section>
 
   <!-- 4 · QUIZ 2 -->
   <section class="screen" data-step="4">
     <div class="qnum">QUIZ 2 / 4</div>
-    <div class="question">Au bout de la chaîne, qui supporte économiquement l'interchange ?</div>
-    <div class="options" data-quiz="1" data-answer="3" data-next="5">
-      <button class="opt">L'acquéreur, sur sa marge</button>
-      <button class="opt">Le porteur, via ses frais bancaires</button>
-      <button class="opt">Personne : les flux s'annulent entre banques</button>
-      <button class="opt">Le commerçant, via sa commission carte (MSC)</button>
+    <div class="question">Un commerçant regarde sa commission carte et dit : « tout ça, c'est pour ma banque. » Que lui revient-il réellement&nbsp;?</div>
+    <div class="options" data-quiz="1" data-answer="2" data-next="5">
+      <button class="opt">La totalité : c'est elle qui facture</button>
+      <button class="opt">La plus grosse part, le reste allant au réseau</button>
+      <button class="opt">Sa marge seulement : une partie repart en interchange vers la banque du porteur, une autre en frais de réseau</button>
+      <button class="opt">Rien : sa banque se rémunère sur le compte pro</button>
     </div>
   </section>
 
@@ -454,12 +459,12 @@
   <!-- 6 · QUIZ 3 -->
   <section class="screen" data-step="6">
     <div class="qnum">QUIZ 3 / 4</div>
-    <div class="question">Qui fixe le taux d'interchange appliqué à une transaction ?</div>
-    <div class="options" data-quiz="2" data-answer="0" data-next="7">
-      <button class="opt">Le réseau, via un barème publié</button>
-      <button class="opt">L'émetteur, librement</button>
-      <button class="opt">L'acquéreur, en négociation avec chaque commerçant</button>
-      <button class="opt">La Banque centrale européenne</button>
+    <div class="question">Le client paie chez un commerçant, et les deux sont clients de la même banque. Que devient l'interchange&nbsp;?</div>
+    <div class="options" data-quiz="2" data-answer="1" data-next="7">
+      <button class="opt">Il n'y en a pas : sans transfert entre banques, la commission n'a pas lieu d'être</button>
+      <button class="opt">Il est prélevé normalement, la banque se le verse à elle-même</button>
+      <button class="opt">Il est réduit, une seule banque étant impliquée</button>
+      <button class="opt">Il est reversé au réseau, qui arbitre le cas</button>
     </div>
   </section>
 
@@ -481,17 +486,17 @@
           <td><b>0,2 % / 0,3 %</b><small>plafond IFR</small></td>
         </tr>
         <tr>
-          <td>Carte émise hors EEE<small>« inter-régional » : UK, US, Chine…</small></td>
-          <td><b>libre</b><small>souvent plusieurs fois plus</small></td>
+          <td>Carte de particulier émise hors EEE<small>« inter-régional » : UK, US, Chine…</small></td>
+          <td><b>1,15 % / 1,5 %</b><small>en ligne ; 0,2 % / 0,3 % en face-à-face</small></td>
         </tr>
         <tr>
           <td>Carte commerciale · réseau à 3 coins<small>cartes d'entreprise, AMEX</small></td>
           <td><b>hors plafond</b><small>quel que soit le pays</small></td>
         </tr>
       </table>
-      <p class="fee-note">EEE = Union européenne + Islande, Liechtenstein, Norvège.</p>
+      <p class="fee-note">EEE = Union européenne + Islande, Liechtenstein, Norvège. Les plafonds hors EEE ne viennent pas de l'IFR mais d'engagements pris par Visa et Mastercard devant la Commission européenne en 2019, prolongés jusqu'en 2029 : c'est le 1,5 % du cas Brexit ci-dessus.</p>
       <div class="keyfact">💡 Aux États-Unis, l'interchange crédit reste libre, souvent autour de 2 % : c'est lui qui finance le cashback des cartes américaines, un avantage en apparence gratuit, payé par les frais des commerçants et, in fine, par les prix en rayon.</div>
-      <!-- [VOIX ?] tranché (10/08) : pas d'encart « Mon avis » sur cet épisode. -->
+      <!-- [VOIX ?] 11/08 : le bloc voix de cet épisode est « Ce qui compte vraiment » (IC++ / blended), placé à l'écran 3. Matière et arbitrage de Charles. -->
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
   </section>
@@ -499,12 +504,12 @@
   <!-- 8 · QUIZ 4 -->
   <section class="screen" data-step="8">
     <div class="qnum">QUIZ 4 / 4</div>
-    <div class="question">Laquelle de ces cartes échappe aux plafonds européens de l'IFR ?</div>
-    <div class="options" data-quiz="3" data-answer="2" data-next="9">
-      <button class="opt">La carte de débit d'un particulier</button>
-      <button class="opt">La carte prépayée d'un particulier</button>
-      <button class="opt">La carte d'entreprise (commerciale)</button>
-      <button class="opt">Aucune : tout est plafonné dans l'EEE</button>
+    <div class="question">Un commerçant français encaisse une carte de débit belge. Par rapport à une carte française de même type, l'interchange est&nbsp;:</div>
+    <div class="options" data-quiz="3" data-answer="1" data-next="9">
+      <button class="opt">Plus élevé : c'est une carte étrangère</button>
+      <button class="opt">Identique : la Belgique est dans l'EEE, le plafond IFR s'applique de la même façon</button>
+      <button class="opt">Plus élevé, mais encadré par un accord bilatéral</button>
+      <button class="opt">Libre : les plafonds ne valent qu'en domestique</button>
     </div>
   </section>
 
@@ -523,7 +528,7 @@
         <div class="recap-item" data-q="0">L'interchange : versé par l'acquéreur (banque du commerçant) à l'émetteur (banque du porteur), sur chaque transaction.</div>
         <div class="recap-item" data-q="1">Sur 60 € en débit : 0,12 €, refacturés au commerçant dans sa commission carte (le MSC). Le porteur ne le voit jamais.</div>
         <div class="recap-item" data-q="2">Il rémunère la garantie de paiement portée par l'émetteur, d'où un pourcentage plutôt qu'un frais fixe ; le barème est fixé par le réseau, qui n'en touche rien.</div>
-        <div class="recap-item" data-q="3">IFR 2015 : 0,2 % débit / 0,3 % crédit dans l'EEE. Cartes commerciales, hors EEE et réseaux à 3 coins non plafonnés.</div>
+        <div class="recap-item" data-q="3">IFR 2015 : 0,2 % débit / 0,3 % crédit dans l'EEE. Hors EEE, ce sont les engagements Visa/Mastercard de 2019 qui plafonnent, bien plus haut. Cartes commerciales et réseaux à 3 coins : hors plafond.</div>
       </div>
       <div class="teaser">
         <div class="kicker">Prochain épisode</div>
@@ -553,9 +558,9 @@
   </div>
 </div>
 
-<script src="../assets/telemetry.js?v=fcc905e6"></script>
-<script src="../assets/progress.js?v=48464c83"></script>
-<script src="../assets/subscribe.js?v=52a6ee36"></script>
+<script src="../assets/telemetry.js?v=4b17031c"></script>
+<script src="../assets/progress.js?v=d99060c2"></script>
+<script src="../assets/subscribe.js?v=d1cf0f38"></script>
 <script>
   // Wrappers sûrs : si les assets ne chargent pas, l'épisode fonctionne quand même.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
@@ -594,17 +599,17 @@
 
   // ---- Quiz ----
   const EXPLAIN = [
-    {good:"Exactement : la banque du commerçant paie celle du porteur, sur chaque transaction.",
-     bad:"L'interchange est versé <b>par l'acquéreur à l'émetteur</b> : la banque du commerçant paie la banque du client, sur chaque transaction."},
-    {good:"Refacturé au commerçant dans son MSC, lui seul le voit passer sur sa facture, jamais le porteur.",
-     bad:"C'est <b>le commerçant</b> qui le supporte, via sa commission carte (le MSC) : l'acquéreur refacture l'interchange, y ajoute les scheme fees et sa marge. Reste à savoir s'il finit dans les prix en rayon, les économistes en débattent encore."},
-    {good:"Le réseau fixe le barème, l'émetteur encaisse, le régulateur plafonne. Trois rôles, trois acteurs, à ne pas mélanger.",
-     bad:"C'est <b>le réseau</b> qui publie le barème… alors qu'il ne touche pas un centime d'interchange. L'émetteur encaisse, et depuis 2015 le régulateur européen plafonne."},
-    {good:"Les cartes commerciales sont hors du champ de l'IFR, comme les cartes émises hors EEE et les réseaux à 3 coins. D'où des commissions qui piquent sur ces cartes-là.",
-     bad:"Les <b>cartes d'entreprise</b> (commerciales) sont hors du champ de l'IFR, comme les cartes émises hors EEE et les réseaux à 3 coins. Les cartes prépayées de particuliers, elles, sont plafonnées comme le débit."}
+    {good:"Le réseau ne touche rien sur l'interchange. Il facture bien ses propres frais aux banques, mais ils pèsent une fraction de ce pourcentage : sa force n'est pas la commission, c'est le volume qu'aucune banque n'atteint.",
+     bad:"Le pourcentage part vers <b>la banque du porteur</b>, pas vers le réseau. Le réseau facture ses propres frais aux banques, pour partie fixes par message, pour partie proportionnels, mais sans commune mesure avec l'interchange."},
+    {good:"Sa banque encaisse sa marge, pas la ligne entière. Un taux blended, unique et lisible, entretient l'illusion inverse.",
+     bad:"Le commerçant ne paie pas tout à sa banque : une grande partie repart en <b>interchange vers la banque du porteur</b>, une autre en frais de réseau. Un taux blended, unique et lisible, entretient l'illusion inverse."},
+    {good:"L'argent n'a pas quitté l'établissement, et la commission est comptée quand même. C'est aussi pourquoi une banque qui a beaucoup de cartes et beaucoup de commerçants peut être plus agressive côté acquisition : sur ces transactions, elle ne perd rien.",
+     bad:"Il est bien <b>prélevé</b> : la banque se le verse à elle-même, alors que l'argent n'a pas quitté l'établissement. C'est aussi pourquoi une banque qui a beaucoup de cartes et beaucoup de commerçants peut être plus agressive côté acquisition."},
+    {good:"La Belgique est dans l'EEE : même plafond qu'une carte française. Le réflexe « carte étrangère, donc plus cher » ne commence à valoir qu'au-delà de l'EEE.",
+     bad:"La Belgique est dans l'<b>EEE</b> : le plafond IFR s'applique exactement comme sur une carte française. Le réflexe « carte étrangère, donc plus cher » ne commence à valoir qu'au-delà de l'EEE."}
   ];
   const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
-  const BAD_TITLES = ["Le sens piège","L'idée reçue classique","Pas tout à fait","Le détail qui coûte cher"];
+  const BAD_TITLES = ["La confusion la plus courante","L'illusion du taux unique","Contre-intuitif","Le réflexe « carte étrangère »"];
 
   document.querySelectorAll('.options').forEach(block=>{
     const qi = +block.dataset.quiz;
@@ -744,7 +749,7 @@
         : (msg || 'Une erreur est survenue – réessayez.');
       el.style.color = ok ? '' : '#E85C4A';
       el.classList.add('show');
-      if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu — jamais l'email
+      if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu – jamais l'email
     });
   }
 

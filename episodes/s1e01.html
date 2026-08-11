@@ -488,9 +488,9 @@
   </div>
 </div>
 
-<script src="../assets/telemetry.js?v=fcc905e6"></script>
-<script src="../assets/progress.js?v=48464c83"></script>
-<script src="../assets/subscribe.js?v=52a6ee36"></script>
+<script src="../assets/telemetry.js?v=4b17031c"></script>
+<script src="../assets/progress.js?v=d99060c2"></script>
+<script src="../assets/subscribe.js?v=d1cf0f38"></script>
 <script>
   // Wrappers sûrs : si les assets ne chargent pas, l'épisode fonctionne quand même.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
@@ -675,7 +675,7 @@
         : (msg || 'Une erreur est survenue – réessayez.');
       el.style.color = ok ? '' : '#E85C4A';
       el.classList.add('show');
-      if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu — jamais l'email
+      if(ok) PDT.track('subscribe_ok'); // le fait qu'un abonnement a eu lieu – jamais l'email
     });
   }
 

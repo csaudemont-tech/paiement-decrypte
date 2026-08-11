@@ -493,9 +493,9 @@
   </div>
 </div>
 
-<script src="../../assets/telemetry.js?v=fcc905e6"></script>
-<script src="../../assets/progress.js?v=48464c83"></script>
-<script src="../../assets/subscribe.js?v=52a6ee36"></script>
+<script src="../../assets/telemetry.js?v=4b17031c"></script>
+<script src="../../assets/progress.js?v=d99060c2"></script>
+<script src="../../assets/subscribe.js?v=d1cf0f38"></script>
 <script>
   // Safe wrappers: the episode still works if the assets fail to load.
   const PDT = window.PD || { track(){}, screen(){}, complete(){} };
@@ -534,17 +534,17 @@
 
   // ---- Quiz ----
   const EXPLAIN = [
-    {good:"Credit is the issuer's job — the cardholder's bank. The scheme doesn't lend a cent.",
-     bad:"Credit is granted by the <b>issuer</b> (the cardholder's bank). The scheme sets the rules, default interchange rates and manages the brand — but never touches the customer's money."},
-    {good:"The acquirer pays interchange to the issuer — a cost the merchant finds again in its fees.",
+    {good:"Credit is the issuer's job – the cardholder's bank. The scheme doesn't lend a cent.",
+     bad:"Credit is granted by the <b>issuer</b> (the cardholder's bank). The scheme sets the rules, default interchange rates and manages the brand – but never touches the customer's money."},
+    {good:"The acquirer pays interchange to the issuer – a cost the merchant finds again in its fees.",
      bad:"The <b>acquirer pays interchange to the issuer</b>, on every transaction. It then passes it on to the merchant inside the merchant service charge (MSC)."},
-    {good:"Each scheme publishes its dispute rulebook — it's the referee between issuer and acquirer.",
+    {good:"Each scheme publishes its dispute rulebook – it's the referee between issuer and acquirer.",
      bad:"The <b>scheme's rulebook</b> applies. Visa, Mastercard and CB each have chargeback procedures that bind their member banks."},
     {good:"Since the 2015 IFR, the consumer's expressed choice overrides the merchant's default.",
      bad:"Under the <b>EU Interchange Fee Regulation (IFR, 2015)</b>, if the consumer expresses a brand choice, that choice prevails. The merchant can only pre-set a default priority."}
   ];
   const GOOD_TITLES = ["Correct!","Nice one!","Flawless!","Exactly!"];
-  const BAD_TITLES = ["The classic trap","Counter-intuitive — you're not alone","Not quite","Surprising, right?"];
+  const BAD_TITLES = ["The classic trap","Counter-intuitive – you're not alone","Not quite","Surprising, right?"];
 
   document.querySelectorAll('.options').forEach(block=>{
     const qi = +block.dataset.quiz;
@@ -579,11 +579,11 @@
 
   // ---- Four-party diagram ----
   const FLOW = [
-    {lit:['a-porteur','a-marchand'], txt:"<b>1.</b> The cardholder presents their card to the merchant — €60 at the terminal."},
+    {lit:['a-porteur','a-marchand'], txt:"<b>1.</b> The cardholder presents their card to the merchant – €60 at the terminal."},
     {lit:['a-marchand','a-acquereur'], txt:"<b>2.</b> The terminal sends the authorisation request to the acquirer."},
     {lit:['a-acquereur','a-scheme'], txt:"<b>3.</b> The acquirer routes the request through the <b>scheme</b>…"},
     {lit:['a-scheme','a-emetteur'], txt:"<b>4.</b> …which passes it to the issuer. It checks balance, limits, fraud → <b>authorisation</b>."},
-    {lit:['a-scheme'], txt:"<b>5.</b> Later: the scheme orchestrates clearing and settlement. Money moves between banks — never through the scheme."}
+    {lit:['a-scheme'], txt:"<b>5.</b> Later: the scheme orchestrates clearing and settlement. Money moves between banks – never through the scheme."}
   ];
   let flowStep = -1, flowTracked = false;
   function stepFlow(){
@@ -615,9 +615,9 @@
     const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
     const revisit = missed.length===1 ? "REVISIT CONCEPT "+missed[0]
                   : "REVISIT CONCEPTS "+missed.slice(0,-1).join(", ")+" AND "+missed[missed.length-1];
-    const msg = score===4 ? "PERFECT — EXPERT LEVEL" :
-                score>=3 ? "SOLID — "+revisit+" AND YOU'RE THERE" :
-                score>=2 ? "FAIR — "+revisit :
+    const msg = score===4 ? "PERFECT – EXPERT LEVEL" :
+                score>=3 ? "SOLID – "+revisit+" AND YOU'RE THERE" :
+                score>=2 ? "FAIR – "+revisit :
                 "WORTH A REPLAY";
     document.getElementById('scoremsg').textContent = msg;
     document.getElementById('stat-score').textContent = score + '/4';
@@ -651,7 +651,7 @@
   function shareScore(){
     const grid = results.map(r=>r?'🟩':'🟥').join('');
     const time = t0 ? fmtTime(Date.now()-t0) : '';
-    const txt = `S1 · E01 · Card schemes — ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.\npaiement-decrypte.fr/en/`;
+    const txt = `S1 · E01 · Card schemes – ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.\npaiement-decrypte.fr/en/`;
     const btn = document.getElementById('sharebtn');
     const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     if(isMobile && navigator.share){
@@ -662,7 +662,7 @@
       if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(txt).catch(()=>{});
       }
-      btn.textContent = 'Copied ✓ — your LinkedIn post is ready';
+      btn.textContent = 'Copied ✓ – your LinkedIn post is ready';
       setTimeout(()=>btn.textContent='Share my score', 3000);
       window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
     }
@@ -675,10 +675,10 @@
       var el = document.getElementById('ep-signup-ok');
       el.textContent = ok
         ? 'Almost there! Confirm via the email we just sent.'
-        : (msg || 'Something went wrong — please try again.');
+        : (msg || 'Something went wrong – please try again.');
       el.style.color = ok ? '' : '#E85C4A';
       el.classList.add('show');
-      if(ok) PDT.track('subscribe_ok'); // the fact a signup happened — never the email itself
+      if(ok) PDT.track('subscribe_ok'); // the fact a signup happened – never the email itself
     });
   }
 

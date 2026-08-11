@@ -1,7 +1,7 @@
 /**
- * Paiement Décrypté — widget d'assistant conversationnel (façade)
+ * Paiement Décrypté – widget d'assistant conversationnel (façade)
  * -----------------------------------------------------------------
- * Fichier unique, autonome, sans dépendance — cohérent avec la doctrine
+ * Fichier unique, autonome, sans dépendance – cohérent avec la doctrine
  * du site ("un outil/composant = un fichier"). S'intègre en une ligne :
  *
  *   <script src="assets/agent-widget.js" data-api-url="https://paiement-decrypte-agent.TON-SOUS-DOMAINE.workers.dev/api/chat"></script>
@@ -10,7 +10,7 @@
  * (typiquement outils/emv-parser.html). Le script s'auto-monte : rien
  * d'autre à faire côté HTML.
  *
- * Reprend les tokens visuels du site (couleurs, polices) — aucune
+ * Reprend les tokens visuels du site (couleurs, polices) – aucune
  * dépendance à un projet tiers.
  */
 (function () {
@@ -19,7 +19,7 @@
   const scriptTag = document.currentScript;
   const API_URL = scriptTag && scriptTag.getAttribute('data-api-url');
   if (!API_URL) {
-    console.warn('[agent-widget] data-api-url manquant sur la balise <script> — widget non initialisé.');
+    console.warn('[agent-widget] data-api-url manquant sur la balise <script> – widget non initialisé.');
     return;
   }
 
@@ -100,7 +100,7 @@
       <button class="pd-agent-close" aria-label="Fermer">✕</button>
     </div>
     <div class="pd-agent-msgs" id="pd-agent-msgs">
-      <div class="pd-agent-intro">Pose une question sur un tag EMV, une notion de paiement liée, ou ce que tu viens de voir dans l'outil. Réponses générées automatiquement — vérifie les points sensibles.</div>
+      <div class="pd-agent-intro">Pose une question sur un tag EMV, une notion de paiement liée, ou ce que tu viens de voir dans l'outil. Réponses générées automatiquement – vérifie les points sensibles.</div>
     </div>
     <form class="pd-agent-form" id="pd-agent-form">
       <textarea class="pd-agent-input" id="pd-agent-input" rows="1" placeholder="Écris ta question…" maxlength="2000"></textarea>
