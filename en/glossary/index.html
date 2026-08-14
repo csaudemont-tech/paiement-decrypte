@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EMV glossary – every chip tag, explained | Paiement Décrypté</title>
+<meta name="description" content="The EMV data dictionary: what each tag is for, what it changes in a transaction, and where you will actually meet it. Written from the field.">
+<link rel="canonical" href="https://paiement-decrypte.fr/en/glossary/">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/glossary/">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/lexique/">
+<link rel="icon" href="/assets/favicon.svg?v=42d12093" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="EMV glossary – every chip tag, explained | Paiement Décrypté">
+<meta property="og:description" content="The EMV data dictionary: what each tag is for, what it changes in a transaction, and where you will actually meet it. Written from the field.">
+<meta property="og:url" content="https://paiement-decrypte.fr/en/glossary/">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png?v=41c0b62d">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{
+  --paper:#F2F4F8; --ink:#0E1B2C; --cobalt:#1F4FD8; --mint:#17B587; --coral:#E85C4A;
+  --ink-60:rgba(14,27,44,.62); --ink-12:rgba(14,27,44,.12); --ink-06:rgba(14,27,44,.06);
+  --radius:14px; 
+}
+@font-face{font-family:'Bricolage Grotesque';src:url('/assets/fonts/bricolage-grotesque-var.woff2?v=11f6ab2d') format('woff2');font-weight:200 800;font-display:swap}
+@font-face{font-family:'Instrument Sans';src:url('/assets/fonts/instrument-sans-var.woff2?v=adbdfd9a') format('woff2');font-weight:400 700;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('/assets/fonts/jetbrains-mono-var.woff2?v=e7277e71') format('woff2');font-weight:400 700;font-display:swap}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{width:100%;max-width:800px;margin:0 auto;padding:0 20px}
+a{color:var(--cobalt);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--cobalt);outline-offset:2px}
+h1,h2,h3{font-family:'Bricolage Grotesque',Georgia,serif;font-weight:700;letter-spacing:-.02em;line-height:1.15;margin:0}
+code,.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+
+/* masthead */
+.top{border-bottom:1px solid var(--ink-12);background:var(--paper);position:sticky;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;gap:14px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:700}
+.brand img{width:26px;height:26px;display:block}
+.brand span{font-family:'Bricolage Grotesque',serif;font-size:17px}
+.top nav{margin-left:auto;display:flex;gap:16px;font-size:14px}
+.top nav a{color:var(--ink-60);text-decoration:none}
+.top nav a:hover{color:var(--cobalt)}
+
+/* hero */
+.hero{padding:44px 0 26px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt);margin:0 0 10px}
+.hero h1{font-size:clamp(30px,6vw,46px)}
+.hero p{color:var(--ink-60);margin:14px 0 0;max-width:62ch}
+.count{margin-top:18px;font-size:14px;color:var(--ink-60)}
+.count b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* controls */
+.controls{position:sticky;top:60px;z-index:15;background:var(--paper);
+  padding:14px 0 12px;border-bottom:1px solid var(--ink-12);margin-bottom:8px}
+.controls .row{display:flex;gap:10px;flex-wrap:wrap}
+.field{flex:1 1 260px;display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-60)}
+input[type=search],select{width:100%;padding:11px 13px;font:inherit;font-size:15px;color:var(--ink);
+  background:#fff;border:1px solid var(--ink-12);border-radius:10px}
+input[type=search]::placeholder{color:rgba(14,27,44,.38)}
+
+/* entries */
+.entry{padding:22px 0;border-bottom:1px solid var(--ink-12);scroll-margin-top:150px}
+.entry:target{background:rgba(31,79,216,.05);box-shadow:inset 3px 0 0 var(--cobalt);
+  padding-left:14px;margin-left:-14px;border-radius:0 8px 8px 0}
+.entry h2{font-size:20px;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.entry h2 .id{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;
+  color:var(--cobalt);background:rgba(31,79,216,.09);padding:2px 8px;border-radius:6px;letter-spacing:0}
+.fam{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-60);border:1px solid var(--ink-12);border-radius:999px;padding:2px 9px;margin-top:8px}
+.entry p.def{margin:12px 0 0}
+.entry .links{margin:12px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px}
+.entry .links span,.entry .links a{display:inline-flex;align-items:center;gap:6px}
+.entry .links .lbl{color:var(--ink-60)}
+.ref{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-60)}
+
+/* bits */
+details.bits{margin-top:14px;border:1px solid var(--ink-12);border-radius:10px;background:#fff}
+details.bits>summary{cursor:pointer;padding:10px 13px;font-size:14px;font-weight:600;list-style:none}
+details.bits>summary::-webkit-details-marker{display:none}
+details.bits>summary::before{content:'+';display:inline-block;width:16px;color:var(--cobalt);font-weight:700}
+details.bits[open]>summary::before{content:'\2212'}
+details.bits .inner{padding:0 13px 13px}
+.bitnote{font-size:13px;color:var(--ink-60);margin:0 0 10px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--ink-06);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);font-weight:700}
+td.pos{white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-60)}
+tr[data-level=bad] td.lv{color:var(--coral)}
+tr[data-level=warn] td.lv{color:#B06A00}
+tr[data-level=ok] td.lv{color:var(--mint)}
+
+/* annexes */
+.annex{padding:40px 0 10px}
+.annex h2{font-size:24px}
+.annex>p{color:var(--ink-60);max-width:62ch}
+.annex details{margin-top:14px;border:1px solid var(--ink-12);border-radius:10px;background:#fff}
+.annex summary{cursor:pointer;padding:12px 14px;font-weight:600;font-size:15px;list-style:none}
+.annex summary::-webkit-details-marker{display:none}
+.annex summary::before{content:'+';display:inline-block;width:18px;color:var(--cobalt);font-weight:700}
+.annex details[open] summary::before{content:'\2212'}
+.annex .inner{padding:0 14px 14px;overflow-x:auto}
+.annex .inner>p{color:var(--ink-60);max-width:70ch;font-size:14.5px;line-height:1.6;margin:0 0 12px}
+.annex .inner>p.note{margin:12px 0 0;font-size:13.5px;border-top:1px solid var(--ink-12);padding-top:10px}
+.annex td:first-child{font-family:'JetBrains Mono',monospace;font-size:13px;white-space:nowrap}
+
+/* cta + footer */
+.cta{margin:44px 0 0;padding:26px;background:var(--ink);color:#fff;border-radius:var(--radius)}
+.cta h2{font-size:22px;color:#fff}
+.cta p{color:rgba(255,255,255,.74);margin:10px 0 18px;max-width:52ch}
+.btn{display:inline-block;background:var(--mint);color:#04231a;font-weight:700;text-decoration:none;
+  padding:12px 20px;border-radius:10px;font-size:15px}
+footer{margin-top:40px;padding:26px 0 44px;border-top:1px solid var(--ink-12);
+  font-size:13px;color:var(--ink-60);display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center}
+footer a{color:var(--ink-60)}
+.empty{padding:34px 0;color:var(--ink-60);display:none}
+.empty.on{display:block}
+@media (max-width:560px){
+  body{font-size:16px}
+  .controls{top:60px}
+  .entry:target{padding-left:10px;margin-left:-10px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body data-ep="lexique-en">
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/en/">
+      <img src="/assets/favicon.svg?v=42d12093" alt="" width="26" height="26">
+      <span>Paiement Décrypté</span>
+    </a>
+    <nav>
+      <a href="/en/">Episodes</a>
+      <a href="/en/tools/">Tools</a>
+      <a href="https://paiement-decrypte.fr/lexique/">Français</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <script src="/assets/js/pd-toolbar.js?v=4f3e3237" data-tool="glossary"></script>
+    <section class="hero">
+      <p class="kicker">Reference</p>
+      <h1>EMV glossary</h1>
+      <p>The data a chip and a terminal exchange, term by term. Each entry says what the field is for, what it changes in a real transaction, and where you will run into it. Same source as the tools on this site – so a definition never exists in two versions.</p>
+      <p class="count" id="count" role="status" aria-live="polite"
+         data-one="term shown" data-many="terms shown"><b>82</b> terms shown</p>
+    </section>
+
+    <section class="controls" role="search">
+      <div class="row">
+        <div class="field">
+          <label for="q">Search a term</label>
+          <input type="search" id="q" placeholder="Tag, name, keyword… (e.g. 9F33, TVR, co-badging)" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="cat">Families</label>
+          <select id="cat">
+            <option value="">All families</option>
+            <option value="Cardholder">Cardholder</option>
+            <option value="Decision">Decision</option>
+            <option value="Identification">Identification</option>
+            <option value="Security">Security</option>
+            <option value="Structure">Structure</option>
+            <option value="Terminal">Terminal</option>
+            <option value="Transaction">Transaction</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div id="list">
+      <article class="entry" id="tag-4f" data-cat="Identification" data-search="4f aid, application identifier identification the aid identifies the payment application on the chip: the first 5 bytes (rid) designate the network (visa, mastercard, cb…), the rest specifies the product. a french co-badged card typically carries two aids: cb and visa or mastercard.">
+        <h2><span class="id">4F</span> AID, application identifier</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The AID identifies the payment application on the chip: the first 5 bytes (RID) designate the network (Visa, Mastercard, CB…), the rest specifies the product. A French co-badged card typically carries two AIDs: CB and Visa or Mastercard.</p>
+        <div class="links"><a href="/en/episodes/s1e01.html">Seen in episode : Visa, Mastercard, CB: what does a network actually do?</a>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-50" data-cat="Identification" data-search="50 application label identification the application name as the card offers it for display (e.g. &quot;cb&quot;, &quot;visa&quot;). this is the label a terminal shows when it asks the customer to choose between the brands on a co-badged card.">
+        <h2><span class="id">50</span> Application Label</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The application name as the card offers it for display (e.g. &quot;CB&quot;, &quot;VISA&quot;). This is the label a terminal shows when it asks the customer to choose between the brands on a co-badged card.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-57" data-cat="Identification" data-search="57 track 2 equivalent data identification reproduces the data from the old magnetic stripe: pan, expiry date, service code. separator &quot;d&quot;. present for compatibility with legacy systems, this is sensitive (pci) data: never paste a real capture here.">
+        <h2><span class="id">57</span> Track 2 Equivalent Data</h2>
+        <div class="fam">Identification</div>
+        <p class="def">Reproduces the data from the old magnetic stripe: PAN, expiry date, service code. Separator &quot;D&quot;. Present for compatibility with legacy systems, this is sensitive (PCI) data: never paste a real capture here.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5a" data-cat="Identification" data-search="5a pan, card number identification the card number encoded in bcd. sensitive pci data: in logs and tools it must always be masked or truncated (first 6 + last 4 digits at most).">
+        <h2><span class="id">5A</span> PAN, card number</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The card number encoded in BCD. Sensitive PCI data: in logs and tools it must always be masked or truncated (first 6 + last 4 digits at most).</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-61" data-cat="Structure" data-search="61 application template structure container for one directory entry: a candidate application (aid + label + priority). in the ppse of a co-badged card you&#39;ll see two 61 templates, one per brand. order and tag 87 decide priority.">
+        <h2><span class="id">61</span> Application Template</h2>
+        <div class="fam">Structure</div>
+        <p class="def">Container for one directory entry: a candidate application (AID + label + priority). In the PPSE of a co-badged card you&#39;ll see two 61 templates, one per brand. Order and tag 87 decide priority.</p>
+        <div class="links"><a href="/en/episodes/s1e01.html">Seen in episode : Visa, Mastercard, CB: what does a network actually do?</a>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-6f" data-cat="Structure" data-search="6f fci template, response to select structure the card&#39;s response to a select command: it announces the selected file (84) and its metadata (a5). this is the starting point of every emv transaction.">
+        <h2><span class="id">6F</span> FCI Template, response to SELECT</h2>
+        <div class="fam">Structure</div>
+        <p class="def">The card&#39;s response to a SELECT command: it announces the selected file (84) and its metadata (A5). This is the starting point of every EMV transaction.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-70" data-cat="Structure" data-search="70 record template structure generic wrapper for records read via read record: the card&#39;s application data (pan, dates, cvm lists, certificates…) live inside these records.">
+        <h2><span class="id">70</span> Record Template</h2>
+        <div class="fam">Structure</div>
+        <p class="def">Generic wrapper for records read via READ RECORD: the card&#39;s application data (PAN, dates, CVM lists, certificates…) live inside these records.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-71" data-cat="Security" data-search="71 issuer script template 1 security a command sent by the issuer to the card via the terminal, executed before the final generate ac: block the application, reset the pin try counter… this is the remote card-management channel.">
+        <h2><span class="id">71</span> Issuer Script Template 1</h2>
+        <div class="fam">Security</div>
+        <p class="def">A command sent by the issuer to the card via the terminal, executed before the final GENERATE AC: block the application, reset the PIN try counter… This is the remote card-management channel.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-72" data-cat="Security" data-search="72 issuer script template 2 security same principle as tag 71, but executed after the final generate ac.">
+        <h2><span class="id">72</span> Issuer Script Template 2</h2>
+        <div class="fam">Security</div>
+        <p class="def">Same principle as tag 71, but executed after the final GENERATE AC.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-77" data-cat="Structure" data-search="77 response template format 2 structure tlv-explicit response format, typically the response to generate ac: cryptogram (9f26), cryptogram type (9f27), atc (9f36), iad (9f10).">
+        <h2><span class="id">77</span> Response Template Format 2</h2>
+        <div class="fam">Structure</div>
+        <p class="def">TLV-explicit response format, typically the response to GENERATE AC: cryptogram (9F26), cryptogram type (9F27), ATC (9F36), IAD (9F10).</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-80" data-cat="Structure" data-search="80 response template format 1 structure compact response format: values are concatenated without tlv structure, in an order mandated by the command. classic beginner trap: it doesn&#39;t parse like tlv, the order comes from the spec.">
+        <h2><span class="id">80</span> Response Template Format 1</h2>
+        <div class="fam">Structure</div>
+        <p class="def">Compact response format: values are concatenated WITHOUT TLV structure, in an order mandated by the command. Classic beginner trap: it doesn&#39;t parse like TLV, the order comes from the spec.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-82" data-cat="Decision" data-search="82 aip, application interchange profile decision the card announces here what it can do: which offline authentications (sda/dda/cda), whether it supports cardholder verification, issuer authentication… the terminal adapts the whole transaction to this profile. 2 bytes of flags. sda supported (static authentication) dda supported (dynamic authentication) cardholder verification supported (cvm) terminal risk management to be performed issuer authentication supported on-device cardholder verification (cdcvm) supported cda supported (combined authentication) msd mode supported (contactless, legacy) relay resistance protocol supported (contactless, kernel 2)">
+        <h2><span class="id">82</span> AIP, Application Interchange Profile</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The card announces here what it can do: which offline authentications (SDA/DDA/CDA), whether it supports cardholder verification, issuer authentication… The terminal adapts the whole transaction to this profile. 2 bytes of flags.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, Annex C1 (+ Book C-2 Kernel 2 for byte 2)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+        <details class="bits">
+          <summary>What its bits carry (9)</summary>
+          <div class="inner">
+            <p class="bitnote">Bit labels – the detailed bit-by-bit explanation is coming in a later pass.</p>
+            <table><tbody>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 7</td><td class="lv">SDA supported (static authentication)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 6</td><td class="lv">DDA supported (dynamic authentication)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 5</td><td class="lv">Cardholder verification supported (CVM)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 4</td><td class="lv">Terminal risk management to be performed</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 3</td><td class="lv">Issuer authentication supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 2</td><td class="lv">On-device cardholder verification (CDCVM) supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 1</td><td class="lv">CDA supported (combined authentication)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 8</td><td class="lv">MSD mode supported (contactless, legacy)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 2</td><td class="lv">Relay resistance protocol supported (contactless, Kernel 2)</td></tr>
+            </tbody></table>
+          </div>
+        </details>
+      </article>
+
+      <article class="entry" id="tag-84" data-cat="Identification" data-search="84 df name, selected file name identification name of the selected directory or application. &quot;2pay.sys.ddf01&quot; = contactless selection directory (ppse); otherwise it&#39;s generally the aid of the chosen application.">
+        <h2><span class="id">84</span> DF Name, selected file name</h2>
+        <div class="fam">Identification</div>
+        <p class="def">Name of the selected directory or application. &quot;2PAY.SYS.DDF01&quot; = contactless selection directory (PPSE); otherwise it&#39;s generally the AID of the chosen application.</p>
+        <div class="links"><a href="/en/episodes/s1e01.html">Seen in episode : Visa, Mastercard, CB: what does a network actually do?</a>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-87" data-cat="Identification" data-search="87 application priority indicator identification one byte that settles two things in the application directory (each candidate application is listed there in an application template, tag 61): the high-order bit (b8) indicates whether explicit cardholder confirmation is required before selecting this application (1 = yes); the 4 low-order bits give the priority rank, from 1 (highest priority) to 15, with 0 meaning the issuer expresses no preference among several applications. on a co-badged card in france, the merchant can configure its display preference, but the customer keeps the right to choose the brand (ifr regulation, art. 8).">
+        <h2><span class="id">87</span> Application Priority Indicator</h2>
+        <div class="fam">Identification</div>
+        <p class="def">One byte that settles two things in the application directory (each candidate application is listed there in an Application Template, tag 61): the high-order bit (b8) indicates whether explicit cardholder confirmation is required before selecting this application (1 = yes); the 4 low-order bits give the priority rank, from 1 (highest priority) to 15, with 0 meaning the issuer expresses no preference among several applications. On a co-badged card in France, the merchant can configure its display preference, but the customer keeps the right to choose the brand (IFR regulation, art. 8).</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 1, §11.3.4</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-88" data-cat="Structure" data-search="88 sfi, short file identifier structure short identifier for the file where the directory&#39;s records are read. a plumbing detail of application selection, useful when stepping through a select pse by hand.">
+        <h2><span class="id">88</span> SFI, Short File Identifier</h2>
+        <div class="fam">Structure</div>
+        <p class="def">Short identifier for the file where the directory&#39;s records are read. A plumbing detail of application selection, useful when stepping through a SELECT PSE by hand.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-8a" data-cat="Decision" data-search="8a arc, authorisation response code decision the verdict from the authorisation circuit, 2 characters: 00 = approved, 05 = declined… the y1/z1/y3/z3 codes are generated by the terminal itself when the transaction is decided offline. don&#39;t confuse this with the cryptogram: the arc is the verdict, the cryptogram is the proof.">
+        <h2><span class="id">8A</span> ARC, Authorisation Response Code</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The verdict from the authorisation circuit, 2 characters: 00 = approved, 05 = declined… The Y1/Z1/Y3/Z3 codes are generated by the terminal itself when the transaction is decided offline. Don&#39;t confuse this with the cryptogram: the ARC is the verdict, the cryptogram is the proof.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-8c" data-cat="Decision" data-search="8c cdol1, card risk management dol 1 decision the card&#39;s shopping list for the first generate ac: which terminal tags (amount, tvr, date, nonce…) it requires, and in what order. the terminal concatenates them without tags, which is why you can&#39;t parse cdol data as tlv.">
+        <h2><span class="id">8C</span> CDOL1, Card Risk Management DOL 1</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The card&#39;s shopping list for the first GENERATE AC: which terminal tags (amount, TVR, date, nonce…) it requires, and in what order. The terminal concatenates them WITHOUT tags, which is why you can&#39;t parse CDOL data as TLV.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-8d" data-cat="Decision" data-search="8d cdol2, card risk management dol 2 decision same principle as cdol1, for the second generate ac (after the online authorisation result comes back): the card typically asks here for the arc and the issuer authentication results.">
+        <h2><span class="id">8D</span> CDOL2, Card Risk Management DOL 2</h2>
+        <div class="fam">Decision</div>
+        <p class="def">Same principle as CDOL1, for the second GENERATE AC (after the online authorisation result comes back): the card typically asks here for the ARC and the issuer authentication results.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-8e" data-cat="Cardholder" data-search="8e cvm list, cardholder verification methods list cardholder the cardholder verification policy, written into the card by the issuer: a sequence of &quot;method + condition&quot; rules evaluated in order. typical example in france: enciphered offline pin, else online pin, else signature.">
+        <h2><span class="id">8E</span> CVM List, cardholder verification methods list</h2>
+        <div class="fam">Cardholder</div>
+        <p class="def">The cardholder verification policy, written into the card by the issuer: a sequence of &quot;method + condition&quot; rules evaluated in order. Typical example in France: enciphered offline PIN, else online PIN, else signature.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, Annex C3</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-8f" data-cat="Security" data-search="8f ca public key index security index of the certificate authority&#39;s public key (per network) that the terminal must use to walk up the certificate chain. if the terminal doesn&#39;t have this key in store, offline authentication fails, the corresponding tvr bit is set.">
+        <h2><span class="id">8F</span> CA Public Key Index</h2>
+        <div class="fam">Security</div>
+        <p class="def">Index of the certificate authority&#39;s public key (per network) that the terminal must use to walk up the certificate chain. If the terminal doesn&#39;t have this key in store, offline authentication fails, the corresponding TVR bit is set.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-90" data-cat="Security" data-search="90 issuer public key certificate security certificate for the issuer&#39;s public key, signed by the network&#39;s ca. the first link in the offline trust chain: ca → issuer → card.">
+        <h2><span class="id">90</span> Issuer Public Key Certificate</h2>
+        <div class="fam">Security</div>
+        <p class="def">Certificate for the issuer&#39;s public key, signed by the network&#39;s CA. The first link in the offline trust chain: CA → issuer → card.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-91" data-cat="Security" data-search="91 issuer authentication data security data returned by the issuer (arpc + code) letting the card verify that the authorisation response genuinely came from it, authentication in the other direction.">
+        <h2><span class="id">91</span> Issuer Authentication Data</h2>
+        <div class="fam">Security</div>
+        <p class="def">Data returned by the issuer (ARPC + code) letting the card verify that the authorisation response genuinely came from it, authentication in the other direction.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-92" data-cat="Security" data-search="92 issuer public key remainder security the remainder of the issuer&#39;s public key that didn&#39;t fit in certificate 90. concatenated to reconstruct the full key.">
+        <h2><span class="id">92</span> Issuer Public Key Remainder</h2>
+        <div class="fam">Security</div>
+        <p class="def">The remainder of the issuer&#39;s public key that didn&#39;t fit in certificate 90. Concatenated to reconstruct the full key.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-93" data-cat="Security" data-search="93 signed static application data security the card&#39;s static data signed by the issuer, the core of sda. weak by design (replayable): this is why sda was superseded by dda/cda.">
+        <h2><span class="id">93</span> Signed Static Application Data</h2>
+        <div class="fam">Security</div>
+        <p class="def">The card&#39;s static data signed by the issuer, the core of SDA. Weak by design (replayable): this is why SDA was superseded by DDA/CDA.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-94" data-cat="Structure" data-search="94 afl, application file locator structure the card tells the terminal which records to read (file, range, and which ones take part in offline authentication). read in groups of 4 bytes: sfi, first record, last record, number of records covered by signature.">
+        <h2><span class="id">94</span> AFL, Application File Locator</h2>
+        <div class="fam">Structure</div>
+        <p class="def">The card tells the terminal which records to read (file, range, and which ones take part in offline authentication). Read in groups of 4 bytes: SFI, first record, last record, number of records covered by signature.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-95" data-cat="Decision" data-search="95 tvr, terminal verification results decision the terminal&#39;s logbook: 5 bytes of flags, each recording a check that failed or an event (failed authentication, expired card, floor limit exceeded…). cross-referenced with the tac/iac thresholds, this is what decides whether the transaction goes offline, online, or gets declined. the single most valuable tag in a transaction log. offline data authentication not performed sda failed (static authentication) icc data missing card on terminal exception file dda failed (dynamic authentication) cda failed (combined authentication) icc and terminal have different application versions expired application application not yet effective (future effective date) requested service not allowed for card product new card (first use) cardholder verification was not successful unrecognised cvm pin try limit exceeded pin entry required but pin pad not present or not working pin entry required, pin pad present, but pin was not entered online pin entered transaction exceeds floor limit lower consecutive offline limit exceeded upper consecutive offline limit exceeded transaction selected randomly for online processing merchant forced transaction online default tdol used issuer authentication failed script processing failed before final generate ac script processing failed after final generate ac">
+        <h2><span class="id">95</span> TVR, Terminal Verification Results</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The terminal&#39;s logbook: 5 bytes of flags, each recording a check that failed or an event (failed authentication, expired card, floor limit exceeded…). Cross-referenced with the TAC/IAC thresholds, THIS is what decides whether the transaction goes offline, online, or gets declined. The single most valuable tag in a transaction log.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, Annex C5</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+        <details class="bits">
+          <summary>What its bits carry (26)</summary>
+          <div class="inner">
+            <p class="bitnote">Bit labels – the detailed bit-by-bit explanation is coming in a later pass.</p>
+            <table><tbody>
+            <tr data-level="warn"><td class="pos">Byte 1 · bit 8</td><td class="lv">Offline data authentication not performed</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 1 · bit 7</td><td class="lv">SDA failed (static authentication)</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 1 · bit 6</td><td class="lv">ICC data missing</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 1 · bit 5</td><td class="lv">Card on terminal exception file</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 1 · bit 4</td><td class="lv">DDA failed (dynamic authentication)</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 1 · bit 3</td><td class="lv">CDA failed (combined authentication)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 8</td><td class="lv">ICC and terminal have different application versions</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 2 · bit 7</td><td class="lv">Expired application</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 2 · bit 6</td><td class="lv">Application not yet effective (future effective date)</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 2 · bit 5</td><td class="lv">Requested service not allowed for card product</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 4</td><td class="lv">New card (first use)</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 3 · bit 8</td><td class="lv">Cardholder verification was not successful</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 3 · bit 7</td><td class="lv">Unrecognised CVM</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 3 · bit 6</td><td class="lv">PIN Try Limit exceeded</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 3 · bit 5</td><td class="lv">PIN entry required but PIN pad not present or not working</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 3 · bit 4</td><td class="lv">PIN entry required, PIN pad present, but PIN was not entered</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 3</td><td class="lv">Online PIN entered</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 8</td><td class="lv">Transaction exceeds floor limit</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 4 · bit 7</td><td class="lv">Lower consecutive offline limit exceeded</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 4 · bit 6</td><td class="lv">Upper consecutive offline limit exceeded</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 5</td><td class="lv">Transaction selected randomly for online processing</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 4</td><td class="lv">Merchant forced transaction online</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 8</td><td class="lv">Default TDOL used</td></tr>
+            <tr data-level="bad"><td class="pos">Byte 5 · bit 7</td><td class="lv">Issuer authentication failed</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 5 · bit 6</td><td class="lv">Script processing failed before final GENERATE AC</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 5 · bit 5</td><td class="lv">Script processing failed after final GENERATE AC</td></tr>
+            </tbody></table>
+          </div>
+        </details>
+      </article>
+
+      <article class="entry" id="tag-97" data-cat="Structure" data-search="97 tdol, transaction certificate dol structure list of data to include in the tc hash calculation. rare in practice, hence the tvr&#39;s &quot;default tdol used&quot; bit.">
+        <h2><span class="id">97</span> TDOL, Transaction Certificate DOL</h2>
+        <div class="fam">Structure</div>
+        <p class="def">List of data to include in the TC Hash calculation. Rare in practice, hence the TVR&#39;s &quot;default TDOL used&quot; bit.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-98" data-cat="Security" data-search="98 tc hash value security a hash of the transaction data, little used in modern deployments.">
+        <h2><span class="id">98</span> TC Hash Value</h2>
+        <div class="fam">Security</div>
+        <p class="def">A hash of the transaction data, little used in modern deployments.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-99" data-cat="Cardholder" data-search="99 transaction pin data cardholder the pin, enciphered in transit to the card for offline verification. must never appear in the clear in a log.">
+        <h2><span class="id">99</span> Transaction PIN Data</h2>
+        <div class="fam">Cardholder</div>
+        <p class="def">The PIN, enciphered in transit to the card for offline verification. Must NEVER appear in the clear in a log.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9a" data-cat="Transaction" data-search="9a transaction date transaction date of the transaction on the terminal side (yymmdd). feeds into the cryptogram calculation, an inconsistent date and the cryptogram no longer verifies.">
+        <h2><span class="id">9A</span> Transaction Date</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">Date of the transaction on the terminal side (YYMMDD). Feeds into the cryptogram calculation, an inconsistent date and the cryptogram no longer verifies.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9b" data-cat="Decision" data-search="9b tsi, transaction status information decision tvr&#39;s companion: which steps were attempted (authentication, cardholder verification, scripts…). the tvr says &quot;what went wrong&quot;, the tsi says &quot;what was done&quot;. read the two together. offline data authentication performed cardholder verification performed card risk management performed issuer authentication performed terminal risk management performed issuer script processing performed">
+        <h2><span class="id">9B</span> TSI, Transaction Status Information</h2>
+        <div class="fam">Decision</div>
+        <p class="def">TVR&#39;s companion: which steps were ATTEMPTED (authentication, cardholder verification, scripts…). The TVR says &quot;what went wrong&quot;, the TSI says &quot;what was done&quot;. Read the two together.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, Annex C6</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+        <details class="bits">
+          <summary>What its bits carry (6)</summary>
+          <div class="inner">
+            <p class="bitnote">Bit labels – the detailed bit-by-bit explanation is coming in a later pass.</p>
+            <table><tbody>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 8</td><td class="lv">Offline data authentication performed</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 7</td><td class="lv">Cardholder verification performed</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 6</td><td class="lv">Card risk management performed</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 5</td><td class="lv">Issuer authentication performed</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 4</td><td class="lv">Terminal risk management performed</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 3</td><td class="lv">Issuer script processing performed</td></tr>
+            </tbody></table>
+          </div>
+        </details>
+      </article>
+
+      <article class="entry" id="tag-9c" data-cat="Transaction" data-search="9c transaction type transaction type of operation (iso 8583 processing code): 00 = purchase, 01 = cash withdrawal, 09 = purchase with cashback, 20 = refund…">
+        <h2><span class="id">9C</span> Transaction Type</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">Type of operation (ISO 8583 processing code): 00 = purchase, 01 = cash withdrawal, 09 = purchase with cashback, 20 = refund…</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9d" data-cat="Structure" data-search="9d ddf name structure name of a directory file for directory-based selection (the legacy pse method).">
+        <h2><span class="id">9D</span> DDF Name</h2>
+        <div class="fam">Structure</div>
+        <p class="def">Name of a directory file for directory-based selection (the legacy PSE method).</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-a5" data-cat="Structure" data-search="a5 fci proprietary template structure the &quot;metadata&quot; part of the select response: labels, priority, pdol, proprietary data (bf0c). this is where a co-badged card lists its applications.">
+        <h2><span class="id">A5</span> FCI Proprietary Template</h2>
+        <div class="fam">Structure</div>
+        <p class="def">The &quot;metadata&quot; part of the SELECT response: labels, priority, PDOL, proprietary data (BF0C). This is where a co-badged card lists its applications.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f20" data-cat="Identification" data-search="5f20 cardholder name identification the cardholder&#39;s name as embossed. often filled with generic values on recent cards (&quot;/&quot; or spaces) to limit exposure of personal data.">
+        <h2><span class="id">5F20</span> Cardholder Name</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The cardholder&#39;s name as embossed. Often filled with generic values on recent cards (&quot;/&quot; or spaces) to limit exposure of personal data.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f24" data-cat="Identification" data-search="5f24 application expiration date identification the application&#39;s expiry date (yymmdd). this is what the terminal compares against today&#39;s date, the tvr&#39;s &quot;expired application&quot; bit comes from this check.">
+        <h2><span class="id">5F24</span> Application Expiration Date</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The application&#39;s expiry date (YYMMDD). This is what the terminal compares against today&#39;s date, the TVR&#39;s &quot;expired application&quot; bit comes from this check.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f25" data-cat="Identification" data-search="5f25 application effective date identification start-of-validity date (yymmdd). a card used before this date triggers the tvr&#39;s &quot;application not yet effective&quot; bit.">
+        <h2><span class="id">5F25</span> Application Effective Date</h2>
+        <div class="fam">Identification</div>
+        <p class="def">Start-of-validity date (YYMMDD). A card used before this date triggers the TVR&#39;s &quot;application not yet effective&quot; bit.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f28" data-cat="Identification" data-search="5f28 issuer country code identification country of the issuing bank (iso 3166 numeric). used in particular to distinguish domestic from international transactions, which changes interchange and routing rules.">
+        <h2><span class="id">5F28</span> Issuer Country Code</h2>
+        <div class="fam">Identification</div>
+        <p class="def">Country of the issuing bank (ISO 3166 numeric). Used in particular to distinguish domestic from international transactions, which changes interchange and routing rules.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">ISO 3166-1 numeric (table generated via pycountry/CLDR)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f2a" data-cat="Transaction" data-search="5f2a transaction currency code transaction currency of the transaction (iso 4217 numeric). 0978 = euro. if it differs from the card&#39;s currency, you&#39;re in dynamic currency conversion (dcc) territory.">
+        <h2><span class="id">5F2A</span> Transaction Currency Code</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">Currency of the transaction (ISO 4217 numeric). 0978 = euro. If it differs from the card&#39;s currency, you&#39;re in dynamic currency conversion (DCC) territory.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">ISO 4217 numeric (table generated via pycountry/CLDR)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f2d" data-cat="Identification" data-search="5f2d language preference identification the cardholder&#39;s preferred languages (iso 639 codes), in order of preference. this tag is why a terminal shows &quot;saisissez votre code&quot; rather than &quot;enter pin&quot; to a french cardholder.">
+        <h2><span class="id">5F2D</span> Language Preference</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The cardholder&#39;s preferred languages (ISO 639 codes), in order of preference. This tag is why a terminal shows &quot;SAISISSEZ VOTRE CODE&quot; rather than &quot;ENTER PIN&quot; to a French cardholder.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f30" data-cat="Identification" data-search="5f30 service code identification a service code inherited from magnetic stripes (iso/iec 7813): interchange conditions, authorisation restrictions, pin requirements. the chip has its own controls, but this code is still read by legacy systems.">
+        <h2><span class="id">5F30</span> Service Code</h2>
+        <div class="fam">Identification</div>
+        <p class="def">A service code inherited from magnetic stripes (ISO/IEC 7813): interchange conditions, authorisation restrictions, PIN requirements. The chip has its own controls, but this code is still read by legacy systems.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">ISO/IEC 7813 (magnetic stripes)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f34" data-cat="Identification" data-search="5f34 pan sequence number identification distinguishes multiple cards carrying the same pan (reissue, primary/secondary card). essential on the issuer side to look up the card&#39;s correct cryptographic keys.">
+        <h2><span class="id">5F34</span> PAN Sequence Number</h2>
+        <div class="fam">Identification</div>
+        <p class="def">Distinguishes multiple cards carrying the same PAN (reissue, primary/secondary card). Essential on the issuer side to look up the card&#39;s correct cryptographic keys.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-5f36" data-cat="Transaction" data-search="5f36 transaction currency exponent transaction number of decimal places for the transaction currency (2 for the euro: amounts travel in cents).">
+        <h2><span class="id">5F36</span> Transaction Currency Exponent</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">Number of decimal places for the transaction currency (2 for the euro: amounts travel in cents).</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f02" data-cat="Transaction" data-search="9f02 amount, authorised transaction transaction amount in bcd, in the currency&#39;s smallest unit (cents for the euro). 000000010000 = 100.00. the amount is part of the data signed inside the cryptogram.">
+        <h2><span class="id">9F02</span> Amount, Authorised</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">Transaction amount in BCD, in the currency&#39;s smallest unit (cents for the euro). 000000010000 = 100.00. The amount is part of the data signed inside the cryptogram.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f03" data-cat="Transaction" data-search="9f03 amount, other transaction a second amount, distinct from the main amount (9f02), whose exact meaning depends on terminal/issuer context: most often a cashback amount, but sometimes a service fee or a tip. zero in the vast majority of french transactions.">
+        <h2><span class="id">9F03</span> Amount, Other</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">A second amount, distinct from the main amount (9F02), whose exact meaning depends on terminal/issuer context: most often a cashback amount, but sometimes a service fee or a tip. Zero in the vast majority of French transactions.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f06" data-cat="Identification" data-search="9f06 aid (terminal) identification the aid as seen on the terminal side (during selection). same meaning as tag 4f on the card side.">
+        <h2><span class="id">9F06</span> AID (terminal)</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The AID as seen on the terminal side (during selection). Same meaning as tag 4F on the card side.</p>
+        <div class="links"><a href="/en/episodes/s1e01.html">Seen in episode : Visa, Mastercard, CB: what does a network actually do?</a>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f07" data-cat="Decision" data-search="9f07 application usage control decision usage restrictions set by the issuer: is the card valid abroad? at atms? for cashback? the terminal checks these against context, a disallowed use sets the tvr&#39;s &quot;service not allowed&quot; bit.">
+        <h2><span class="id">9F07</span> Application Usage Control</h2>
+        <div class="fam">Decision</div>
+        <p class="def">Usage restrictions set by the issuer: is the card valid abroad? at ATMs? for cashback? The terminal checks these against context, a disallowed use sets the TVR&#39;s &quot;service not allowed&quot; bit.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f08" data-cat="Identification" data-search="9f08 application version number (card) identification version of the application spec supported by the card. compared against the terminal&#39;s (9f09), a mismatch sets a tvr bit, generally without blocking the transaction.">
+        <h2><span class="id">9F08</span> Application Version Number (card)</h2>
+        <div class="fam">Identification</div>
+        <p class="def">Version of the application spec supported by the card. Compared against the terminal&#39;s (9F09), a mismatch sets a TVR bit, generally without blocking the transaction.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f09" data-cat="Terminal" data-search="9f09 application version number (terminal) terminal version of the application spec on the terminal kernel side.">
+        <h2><span class="id">9F09</span> Application Version Number (terminal)</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">Version of the application spec on the terminal kernel side.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f0a" data-cat="Identification" data-search="9f0a asrpd, application selection registered proprietary data identification an identifier registered with emvco (spec bulletin 175) letting a market or issuer expose a proprietary feature during application selection. the content depends on the entity that registered the id, not decodable without their documentation.">
+        <h2><span class="id">9F0A</span> ASRPD, Application Selection Registered Proprietary Data</h2>
+        <div class="fam">Identification</div>
+        <p class="def">An identifier registered with EMVCo (Spec Bulletin 175) letting a market or issuer expose a proprietary feature during application selection. The content depends on the entity that registered the ID, not decodable without their documentation.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMVCo Specification Bulletin 175 (ASRPD)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f0d" data-cat="Decision" data-search="9f0d iac, default decision the issuer&#39;s fallback thresholds: if the transaction should have gone online but the terminal can&#39;t (offline), these bits say what to decline. read as a mask applied to the tvr.">
+        <h2><span class="id">9F0D</span> IAC, Default</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The issuer&#39;s fallback thresholds: if the transaction should have gone online but the terminal can&#39;t (offline), these bits say what to decline. Read as a mask applied to the TVR.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, §10.7 (Terminal Action Analysis)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f0e" data-cat="Decision" data-search="9f0e iac, denial decision the issuer&#39;s hard-decline thresholds: any bit shared between this mask and the tvr means an immediate offline decline, without even attempting to go online. a cautious issuer would put, say, &quot;expired card&quot; here.">
+        <h2><span class="id">9F0E</span> IAC, Denial</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The issuer&#39;s hard-decline thresholds: any bit shared between this mask and the TVR means an immediate offline decline, without even attempting to go online. A cautious issuer would put, say, &quot;expired card&quot; here.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, §10.7 (Terminal Action Analysis)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f0f" data-cat="Decision" data-search="9f0f iac, online decision the issuer&#39;s go-online thresholds: any bit shared with the tvr sends the transaction to online authorisation. in france almost all transactions go online anyway, so these masks matter most where offline is common.">
+        <h2><span class="id">9F0F</span> IAC, Online</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The issuer&#39;s go-online thresholds: any bit shared with the TVR sends the transaction to online authorisation. In France almost all transactions go online anyway, so these masks matter most where offline is common.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, §10.7 (Terminal Action Analysis)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f10" data-cat="Security" data-search="9f10 iad, issuer application data security issuer-proprietary data returned with the cryptogram: card risk management results (cvr), internal counters… the exact format depends on the network and application profile, the most &quot;black box&quot; tag in a generate ac response.">
+        <h2><span class="id">9F10</span> IAD, Issuer Application Data</h2>
+        <div class="fam">Security</div>
+        <p class="def">Issuer-proprietary data returned with the cryptogram: card risk management results (CVR), internal counters… The exact format depends on the network and application profile, the most &quot;black box&quot; tag in a GENERATE AC response.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f12" data-cat="Identification" data-search="9f12 application preferred name identification the application&#39;s preferred display name, possibly in a dedicated character set (9f11). takes precedence over tag 50 if the terminal can display it.">
+        <h2><span class="id">9F12</span> Application Preferred Name</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The application&#39;s preferred display name, possibly in a dedicated character set (9F11). Takes precedence over tag 50 if the terminal can display it.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f1a" data-cat="Terminal" data-search="9f1a terminal country code terminal country of the terminal (iso 3166). compared against the issuer country (5f28) to determine domestic vs international.">
+        <h2><span class="id">9F1A</span> Terminal Country Code</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">Country of the terminal (ISO 3166). Compared against the issuer country (5F28) to determine domestic vs international.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">ISO 3166-1 numeric (table generated via pycountry/CLDR)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f1e" data-cat="Terminal" data-search="9f1e ifd serial number terminal the reader&#39;s serial number. physically identifies the device in logs, data to anonymise before sharing any capture.">
+        <h2><span class="id">9F1E</span> IFD Serial Number</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">The reader&#39;s serial number. Physically identifies the device in logs, data to anonymise before sharing any capture.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f21" data-cat="Transaction" data-search="9f21 transaction time transaction local time of the transaction (hhmmss), a companion to tag 9a.">
+        <h2><span class="id">9F21</span> Transaction Time</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">Local time of the transaction (HHMMSS), a companion to tag 9A.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f24" data-cat="Identification" data-search="9f24 par, payment account reference identification a non-sensitive identifier (up to 29 alphanumeric characters) that links a tokenised pan (mobile wallet, virtual card) back to its original pan, without ever exposing that original pan. a given par stays stable across all tokens issued from the same physical card, which lets a merchant or issuer reconcile a physical-card payment with a wallet payment with zero pci exposure.">
+        <h2><span class="id">9F24</span> PAR, Payment Account Reference</h2>
+        <div class="fam">Identification</div>
+        <p class="def">A non-sensitive identifier (up to 29 alphanumeric characters) that links a tokenised PAN (mobile wallet, virtual card) back to its original PAN, without ever exposing that original PAN. A given PAR stays stable across all tokens issued from the same physical card, which lets a merchant or issuer reconcile a physical-card payment with a wallet payment with zero PCI exposure.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMVCo, Payment Account Reference (PAR), public specification now maintained by the networks</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f26" data-cat="Security" data-search="9f26 ac, application cryptogram security the cryptographic proof of the transaction: a mac computed by the chip with its secret keys. the exact list of data feeding this calculation isn&#39;t fixed: the card itself chooses it, transaction by transaction, via the cdol1 (8c) and cdol2 (8d) tags, and it almost always includes the amount, the date and the tvr. in a stream that contains an 8c or an 8d, open it: you&#39;ll see the exact list this card requested for this cryptogram. unforgeable without the card&#39;s key, the issuer verifies it to authenticate the transaction. its type (arqc/tc/aac) is given by tag 9f27.">
+        <h2><span class="id">9F26</span> AC, Application Cryptogram</h2>
+        <div class="fam">Security</div>
+        <p class="def">THE cryptographic proof of the transaction: a MAC computed by the chip with its secret keys. The exact list of data feeding this calculation isn&#39;t fixed: the card itself chooses it, transaction by transaction, via the CDOL1 (8C) and CDOL2 (8D) tags, and it almost always includes the amount, the date and the TVR. In a stream that contains an 8C or an 8D, open it: you&#39;ll see the exact list this card requested for this cryptogram. Unforgeable without the card&#39;s key, the issuer verifies it to authenticate the transaction. Its type (ARQC/TC/AAC) is given by tag 9F27.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f27" data-cat="Decision" data-search="9f27 cid, cryptogram information data decision the type of cryptogram returned by the card, i.e. its decision: aac = decline, tc = offline approval, arqc = &quot;ask the issuer&quot;. the card can be stricter than the terminal, never more lenient.">
+        <h2><span class="id">9F27</span> CID, Cryptogram Information Data</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The type of cryptogram returned by the card, i.e. its decision: AAC = decline, TC = offline approval, ARQC = &quot;ask the issuer&quot;. The card can be stricter than the terminal, never more lenient.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, §6.5.5 (CID)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f32" data-cat="Security" data-search="9f32 issuer public key exponent security public exponent of the issuer key (3 or 65537). together with certificate 90 and remainder 92, it lets you reconstruct the full public key.">
+        <h2><span class="id">9F32</span> Issuer Public Key Exponent</h2>
+        <div class="fam">Security</div>
+        <p class="def">Public exponent of the issuer key (3 or 65537). Together with certificate 90 and remainder 92, it lets you reconstruct the full public key.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f33" data-cat="Terminal" data-search="9f33 terminal capabilities terminal what the terminal can do, in 3 bytes: card entry modes, supported cvms, offline authentications. an atm and a restaurant&#39;s card terminal don&#39;t share the same profile. manual key entry (terminal keypad) magnetic stripe read contact chip read plaintext offline pin verified by the card enciphered pin verified online handwritten signature (paper) enciphered offline pin verified by the card no cvm required static authentication (sda) dynamic authentication (dda) card capture possible combined authentication (cda)">
+        <h2><span class="id">9F33</span> Terminal Capabilities</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">What the terminal can do, in 3 bytes: card entry modes, supported CVMs, offline authentications. An ATM and a restaurant&#39;s card terminal don&#39;t share the same profile.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 4, Annex A2</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+        <details class="bits">
+          <summary>What its bits carry (12)</summary>
+          <div class="inner">
+            <p class="bitnote">Bit labels – the detailed bit-by-bit explanation is coming in a later pass.</p>
+            <table><tbody>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 8</td><td class="lv">Manual key entry (terminal keypad)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 7</td><td class="lv">Magnetic stripe read</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 6</td><td class="lv">Contact chip read</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 8</td><td class="lv">Plaintext offline PIN verified by the card</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 7</td><td class="lv">Enciphered PIN verified online</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 6</td><td class="lv">Handwritten signature (paper)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 5</td><td class="lv">Enciphered offline PIN verified by the card</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 4</td><td class="lv">No CVM required</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 8</td><td class="lv">Static authentication (SDA)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 7</td><td class="lv">Dynamic authentication (DDA)</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 6</td><td class="lv">Card capture possible</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 4</td><td class="lv">Combined authentication (CDA)</td></tr>
+            </tbody></table>
+          </div>
+        </details>
+      </article>
+
+      <article class="entry" id="tag-9f34" data-cat="Cardholder" data-search="9f34 cvm results cardholder the result of cardholder verification: which method was applied (from cvm list 8e), under what condition, and whether it succeeded. an essential companion to the tvr for understanding a pin-related decline.">
+        <h2><span class="id">9F34</span> CVM Results</h2>
+        <div class="fam">Cardholder</div>
+        <p class="def">The result of cardholder verification: which method was applied (from CVM List 8E), under what condition, and whether it succeeded. An essential companion to the TVR for understanding a PIN-related decline.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 3, Annex C3 (CVM Results)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f35" data-cat="Terminal" data-search="9f35 terminal type terminal a 2-digit code that crosses two axes: who controls the terminal (financial institution, merchant, cardholder) and its environment (attended or not, ability to go online). the vast majority of attended merchant terminals in france fall in the 21-23 range; the exact value depending on offline capability depends on the acquirer contract.">
+        <h2><span class="id">9F35</span> Terminal Type</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">A 2-digit code that crosses two axes: who controls the terminal (financial institution, merchant, cardholder) and its environment (attended or not, ability to go online). The vast majority of attended merchant terminals in France fall in the 21-23 range; the exact value depending on offline capability depends on the acquirer contract.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f36" data-cat="Security" data-search="9f36 atc, application transaction counter security a counter incremented by the chip on every transaction. it stops an intercepted transaction from being replayed as-is: since it feeds into the cryptogram calculation, no two transactions ever produce the same one. an abnormal jump in atc is a fraud signal on the issuer side.">
+        <h2><span class="id">9F36</span> ATC, Application Transaction Counter</h2>
+        <div class="fam">Security</div>
+        <p class="def">A counter incremented by the chip on every transaction. It stops an intercepted transaction from being replayed as-is: since it feeds into the cryptogram calculation, no two transactions ever produce the same one. An abnormal jump in ATC is a fraud signal on the issuer side.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f37" data-cat="Security" data-search="9f37 unpredictable number security the terminal&#39;s nonce: randomness injected into the cryptogram calculation to prevent pre-computation and replay. a predictable un has already broken the security of entire terminal fleets, a classic audit point.">
+        <h2><span class="id">9F37</span> Unpredictable Number</h2>
+        <div class="fam">Security</div>
+        <p class="def">The terminal&#39;s nonce: randomness injected into the cryptogram calculation to prevent pre-computation and replay. A predictable UN has already broken the security of entire terminal fleets, a classic audit point.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f38" data-cat="Structure" data-search="9f38 pdol, processing options dol structure the list of terminal data the card wants to receive right from get processing options. same logic as the cdols: tag references, and the values then travel without structure.">
+        <h2><span class="id">9F38</span> PDOL, Processing Options DOL</h2>
+        <div class="fam">Structure</div>
+        <p class="def">The list of terminal data the card wants to receive right from GET PROCESSING OPTIONS. Same logic as the CDOLs: tag references, and the values then travel without structure.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f40" data-cat="Terminal" data-search="9f40 additional terminal capabilities terminal companion to tag 9f33: supported transaction types (cash, purchase, withdrawal…) and the terminal&#39;s display/entry capabilities. cash advance goods services cashback inquiry transfer payment administrative cash deposit numeric keys alphabetic and special-character keys command keys function keys print, attendant print, cardholder display, attendant display, cardholder code table 10 code table 9 code table 8 code table 7 code table 6 code table 5 code table 4 code table 3 code table 2 code table 1">
+        <h2><span class="id">9F40</span> Additional Terminal Capabilities</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">Companion to tag 9F33: supported transaction types (cash, purchase, withdrawal…) and the terminal&#39;s display/entry capabilities.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV 4.3 Book 4, Annex A3</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+        <details class="bits">
+          <summary>What its bits carry (27)</summary>
+          <div class="inner">
+            <p class="bitnote">Bit labels – the detailed bit-by-bit explanation is coming in a later pass.</p>
+            <table><tbody>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 8</td><td class="lv">Cash advance</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 7</td><td class="lv">Goods</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 6</td><td class="lv">Services</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 5</td><td class="lv">Cashback</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 4</td><td class="lv">Inquiry</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 3</td><td class="lv">Transfer</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 2</td><td class="lv">Payment</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 1</td><td class="lv">Administrative</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 8</td><td class="lv">Cash deposit</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 8</td><td class="lv">Numeric keys</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 7</td><td class="lv">Alphabetic and special-character keys</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 6</td><td class="lv">Command keys</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 5</td><td class="lv">Function keys</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 8</td><td class="lv">Print, attendant</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 7</td><td class="lv">Print, cardholder</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 6</td><td class="lv">Display, attendant</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 5</td><td class="lv">Display, cardholder</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 2</td><td class="lv">Code table 10</td></tr>
+            <tr data-level="info"><td class="pos">Byte 4 · bit 1</td><td class="lv">Code table 9</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 8</td><td class="lv">Code table 8</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 7</td><td class="lv">Code table 7</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 6</td><td class="lv">Code table 6</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 5</td><td class="lv">Code table 5</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 4</td><td class="lv">Code table 4</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 3</td><td class="lv">Code table 3</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 2</td><td class="lv">Code table 2</td></tr>
+            <tr data-level="info"><td class="pos">Byte 5 · bit 1</td><td class="lv">Code table 1</td></tr>
+            </tbody></table>
+          </div>
+        </details>
+      </article>
+
+      <article class="entry" id="tag-9f41" data-cat="Transaction" data-search="9f41 transaction sequence counter transaction transaction counter on the terminal side, the terminal&#39;s counterpart to the card&#39;s atc.">
+        <h2><span class="id">9F41</span> Transaction Sequence Counter</h2>
+        <div class="fam">Transaction</div>
+        <p class="def">Transaction counter on the terminal side, the terminal&#39;s counterpart to the card&#39;s ATC.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f42" data-cat="Identification" data-search="9f42 application currency code identification the card application&#39;s reference currency (the one used by its internal offline counters).">
+        <h2><span class="id">9F42</span> Application Currency Code</h2>
+        <div class="fam">Identification</div>
+        <p class="def">The card application&#39;s reference currency (the one used by its internal offline counters).</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">ISO 4217 numeric (table generated via pycountry/CLDR)</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f44" data-cat="Identification" data-search="9f44 application currency exponent identification position of the decimal separator for the application&#39;s currency (2 for the euro).">
+        <h2><span class="id">9F44</span> Application Currency Exponent</h2>
+        <div class="fam">Identification</div>
+        <p class="def">Position of the decimal separator for the application&#39;s currency (2 for the euro).</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f45" data-cat="Security" data-search="9f45 data authentication code security code produced by sda authentication, stored for use in dols. legacy, rare on modern cards.">
+        <h2><span class="id">9F45</span> Data Authentication Code</h2>
+        <div class="fam">Security</div>
+        <p class="def">Code produced by SDA authentication, stored for use in DOLs. Legacy, rare on modern cards.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f46" data-cat="Security" data-search="9f46 icc public key certificate security certificate for the card&#39;s public key, signed by the issuer. the last link in the ca → issuer → card chain, used by dda/cda.">
+        <h2><span class="id">9F46</span> ICC Public Key Certificate</h2>
+        <div class="fam">Security</div>
+        <p class="def">Certificate for the card&#39;s public key, signed by the issuer. The last link in the CA → issuer → card chain, used by DDA/CDA.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f47" data-cat="Security" data-search="9f47 icc public key exponent security public exponent of the card&#39;s key.">
+        <h2><span class="id">9F47</span> ICC Public Key Exponent</h2>
+        <div class="fam">Security</div>
+        <p class="def">Public exponent of the card&#39;s key.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f48" data-cat="Security" data-search="9f48 icc public key remainder security remainder of the card&#39;s public key that didn&#39;t fit in certificate 9f46.">
+        <h2><span class="id">9F48</span> ICC Public Key Remainder</h2>
+        <div class="fam">Security</div>
+        <p class="def">Remainder of the card&#39;s public key that didn&#39;t fit in certificate 9F46.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f4a" data-cat="Security" data-search="9f4a sda tag list security list of extra tags included in the statically signed data, in practice almost always the aip (82), to prevent it from being tampered with.">
+        <h2><span class="id">9F4A</span> SDA Tag List</h2>
+        <div class="fam">Security</div>
+        <p class="def">List of extra tags included in the statically signed data, in practice almost always the AIP (82), to prevent it from being tampered with.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f4b" data-cat="Security" data-search="9f4b signed dynamic application data security the dynamic signature produced by the card during dda/cda: it notably covers the terminal&#39;s nonce, proving the card is live and present, which sda could never prove.">
+        <h2><span class="id">9F4B</span> Signed Dynamic Application Data</h2>
+        <div class="fam">Security</div>
+        <p class="def">The dynamic signature produced by the card during DDA/CDA: it notably covers the terminal&#39;s nonce, proving the card is live and present, which SDA could never prove.</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f66" data-cat="Terminal" data-search="9f66 ttq, terminal transaction qualifiers terminal in contactless: the terminal announces to the card what it supports and requires (emv mode, online pin, signature, cdcvm…). the first negotiation of a tap. mag-stripe mode supported emv mode supported emv contact chip supported offline-only reader online pin supported signature supported offline data authentication for online authorizations supported online cryptogram required cvm required (contact chip) offline pin supported issuer update processing supported consumer device cvm supported">
+        <h2><span class="id">9F66</span> TTQ, Terminal Transaction Qualifiers</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">In contactless: the terminal announces to the card what it supports and requires (EMV mode, online PIN, signature, CDCVM…). The first negotiation of a tap.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">EMV Contactless Book A v2.11, Table 5-4 (Terminal Transaction Qualifiers), generic Entry Point baseline</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+        <details class="bits">
+          <summary>What its bits carry (12)</summary>
+          <div class="inner">
+            <p class="bitnote">Bit labels – the detailed bit-by-bit explanation is coming in a later pass.</p>
+            <table><tbody>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 8</td><td class="lv">Mag-stripe mode supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 6</td><td class="lv">EMV mode supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 5</td><td class="lv">EMV contact chip supported</td></tr>
+            <tr data-level="warn"><td class="pos">Byte 1 · bit 4</td><td class="lv">Offline-only reader</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 3</td><td class="lv">Online PIN supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 2</td><td class="lv">Signature supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 1 · bit 1</td><td class="lv">Offline Data Authentication for Online Authorizations supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 8</td><td class="lv">Online cryptogram required</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 7</td><td class="lv">CVM required</td></tr>
+            <tr data-level="info"><td class="pos">Byte 2 · bit 6</td><td class="lv">(Contact Chip) Offline PIN supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 8</td><td class="lv">Issuer Update Processing supported</td></tr>
+            <tr data-level="info"><td class="pos">Byte 3 · bit 7</td><td class="lv">Consumer Device CVM supported</td></tr>
+            </tbody></table>
+          </div>
+        </details>
+      </article>
+
+      <article class="entry" id="tag-9f6c" data-cat="Decision" data-search="9f6c ctq, card transaction qualifiers decision the card&#39;s response to the ttq in contactless: its own requirements (ask for online pin, fall back to contact…).">
+        <h2><span class="id">9F6C</span> CTQ, Card Transaction Qualifiers</h2>
+        <div class="fam">Decision</div>
+        <p class="def">The card&#39;s response to the TTQ in contactless: its own requirements (ask for online PIN, fall back to contact…).</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-9f6e" data-cat="Terminal" data-search="9f6e ffi, form factor indicator terminal outside the base emv spec: its meaning depends on the network. at visa, it&#39;s the form factor indicator, 4 bytes describing the payment form factor (card, mobile, wearable…) and its capabilities. at mastercard, the same tag carries third party data, a variable-length format (country, identifier, form factor type). the tool detects the format from the value&#39;s length and decodes both.">
+        <h2><span class="id">9F6E</span> FFI, Form Factor Indicator</h2>
+        <div class="fam">Terminal</div>
+        <p class="def">Outside the base EMV spec: its meaning depends on the network. At Visa, it&#39;s the Form Factor Indicator, 4 bytes describing the payment form factor (card, mobile, wearable…) and its capabilities. At Mastercard, the same tag carries Third Party Data, a variable-length format (country, identifier, form factor type). The tool detects the format from the value&#39;s length and decodes both.</p>
+        <div class="links"><span><span class="lbl">Spec reference :</span> <span class="ref">Outside the base spec, network-defined: Visa Payment Technology Standards Manual (FFI) and Mastercard M/Chip documentation (Third Party Data), public sources</span></span>
+          <a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+
+      <article class="entry" id="tag-bf0c" data-cat="Structure" data-search="bf0c fci issuer discretionary data structure the issuer&#39;s discretionary area within the fci, directory entries (61) live here, along with proprietary network or domestic tags (including some unpublished cb tags).">
+        <h2><span class="id">BF0C</span> FCI Issuer Discretionary Data</h2>
+        <div class="fam">Structure</div>
+        <p class="def">The issuer&#39;s discretionary area within the FCI, directory entries (61) live here, along with proprietary network or domestic tags (including some unpublished CB tags).</p>
+        <div class="links"><a href="/en/tools/tlv-stream/">Decode a real value</a></div>
+      </article>
+    </div>
+    <p class="empty" id="empty">No match. Try a tag number (9F33) or a word from the label.</p>
+
+    <section class="annex">
+      <h2>Reference tables</h2>
+      <p>They are here because people look them up constantly. Unless stated otherwise, they carry labels only, no explanation.</p>
+      
+      <details>
+        <summary>Application identifiers (AID) (45)</summary>
+        <div class="inner">
+          <p>An AID names the payment application the chip and the terminal are going to use. It is 5 to 16 bytes long and reads in two parts: the first 5 bytes are the RID, the application provider identifier, assigned by ANSI under ISO/IEC 7816-5; the rest is the PIX, free-form, chosen by the network to tell its products apart. A000000003 is Visa’s RID, 1010 the PIX for Visa debit or credit.</p>
+          <p>On a co-badged card – in France, CB plus Visa or Mastercard on roughly 77 of 110 million cards – the chip carries one application per brand, each with its own AID. The terminal intersects the card’s list with its own, and tag 87 ranks whatever is left, from 1, the highest priority, to 15.</p>
+          <p>A subtlety most explanations get wrong: the tag 87 bit meaning “cannot be selected without cardholder confirmation” only exists in contact. In contactless, the high bits are reserved and a value of 0 means the lowest priority, tied with 15 – selection there is fully deterministic, with no cardholder step foreseen by the specification. That is where the technology and the law part ways: article 8(6) of Regulation (EU) 2015/751 lets the merchant pre-set a priority brand in their own equipment, but forbids them from stopping the cardholder overriding it.</p>
+          <table>
+            <thead><tr><th>AID</th><th>RID</th><th>Network</th><th>Product</th><th>Evidence level</th></tr></thead>
+            <tbody>
+              <tr><td>A0000000031010</td><td>A000000003</td><td>Visa</td><td>Visa debit or credit</td><td>Specification or network</td></tr>
+              <tr><td>A0000000032010</td><td>A000000003</td><td>Visa</td><td>Visa Electron</td><td>Specification or network</td></tr>
+              <tr><td>A0000000032020</td><td>A000000003</td><td>Visa</td><td>V PAY (Europe only)</td><td>Specification or network</td></tr>
+              <tr><td>A0000000033010</td><td>A000000003</td><td>Visa</td><td>Visa Interlink (US debit)</td><td>Specification or network</td></tr>
+              <tr><td>A0000000038010</td><td>A000000003</td><td>Visa</td><td>Plus (ATM)</td><td>Specification or network</td></tr>
+              <tr><td>A0000000980840</td><td>A000000098</td><td>Visa</td><td>Visa U.S. Common Debit</td><td>Specification or network</td></tr>
+              <tr><td>A000000003101001</td><td>A000000003</td><td>Visa</td><td>Visa Credit (PIX extension)</td><td>Cross-checked</td></tr>
+              <tr><td>A000000003101002</td><td>A000000003</td><td>Visa</td><td>Visa Debit (PIX extension)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000041010</td><td>A000000004</td><td>Mastercard</td><td>Mastercard credit or debit</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000042203</td><td>A000000004</td><td>Mastercard</td><td>US Maestro, a.k.a. Mastercard U.S. Common Debit</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000043060</td><td>A000000004</td><td>Mastercard</td><td>Maestro (international debit)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000046000</td><td>A000000004</td><td>Mastercard</td><td>Cirrus (ATM only)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000048002</td><td>A000000004</td><td>Mastercard</td><td>Chip Authentication Program (CAP)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000049999</td><td>A000000004</td><td>Mastercard</td><td>Mastercard PayPass</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000050001</td><td>A000000005</td><td>Mastercard</td><td>Maestro UK (formerly Switch)</td><td>Cross-checked</td></tr>
+              <tr><td>A00000002501</td><td>A000000025</td><td>American Express</td><td>American Express (AEIPS, contact and contactless)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000421010</td><td>A000000042</td><td>CB</td><td>CB (Cartes Bancaires, French domestic scheme), credit or debit</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000422010</td><td>A000000042</td><td>CB</td><td>CB (Cartes Bancaires, French domestic scheme), debit</td><td>Cross-checked</td></tr>
+              <tr><td>A0000001523010</td><td>A000000152</td><td>Discover</td><td>Discover and Diners Club (D-PAS)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000001524010</td><td>A000000152</td><td>Discover</td><td>Discover U.S. Common Debit</td><td>Cross-checked</td></tr>
+              <tr><td>A0000003241010</td><td>A000000324</td><td>Discover</td><td>Discover ZIP</td><td>Cross-checked</td></tr>
+              <tr><td>A000000333010101</td><td>A000000333</td><td>UnionPay</td><td>UnionPay debit</td><td>Cross-checked</td></tr>
+              <tr><td>A000000333010102</td><td>A000000333</td><td>UnionPay</td><td>UnionPay credit</td><td>Cross-checked</td></tr>
+              <tr><td>A000000333010103</td><td>A000000333</td><td>UnionPay</td><td>UnionPay quasi-credit</td><td>Cross-checked</td></tr>
+              <tr><td>A000000333010106</td><td>A000000333</td><td>UnionPay</td><td>UnionPay electronic cash</td><td>Cross-checked</td></tr>
+              <tr><td>A000000333010108</td><td>A000000333</td><td>UnionPay</td><td>UnionPay U.S. Common Debit</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000651010</td><td>A000000065</td><td>JCB</td><td>JCB (J/Smart Credit)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000003591010028001</td><td>A000000359</td><td>girocard</td><td>girocard (Germany)</td><td>Cross-checked</td></tr>
+              <tr><td>D27600002545500100</td><td>D276000025</td><td>girocard</td><td>Geldkarte (Germany)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000001211010</td><td>A000000121</td><td>Dankort</td><td>Dankort (Denmark)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000001410001</td><td>A000000141</td><td>Bancomat</td><td>PagoBancomat (Italy)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000002771010</td><td>A000000277</td><td>Interac</td><td>Interac (Canada)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000005241010</td><td>A000000524</td><td>RuPay</td><td>RuPay (India)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000006581010</td><td>A000000658</td><td>Mir</td><td>Mir credit (Russia)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000006582010</td><td>A000000658</td><td>Mir</td><td>Mir debit (Russia)</td><td>Cross-checked</td></tr>
+              <tr><td>A00000038410</td><td>A000000384</td><td>eftpos</td><td>eftpos Savings (Australia)</td><td>Cross-checked</td></tr>
+              <tr><td>A00000038420</td><td>A000000384</td><td>eftpos</td><td>eftpos Cheque (Australia)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000003710001</td><td>A000000371</td><td>Verve</td><td>Verve (Nigeria)</td><td>Cross-checked</td></tr>
+              <tr><td>D5780000021010</td><td>D578000002</td><td>BankAxept</td><td>BankAxept (Norway)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000002281010</td><td>A000000228</td><td>SPAN</td><td>SPAN (Saudi Arabia), M/Chip</td><td>Cross-checked</td></tr>
+              <tr><td>A0000001544442</td><td>A000000154</td><td>Banricompras</td><td>Banricompras Débito (Brazil)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000000291010</td><td>A000000029</td><td>LINK</td><td>LINK (ATM, United Kingdom)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000004391010</td><td>A000000439</td><td>Exchange</td><td>The Exchange Network (ATM, United States and Canada)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000004360100</td><td>A000000436</td><td>Edenred</td><td>Ticket Restaurant (Belgium)</td><td>Cross-checked</td></tr>
+              <tr><td>A0000006200620</td><td>A000000620</td><td>DNA</td><td>Debit Network Alliance Shared Debit (United States)</td><td>Cross-checked</td></tr>
+            </tbody>
+          </table>
+          <p class="note">Every row carries its evidence level. To date, only Visa publishes its AIDs in a public document. For the other networks, values marked “cross-checked” come from several concordant public documents: licensed EMV test card sets, the U.S. Payments Forum, published domestic specifications. Any value carried by a single secondary source was dropped – which is why this table is shorter than the ones circulating elsewhere.</p>
+        </div>
+      </details>
+      
+      <details>
+        <summary>Registered application provider identifiers (RID) (27)</summary>
+        <div class="inner">
+          <p>The RID is the stable part of the AID: 5 bytes identifying the application provider, one per organisation. A RID starting with A is registered internationally; a RID starting with D is national.</p>
+          <table>
+            <thead><tr><th>RID</th><th>Holder</th><th>Region</th></tr></thead>
+            <tbody>
+              <tr><td>A000000003</td><td>Visa International</td><td>International</td></tr>
+              <tr><td>A000000098</td><td>Visa USA (US Common Debit)</td><td>United States</td></tr>
+              <tr><td>A000000004</td><td>Mastercard International</td><td>International</td></tr>
+              <tr><td>A000000005</td><td>Switch Card Services (Maestro UK)</td><td>United Kingdom</td></tr>
+              <tr><td>A000000025</td><td>American Express</td><td>International</td></tr>
+              <tr><td>A000000029</td><td>LINK Interchange Network</td><td>United Kingdom</td></tr>
+              <tr><td>A000000042</td><td>Groupement des Cartes Bancaires CB</td><td>France</td></tr>
+              <tr><td>A000000059</td><td>Zentraler Kreditausschuss (ZKA)</td><td>Germany</td></tr>
+              <tr><td>A000000065</td><td>JCB Co., Ltd.</td><td>Japan</td></tr>
+              <tr><td>A000000121</td><td>PBS Danmark (Dankort)</td><td>Denmark</td></tr>
+              <tr><td>A000000141</td><td>Consorzio Bancomat</td><td>Italy</td></tr>
+              <tr><td>A000000152</td><td>Diners Club International</td><td>International</td></tr>
+              <tr><td>A000000154</td><td>Banrisul</td><td>Brazil</td></tr>
+              <tr><td>A000000228</td><td>Saudi Arabian Monetary Agency (SPAN)</td><td>Saudi Arabia</td></tr>
+              <tr><td>A000000277</td><td>Interac Association</td><td>Canada</td></tr>
+              <tr><td>A000000324</td><td>Discover Financial Services</td><td>United States</td></tr>
+              <tr><td>A000000333</td><td>China UnionPay</td><td>China</td></tr>
+              <tr><td>A000000359</td><td>girocard – holder disputed across sources (Die Deutsche Kreditwirtschaft or EAPS)</td><td>Germany</td></tr>
+              <tr><td>A000000371</td><td>Verve / Interswitch</td><td>Nigeria</td></tr>
+              <tr><td>A000000384</td><td>eftpos / AusPayNet</td><td>Australia</td></tr>
+              <tr><td>A000000436</td><td>Edenred</td><td>Belgium</td></tr>
+              <tr><td>A000000439</td><td>ACCEL / The Exchange Network</td><td>United States and Canada</td></tr>
+              <tr><td>A000000524</td><td>RuPay / NPCI</td><td>India</td></tr>
+              <tr><td>A000000620</td><td>Debit Network Alliance</td><td>United States</td></tr>
+              <tr><td>A000000658</td><td>Mir / NSPK</td><td>Russia</td></tr>
+              <tr><td>D276000025</td><td>ZKA (girocard, Geldkarte)</td><td>Germany</td></tr>
+              <tr><td>D578000002</td><td>BankAxept</td><td>Norway</td></tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </details>
+      
+      <details>
+        <summary>Issuer response codes (ARC) (11)</summary>
+        <div class="inner">
+          
+          <table>
+            <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>51</td><td>Insufficient funds</td></tr>
+              <tr><td>54</td><td>Expired card</td></tr>
+              <tr><td>55</td><td>Incorrect PIN</td></tr>
+              <tr><td>00</td><td>Approved</td></tr>
+              <tr><td>01</td><td>Refer to card issuer (call)</td></tr>
+              <tr><td>02</td><td>Refer to card issuer, special conditions</td></tr>
+              <tr><td>05</td><td>Do not honour</td></tr>
+              <tr><td>Y1</td><td>Offline approved (the transaction did not go online)</td></tr>
+              <tr><td>Z1</td><td>Offline decline</td></tr>
+              <tr><td>Y3</td><td>Unable to go online, offline approved</td></tr>
+              <tr><td>Z3</td><td>Unable to go online, offline decline</td></tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </details>
+      
+      <details>
+        <summary>Cardholder verification methods (CVM) (9)</summary>
+        <div class="inner">
+          
+          <table>
+            <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>Fail CVM processing</td></tr>
+              <tr><td>1</td><td>Plaintext offline PIN, verified by the card</td></tr>
+              <tr><td>2</td><td>Online PIN (verified by the issuer)</td></tr>
+              <tr><td>3</td><td>Plaintext offline PIN + paper signature</td></tr>
+              <tr><td>4</td><td>Enciphered offline PIN, verified by the card</td></tr>
+              <tr><td>5</td><td>Enciphered offline PIN + paper signature</td></tr>
+              <tr><td>30</td><td>Paper signature</td></tr>
+              <tr><td>31</td><td>No CVM required</td></tr>
+              <tr><td>63</td><td>No CVM performed</td></tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </details>
+      
+      <details>
+        <summary>Transaction types (6)</summary>
+        <div class="inner">
+          
+          <table>
+            <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>17</td><td>Cash disbursement at a counter</td></tr>
+              <tr><td>20</td><td>Refund</td></tr>
+              <tr><td>30</td><td>Balance inquiry</td></tr>
+              <tr><td>00</td><td>Purchase</td></tr>
+              <tr><td>01</td><td>Cash withdrawal / cash advance</td></tr>
+              <tr><td>09</td><td>Purchase with cashback</td></tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </details>
+      
+      <details>
+        <summary>Terminal types (tag 9F35) (15)</summary>
+        <div class="inner">
+          
+          <table>
+            <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>11</td><td>Financial institution, attended, online only</td></tr>
+              <tr><td>12</td><td>Financial institution, attended, offline with online capability</td></tr>
+              <tr><td>13</td><td>Financial institution, attended, offline only</td></tr>
+              <tr><td>14</td><td>Financial institution, unattended, online only</td></tr>
+              <tr><td>15</td><td>Financial institution, unattended, offline with online capability</td></tr>
+              <tr><td>16</td><td>Financial institution, unattended, offline only</td></tr>
+              <tr><td>21</td><td>Merchant, attended, online only</td></tr>
+              <tr><td>22</td><td>Merchant, attended, offline with online capability</td></tr>
+              <tr><td>23</td><td>Merchant, attended, offline only</td></tr>
+              <tr><td>24</td><td>Merchant, unattended (self-service), online only</td></tr>
+              <tr><td>25</td><td>Merchant, unattended (self-service), offline with online capability</td></tr>
+              <tr><td>26</td><td>Merchant, unattended (self-service), offline only</td></tr>
+              <tr><td>34</td><td>Cardholder, personal terminal, online only</td></tr>
+              <tr><td>35</td><td>Cardholder, personal terminal, offline with online capability</td></tr>
+              <tr><td>36</td><td>Cardholder, personal terminal, offline only</td></tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </details>
+      
+      <details>
+        <summary>Cryptogram Information Data (tag 9F27) (4)</summary>
+        <div class="inner">
+          
+          <table>
+            <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>AAC</td><td>Declined by the card</td></tr>
+              <tr><td>TC</td><td>Offline approval</td></tr>
+              <tr><td>ARQC</td><td>Online authorisation requested</td></tr>
+              <tr><td>RFU/AAR</td><td>Reserved value</td></tr>
+            </tbody>
+          </table>
+          
+        </div>
+      </details>
+    </section>
+
+    <section class="cta">
+      <h2>One 5-minute episode a week</h2>
+      <p>The glossary answers “what is it”. The episodes answer “how does it actually work”.</p>
+      <a class="btn" href="/en/">See the episodes</a>
+    </section>
+
+    <footer>
+      <span>Generated from the site sources. A definition is fixed in exactly one place.</span>
+      <a href="#top">Back to top</a>
+    </footer>
+  </div>
+</main>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"DefinedTermSet","name":"EMV glossary","inLanguage":"en","url":"https://paiement-decrypte.fr/en/glossary/","hasDefinedTerm":[{"@type":"DefinedTerm","termCode":"4F","name":"4F – AID, application identifier","description":"The AID identifies the payment application on the chip: the first 5 bytes (RID) designate the network (Visa, Mastercard, CB…), the rest specifies the product. A French co-badged card typically carries two AIDs: CB and Visa or Mastercard.","url":"https://paiement-decrypte.fr/en/glossary/#tag-4f"},{"@type":"DefinedTerm","termCode":"50","name":"50 – Application Label","description":"The application name as the card offers it for display (e.g. \"CB\", \"VISA\"). This is the label a terminal shows when it asks the customer to choose between the brands on a co-badged card.","url":"https://paiement-decrypte.fr/en/glossary/#tag-50"},{"@type":"DefinedTerm","termCode":"57","name":"57 – Track 2 Equivalent Data","description":"Reproduces the data from the old magnetic stripe: PAN, expiry date, service code. Separator \"D\". Present for compatibility with legacy systems, this is sensitive (PCI) data: never paste a real capture here.","url":"https://paiement-decrypte.fr/en/glossary/#tag-57"},{"@type":"DefinedTerm","termCode":"5A","name":"5A – PAN, card number","description":"The card number encoded in BCD. Sensitive PCI data: in logs and tools it must always be masked or truncated (first 6 + last 4 digits at most).","url":"https://paiement-decrypte.fr/en/glossary/#tag-5a"},{"@type":"DefinedTerm","termCode":"61","name":"61 – Application Template","description":"Container for one directory entry: a candidate application (AID + label + priority). In the PPSE of a co-badged card you'll see two 61 templates, one per brand. Order and tag 87 decide priority.","url":"https://paiement-decrypte.fr/en/glossary/#tag-61"},{"@type":"DefinedTerm","termCode":"6F","name":"6F – FCI Template, response to SELECT","description":"The card's response to a SELECT command: it announces the selected file (84) and its metadata (A5). This is the starting point of every EMV transaction.","url":"https://paiement-decrypte.fr/en/glossary/#tag-6f"},{"@type":"DefinedTerm","termCode":"70","name":"70 – Record Template","description":"Generic wrapper for records read via READ RECORD: the card's application data (PAN, dates, CVM lists, certificates…) live inside these records.","url":"https://paiement-decrypte.fr/en/glossary/#tag-70"},{"@type":"DefinedTerm","termCode":"71","name":"71 – Issuer Script Template 1","description":"A command sent by the issuer to the card via the terminal, executed before the final GENERATE AC: block the application, reset the PIN try counter… This is the remote card-management channel.","url":"https://paiement-decrypte.fr/en/glossary/#tag-71"},{"@type":"DefinedTerm","termCode":"72","name":"72 – Issuer Script Template 2","description":"Same principle as tag 71, but executed after the final GENERATE AC.","url":"https://paiement-decrypte.fr/en/glossary/#tag-72"},{"@type":"DefinedTerm","termCode":"77","name":"77 – Response Template Format 2","description":"TLV-explicit response format, typically the response to GENERATE AC: cryptogram (9F26), cryptogram type (9F27), ATC (9F36), IAD (9F10).","url":"https://paiement-decrypte.fr/en/glossary/#tag-77"},{"@type":"DefinedTerm","termCode":"80","name":"80 – Response Template Format 1","description":"Compact response format: values are concatenated WITHOUT TLV structure, in an order mandated by the command. Classic beginner trap: it doesn't parse like TLV, the order comes from the spec.","url":"https://paiement-decrypte.fr/en/glossary/#tag-80"},{"@type":"DefinedTerm","termCode":"82","name":"82 – AIP, Application Interchange Profile","description":"The card announces here what it can do: which offline authentications (SDA/DDA/CDA), whether it supports cardholder verification, issuer authentication… The terminal adapts the whole transaction to this profile. 2 bytes of flags.","url":"https://paiement-decrypte.fr/en/glossary/#tag-82"},{"@type":"DefinedTerm","termCode":"84","name":"84 – DF Name, selected file name","description":"Name of the selected directory or application. \"2PAY.SYS.DDF01\" = contactless selection directory (PPSE); otherwise it's generally the AID of the chosen application.","url":"https://paiement-decrypte.fr/en/glossary/#tag-84"},{"@type":"DefinedTerm","termCode":"87","name":"87 – Application Priority Indicator","description":"One byte that settles two things in the application directory (each candidate application is listed there in an Application Template, tag 61): the high-order bit (b8) indicates whether explicit cardholder confirmation is required before selecting this application (1 = yes); the 4 low-order bits give the priority rank, from 1 (highest priority) to 15, with 0 meaning the issuer expresses no preference among several applications. On a co-badged card in France, the merchant can configure its display preference, but the customer keeps the right to choose the brand (IFR regulation, art. 8).","url":"https://paiement-decrypte.fr/en/glossary/#tag-87"},{"@type":"DefinedTerm","termCode":"88","name":"88 – SFI, Short File Identifier","description":"Short identifier for the file where the directory's records are read. A plumbing detail of application selection, useful when stepping through a SELECT PSE by hand.","url":"https://paiement-decrypte.fr/en/glossary/#tag-88"},{"@type":"DefinedTerm","termCode":"8A","name":"8A – ARC, Authorisation Response Code","description":"The verdict from the authorisation circuit, 2 characters: 00 = approved, 05 = declined… The Y1/Z1/Y3/Z3 codes are generated by the terminal itself when the transaction is decided offline. Don't confuse this with the cryptogram: the ARC is the verdict, the cryptogram is the proof.","url":"https://paiement-decrypte.fr/en/glossary/#tag-8a"},{"@type":"DefinedTerm","termCode":"8C","name":"8C – CDOL1, Card Risk Management DOL 1","description":"The card's shopping list for the first GENERATE AC: which terminal tags (amount, TVR, date, nonce…) it requires, and in what order. The terminal concatenates them WITHOUT tags, which is why you can't parse CDOL data as TLV.","url":"https://paiement-decrypte.fr/en/glossary/#tag-8c"},{"@type":"DefinedTerm","termCode":"8D","name":"8D – CDOL2, Card Risk Management DOL 2","description":"Same principle as CDOL1, for the second GENERATE AC (after the online authorisation result comes back): the card typically asks here for the ARC and the issuer authentication results.","url":"https://paiement-decrypte.fr/en/glossary/#tag-8d"},{"@type":"DefinedTerm","termCode":"8E","name":"8E – CVM List, cardholder verification methods list","description":"The cardholder verification policy, written into the card by the issuer: a sequence of \"method + condition\" rules evaluated in order. Typical example in France: enciphered offline PIN, else online PIN, else signature.","url":"https://paiement-decrypte.fr/en/glossary/#tag-8e"},{"@type":"DefinedTerm","termCode":"8F","name":"8F – CA Public Key Index","description":"Index of the certificate authority's public key (per network) that the terminal must use to walk up the certificate chain. If the terminal doesn't have this key in store, offline authentication fails, the corresponding TVR bit is set.","url":"https://paiement-decrypte.fr/en/glossary/#tag-8f"},{"@type":"DefinedTerm","termCode":"90","name":"90 – Issuer Public Key Certificate","description":"Certificate for the issuer's public key, signed by the network's CA. The first link in the offline trust chain: CA → issuer → card.","url":"https://paiement-decrypte.fr/en/glossary/#tag-90"},{"@type":"DefinedTerm","termCode":"91","name":"91 – Issuer Authentication Data","description":"Data returned by the issuer (ARPC + code) letting the card verify that the authorisation response genuinely came from it, authentication in the other direction.","url":"https://paiement-decrypte.fr/en/glossary/#tag-91"},{"@type":"DefinedTerm","termCode":"92","name":"92 – Issuer Public Key Remainder","description":"The remainder of the issuer's public key that didn't fit in certificate 90. Concatenated to reconstruct the full key.","url":"https://paiement-decrypte.fr/en/glossary/#tag-92"},{"@type":"DefinedTerm","termCode":"93","name":"93 – Signed Static Application Data","description":"The card's static data signed by the issuer, the core of SDA. Weak by design (replayable): this is why SDA was superseded by DDA/CDA.","url":"https://paiement-decrypte.fr/en/glossary/#tag-93"},{"@type":"DefinedTerm","termCode":"94","name":"94 – AFL, Application File Locator","description":"The card tells the terminal which records to read (file, range, and which ones take part in offline authentication). Read in groups of 4 bytes: SFI, first record, last record, number of records covered by signature.","url":"https://paiement-decrypte.fr/en/glossary/#tag-94"},{"@type":"DefinedTerm","termCode":"95","name":"95 – TVR, Terminal Verification Results","description":"The terminal's logbook: 5 bytes of flags, each recording a check that failed or an event (failed authentication, expired card, floor limit exceeded…). Cross-referenced with the TAC/IAC thresholds, THIS is what decides whether the transaction goes offline, online, or gets declined. The single most valuable tag in a transaction log.","url":"https://paiement-decrypte.fr/en/glossary/#tag-95"},{"@type":"DefinedTerm","termCode":"97","name":"97 – TDOL, Transaction Certificate DOL","description":"List of data to include in the TC Hash calculation. Rare in practice, hence the TVR's \"default TDOL used\" bit.","url":"https://paiement-decrypte.fr/en/glossary/#tag-97"},{"@type":"DefinedTerm","termCode":"98","name":"98 – TC Hash Value","description":"A hash of the transaction data, little used in modern deployments.","url":"https://paiement-decrypte.fr/en/glossary/#tag-98"},{"@type":"DefinedTerm","termCode":"99","name":"99 – Transaction PIN Data","description":"The PIN, enciphered in transit to the card for offline verification. Must NEVER appear in the clear in a log.","url":"https://paiement-decrypte.fr/en/glossary/#tag-99"},{"@type":"DefinedTerm","termCode":"9A","name":"9A – Transaction Date","description":"Date of the transaction on the terminal side (YYMMDD). Feeds into the cryptogram calculation, an inconsistent date and the cryptogram no longer verifies.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9a"},{"@type":"DefinedTerm","termCode":"9B","name":"9B – TSI, Transaction Status Information","description":"TVR's companion: which steps were ATTEMPTED (authentication, cardholder verification, scripts…). The TVR says \"what went wrong\", the TSI says \"what was done\". Read the two together.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9b"},{"@type":"DefinedTerm","termCode":"9C","name":"9C – Transaction Type","description":"Type of operation (ISO 8583 processing code): 00 = purchase, 01 = cash withdrawal, 09 = purchase with cashback, 20 = refund…","url":"https://paiement-decrypte.fr/en/glossary/#tag-9c"},{"@type":"DefinedTerm","termCode":"9D","name":"9D – DDF Name","description":"Name of a directory file for directory-based selection (the legacy PSE method).","url":"https://paiement-decrypte.fr/en/glossary/#tag-9d"},{"@type":"DefinedTerm","termCode":"A5","name":"A5 – FCI Proprietary Template","description":"The \"metadata\" part of the SELECT response: labels, priority, PDOL, proprietary data (BF0C). This is where a co-badged card lists its applications.","url":"https://paiement-decrypte.fr/en/glossary/#tag-a5"},{"@type":"DefinedTerm","termCode":"5F20","name":"5F20 – Cardholder Name","description":"The cardholder's name as embossed. Often filled with generic values on recent cards (\"/\" or spaces) to limit exposure of personal data.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f20"},{"@type":"DefinedTerm","termCode":"5F24","name":"5F24 – Application Expiration Date","description":"The application's expiry date (YYMMDD). This is what the terminal compares against today's date, the TVR's \"expired application\" bit comes from this check.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f24"},{"@type":"DefinedTerm","termCode":"5F25","name":"5F25 – Application Effective Date","description":"Start-of-validity date (YYMMDD). A card used before this date triggers the TVR's \"application not yet effective\" bit.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f25"},{"@type":"DefinedTerm","termCode":"5F28","name":"5F28 – Issuer Country Code","description":"Country of the issuing bank (ISO 3166 numeric). Used in particular to distinguish domestic from international transactions, which changes interchange and routing rules.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f28"},{"@type":"DefinedTerm","termCode":"5F2A","name":"5F2A – Transaction Currency Code","description":"Currency of the transaction (ISO 4217 numeric). 0978 = euro. If it differs from the card's currency, you're in dynamic currency conversion (DCC) territory.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f2a"},{"@type":"DefinedTerm","termCode":"5F2D","name":"5F2D – Language Preference","description":"The cardholder's preferred languages (ISO 639 codes), in order of preference. This tag is why a terminal shows \"SAISISSEZ VOTRE CODE\" rather than \"ENTER PIN\" to a French cardholder.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f2d"},{"@type":"DefinedTerm","termCode":"5F30","name":"5F30 – Service Code","description":"A service code inherited from magnetic stripes (ISO/IEC 7813): interchange conditions, authorisation restrictions, PIN requirements. The chip has its own controls, but this code is still read by legacy systems.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f30"},{"@type":"DefinedTerm","termCode":"5F34","name":"5F34 – PAN Sequence Number","description":"Distinguishes multiple cards carrying the same PAN (reissue, primary/secondary card). Essential on the issuer side to look up the card's correct cryptographic keys.","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f34"},{"@type":"DefinedTerm","termCode":"5F36","name":"5F36 – Transaction Currency Exponent","description":"Number of decimal places for the transaction currency (2 for the euro: amounts travel in cents).","url":"https://paiement-decrypte.fr/en/glossary/#tag-5f36"},{"@type":"DefinedTerm","termCode":"9F02","name":"9F02 – Amount, Authorised","description":"Transaction amount in BCD, in the currency's smallest unit (cents for the euro). 000000010000 = 100.00. The amount is part of the data signed inside the cryptogram.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f02"},{"@type":"DefinedTerm","termCode":"9F03","name":"9F03 – Amount, Other","description":"A second amount, distinct from the main amount (9F02), whose exact meaning depends on terminal/issuer context: most often a cashback amount, but sometimes a service fee or a tip. Zero in the vast majority of French transactions.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f03"},{"@type":"DefinedTerm","termCode":"9F06","name":"9F06 – AID (terminal)","description":"The AID as seen on the terminal side (during selection). Same meaning as tag 4F on the card side.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f06"},{"@type":"DefinedTerm","termCode":"9F07","name":"9F07 – Application Usage Control","description":"Usage restrictions set by the issuer: is the card valid abroad? at ATMs? for cashback? The terminal checks these against context, a disallowed use sets the TVR's \"service not allowed\" bit.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f07"},{"@type":"DefinedTerm","termCode":"9F08","name":"9F08 – Application Version Number (card)","description":"Version of the application spec supported by the card. Compared against the terminal's (9F09), a mismatch sets a TVR bit, generally without blocking the transaction.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f08"},{"@type":"DefinedTerm","termCode":"9F09","name":"9F09 – Application Version Number (terminal)","description":"Version of the application spec on the terminal kernel side.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f09"},{"@type":"DefinedTerm","termCode":"9F0A","name":"9F0A – ASRPD, Application Selection Registered Proprietary Data","description":"An identifier registered with EMVCo (Spec Bulletin 175) letting a market or issuer expose a proprietary feature during application selection. The content depends on the entity that registered the ID, not decodable without their documentation.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f0a"},{"@type":"DefinedTerm","termCode":"9F0D","name":"9F0D – IAC, Default","description":"The issuer's fallback thresholds: if the transaction should have gone online but the terminal can't (offline), these bits say what to decline. Read as a mask applied to the TVR.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f0d"},{"@type":"DefinedTerm","termCode":"9F0E","name":"9F0E – IAC, Denial","description":"The issuer's hard-decline thresholds: any bit shared between this mask and the TVR means an immediate offline decline, without even attempting to go online. A cautious issuer would put, say, \"expired card\" here.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f0e"},{"@type":"DefinedTerm","termCode":"9F0F","name":"9F0F – IAC, Online","description":"The issuer's go-online thresholds: any bit shared with the TVR sends the transaction to online authorisation. In France almost all transactions go online anyway, so these masks matter most where offline is common.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f0f"},{"@type":"DefinedTerm","termCode":"9F10","name":"9F10 – IAD, Issuer Application Data","description":"Issuer-proprietary data returned with the cryptogram: card risk management results (CVR), internal counters… The exact format depends on the network and application profile, the most \"black box\" tag in a GENERATE AC response.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f10"},{"@type":"DefinedTerm","termCode":"9F12","name":"9F12 – Application Preferred Name","description":"The application's preferred display name, possibly in a dedicated character set (9F11). Takes precedence over tag 50 if the terminal can display it.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f12"},{"@type":"DefinedTerm","termCode":"9F1A","name":"9F1A – Terminal Country Code","description":"Country of the terminal (ISO 3166). Compared against the issuer country (5F28) to determine domestic vs international.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f1a"},{"@type":"DefinedTerm","termCode":"9F1E","name":"9F1E – IFD Serial Number","description":"The reader's serial number. Physically identifies the device in logs, data to anonymise before sharing any capture.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f1e"},{"@type":"DefinedTerm","termCode":"9F21","name":"9F21 – Transaction Time","description":"Local time of the transaction (HHMMSS), a companion to tag 9A.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f21"},{"@type":"DefinedTerm","termCode":"9F24","name":"9F24 – PAR, Payment Account Reference","description":"A non-sensitive identifier (up to 29 alphanumeric characters) that links a tokenised PAN (mobile wallet, virtual card) back to its original PAN, without ever exposing that original PAN. A given PAR stays stable across all tokens issued from the same physical card, which lets a merchant or issuer reconcile a physical-card payment with a wallet payment with zero PCI exposure.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f24"},{"@type":"DefinedTerm","termCode":"9F26","name":"9F26 – AC, Application Cryptogram","description":"THE cryptographic proof of the transaction: a MAC computed by the chip with its secret keys. The exact list of data feeding this calculation isn't fixed: the card itself chooses it, transaction by transaction, via the CDOL1 (8C) and CDOL2 (8D) tags, and it almost always includes the amount, the date and the TVR. In a stream that contains an 8C or an 8D, open it: you'll see the exact list this card requested for this cryptogram. Unforgeable without the card's key, the issuer verifies it to authenticate the transaction. Its type (ARQC/TC/AAC) is given by tag 9F27.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f26"},{"@type":"DefinedTerm","termCode":"9F27","name":"9F27 – CID, Cryptogram Information Data","description":"The type of cryptogram returned by the card, i.e. its decision: AAC = decline, TC = offline approval, ARQC = \"ask the issuer\". The card can be stricter than the terminal, never more lenient.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f27"},{"@type":"DefinedTerm","termCode":"9F32","name":"9F32 – Issuer Public Key Exponent","description":"Public exponent of the issuer key (3 or 65537). Together with certificate 90 and remainder 92, it lets you reconstruct the full public key.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f32"},{"@type":"DefinedTerm","termCode":"9F33","name":"9F33 – Terminal Capabilities","description":"What the terminal can do, in 3 bytes: card entry modes, supported CVMs, offline authentications. An ATM and a restaurant's card terminal don't share the same profile.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f33"},{"@type":"DefinedTerm","termCode":"9F34","name":"9F34 – CVM Results","description":"The result of cardholder verification: which method was applied (from CVM List 8E), under what condition, and whether it succeeded. An essential companion to the TVR for understanding a PIN-related decline.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f34"},{"@type":"DefinedTerm","termCode":"9F35","name":"9F35 – Terminal Type","description":"A 2-digit code that crosses two axes: who controls the terminal (financial institution, merchant, cardholder) and its environment (attended or not, ability to go online). The vast majority of attended merchant terminals in France fall in the 21-23 range; the exact value depending on offline capability depends on the acquirer contract.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f35"},{"@type":"DefinedTerm","termCode":"9F36","name":"9F36 – ATC, Application Transaction Counter","description":"A counter incremented by the chip on every transaction. It stops an intercepted transaction from being replayed as-is: since it feeds into the cryptogram calculation, no two transactions ever produce the same one. An abnormal jump in ATC is a fraud signal on the issuer side.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f36"},{"@type":"DefinedTerm","termCode":"9F37","name":"9F37 – Unpredictable Number","description":"The terminal's nonce: randomness injected into the cryptogram calculation to prevent pre-computation and replay. A predictable UN has already broken the security of entire terminal fleets, a classic audit point.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f37"},{"@type":"DefinedTerm","termCode":"9F38","name":"9F38 – PDOL, Processing Options DOL","description":"The list of terminal data the card wants to receive right from GET PROCESSING OPTIONS. Same logic as the CDOLs: tag references, and the values then travel without structure.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f38"},{"@type":"DefinedTerm","termCode":"9F40","name":"9F40 – Additional Terminal Capabilities","description":"Companion to tag 9F33: supported transaction types (cash, purchase, withdrawal…) and the terminal's display/entry capabilities.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f40"},{"@type":"DefinedTerm","termCode":"9F41","name":"9F41 – Transaction Sequence Counter","description":"Transaction counter on the terminal side, the terminal's counterpart to the card's ATC.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f41"},{"@type":"DefinedTerm","termCode":"9F42","name":"9F42 – Application Currency Code","description":"The card application's reference currency (the one used by its internal offline counters).","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f42"},{"@type":"DefinedTerm","termCode":"9F44","name":"9F44 – Application Currency Exponent","description":"Position of the decimal separator for the application's currency (2 for the euro).","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f44"},{"@type":"DefinedTerm","termCode":"9F45","name":"9F45 – Data Authentication Code","description":"Code produced by SDA authentication, stored for use in DOLs. Legacy, rare on modern cards.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f45"},{"@type":"DefinedTerm","termCode":"9F46","name":"9F46 – ICC Public Key Certificate","description":"Certificate for the card's public key, signed by the issuer. The last link in the CA → issuer → card chain, used by DDA/CDA.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f46"},{"@type":"DefinedTerm","termCode":"9F47","name":"9F47 – ICC Public Key Exponent","description":"Public exponent of the card's key.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f47"},{"@type":"DefinedTerm","termCode":"9F48","name":"9F48 – ICC Public Key Remainder","description":"Remainder of the card's public key that didn't fit in certificate 9F46.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f48"},{"@type":"DefinedTerm","termCode":"9F4A","name":"9F4A – SDA Tag List","description":"List of extra tags included in the statically signed data, in practice almost always the AIP (82), to prevent it from being tampered with.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f4a"},{"@type":"DefinedTerm","termCode":"9F4B","name":"9F4B – Signed Dynamic Application Data","description":"The dynamic signature produced by the card during DDA/CDA: it notably covers the terminal's nonce, proving the card is live and present, which SDA could never prove.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f4b"},{"@type":"DefinedTerm","termCode":"9F66","name":"9F66 – TTQ, Terminal Transaction Qualifiers","description":"In contactless: the terminal announces to the card what it supports and requires (EMV mode, online PIN, signature, CDCVM…). The first negotiation of a tap.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f66"},{"@type":"DefinedTerm","termCode":"9F6C","name":"9F6C – CTQ, Card Transaction Qualifiers","description":"The card's response to the TTQ in contactless: its own requirements (ask for online PIN, fall back to contact…).","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f6c"},{"@type":"DefinedTerm","termCode":"9F6E","name":"9F6E – FFI, Form Factor Indicator","description":"Outside the base EMV spec: its meaning depends on the network. At Visa, it's the Form Factor Indicator, 4 bytes describing the payment form factor (card, mobile, wearable…) and its capabilities. At Mastercard, the same tag carries Third Party Data, a variable-length format (country, identifier, form factor type). The tool detects the format from the value's length and decodes both.","url":"https://paiement-decrypte.fr/en/glossary/#tag-9f6e"},{"@type":"DefinedTerm","termCode":"BF0C","name":"BF0C – FCI Issuer Discretionary Data","description":"The issuer's discretionary area within the FCI, directory entries (61) live here, along with proprietary network or domestic tags (including some unpublished CB tags).","url":"https://paiement-decrypte.fr/en/glossary/#tag-bf0c"}]}</script>
+<script>
+(function(){
+  var q=document.getElementById('q'), cat=document.getElementById('cat');
+  var out=document.getElementById('count'), empty=document.getElementById('empty');
+  var entries=[].slice.call(document.querySelectorAll('.entry'));
+  var one=out.getAttribute('data-one'), many=out.getAttribute('data-many');
+  function norm(s){
+    s=(s||'').toLowerCase();
+    try{ s=s.normalize('NFD').replace(/[̀-ͯ]/g,''); }catch(e){}
+    return s;
+  }
+  function apply(){
+    var needle=norm(q.value).trim(), family=cat.value, shown=0;
+    for(var i=0;i<entries.length;i++){
+      var el=entries[i];
+      var okCat = !family || el.getAttribute('data-cat')===family;
+      var okTxt = !needle || el.getAttribute('data-search').indexOf(needle)>-1;
+      var vis = okCat && okTxt;
+      el.hidden = !vis;
+      if(vis) shown++;
+    }
+    out.innerHTML='<b>'+shown+'</b> '+(shown===1?one:many);
+    empty.className = shown ? 'empty' : 'empty on';
+  }
+  q.addEventListener('input',apply);
+  cat.addEventListener('change',apply);
+  // Un lien profond (#tag-9f33) doit rester visible même si un filtre traîne.
+  window.addEventListener('hashchange',function(){
+    var t=document.querySelector(window.location.hash||'#none');
+    if(t&&t.hidden){ q.value=''; cat.value=''; apply(); t.scrollIntoView(); }
+  });
+  apply();
+})();
+</script>
+<script src="/assets/telemetry.js?v=4b17031c"></script>
+<script>if(window.PD)PD.track('page_open');</script>
+</body>
+</html>

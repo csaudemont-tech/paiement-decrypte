@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ma boîte à outils – Paiement Décrypté</title>
-<meta name="description" content="Des outils gratuits pour le terrain paiement : décodeur EMV TLV, diff de config NEXO, et bientôt un explorateur NEXO Acquirer et un décodeur de configuration NEXO. Rien à installer, tout tourne dans votre navigateur.">
+<meta name="description" content="Des outils gratuits pour le terrain paiement : décodeur EMV TLV, diff de config NEXO, décodeur de configuration NEXO, convertisseur de format et contrôle de Luhn. Rien à installer, tout tourne dans votre navigateur.">
 <link rel="canonical" href="https://paiement-decrypte.fr/outils/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Paiement Décrypté">
@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-fr.png?v=6cef4971">
 <link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/">
-<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=42d12093">
 
 <style>
@@ -164,7 +164,8 @@
     <span class="eyebrow">Paiement Décrypté</span>
     <div class="masthead-right">
       <a class="formation-nav" href="../">Ma formation</a>
-      <a class="lang" href="../en/outils/" hreflang="en">EN</a>
+      <a class="formation-nav" href="../lexique/">Lexique</a>
+      <a class="lang" href="../en/tools/" hreflang="en">EN</a>
     </div>
   </div>
 
@@ -176,33 +177,44 @@
 
   <section class="section">
     <div class="grid">
-      <a class="card tool" href="emv-parser.html">
+
+
+
+      <a class="card tool" href="flux-tlv/">
         <p class="card-eyebrow"><span>OUTIL</span></p>
         <h3>Décodeur EMV TLV</h3>
         <p>Décode un flux TLV tag par tag, avec un encodeur intégré (repartir d'une valeur).</p>
         <span class="card-cta">Ouvrir l'outil</span>
       </a>
 
-      <a class="card tool" href="nexo-diff.html">
+      <a class="card tool" href="comparer-configurations/">
         <p class="card-eyebrow"><span>OUTIL</span></p>
         <h3>Diff config NEXO</h3>
         <p>Compare deux fichiers de configuration terminal et met en avant ce qui a changé.</p>
         <span class="card-cta">Ouvrir l'outil</span>
       </a>
 
-      <div class="card tool locked" aria-disabled="true">
-        <p class="card-eyebrow"><span>OUTIL</span></p>
-        <h3>NEXO Acquirer Explainer</h3>
-        <p>Explore les messages du protocole NEXO côté acquéreur, message par message.</p>
-        <span class="badge">À VENIR</span>
-      </div>
 
-      <div class="card tool locked" aria-disabled="true">
+      <a class="card tool" href="nexo-config-decoder.html">
         <p class="card-eyebrow"><span>OUTIL</span></p>
         <h3>Décodeur config NEXO</h3>
-        <p>Lecture claire d'un fichier de configuration terminal.</p>
-        <span class="badge">À VENIR</span>
-      </div>
+        <p>Chaque champ d'un fichier de config résolu dans son bloc, la section nexo FAST citée, et les tables de bits décodées.</p>
+        <span class="card-cta">Ouvrir l'outil</span>
+      </a>
+
+      <a class="card tool" href="convertir-un-format/">
+        <p class="card-eyebrow"><span>OUTIL</span></p>
+        <h3>Convertir un format</h3>
+        <p>Texte, hexadécimal, binaire, Base64 : une saisie, toutes les formes, et le format qu'il a lu.</p>
+        <span class="card-cta">Ouvrir l'outil</span>
+      </a>
+
+      <a class="card tool" href="luhn/">
+        <p class="card-eyebrow"><span>OUTIL</span></p>
+        <h3>Contrôle de Luhn</h3>
+        <p>Dire si un numéro de carte est bien formé, ce qui ne dit pas qu'il existe.</p>
+        <span class="card-cta">Ouvrir l'outil</span>
+      </a>
     </div>
   </section>
 

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TVR, le carnet de notes du terminal (tag 95) | Lexique – Paiement Décrypté</title>
+<meta name="description" content="Le Terminal Verification Results, bit par bit : qui l’écrit, qui le lit, comment il décide seul d’un refus, et comment décoder une vraie valeur. Le seul endroit en français où le TVR est expliqué en entier.">
+<link rel="canonical" href="https://paiement-decrypte.fr/lexique/fiches/tvr/">
+<link rel="icon" href="/assets/favicon.svg?v=42d12093" type="image/svg+xml">
+<style>
+:root{
+  --paper:#F2F4F8; --ink:#0E1B2C; --cobalt:#1F4FD8; --mint:#17B587; --coral:#E85C4A;
+  --ink-60:rgba(14,27,44,.62); --ink-12:rgba(14,27,44,.12); --ink-06:rgba(14,27,44,.06);
+}
+@font-face{font-family:'Bricolage Grotesque';src:url('/assets/fonts/bricolage-grotesque-var.woff2?v=11f6ab2d') format('woff2');font-weight:200 800;font-display:swap}
+@font-face{font-family:'Instrument Sans';src:url('/assets/fonts/instrument-sans-var.woff2?v=adbdfd9a') format('woff2');font-weight:400 700;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('/assets/fonts/jetbrains-mono-var.woff2?v=e7277e71') format('woff2');font-weight:100 800;font-display:swap}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Instrument Sans',system-ui,sans-serif;font-size:17px;line-height:1.65}
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:0 20px}
+a{color:var(--cobalt);text-underline-offset:2px}
+h1,h2,h3{font-family:'Bricolage Grotesque',Georgia,serif;font-weight:700;letter-spacing:-.02em;line-height:1.15;margin:0}
+code,.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.top{border-bottom:1px solid var(--ink-12);background:var(--paper)}
+.top .wrap{display:flex;align-items:center;gap:12px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:700}
+.brand img{width:26px;height:26px}
+.brand span{font-family:'Bricolage Grotesque',serif;font-size:17px}
+.top nav{margin-left:auto;font-size:14px}
+.top nav a{color:var(--ink-60);text-decoration:none;margin-left:16px}
+.hero{padding:40px 0 8px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt);margin:0 0 10px}
+h1{font-size:clamp(28px,5.6vw,42px)}
+.tagline{margin:8px 0 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tagid{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--cobalt);background:rgba(31,79,216,.09);padding:3px 9px;border-radius:6px}
+.fam{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);border:1px solid var(--ink-12);border-radius:999px;padding:3px 10px}
+.lede{font-size:20px;line-height:1.55;margin:22px 0 0}
+h2{font-size:25px;margin:44px 0 0}
+h3{font-size:18px;margin:28px 0 0}
+p{margin:14px 0 0}
+.who{width:100%;border-collapse:collapse;margin-top:18px;font-size:15px;background:#fff;border-radius:12px;overflow:hidden}
+.who th,.who td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--ink-06);vertical-align:top}
+.who th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-60);width:110px;white-space:nowrap}
+figure{margin:26px 0 0;background:#fff;border:1px solid var(--ink-12);border-radius:14px;padding:20px 18px}
+figure svg{display:block;width:100%;height:auto}
+figcaption{margin-top:14px;font-size:14px;color:var(--ink-60);line-height:1.55}
+.bitlist{margin:18px 0 0;padding:0;list-style:none}
+.bitlist li{padding:14px 0;border-bottom:1px solid var(--ink-12)}
+.bitlist li:last-child{border-bottom:0}
+.bitlist .pos{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-60);display:block}
+.bitlist .lbl{font-weight:700}
+.bitlist .why{margin:5px 0 0;color:var(--ink-60);font-size:15.5px}
+.calc{background:var(--ink);color:#fff;border-radius:14px;padding:22px;margin-top:26px;font-size:15.5px}
+.calc h3{color:#fff;margin:0 0 4px}
+.calc ol{margin:14px 0 0;padding-left:20px}
+.calc li{margin:9px 0;color:rgba(255,255,255,.82)}
+.calc code{color:#7FE3C4;background:rgba(255,255,255,.07);padding:2px 6px;border-radius:5px;font-size:14px}
+.calc b{color:#fff}
+.err{margin-top:18px;border-left:3px solid var(--coral);background:#fff;border-radius:0 12px 12px 0;padding:14px 16px}
+.err b{display:block}
+.err p{margin:5px 0 0;color:var(--ink-60);font-size:15.5px}
+.voix{margin-top:26px;border:2px dashed var(--coral);border-radius:14px;padding:18px;background:rgba(232,92,74,.04)}
+.voix .tag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral)}
+.voix p{font-size:16px}
+.links{margin:40px 0 0;padding:20px;background:#fff;border:1px solid var(--ink-12);border-radius:14px;display:flex;flex-wrap:wrap;gap:10px 22px;font-size:15px}
+footer{margin-top:44px;padding:24px 0 48px;border-top:1px solid var(--ink-12);font-size:13px;color:var(--ink-60)}
+@media(max-width:560px){body{font-size:16px}.lede{font-size:18px}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><img src="/assets/favicon.svg?v=42d12093" alt="" width="26" height="26"><span>Paiement Décrypté</span></a>
+  <nav><a href="/lexique/">Lexique</a><a href="/outils/">Outils</a></nav>
+</div></header>
+
+<main class="wrap">
+
+<div class="hero">
+  <p class="kicker">Fiche · Décision de la transaction</p>
+  <h1>TVR, le carnet de notes du terminal</h1>
+  <div class="tagline"><span class="tagid">95</span><span class="fam">Terminal Verification Results</span></div>
+</div>
+
+<p class="lede">Cinq octets où le terminal note tout ce qui s’est mal passé pendant la transaction. Personne ne les lit à l’œil nu, et pourtant c’est ce champ – croisé avec deux autres – qui décide seul, sans réseau, si un paiement est refusé.</p>
+
+<h2>Qui l’écrit, qui le lit</h2>
+
+<table class="who">
+  <tr><th>Écrit par</th><td>Le terminal, et lui seul. La carte n’y touche jamais. Il est remis à zéro au début de chaque transaction et se remplit au fil des étapes.</td></tr>
+  <tr><th>Lu par</th><td>Le terminal lui-même pour décider en local ; la carte, qui le reçoit dans le CDOL au moment du GENERATE AC ; l’émetteur, qui le reçoit dans le message d’autorisation (champ 55).</td></tr>
+  <tr><th>Le piège</th><td>Un bit à 1 n’est pas un refus. C’est un constat. Ce qui transforme un constat en refus, c’est le croisement avec les <em>action codes</em> – voir plus bas.</td></tr>
+</table>
+
+<h2>40 bits, 26 utilisés</h2>
+
+<figure>
+<svg viewBox="0 0 660 250" role="img" aria-label="Grille des 5 octets du TVR : 26 bits définis sur 40, groupés par thème">
+  <style>
+    .oct{font:600 12px 'Instrument Sans',sans-serif;fill:#0E1B2C}
+    .thm{font:400 11.5px 'Instrument Sans',sans-serif;fill:rgba(14,27,44,.62)}
+    .bn{font:400 9.5px 'JetBrains Mono',monospace;fill:rgba(14,27,44,.45)}
+    .on{fill:#1F4FD8}.on2{fill:#17B587}.on3{fill:#E85C4A}
+    .off{fill:rgba(14,27,44,.07)}
+  </style>
+  <text class="bn" x="86" y="14">b8</text><text class="bn" x="122" y="14">b7</text><text class="bn" x="158" y="14">b6</text>
+  <text class="bn" x="194" y="14">b5</text><text class="bn" x="230" y="14">b4</text><text class="bn" x="266" y="14">b3</text>
+  <text class="bn" x="302" y="14">b2</text><text class="bn" x="338" y="14">b1</text>
+
+  <text class="oct" x="0" y="38">Octet 1</text>
+  <rect class="on"  x="80" y="26" width="28" height="18" rx="4"/><rect class="on" x="116" y="26" width="28" height="18" rx="4"/>
+  <rect class="on"  x="152" y="26" width="28" height="18" rx="4"/><rect class="on" x="188" y="26" width="28" height="18" rx="4"/>
+  <rect class="on"  x="224" y="26" width="28" height="18" rx="4"/><rect class="on" x="260" y="26" width="28" height="18" rx="4"/>
+  <rect class="off" x="296" y="26" width="28" height="18" rx="4"/><rect class="off" x="332" y="26" width="28" height="18" rx="4"/>
+  <text class="thm" x="378" y="39">La carte est-elle authentique ?</text>
+
+  <text class="oct" x="0" y="76">Octet 2</text>
+  <rect class="on"  x="80" y="64" width="28" height="18" rx="4"/><rect class="on" x="116" y="64" width="28" height="18" rx="4"/>
+  <rect class="on"  x="152" y="64" width="28" height="18" rx="4"/><rect class="on" x="188" y="64" width="28" height="18" rx="4"/>
+  <rect class="on"  x="224" y="64" width="28" height="18" rx="4"/>
+  <rect class="off" x="260" y="64" width="28" height="18" rx="4"/><rect class="off" x="296" y="64" width="28" height="18" rx="4"/><rect class="off" x="332" y="64" width="28" height="18" rx="4"/>
+  <text class="thm" x="378" y="77">L’application est-elle utilisable ?</text>
+
+  <text class="oct" x="0" y="114">Octet 3</text>
+  <rect class="on2" x="80" y="102" width="28" height="18" rx="4"/><rect class="on2" x="116" y="102" width="28" height="18" rx="4"/>
+  <rect class="on2" x="152" y="102" width="28" height="18" rx="4"/><rect class="on2" x="188" y="102" width="28" height="18" rx="4"/>
+  <rect class="on2" x="224" y="102" width="28" height="18" rx="4"/><rect class="on2" x="260" y="102" width="28" height="18" rx="4"/>
+  <rect class="off" x="296" y="102" width="28" height="18" rx="4"/><rect class="off" x="332" y="102" width="28" height="18" rx="4"/>
+  <text class="thm" x="378" y="115">Le porteur a-t-il été vérifié ?</text>
+
+  <text class="oct" x="0" y="152">Octet 4</text>
+  <rect class="on3" x="80" y="140" width="28" height="18" rx="4"/><rect class="on3" x="116" y="140" width="28" height="18" rx="4"/>
+  <rect class="on3" x="152" y="140" width="28" height="18" rx="4"/><rect class="on3" x="188" y="140" width="28" height="18" rx="4"/>
+  <rect class="on3" x="224" y="140" width="28" height="18" rx="4"/>
+  <rect class="off" x="260" y="140" width="28" height="18" rx="4"/><rect class="off" x="296" y="140" width="28" height="18" rx="4"/><rect class="off" x="332" y="140" width="28" height="18" rx="4"/>
+  <text class="thm" x="378" y="153">Faut-il monter en ligne ?</text>
+
+  <text class="oct" x="0" y="190">Octet 5</text>
+  <rect class="on"  x="80" y="178" width="28" height="18" rx="4"/><rect class="on" x="116" y="178" width="28" height="18" rx="4"/>
+  <rect class="on"  x="152" y="178" width="28" height="18" rx="4"/><rect class="on" x="188" y="178" width="28" height="18" rx="4"/>
+  <rect class="off" x="224" y="178" width="28" height="18" rx="4"/><rect class="off" x="260" y="178" width="28" height="18" rx="4"/>
+  <rect class="off" x="296" y="178" width="28" height="18" rx="4"/><rect class="off" x="332" y="178" width="28" height="18" rx="4"/>
+  <text class="thm" x="378" y="191">Le dialogue émetteur a-t-il abouti ?</text>
+
+  <rect class="on"  x="0" y="222" width="14" height="12" rx="3"/><text class="thm" x="20" y="232">bit défini · la couleur groupe l’octet par thème</text>
+  <rect class="off" x="120" y="222" width="14" height="12" rx="3"/><text class="thm" x="140" y="232">réservé (toujours 0)</text>
+</svg>
+<figcaption>Les 14 bits gris ne sont pas « libres » : ils sont réservés par la spécification et doivent rester à zéro. Un TVR dont un bit réservé est à 1 sort d’une implémentation qui bricole, ou d’une capture mal alignée.</figcaption>
+</figure>
+
+<h2>Les six bits que vous verrez vraiment</h2>
+
+<p>Sur les 26, une poignée revient en permanence dans les traces réelles. Les autres sont des cas de bord ou des reliquats d’une époque où l’authentification statique existait encore.</p>
+
+<ul class="bitlist">
+  <li>
+    <span class="pos">Octet 1 · bit 8 · <code>80 00 00 00 00</code></span>
+    <span class="lbl">Authentification offline des données non réalisée</span>
+    <p class="why">Le terminal n’a pas vérifié la signature de la carte. Ce n’est pas forcément une anomalie : en transaction en ligne systématique, beaucoup de configurations sautent l’étape. C’est le bit le plus fréquemment allumé du TVR, et celui qui affole le plus de monde à tort.</p>
+  </li>
+  <li>
+    <span class="pos">Octet 1 · bit 3</span>
+    <span class="lbl">Échec CDA</span>
+    <p class="why">Là en revanche, la carte n’a pas su prouver son authenticité de façon dynamique. Sur une carte moderne, ce bit ne devrait jamais être à 1. S’il l’est en série sur un parc, c’est le certificat de l’émetteur ou la clé publique du réseau qu’il faut aller regarder dans le terminal, pas les cartes.</p>
+  </li>
+  <li>
+    <span class="pos">Octet 2 · bit 7</span>
+    <span class="lbl">Application expirée</span>
+    <p class="why">Le terminal compare la date d’expiration de la carte à sa propre date. Un terminal dont l’horloge a dérivé refuse donc des cartes parfaitement valides – et le TVR est le seul endroit où ça se voit.</p>
+  </li>
+  <li>
+    <span class="pos">Octet 3 · bit 8</span>
+    <span class="lbl">Vérification du porteur en échec</span>
+    <p class="why">Le CVM choisi n’a pas abouti. À croiser systématiquement avec le tag 9F34 (CVM Results), qui dit <em>lequel</em> a échoué. Le TVR dit qu’il y a eu un problème, le 9F34 dit lequel.</p>
+  </li>
+  <li>
+    <span class="pos">Octet 4 · bit 8 · <code>00 00 00 80 00</code></span>
+    <span class="lbl">Dépassement du plafond (floor limit)</span>
+    <p class="why">Le montant dépasse le plancher au-delà duquel le terminal doit demander une autorisation. C’est le bit qui envoie la transaction en ligne dans l’écrasante majorité des cas – et le plus simple à provoquer volontairement pour tester une chaîne.</p>
+  </li>
+  <li>
+    <span class="pos">Octet 4 · bit 5</span>
+    <span class="lbl">Transaction sélectionnée aléatoirement pour passer en ligne</span>
+    <p class="why">Le terminal tire au sort. C’est voulu : ça empêche un fraudeur de rester indéfiniment sous le plafond en sachant qu’il ne montera jamais. Ce bit explique les « pourquoi celle-là est passée en ligne et pas l’autre » qui n’ont aucune autre explication.</p>
+  </li>
+</ul>
+
+<h2>La mécanique que personne n’explique</h2>
+
+<p>Le TVR seul ne décide de rien. Il est croisé, bit à bit, avec deux jeux de masques : les <em>Terminal Action Codes</em>, posés par l’acquéreur dans la configuration du terminal, et les <em>Issuer Action Codes</em>, portés par la carte elle-même (tags 9F0E, 9F0F, 9F0D). Le terminal combine les deux, puis fait un ET logique avec le TVR. Un seul bit qui ressort à 1 suffit.</p>
+
+<figure>
+<svg viewBox="0 0 660 300" role="img" aria-label="Arbre de décision : TVR croisé avec les action codes de refus puis en ligne">
+  <style>
+    .bx{fill:#fff;stroke:rgba(14,27,44,.18)}
+    .t{font:600 13px 'Instrument Sans',sans-serif;fill:#0E1B2C}
+    .s{font:400 11.5px 'Instrument Sans',sans-serif;fill:rgba(14,27,44,.62)}
+    .m{font:600 11px 'JetBrains Mono',monospace;fill:#1F4FD8}
+    .ar{stroke:rgba(14,27,44,.3);stroke-width:1.5;fill:none;marker-end:url(#a)}
+    .out{stroke-width:0}
+  </style>
+  <defs><marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="rgba(14,27,44,.3)"/></marker></defs>
+
+  <rect class="bx" x="0" y="14" width="180" height="46" rx="10"/>
+  <text class="t" x="14" y="34">TVR</text><text class="s" x="14" y="50">ce qui s’est mal passé</text>
+
+  <path class="ar" d="M90 62 L90 92"/>
+  <rect class="bx" x="0" y="94" width="290" height="54" rx="10"/>
+  <text class="t" x="14" y="116">ET  (TAC-Denial | IAC-Denial)</text>
+  <text class="s" x="14" y="134">masques de refus : acquéreur et émetteur</text>
+
+  <path class="ar" d="M300 121 L392 121"/>
+  <text class="m" x="306" y="114">résultat ≠ 0</text>
+  <rect x="400" y="98" width="240" height="46" rx="10" fill="#E85C4A" class="out"/>
+  <text class="t" x="416" y="119" fill="#fff">Refus hors ligne, sans réseau</text>
+  <text class="s" x="416" y="135" fill="rgba(255,255,255,.8)">la carte renvoie un AAC</text>
+
+  <path class="ar" d="M145 150 L145 180"/>
+  <text class="m" x="152" y="170">résultat = 0</text>
+  <rect class="bx" x="0" y="182" width="290" height="54" rx="10"/>
+  <text class="t" x="14" y="204">ET  (TAC-Online | IAC-Online)</text>
+  <text class="s" x="14" y="222">masques de passage en ligne</text>
+
+  <path class="ar" d="M300 209 L392 209"/>
+  <text class="m" x="306" y="202">résultat ≠ 0</text>
+  <rect x="400" y="186" width="240" height="46" rx="10" fill="#1F4FD8" class="out"/>
+  <text class="t" x="416" y="207" fill="#fff">Demande d’autorisation</text>
+  <text class="s" x="416" y="223" fill="rgba(255,255,255,.8)">la carte renvoie un ARQC</text>
+
+  <path class="ar" d="M145 238 L145 262"/>
+  <rect x="0" y="264" width="290" height="36" rx="10" fill="#17B587" class="out"/>
+  <text class="t" x="14" y="287" fill="#fff">Accord hors ligne · la carte renvoie un TC</text>
+</svg>
+<figcaption>Et quand le terminal veut monter en ligne mais n’y arrive pas – ligne coupée, serveur muet – il rejoue le même calcul avec un troisième masque, le TAC-Default, pour trancher tout seul. C’est là que se jouent les refus « inexplicables » d’un magasin dont la liaison est instable.</figcaption>
+</figure>
+
+<h2>Décoder une vraie valeur</h2>
+
+<div class="calc">
+  <h3>TVR = <code>00 00 00 80 00</code></h3>
+  <ol>
+    <li>Cinq octets, on les lit dans l’ordre. Les octets 1, 2, 3 et 5 sont à zéro : rien à signaler côté authentification, application, porteur, dialogue émetteur.</li>
+    <li>Octet 4 = <code>0x80</code> = <code>1000 0000</code> en binaire, donc le <b>bit 8</b> est à 1.</li>
+    <li>Octet 4, bit 8 : <b>dépassement du plafond</b>. Le montant est au-dessus du floor limit configuré.</li>
+    <li>Le terminal croise avec son TAC-Denial : ce bit n’y est pas → pas de refus local.</li>
+    <li>Il croise avec son TAC-Online, où ce bit est à 1 dans toute configuration saine → <b>la transaction part en ligne</b>.</li>
+  </ol>
+  <p style="margin-top:16px;color:rgba(255,255,255,.72);font-size:14.5px">Lecture inverse utile en dépannage : une transaction qui monte en ligne alors que le montant est faible, avec un TVR à <code>00 00 00 08 00</code>, c’est le tirage au sort – pas un incident.</p>
+</div>
+
+<h2>Trois erreurs qu’on entend souvent</h2>
+
+<div class="err">
+  <b>« Le TVR est à 80 00 00 00 00, la carte est suspecte. »</b>
+  <p>Non. Ce bit dit seulement que l’authentification hors ligne n’a pas été faite, ce qui est le comportement normal de beaucoup de configurations en ligne systématique. Le bit qui accuse la carte, c’est l’échec CDA de l’octet 1.</p>
+</div>
+<div class="err">
+  <b>« C’est le terminal qui a refusé, donc c’est le TVR. »</b>
+  <p>Le TVR constate, il ne décide pas. Sans les action codes en face, il ne se passe rien. Deux terminaux avec le même TVR et des TAC différents prennent deux décisions opposées – et c’est l’acquéreur qui a écrit ces TAC.</p>
+</div>
+<div class="err">
+  <b>« Les bits inutilisés, on peut s’en servir. »</b>
+  <p>Ils sont réservés par la spécification, et les tests de certification les vérifient. Un octet 5 avec le bit 4 à 1 ne passera pas.</p>
+</div>
+
+<div class="voix">
+  <span class="tag">[VOIX ?] – à valider, remplacer ou supprimer par Charles</span>
+  <p>Trois emplacements attendent du vécu, pas de la doctrine : (1) un cas où l’horloge d’un terminal a fait refuser des cartes valides, avec l’ordre de grandeur du parc touché ; (2) ce qu’on regarde en premier quand un TVR revient avec un échec CDA en série ; (3) une phrase sèche sur les TAC copiés-collés d’un acquéreur à l’autre sans être relus. Sans ça, cette fiche reste excellente et impersonnelle – exactement ce que fait déjà la documentation existante.</p>
+</div>
+
+<div class="links">
+  <a href="/outils/emv-parser.html">Décoder votre propre TVR</a>
+  <a href="/lexique/#tag-95">L’entrée courte dans le lexique</a>
+  <a href="/lexique/#tag-9f34">Voir aussi : 9F34, CVM Results</a>
+</div>
+
+<footer>Fiche de lexique – prototype du 2026-08-13. Les libellés de bits viennent de la source canonique du site ; les explications, l’arbitrage et les erreurs fréquentes sont écrits pour cette fiche.</footer>
+
+</main>
+</body>
+</html>

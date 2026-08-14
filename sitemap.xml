@@ -34,31 +34,75 @@
   <url>
     <loc>https://paiement-decrypte.fr/outils/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/"/>
   </url>
   <url>
-    <loc>https://paiement-decrypte.fr/en/outils/</loc>
+    <loc>https://paiement-decrypte.fr/en/tools/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/"/>
   </url>
   <url>
-    <loc>https://paiement-decrypte.fr/outils/emv-parser.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/emv-parser.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/emv-parser.html"/>
+    <loc>https://paiement-decrypte.fr/outils/flux-tlv/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/flux-tlv/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/tlv-stream/"/>
   </url>
   <url>
-    <loc>https://paiement-decrypte.fr/en/outils/emv-parser.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/emv-parser.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/emv-parser.html"/>
+    <loc>https://paiement-decrypte.fr/en/tools/tlv-stream/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/flux-tlv/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/tlv-stream/"/>
   </url>
   <url>
-    <loc>https://paiement-decrypte.fr/outils/nexo-diff.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/nexo-diff.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/nexo-diff.html"/>
+    <loc>https://paiement-decrypte.fr/outils/comparer-configurations/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/comparer-configurations/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/compare-configurations/"/>
   </url>
   <url>
-    <loc>https://paiement-decrypte.fr/en/outils/nexo-diff.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/nexo-diff.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/nexo-diff.html"/>
+    <loc>https://paiement-decrypte.fr/en/tools/compare-configurations/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/comparer-configurations/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/compare-configurations/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/outils/nexo-config-decoder.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/nexo-config-decoder.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/nexo-config-decoder.html"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/outils/nexo-config-decoder.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/nexo-config-decoder.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/nexo-config-decoder.html"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/outils/luhn/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/luhn/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/luhn/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/tools/luhn/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/luhn/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/luhn/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/outils/convertir-un-format/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/convertir-un-format/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/convert-a-format/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/tools/convert-a-format/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/convertir-un-format/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/convert-a-format/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/lexique/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/lexique/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/glossary/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/glossary/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/lexique/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/glossary/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/lexique/fiches/tvr/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/lexique/fiches/tvr/"/>
   </url>
 </urlset>
