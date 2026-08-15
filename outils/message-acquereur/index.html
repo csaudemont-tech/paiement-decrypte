@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Décodeur EMV TLV, l'outil qui explique la transaction | Paiement Décrypté</title>
-<meta name="description" content="Collez un flux TLV EMV : arbre complet, décodage bit à bit (TVR, AIP, TSI…), devises et pays ISO en clair, et lecture guidée de la transaction, pourquoi elle est passée ou a été refusée. 100 % dans votre navigateur.">
+<title>Décodeur de messages NEXO Acquirer, l'outil qui explique l'échange | Paiement Décrypté</title>
+<meta name="description" content="Collez un message du protocole nexo Acquirer (autorisation, complétion, annulation) : décodage des champs standard et des tags EMV embarqués, en clair. Fondé sur la spec publique nexo Card Payment Message Usage Guide v6.0.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Paiement Décrypté">
 <meta property="og:locale" content="fr_FR">
-<meta property="og:locale:alternate" content="en_GB">
-<meta property="og:title" content="Décodeur EMV TLV, l'outil qui explique la transaction">
-<meta property="og:description" content="Le décodeur qui ne se contente pas de nommer les tags : il raconte la transaction.">
-<meta property="og:url" content="https://paiement-decrypte.fr/outils/flux-tlv/">
+<meta property="og:title" content="Décodeur de messages NEXO Acquirer">
+<meta property="og:description" content="Le décodeur qui explique un échange d'autorisation, de complétion ou d'annulation, champ par champ.">
+<meta property="og:url" content="https://paiement-decrypte.fr/outils/message-acquereur/">
 <meta property="og:image" content="https://paiement-decrypte.fr/assets/og-fr.png?v=6cef4971">
-<link rel="canonical" href="https://paiement-decrypte.fr/outils/flux-tlv/">
-<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/flux-tlv/">
-<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/tlv-stream/">
+<link rel="canonical" href="https://paiement-decrypte.fr/outils/message-acquereur/">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/message-acquereur/">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/acquirer-message/">
 <link rel="icon" type="image/svg+xml" href="https://paiement-decrypte.fr/assets/favicon.svg?v=42d12093">
 <style>
+  .lang-link{font-size:12px;letter-spacing:.06em;text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:inherit}
   @font-face{font-family:'Bricolage Grotesque';src:url('https://paiement-decrypte.fr/assets/fonts/bricolage-grotesque-var.woff2?v=11f6ab2d') format('woff2');font-weight:200 800;font-display:swap}
   @font-face{font-family:'Instrument Sans';src:url('https://paiement-decrypte.fr/assets/fonts/instrument-sans-var.woff2?v=adbdfd9a') format('woff2');font-weight:400 700;font-display:swap}
   @font-face{font-family:'JetBrains Mono';src:url('https://paiement-decrypte.fr/assets/fonts/jetbrains-mono-var.woff2?v=e7277e71') format('woff2');font-weight:100 800;font-display:swap}
@@ -35,7 +35,6 @@
      sans !important côté auteur). Résultat avant correctif : le bandeau verdict et la
      barre de permalien restaient visibles, vides, avant tout décodage. */
   [hidden]{display:none !important}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   html{scroll-behavior:smooth}
   body{
     font-family:'Instrument Sans',system-ui,sans-serif;
@@ -51,11 +50,8 @@
   .brand a{color:inherit;text-decoration:none}
   .beta{
     font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--cobalt);border:1px solid var(--cobalt);border-radius:20px;padding:2px 9px;
+    color:var(--cobalt);border:1px solid var(--cobalt);border-radius:20px;padding:2px 9px;margin-left:auto;
   }
-  .masthead-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-  .lang-link{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
-  .lang-link:hover{border-color:var(--cobalt)}
   .kicker{
     font-family:var(--mono);font-size:11px;letter-spacing:.12em;
     text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
@@ -148,10 +144,6 @@
   .ex-link:hover{color:var(--cobalt-deep)}
   .ex-sep{color:var(--ink-soft);font-size:12.5px}
   #ex-desc{font-size:12.5px;color:var(--ink-soft);margin-top:6px;min-height:16px}
-  #input-note{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-soft);margin-top:10px;padding:9px 12px;border-left:3px solid var(--cobalt);border-radius:8px;background:#EDF1FB}
-  #input-note .fmt{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt);border:1px solid var(--cobalt);border-radius:20px;padding:2px 9px}
-  #input-note button{font:inherit;color:var(--cobalt);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
-  #input-note button:hover{color:var(--cobalt-deep)}
 
   /* ---- Erreurs ---- */
   #errors{
@@ -331,49 +323,14 @@
 
   /* ---- Mode construire ---- */
   .build-form{display:flex;flex-direction:column;gap:14px}
-  .build-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .build-load{display:flex;flex-direction:column;gap:6px}
-  .build-load label{font-size:13px;font-weight:600}
-  .build-load-row{display:flex;gap:8px}
-  .build-load-row input{
-    flex:1;min-width:0;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;
-    font-family:var(--mono);font-size:13px;color:var(--ink);background:#FAFBFD;
-  }
-  .build-load-row input:focus{outline:none;border-color:var(--cobalt)}
-  .build-load-hint{margin-top:0;min-height:16px}
-  .build-load-hint.error{color:var(--coral)}
+  .build-head{display:flex;align-items:center;gap:10px}
+  .build-tagname{font-weight:600;font-size:14.5px}
   .build-byte{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
   .build-byte-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
   .build-byte-label{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
   .build-byte-hex{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--cobalt-deep)}
   .build-check{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;padding:5px 0;cursor:pointer}
   .build-check input{margin-top:3px;flex:none;accent-color:var(--cobalt);width:16px;height:16px;cursor:pointer}
-  .build-enum-select{width:100%;font:inherit;font-size:13.5px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer}
-  .build-enum-select:focus{outline:none;border-color:var(--cobalt)}
-  .build-note{background:#FFF6E5;border:1px solid #F0D48A;border-radius:10px;padding:10px 12px;color:var(--ink-soft)}
-  .build-note p{margin:0 0 6px}
-  .build-note p:last-child{margin-bottom:0}
-  .build-note ul{margin:0 0 6px 18px;padding:0}
-  .build-note li{margin:2px 0}
-  .build-enum2-row{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
-  .build-enum2-row label{font-size:11px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em}
-  .build-enum2-result{margin:2px 0 0;font-size:13.5px;font-weight:700;color:var(--cobalt-deep)}
-
-  /* ---- TAC : grille à 3 colonnes ---- */
-  .build-tac-colhead,.build-tac-row{display:grid;grid-template-columns:1fr 56px 56px 64px;align-items:center;gap:6px}
-  .build-tac-colhead{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);padding:0 14px 8px;text-align:center}
-  .build-tac-colhead span:first-child{text-align:left}
-  .build-tac-byte{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:8px}
-  .build-tac-row{font-size:13px;padding:5px 0}
-  .build-tac-row input{accent-color:var(--cobalt);width:16px;height:16px;cursor:pointer;justify-self:center}
-  .build-tac-outputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
-  .build-tac-output{background:#E9F8F2;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
-  .build-tac-output .rawlabel{font-size:11.5px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-  .build-tac-output code{font-size:14px;font-weight:700;letter-spacing:.03em;font-family:var(--mono)}
-  .build-tac-load{display:flex;gap:6px}
-  .build-tac-load input{flex:1;min-width:0;font:inherit;font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-family:var(--mono)}
-  .build-tac-load input:focus{outline:none;border-color:var(--cobalt)}
-  .build-tac-load button{font-size:12px;padding:6px 10px}
   .build-rawval{margin-top:2px;background:#E9F8F2;border-radius:12px;padding:14px 16px}
   .build-rawval .rawlabel{margin-bottom:5px}
   .build-rawval code{font-size:16px;font-weight:700;letter-spacing:.03em}
@@ -394,18 +351,94 @@
   .colophon{font-size:12.5px;color:var(--ink-soft)}
   .colophon a{color:var(--cobalt);text-decoration:none}
 
-  /* === PD:READ_FLASH === Confirmation de décodage, ajoutée le 12/08.
-     Le résultat est plus bas dans la page : sans ce retour à l'endroit du
-     clic, rien ne dit que le décodage a eu lieu. */
-  .read-flash{margin:10px 0 0;font-family:var(--mono,monospace);font-size:12.5px;
-              color:#0B7A5A;background:#F2FAF7;border-left:3px solid var(--mint,#17B587);
-              border-radius:0 8px 8px 0;padding:9px 13px}
-  .read-flash.flash{animation:pdflash .9s ease-out}
-  @keyframes pdflash{0%{opacity:0;transform:translateY(-4px)}12%{opacity:1;transform:none}}
-  @media (prefers-reduced-motion: reduce){.read-flash.flash{animation:none}}
+
+  /* ---- NEXO explainer : composants propres à cet outil ---- */
+  .msg-badge{
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 16px;
+  }
+  .msg-badge-xsd{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--ink-soft)}
+  .field-section{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px;margin-top:14px;max-width:820px;
+  }
+  .field-section h3{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15.5px;
+    margin-bottom:12px;display:flex;align-items:center;gap:8px;
+  }
+  .fs-icon{color:var(--cobalt);font-size:13px}
+  .field-grid{display:flex;flex-direction:column;gap:2px}
+  .field-row{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;
+    padding:7px 0;border-top:1px solid #EEF1F7;font-size:13.5px;
+  }
+  .field-row:first-child{border-top:none}
+  .field-label{color:var(--ink-soft);min-width:220px;flex:none}
+  .field-value{color:var(--ink);font-weight:600;font-family:var(--mono);font-size:13px}
+  .field-hint{flex-basis:100%;color:var(--ink-soft);font-size:12px;font-style:italic}
+  .emv-taglist{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .emv-row{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#FAFBFD}
+  .emv-row.unknown{border-style:dashed}
+  .emv-row-head{display:flex;align-items:center;gap:8px}
+  .emv-row-name{font-size:13.5px;color:var(--ink);font-weight:600}
+  .emv-row.unknown .emv-row-name{color:var(--ink-soft);font-style:italic;font-weight:400}
+  .emv-row-decoded{margin-top:6px;font-size:13px;color:var(--cobalt-deep);background:#E9F8F2;border-radius:8px;padding:6px 9px}
+  .emv-row-raw{margin-top:6px}
+  .emv-row-raw code{font-family:var(--mono);font-size:11px;word-break:break-all;color:var(--ink-soft)}
+
+  /* ---- Modes (identique au Décodeur EMV TLV, pour une navigation cohérente entre outils) ---- */
+  .mode-row{display:flex;gap:0;margin-top:22px;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;width:fit-content;background:var(--card);flex-wrap:wrap}
+  .mode-btn{
+    padding:10px 18px;border:none;background:transparent;cursor:pointer;
+    font-family:inherit;font-weight:600;font-size:14px;color:var(--ink-soft);
+  }
+  .mode-btn.active{background:var(--cobalt);color:#fff}
+  .mode-btn:not(.active):hover{color:var(--cobalt)}
+
+  /* ---- Encart de référence (non-approbation) : jamais un décodage, un rappel de la spec ---- */
+  .reject-note{border-left:3px solid var(--coral);background:#FCF7F5}
+  .reject-note p{font-size:13.5px;color:var(--ink);line-height:1.55;margin-top:8px}
+  .reject-note code{font-family:var(--mono);font-size:12px;background:#FCEEEB;padding:1px 5px;border-radius:5px}
+
+  /* ---- Mode cycle de vie ---- */
+  .lifecycle-summary,.lifecycle-warning{font-size:13.5px;max-width:820px;margin-bottom:14px;padding:10px 14px;border-radius:10px}
+  .lifecycle-summary{background:#EDF1FB;border-left:3px solid var(--cobalt);color:var(--ink)}
+  .lifecycle-warning{background:#FCEEEB;border-left:3px solid var(--coral);color:var(--ink)}
+  .lifecycle-summary code{font-family:var(--mono);background:#fff;padding:1px 5px;border-radius:5px}
+  .lifecycle-track{max-width:820px}
+  .lifecycle-item{position:relative;display:flex;gap:14px;padding-left:2px}
+  .lifecycle-dot{width:14px;height:14px;border-radius:50%;background:var(--mint);border:2px solid #fff;box-shadow:0 0 0 2px var(--mint);margin-top:6px;flex:none}
+  .lifecycle-dot.reject{background:var(--coral);box-shadow:0 0 0 2px var(--coral)}
+  .lifecycle-line{position:absolute;left:6px;top:22px;bottom:-14px;width:2px;background:var(--line)}
+  .lifecycle-card{flex:1;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+  .lifecycle-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .lifecycle-time{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+  .lifecycle-oneline{font-size:13.5px;color:var(--ink);margin-top:8px}
+  .lifecycle-toggle{margin-top:8px;background:none;border:none;color:var(--cobalt);font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;padding:0}
+  .lifecycle-toggle:hover{text-decoration:underline}
+  .lifecycle-detail{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  .lifecycle-detail .field-section{margin-top:10px}
+
+  /* ---- Mode comparer deux messages ---- */
+  .diff-inputs{display:flex;gap:16px;flex-wrap:wrap}
+  .diff-inputs .diff-col{flex:1;min-width:260px}
+  .diff-inputs label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .diff-badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .diff-summary{font-size:13.5px;color:var(--ink-soft);max-width:820px;margin-bottom:10px}
+  .diff-table{width:100%;max-width:820px;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .diff-table th{text-align:left;padding:9px 12px;background:#F5F7FB;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:12.5px;color:var(--ink)}
+  .diff-table td{padding:8px 12px;border-top:1px solid #EEF1F7;vertical-align:top}
+  .diff-section-row td{background:#FAFBFD;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);padding:7px 12px}
+  .diff-label{color:var(--ink-soft);width:34%}
+  .diff-val{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+  .diff-empty{color:#C7CEDB}
+  .diff-row.diff-differs{background:#FCF7F5}
+  .diff-row.diff-differs .diff-val{color:#B4402F;font-weight:600}
+
 </style>
 </head>
-<body data-ep="emv-parser">
+<body data-ep="message-acquereur">
 <div class="app">
 
   <header class="masthead">
@@ -422,260 +455,107 @@
       <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
     </svg>
     <div class="brand"><a href="https://paiement-decrypte.fr/">Paiement Décrypté</a></div>
-    <div class="masthead-right">
-      <span class="beta">Outils · bêta</span>
-      <a class="lang-link" href="https://paiement-decrypte.fr/en/tools/tlv-stream/" hreflang="en">EN</a>
-    </div>
+    <span class="beta">Outils · bêta</span>
+    <a class="lang-link" href="https://paiement-decrypte.fr/en/tools/acquirer-message/" hreflang="en">EN</a>
   </header>
-  <script src="/assets/js/pd-toolbar.js?v=f37cc800" data-tool="flux-tlv"></script>
+  <script src="/assets/js/pd-toolbar.js?v=f37cc800" data-tool="message-acquereur"></script>
 
-  <div class="kicker">Décodeur EMV TLV</div>
-  <h1>Ne décodez pas seulement les tags.<br>Comprenez la transaction.</h1>
+  <div class="kicker">Décodeur NEXO Acquirer</div>
+  <h1>Un message d'autorisation, de complétion ou d'annulation.<br>Lu champ par champ.</h1>
 
-  <div class="privacy">Cet outil décode le TLV (tag, longueur, valeur) EMV et donne un sens étendu à chaque tag : TVR (tag 95), Terminal Capabilities (9F33), AID, dates, montants… Format décrit dans l'EMV Book 3 (Application Specification), Annexe B, règles pour les objets BER-TLV.</div>
+  <div class="privacy">Cet outil décode les messages du protocole <b>nexo Acquirer</b> (norme publique nexo Standards, Card Payment Message Usage Guide v6.0) : requêtes/réponses d'autorisation, avis de complétion, avis d'annulation. Il n'affiche que des champs standard du protocole et des tags EMV standard embarqués (ICCRelatedData) – aucun champ propriétaire, aucun format de log interne.</div>
 
   <div class="mode-row" role="tablist">
-    <button type="button" class="mode-btn active" id="mode-stream" role="tab" aria-selected="true">Flux TLV complet</button>
-    <button type="button" class="mode-btn" id="mode-tag" role="tab" aria-selected="false">Décoder un tag seul</button>
-    <button type="button" class="mode-btn" id="mode-build" role="tab" aria-selected="false">Construire un tag</button>
+    <button type="button" class="mode-btn active" id="mode-single" role="tab" aria-selected="true">Décoder un message</button>
+    <button type="button" class="mode-btn" id="mode-lifecycle" role="tab" aria-selected="false">Cycle de vie d'une transaction</button>
+    <button type="button" class="mode-btn" id="mode-diff" role="tab" aria-selected="false">Comparer deux messages</button>
   </div>
 
-  <div class="input-card">
-    <div id="panel-stream">
-      <textarea id="hex-input" placeholder="Collez votre flux ici, hexadécimal ou Base64, le format est détecté tout seul.&#10;Ex. : 6F 20 84 07 A0 00 00 00 04 10 10 …&#10;Ex. : byCEB6AAAAAEEBClFVAL…" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+  <div id="panel-single">
+    <div class="input-card">
+      <textarea id="nexo-input" placeholder="Collez ici un message XML du protocole nexo Acquirer (AccptrAuthstnReq, AccptrAuthstnRspn, AccptrCmpltnAdvc, AccptrCxlAdvc…), avec ou sans l'enveloppe &lt;Document&gt;." spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
       <div class="btn-row">
-        <button type="button" class="btn" id="btn-parse">Décoder</button>
+        <button type="button" class="btn" id="btn-decode">Décoder</button>
         <button type="button" class="btn ghost" id="btn-clear">Effacer</button>
       </div>
-      <p class="read-flash" id="read-flash" role="status" aria-live="polite" hidden></p>
       <p class="hint"><kbd>Ctrl</kbd>+<kbd>Entrée</kbd> pour décoder directement depuis la zone de saisie.</p>
 
-      <p class="ex-title">Exemples (tous synthétiques) :</p>
-      <div class="ex-links" id="examples"></div>
+      <p class="ex-title">Exemples (issus de la spec publique nexo, cycle de vie d'une même transaction) :</p>
+      <div class="ex-links" id="nexo-examples"></div>
       <p id="ex-desc"></p>
-      <div id="input-note" hidden></div>
     </div>
 
-    <div id="panel-tag" hidden>
-      <div class="tag-form">
-        <label for="tag-search">Tag à décoder</label>
-        <div class="tag-picker">
-          <input type="text" id="tag-search" placeholder="Cherchez par numéro (9F34) ou par nom (CVM, TVR, devise…)" spellcheck="false" autocapitalize="off" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="tag-dropdown">
-          <div id="tag-dropdown" class="tag-dropdown" hidden role="listbox"></div>
-        </div>
-        <label for="tag-value">Valeur hexadécimale (sans le tag ni la longueur)</label>
-        <input type="text" id="tag-value" placeholder="ex. 0000A08000 pour un TVR" spellcheck="false" autocapitalize="off" autocomplete="off">
-        <div class="btn-row">
-          <button type="button" class="btn" id="btn-tag-decode">Décoder ce tag</button>
-        </div>
-        <p class="hint">Le décodage détaillé d'un seul tag, TVR, AIP, CVM Results, devise…, sans coller tout le flux. Le lien de partage fonctionne ici aussi.</p>
-      </div>
-    </div>
+    <p id="nexo-errors" hidden style="margin-top:16px;padding:14px 18px;border-radius:12px;font-size:14px;background:#FCEEEB;border-left:3px solid var(--coral);color:var(--ink);max-width:820px;"></p>
 
-    <div id="panel-build" hidden>
-      <div class="build-form">
-        <div class="build-head">
-          <span class="tag-badge" id="build-tag-badge"></span>
-        </div>
-
-        <div class="tag-form">
-          <label for="build-tag-search">Tag à construire</label>
-          <div class="tag-picker build-tag-picker">
-            <input type="text" id="build-tag-search" placeholder="Cherchez par numéro (9F40) ou par nom (TTQ, TAC, capacités…)" spellcheck="false" autocapitalize="off" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="build-tag-dropdown">
-            <div id="build-tag-dropdown" class="tag-dropdown" hidden role="listbox"></div>
-          </div>
-        </div>
-
-        <div class="hint build-note" id="build-note" hidden></div>
-
-        <div id="build-single-host">
-          <div class="build-load">
-            <label for="build-load-value">Repartir d'une valeur existante (optionnel)</label>
-            <div class="build-load-row">
-              <input type="text" id="build-load-value" placeholder="ex. E0F8C8" spellcheck="false" autocapitalize="off" autocomplete="off">
-              <button type="button" class="btn secondary" id="build-load-btn">Charger</button>
-            </div>
-            <p class="hint build-load-hint" id="build-load-hint"></p>
-          </div>
-
-          <p class="hint" id="build-hint">Cochez les capacités du terminal : la valeur hexadécimale se met à jour en direct, prête à coller dans un fichier ou un terminal de config. Les bits non listés ci-dessous sont réservés (RFU) et restent à 0.</p>
-          <div id="build-fields"></div>
-          <div class="rawval build-rawval">
-            <span class="rawlabel">valeur hexadécimale (sans le tag ni la longueur)<button type="button" class="copy-btn" id="build-copy" data-copy="">Copier</button></span>
-            <code id="build-hex"></code>
-          </div>
-        </div>
-
-        <div id="build-multi-host" hidden></div>
-      </div>
-    </div>
+    <div id="nexo-result" hidden></div>
   </div>
 
-  <ul id="errors" hidden></ul>
+  <div id="panel-lifecycle" hidden>
+    <div class="input-card">
+      <textarea id="lifecycle-input" placeholder="Collez ici plusieurs messages du protocole nexo Acquirer, à la suite les uns des autres (par ex. la requête d'autorisation, sa réponse, puis l'avis de complétion) : l'outil les relie et les ordonne dans le temps." spellcheck="false" autocapitalize="off" autocomplete="off" style="min-height:160px"></textarea>
+      <div class="btn-row">
+        <button type="button" class="btn" id="btn-lifecycle-run">Reconstituer le cycle de vie</button>
+        <button type="button" class="btn ghost" id="btn-lifecycle-clear">Effacer</button>
+      </div>
+      <p class="ex-title">Exemple (les 4 messages de la même transaction, requête → réponse → complétion → annulation) :</p>
+      <div class="ex-links"><button type="button" class="ex-link" id="btn-lifecycle-demo">charger le cycle complet</button></div>
+    </div>
 
-  <div id="verdict" class="verdict" hidden></div>
+    <p id="lifecycle-errors" hidden style="margin-top:16px;padding:14px 18px;border-radius:12px;font-size:14px;background:#FCEEEB;border-left:3px solid var(--coral);color:var(--ink);max-width:820px;"></p>
 
-  <div id="permalink-bar" hidden>
-    <button type="button" class="btn secondary" id="btn-copy">Copier le lien de ce décodage</button>
-    <p>Le décodage complet tient dans l'URL, collez-la dans un ticket, un chat d'équipe ou une réponse de forum.</p>
+    <div id="lifecycle-result" hidden></div>
   </div>
 
-  <div id="single-result" hidden></div>
-
-  <div id="results-grid" hidden>
-    <div id="analysis-col">
-      <div id="analysis-empty" hidden>Pas de tags de décision (TVR, TSI, AIP, CID, ARC…) dans ces données, la lecture de transaction s'active dès qu'ils sont présents. Essayez l'exemple « flux simple ».</div>
-      <section id="explainer" hidden></section>
-    </div>
-    <section id="result" hidden>
-      <div class="result-head">
-        <h2>Arbre TLV</h2>
-        <span id="tree-count"></span>
+  <div id="panel-diff" hidden>
+    <div class="input-card">
+      <div class="diff-inputs">
+        <div class="diff-col">
+          <label for="diff-input-a">Message A</label>
+          <textarea id="diff-input-a" placeholder="Premier message à comparer…" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+        </div>
+        <div class="diff-col">
+          <label for="diff-input-b">Message B</label>
+          <textarea id="diff-input-b" placeholder="Second message à comparer…" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+        </div>
       </div>
-      <div id="tree"></div>
-    </section>
+      <div class="btn-row">
+        <button type="button" class="btn" id="btn-diff-run">Comparer</button>
+        <button type="button" class="btn ghost" id="btn-diff-clear">Effacer</button>
+      </div>
+      <p class="ex-title">Exemple :</p>
+      <div class="ex-links"><button type="button" class="ex-link" id="btn-diff-demo">requête vs réponse d'autorisation</button></div>
+      <p id="diff-desc"></p>
+    </div>
+
+    <p id="diff-errors" hidden style="margin-top:16px;padding:14px 18px;border-radius:12px;font-size:14px;background:#FCEEEB;border-left:3px solid var(--coral);color:var(--ink);max-width:820px;"></p>
+
+    <div id="diff-result" hidden></div>
   </div>
 
   <footer class="toolfoot">
     <div class="cta">
-      <b>Les mécanismes derrière ces tags, en 5 minutes par notion.</b>
-      <p>Réseaux, interchange, autorisation… <a href="https://paiement-decrypte.fr/">Les micro-formations Paiement Décrypté</a> expliquent le paiement depuis le terrain, puis la newsletter vous prévient à chaque nouvel épisode.</p>
+      <b>Le protocole derrière ces échanges, en 5 minutes par notion.</b>
+      <p>Autorisation, acquisition, réseaux… <a href="https://paiement-decrypte.fr/">Les micro-formations Paiement Décrypté</a> expliquent le paiement depuis le terrain, puis la newsletter vous prévient à chaque nouvel épisode.</p>
     </div>
-    <p class="colophon">Un outil <a href="https://paiement-decrypte.fr/">Paiement Décrypté</a> · dictionnaire fondé sur les spécifications EMV publiques (EMV 4.3 Books 3-4, Contactless C-2), référencées tag par tag · tables ISO 4217/3166 complètes · les tags propriétaires non publiés sont affichés comme tels, jamais inventés.</p>
+    <p class="colophon">Un outil <a href="https://paiement-decrypte.fr/">Paiement Décrypté</a> · champs fondés sur la spec publique nexo Standards, Card Payment Message Usage Guide v6.0 (Acquirer Protocol) et Card Payment Message Examples v6.0 · tags EMV embarqués décodés avec le même dictionnaire sourcé que le <a href="/outils/flux-tlv/">Transaction Explainer</a> · les champs ou codes non répertoriés dans ce dictionnaire sont affichés en valeur brute, jamais devinés.</p>
   </footer>
 
 </div>
 <script>
-/* === EMV_DICTIONARY:BEGIN === */
-/* ============================================================
-   Paiement Décrypté – dictionnaire EMV canonique (FR)
-   ============================================================
-   SOURCE UNIQUE DE VÉRITÉ pour les données EMV partagées entre les
-   outils du site (emv-parser, nexo-config-decoder, et à terme
-   nexo-acquirer-explainer / nexo-retailer-explainer une fois
-   remis à niveau – voir mémoire [[architecture-plateforme]]).
-
-   RÈGLE D'OR : ne jamais éditer ce bloc de données dans un fichier
-   outil directement (repérable aux marqueurs EMV_DICTIONARY:BEGIN
-   / EMV_DICTIONARY:END). Éditer CE fichier-ci, puis lancer :
-     node a-publier/_shared/merge-emv-dictionary.js
-   Le script réécrit le bloc marqué dans chaque outil listé au
-   sommet du script (MANIFEST), vérifie la syntaxe résultante, et
-   n'écrit rien si un fichier n'a pas ses marqueurs. Voir mémoire
-   [[architecture-plateforme]], section « DICTIONNAIRE EMV
-   CANONIQUE », pour le contexte complet : pourquoi PAS un
-   <script src> chargé au runtime (incident du 09/08 avec
-   assets/js/emv-dictionary.js – chemins relatifs incompatibles
-   entre a-publier/ et site/, URL absolue invérifiable en local,
-   fichier resté périmé faute de coordination entre sessions).
-
-   Contenu : AID réseaux (EMV_AIDS, DF_NAMES), dictionnaire de tags
-   EMV (EMV_TAGS + TAG_REFS pour le sourcing), bitfields (TVR/AIP/
-   TSI/TERMCAP/ADDTERMCAP/TTQ), codes CVM/ARC/TX_TYPES, TERM_TYPE
-   (+ ses 2 axes pour un éventuel sélecteur), Form Factor Indicator
-   Visa/Mastercard (tag 9F6E), tables ISO 4217/3166 complètes
-   (CURRENCY_DICT/COUNTRY_DICT).
-   Sources : EMV 4.3 Book 3 (définitions de tags, TVR/TSI/CID,
-   Terminal Action Analysis), EMV 4.3 Book 4 Annexe A1/A2/A3
-   (Terminal Type, Terminal Capabilities, Additional Terminal
-   Capabilities), EMV Contactless Book A v2.11 Table 5-4 (TTQ), EMV
-   Contactless Book C-2 Kernel 2, Visa Payment Technology Standards
-   Manual (FFI), documentation Mastercard M/Chip (Third Party
-   Data), connaissances publiques (AID réseaux), tables ISO
-   4217/3166-1 (pycountry + Babel/CLDR). Aucune donnée réelle :
-   tous les exemples sont synthétiques.
-
-   Dernière synchro depuis emv-parser.html : round 8 (2026-08-09).
-   ============================================================ */
-
-/* --------------------------------------------------------------------------
-   AID et RID – reconstruits le 2026-08-12 depuis des sources PUBLIQUES.
-   src: 'p' = source primaire (spécification EMVCo/ISO, ou document public
-             publié par le réseau lui-même – à ce jour seul Visa le fait,
-             Transaction Acceptance Device Guide, table 4-2, août 2025)
-        'c' = plusieurs sources publiques indépendantes et concordantes
-             (jeux de cartes de test sous licence réseau, U.S. Payments
-             Forum, spécifications domestiques publiées)
-   Toute valeur portée par une seule source secondaire a été ÉCARTÉE.
-   Structure : AID = RID (5 octets) + PIX (0 à 11 octets), ISO/IEC 7816-5 ;
-   longueur 5 à 16 octets (EMV Book 3, annexe A, tags 4F et 9F06).
-   -------------------------------------------------------------------------- */
 const EMV_AIDS = {
-  'A0000000031010':       { reseau: 'Visa', produit: 'Visa débit ou crédit', src: 'p' },
-  'A0000000032010':       { reseau: 'Visa', produit: 'Visa Electron', src: 'p' },
-  'A0000000032020':       { reseau: 'Visa', produit: 'V PAY (Europe uniquement)', src: 'p' },
-  'A0000000033010':       { reseau: 'Visa', produit: 'Visa Interlink (débit américain)', src: 'p' },
-  'A0000000038010':       { reseau: 'Visa', produit: 'Plus (retrait)', src: 'p' },
-  'A0000000980840':       { reseau: 'Visa', produit: 'Visa U.S. Common Debit', src: 'p' },
-  'A000000003101001':     { reseau: 'Visa', produit: 'Visa Credit (extension de PIX)', src: 'c' },
-  'A000000003101002':     { reseau: 'Visa', produit: 'Visa Debit (extension de PIX)', src: 'c' },
-  'A0000000041010':       { reseau: 'Mastercard', produit: 'Mastercard crédit ou débit', src: 'c' },
-  'A0000000042203':       { reseau: 'Mastercard', produit: 'Maestro américain, alias Mastercard U.S. Common Debit', src: 'c' },
-  'A0000000043060':       { reseau: 'Mastercard', produit: 'Maestro (débit international)', src: 'c' },
-  'A0000000046000':       { reseau: 'Mastercard', produit: 'Cirrus (retrait)', src: 'c' },
-  'A0000000048002':       { reseau: 'Mastercard', produit: 'Chip Authentication Program (CAP)', src: 'c' },
-  'A0000000049999':       { reseau: 'Mastercard', produit: 'Mastercard PayPass', src: 'c' },
-  'A0000000050001':       { reseau: 'Mastercard', produit: 'Maestro UK (ex-Switch)', src: 'c' },
-  'A00000002501':         { reseau: 'American Express', produit: 'American Express (AEIPS, contact et sans contact)', src: 'c' },
-  'A0000000421010':       { reseau: 'CB', produit: 'CB (Cartes Bancaires), crédit ou débit', src: 'c', fr: true },
-  'A0000000422010':       { reseau: 'CB', produit: 'CB (Cartes Bancaires), débit', src: 'c', fr: true },
-  'A0000001523010':       { reseau: 'Discover', produit: 'Discover et Diners Club (D-PAS)', src: 'c' },
-  'A0000001524010':       { reseau: 'Discover', produit: 'Discover U.S. Common Debit', src: 'c' },
-  'A0000003241010':       { reseau: 'Discover', produit: 'Discover ZIP', src: 'c' },
-  'A000000333010101':     { reseau: 'UnionPay', produit: 'UnionPay débit', src: 'c' },
-  'A000000333010102':     { reseau: 'UnionPay', produit: 'UnionPay crédit', src: 'c' },
-  'A000000333010103':     { reseau: 'UnionPay', produit: 'UnionPay quasi-crédit', src: 'c' },
-  'A000000333010106':     { reseau: 'UnionPay', produit: 'UnionPay monnaie électronique', src: 'c' },
-  'A000000333010108':     { reseau: 'UnionPay', produit: 'UnionPay U.S. Common Debit', src: 'c' },
-  'A0000000651010':       { reseau: 'JCB', produit: 'JCB (J/Smart Credit)', src: 'c' },
-  'A0000003591010028001': { reseau: 'girocard', produit: 'girocard (Allemagne)', src: 'c' },
-  'D27600002545500100':   { reseau: 'girocard', produit: 'Geldkarte (Allemagne)', src: 'c' },
-  'A0000001211010':       { reseau: 'Dankort', produit: 'Dankort (Danemark)', src: 'c' },
-  'A0000001410001':       { reseau: 'Bancomat', produit: 'PagoBancomat (Italie)', src: 'c' },
-  'A0000002771010':       { reseau: 'Interac', produit: 'Interac (Canada)', src: 'c' },
-  'A0000005241010':       { reseau: 'RuPay', produit: 'RuPay (Inde)', src: 'c' },
-  'A0000006581010':       { reseau: 'Mir', produit: 'Mir crédit (Russie)', src: 'c' },
-  'A0000006582010':       { reseau: 'Mir', produit: 'Mir débit (Russie)', src: 'c' },
-  'A00000038410':         { reseau: 'eftpos', produit: 'eftpos Savings (Australie)', src: 'c' },
-  'A00000038420':         { reseau: 'eftpos', produit: 'eftpos Cheque (Australie)', src: 'c' },
-  'A0000003710001':       { reseau: 'Verve', produit: 'Verve (Nigeria)', src: 'c' },
-  'D5780000021010':       { reseau: 'BankAxept', produit: 'BankAxept (Norvège)', src: 'c' },
-  'A0000002281010':       { reseau: 'SPAN', produit: 'SPAN (Arabie saoudite), M/Chip', src: 'c' },
-  'A0000001544442':       { reseau: 'Banricompras', produit: 'Banricompras Débito (Brésil)', src: 'c' },
-  'A0000000291010':       { reseau: 'LINK', produit: 'LINK (retrait, Royaume-Uni)', src: 'c' },
-  'A0000004391010':       { reseau: 'Exchange', produit: 'The Exchange Network (retrait, États-Unis et Canada)', src: 'c' },
-  'A0000004360100':       { reseau: 'Edenred', produit: 'Ticket Restaurant (Belgique)', src: 'c' },
-  'A0000006200620':       { reseau: 'DNA', produit: 'Debit Network Alliance Shared Debit (États-Unis)', src: 'c' },
-};
-
-const EMV_RIDS = {
-  'A000000003': { titulaire: 'Visa International', zone: 'International' },
-  'A000000098': { titulaire: 'Visa USA (US Common Debit)', zone: 'États-Unis' },
-  'A000000004': { titulaire: 'Mastercard International', zone: 'International' },
-  'A000000005': { titulaire: 'Switch Card Services (Maestro UK)', zone: 'Royaume-Uni' },
-  'A000000025': { titulaire: 'American Express', zone: 'International' },
-  'A000000029': { titulaire: 'LINK Interchange Network', zone: 'Royaume-Uni' },
-  'A000000042': { titulaire: 'Groupement des Cartes Bancaires CB', zone: 'France' },
-  'A000000059': { titulaire: 'Zentraler Kreditausschuss (ZKA)', zone: 'Allemagne' },
-  'A000000065': { titulaire: 'JCB Co., Ltd.', zone: 'Japon' },
-  'A000000121': { titulaire: 'PBS Danmark (Dankort)', zone: 'Danemark' },
-  'A000000141': { titulaire: 'Consorzio Bancomat', zone: 'Italie' },
-  'A000000152': { titulaire: 'Diners Club International', zone: 'International' },
-  'A000000154': { titulaire: 'Banrisul', zone: 'Brésil' },
-  'A000000228': { titulaire: 'Saudi Arabian Monetary Agency (SPAN)', zone: 'Arabie saoudite' },
-  'A000000277': { titulaire: 'Interac Association', zone: 'Canada' },
-  'A000000324': { titulaire: 'Discover Financial Services', zone: 'États-Unis' },
-  'A000000333': { titulaire: 'China UnionPay', zone: 'Chine' },
-  'A000000359': { titulaire: 'girocard – titulaire divergent selon les sources (Die Deutsche Kreditwirtschaft ou EAPS)', zone: 'Allemagne' },
-  'A000000371': { titulaire: 'Verve / Interswitch', zone: 'Nigeria' },
-  'A000000384': { titulaire: 'eftpos / AusPayNet', zone: 'Australie' },
-  'A000000436': { titulaire: 'Edenred', zone: 'Belgique' },
-  'A000000439': { titulaire: 'ACCEL / The Exchange Network', zone: 'États-Unis et Canada' },
-  'A000000524': { titulaire: 'RuPay / NPCI', zone: 'Inde' },
-  'A000000620': { titulaire: 'Debit Network Alliance', zone: 'États-Unis' },
-  'A000000658': { titulaire: 'Mir / NSPK', zone: 'Russie' },
-  'D276000025': { titulaire: 'ZKA (girocard, Geldkarte)', zone: 'Allemagne' },
-  'D578000002': { titulaire: 'BankAxept', zone: 'Norvège' },
+  'A0000000031010': { reseau: 'Visa', produit: 'Visa crédit/débit' },
+  'A0000000032010': { reseau: 'Visa', produit: 'Visa Electron' },
+  'A0000000032020': { reseau: 'Visa', produit: 'V PAY' },
+  'A0000000041010': { reseau: 'Mastercard', produit: 'Mastercard crédit/débit' },
+  'A0000000043060': { reseau: 'Mastercard', produit: 'Maestro' },
+  'A0000000250104': { reseau: 'American Express', produit: 'Amex' },
+  'A00000002501':   { reseau: 'American Express', produit: 'Amex' },
+  'A0000000421010': { reseau: 'CB', produit: 'CB (Cartes Bancaires), crédit/débit', fr: true },
+  'A0000000422010': { reseau: 'CB', produit: 'CB (Cartes Bancaires), débit', fr: true },
+  'A0000001523010': { reseau: 'Discover', produit: 'Discover/Diners' },
+  'A0000003330101': { reseau: 'UnionPay', produit: 'UnionPay débit' },
+  'A0000003330102': { reseau: 'UnionPay', produit: 'UnionPay crédit' },
+  'A0000000651010': { reseau: 'JCB', produit: 'JCB' },
 };
 
 const DF_NAMES = {
@@ -756,51 +636,15 @@ const TERMCAP_BITS = [
   [3,0x08,"Authentification combinée (CDA)",'info'],
 ];
 
-/* Additional Terminal Capabilities (9F40), sourcée EMV 4.3 Book 4, Annexe A3
-   (Material/EMV/EMV_v4.3_Book_4_Other_Interfaces…pdf, tables 28-32), 27 bits
-   définis sur 40 (5 octets). Byte 2 n'a qu'un seul bit défini (RFU sinon). */
-const ADDTERMCAP_BITS = [
-  [1,0x80,"Retrait cash / espèces",'info'],
-  [1,0x40,"Achat de biens",'info'],
-  [1,0x20,"Achat de services",'info'],
-  [1,0x10,"Cash-back",'info'],
-  [1,0x08,"Consultation de compte (inquiry)",'info'],
-  [1,0x04,"Virement entre comptes",'info'],
-  [1,0x02,"Paiement vers un tiers",'info'],
-  [1,0x01,"Transaction administrative",'info'],
-  [2,0x80,"Dépôt d'espèces",'info'],
-  [3,0x80,"Clavier numérique",'info'],
-  [3,0x40,"Clavier alphabétique et caractères spéciaux",'info'],
-  [3,0x20,"Touches de commande",'info'],
-  [3,0x10,"Touches de fonction",'info'],
-  [4,0x80,"Impression côté commerçant",'info'],
-  [4,0x40,"Impression côté porteur",'info'],
-  [4,0x20,"Écran côté commerçant",'info'],
-  [4,0x10,"Écran côté porteur",'info'],
-  [4,0x02,"Table de code ISO/IEC 8859, partie 10",'info'],
-  [4,0x01,"Table de code ISO/IEC 8859, partie 9",'info'],
-  [5,0x80,"Table de code ISO/IEC 8859, partie 8",'info'],
-  [5,0x40,"Table de code ISO/IEC 8859, partie 7",'info'],
-  [5,0x20,"Table de code ISO/IEC 8859, partie 6",'info'],
-  [5,0x10,"Table de code ISO/IEC 8859, partie 5",'info'],
-  [5,0x08,"Table de code ISO/IEC 8859, partie 4",'info'],
-  [5,0x04,"Table de code ISO/IEC 8859, partie 3",'info'],
-  [5,0x02,"Table de code ISO/IEC 8859, partie 2",'info'],
-  [5,0x01,"Table de code ISO/IEC 8859, partie 1",'info'],
-];
-
-/* Terminal Transaction Qualifiers (9F66), sans contact, sourcée EMV Contactless
-   Book A v2.11, Table 5-4 (Material/EMV/EMV-Contactless-Book-A-…pdf) : c'est la
-   définition Entry Point générique (celle que TOUS les kernels reçoivent en
-   « Copy of TTQ »), pas une variante par réseau. Les deux blogs comparés avant
-   l'ajout de cette source (EFTlab, emv.cool) se trompaient sur l'octet 1 bits
-   6-7 (parlaient de « Contactless VSDC/qVSDC » là où la spec dit b7 = RFU et
-   b6 = « EMV mode supported » tout court) : preuve concrète que la source
-   primaire valait la peine d'être ajoutée avant de construire. Variantes par
-   réseau (Visa Kernel 3, UnionPay qPBOC, Discover DPAS…) potentiellement
-   différentes sur les bits RFU de cette table de base, mais pas sourcées ici
-   à ce jour : pas construites, pas de sélecteur réseau tant qu'il n'y a
-   qu'un seul jeu de données vérifié. */
+/* TTQ_BITS ajoutée le 10/08 : rafraîchissement depuis a-publier/outils/emv-parser/emv-parser.html
+   (table canonique, EMV Contactless Book A v2.11, Table 5-4, Entry Point générique). Corrige un
+   décodage manuel bit-à-bit (case 'ttq' ci-dessous) qui datait d'avant l'ajout de cette table côté
+   emv-parser et se trompait notamment sur le bit 1/0x08 (affiché comme "terminal en ligne
+   uniquement", qui est le sens INVERSE de "lecteur hors ligne uniquement"). Si cette table diverge
+   un jour de celle d'emv-parser, celle d'emv-parser fait référence – resynchroniser depuis elle,
+   ne pas repartir de zéro sur la source EMV Contactless Book A. Voir [[architecture-plateforme]],
+   [[outil-nexo-acquirer]] pour le contexte (garde en copie locale, pas dans le MANIFEST de fusion :
+   cet outil n'a besoin que de cette table sur l'ensemble du dictionnaire). */
 const TTQ_BITS = [
   [1,0x80,"Mode piste magnétique supporté (mag-stripe)",'info'],
   [1,0x20,"Mode EMV supporté",'info'],
@@ -1013,7 +857,7 @@ const EMV_TAGS = {
     p: "Heure locale de la transaction (HHMMSS), complément du tag 9A." },
   '9F24': { n: "PAR, Payment Account Reference", cat: "Identification", dec: 'text',
     p: "Identifiant non sensible (jusqu'à 29 caractères alphanumériques) qui relie un PAN tokenisé (wallet mobile, carte virtuelle) à son PAN d'origine, sans jamais exposer ce dernier. Un même PAR reste stable pour tous les tokens issus de la même carte physique, ce qui permet de rapprocher paiement en carte physique et paiement en wallet côté commerçant ou émetteur sans aucun risque PCI." },
-  '9F40': { n: "Additional Terminal Capabilities", cat: "Terminal", dec: 'addtermcap',
+  '9F40': { n: "Additional Terminal Capabilities", cat: "Terminal",
     p: "Complément du tag 9F33 : types de transactions supportés (cash, achat, retrait…) et capacités d'affichage/saisie du terminal." },
   '9F41': { n: "Transaction Sequence Counter", cat: "Transaction", dec: 'counter',
     p: "Compteur de transactions côté terminal, le pendant terminal de l'ATC carte." },
@@ -1099,24 +943,6 @@ const TERM_TYPE = {
   '36': "Porteur, terminal personnel, hors ligne uniquement",
 };
 
-/* Décomposition de TERM_TYPE en 2 axes pour le sélecteur du mode « Construire »
-   (round 6, 09/08) : le code à 2 chiffres croise « qui contrôle le terminal »
-   (1er chiffre) et « son environnement » (2e chiffre, stable d'une catégorie à
-   l'autre, ex. le chiffre 4 veut toujours dire « sans opérateur, en ligne
-   uniquement », que ce soit pour une institution (14), un commerçant (24) ou
-   un porteur (34, si le code existe)). Vérifié contre TERM_TYPE : les 15
-   entrées s'expliquent exactement par ce croisement (Porteur n'a que les
-   environnements « sans opérateur », cohérent avec un terminal personnel). */
-const TERM_TYPE_AXIS_A = { '1': "Institution financière", '2': "Commerçant", '3': "Porteur" };
-const TERM_TYPE_AXIS_B = {
-  '1': "Avec opérateur, en ligne uniquement",
-  '2': "Avec opérateur, hors ligne (passage en ligne possible)",
-  '3': "Avec opérateur, hors ligne uniquement",
-  '4': "Sans opérateur, en ligne uniquement",
-  '5': "Sans opérateur, hors ligne (passage en ligne possible)",
-  '6': "Sans opérateur, hors ligne uniquement",
-};
-
 /* Form Factor Indicator (9F6E), Visa : byte 1 bits 5-1, forme du support */
 const VISA_FFI_FORM = {
   0: "Carte standard (ID-1, ISO 7810)", 1: "Mini-carte", 2: "Support sans contact non-carte (clé, bague, sticker…)",
@@ -1150,7 +976,6 @@ const MC_DEVICE_TYPES = {
 /* Tables ISO 4217 / ISO 3166-1 numeriques, noms FR, generees via pycountry + Babel/CLDR (session v3-decodeurs) */
 const CURRENCY_DICT = {"008":{"code":"ALL","name":"lek albanais"},"012":{"code":"DZD","name":"dinar algérien"},"032":{"code":"ARS","name":"peso argentin"},"036":{"code":"AUD","name":"dollar australien"},"044":{"code":"BSD","name":"dollar bahaméen"},"048":{"code":"BHD","name":"dinar bahreïni"},"050":{"code":"BDT","name":"taka bangladeshi"},"051":{"code":"AMD","name":"dram arménien"},"052":{"code":"BBD","name":"dollar barbadien"},"060":{"code":"BMD","name":"dollar bermudien"},"064":{"code":"BTN","name":"ngultrum bouthanais"},"068":{"code":"BOB","name":"boliviano bolivien"},"072":{"code":"BWP","name":"pula botswanais"},"084":{"code":"BZD","name":"dollar bélizéen"},"090":{"code":"SBD","name":"dollar des îles Salomon"},"096":{"code":"BND","name":"dollar brunéien"},"104":{"code":"MMK","name":"kyat myanmarais"},"108":{"code":"BIF","name":"franc burundais"},"116":{"code":"KHR","name":"riel cambodgien"},"124":{"code":"CAD","name":"dollar canadien"},"132":{"code":"CVE","name":"escudo capverdien"},"136":{"code":"KYD","name":"dollar des îles Caïmans"},"144":{"code":"LKR","name":"roupie srilankaise"},"152":{"code":"CLP","name":"peso chilien"},"156":{"code":"CNY","name":"yuan renminbi chinois"},"170":{"code":"COP","name":"peso colombien"},"174":{"code":"KMF","name":"franc comorien"},"188":{"code":"CRC","name":"colón costaricain"},"192":{"code":"CUP","name":"peso cubain"},"203":{"code":"CZK","name":"couronne tchèque"},"208":{"code":"DKK","name":"couronne danoise"},"214":{"code":"DOP","name":"peso dominicain"},"222":{"code":"SVC","name":"colón salvadorien"},"230":{"code":"ETB","name":"birr éthiopien"},"232":{"code":"ERN","name":"nafka érythréen"},"238":{"code":"FKP","name":"livre des îles Malouines"},"242":{"code":"FJD","name":"dollar fidjien"},"262":{"code":"DJF","name":"franc djiboutien"},"270":{"code":"GMD","name":"dalasi gambien"},"292":{"code":"GIP","name":"livre de Gibraltar"},"320":{"code":"GTQ","name":"quetzal guatémaltèque"},"324":{"code":"GNF","name":"franc guinéen"},"328":{"code":"GYD","name":"dollar du Guyana"},"332":{"code":"HTG","name":"gourde haïtienne"},"340":{"code":"HNL","name":"lempira hondurien"},"344":{"code":"HKD","name":"dollar de Hong Kong"},"348":{"code":"HUF","name":"forint hongrois"},"352":{"code":"ISK","name":"couronne islandaise"},"356":{"code":"INR","name":"roupie indienne"},"360":{"code":"IDR","name":"roupie indonésienne"},"364":{"code":"IRR","name":"riyal iranien"},"368":{"code":"IQD","name":"dinar irakien"},"376":{"code":"ILS","name":"nouveau shekel israélien"},"388":{"code":"JMD","name":"dollar jamaïcain"},"392":{"code":"JPY","name":"yen japonais"},"396":{"code":"XAD","name":"Arab Accounting Dinar"},"398":{"code":"KZT","name":"tenge kazakh"},"400":{"code":"JOD","name":"dinar jordanien"},"404":{"code":"KES","name":"shilling kényan"},"408":{"code":"KPW","name":"won nord-coréen"},"410":{"code":"KRW","name":"won sud-coréen"},"414":{"code":"KWD","name":"dinar koweïtien"},"417":{"code":"KGS","name":"som kirghize"},"418":{"code":"LAK","name":"kip laotien"},"422":{"code":"LBP","name":"livre libanaise"},"426":{"code":"LSL","name":"loti lesothan"},"430":{"code":"LRD","name":"dollar libérien"},"434":{"code":"LYD","name":"dinar libyen"},"446":{"code":"MOP","name":"pataca macanaise"},"454":{"code":"MWK","name":"kwacha malawite"},"458":{"code":"MYR","name":"ringgit malais"},"462":{"code":"MVR","name":"rufiyaa maldivienne"},"480":{"code":"MUR","name":"roupie mauricienne"},"484":{"code":"MXN","name":"peso mexicain"},"496":{"code":"MNT","name":"tugrik mongol"},"498":{"code":"MDL","name":"leu moldave"},"504":{"code":"MAD","name":"dirham marocain"},"512":{"code":"OMR","name":"riyal omanais"},"516":{"code":"NAD","name":"dollar namibien"},"524":{"code":"NPR","name":"roupie népalaise"},"532":{"code":"XCG","name":"florin caribéen"},"533":{"code":"AWG","name":"florin arubais"},"548":{"code":"VUV","name":"vatu vanuatuan"},"554":{"code":"NZD","name":"dollar néo-zélandais"},"558":{"code":"NIO","name":"córdoba oro nicaraguayen"},"566":{"code":"NGN","name":"naira nigérian"},"578":{"code":"NOK","name":"couronne norvégienne"},"586":{"code":"PKR","name":"roupie pakistanaise"},"590":{"code":"PAB","name":"balboa panaméen"},"598":{"code":"PGK","name":"kina papouan-néo-guinéen"},"600":{"code":"PYG","name":"guaraní paraguayen"},"604":{"code":"PEN","name":"sol péruvien"},"608":{"code":"PHP","name":"peso philippin"},"634":{"code":"QAR","name":"riyal qatari"},"643":{"code":"RUB","name":"rouble russe"},"646":{"code":"RWF","name":"franc rwandais"},"654":{"code":"SHP","name":"livre de Sainte-Hélène"},"682":{"code":"SAR","name":"riyal saoudien"},"690":{"code":"SCR","name":"roupie des Seychelles"},"702":{"code":"SGD","name":"dollar de Singapour"},"704":{"code":"VND","name":"dông vietnamien"},"706":{"code":"SOS","name":"shilling somalien"},"710":{"code":"ZAR","name":"rand sud-africain"},"728":{"code":"SSP","name":"livre sud-soudanaise"},"748":{"code":"SZL","name":"lilangeni swazi"},"752":{"code":"SEK","name":"couronne suédoise"},"756":{"code":"CHF","name":"franc suisse"},"760":{"code":"SYP","name":"livre syrienne"},"764":{"code":"THB","name":"baht thaïlandais"},"776":{"code":"TOP","name":"pa’anga tongan"},"780":{"code":"TTD","name":"dollar de Trinité-et-Tobago"},"784":{"code":"AED","name":"dirham des Émirats arabes unis"},"788":{"code":"TND","name":"dinar tunisien"},"800":{"code":"UGX","name":"shilling ougandais"},"807":{"code":"MKD","name":"denar macédonien"},"818":{"code":"EGP","name":"livre égyptienne"},"826":{"code":"GBP","name":"livre sterling"},"834":{"code":"TZS","name":"shilling tanzanien"},"840":{"code":"USD","name":"dollar des États-Unis"},"858":{"code":"UYU","name":"peso uruguayen"},"860":{"code":"UZS","name":"sum ouzbek"},"882":{"code":"WST","name":"tala samoan"},"886":{"code":"YER","name":"riyal yéménite"},"901":{"code":"TWD","name":"nouveau dollar taïwanais"},"924":{"code":"ZWG","name":"Zimbabwe Gold"},"925":{"code":"SLE","name":"leone sierra-léonais"},"926":{"code":"VED","name":"Bolívar Soberano"},"927":{"code":"UYW","name":"unité de salaire nominal uruguayenne"},"928":{"code":"VES","name":"bolivar vénézuélien"},"929":{"code":"MRU","name":"ouguiya mauritanien"},"930":{"code":"STN","name":"dobra santoméen"},"933":{"code":"BYN","name":"rouble biélorusse"},"934":{"code":"TMT","name":"nouveau manat turkmène"},"936":{"code":"GHS","name":"cédi ghanéen"},"938":{"code":"SDG","name":"livre soudanaise"},"940":{"code":"UYI","name":"peso uruguayen (unités indexées)"},"941":{"code":"RSD","name":"dinar serbe"},"943":{"code":"MZN","name":"metical mozambicain"},"944":{"code":"AZN","name":"manat azéri"},"946":{"code":"RON","name":"leu roumain"},"947":{"code":"CHE","name":"euro WIR"},"948":{"code":"CHW","name":"franc WIR"},"949":{"code":"TRY","name":"livre turque"},"950":{"code":"XAF","name":"franc CFA (BEAC)"},"951":{"code":"XCD","name":"dollar des Caraïbes orientales"},"952":{"code":"XOF","name":"franc CFA (BCEAO)"},"953":{"code":"XPF","name":"franc CFP"},"955":{"code":"XBA","name":"unité européenne composée"},"956":{"code":"XBB","name":"unité monétaire européenne"},"957":{"code":"XBC","name":"unité de compte européenne (XBC)"},"958":{"code":"XBD","name":"unité de compte européenne (XBD)"},"959":{"code":"XAU","name":"or"},"960":{"code":"XDR","name":"droit de tirage spécial"},"961":{"code":"XAG","name":"argent"},"962":{"code":"XPT","name":"platine"},"963":{"code":"XTS","name":"(devise de test)"},"964":{"code":"XPD","name":"palladium"},"965":{"code":"XUA","name":"unité de compte ADB"},"967":{"code":"ZMW","name":"kwacha zambien"},"968":{"code":"SRD","name":"dollar surinamais"},"969":{"code":"MGA","name":"ariary malgache"},"970":{"code":"COU","name":"unité de valeur réelle colombienne"},"971":{"code":"AFN","name":"afghani afghan"},"972":{"code":"TJS","name":"somoni tadjik"},"973":{"code":"AOA","name":"kwanza angolais"},"976":{"code":"CDF","name":"franc congolais"},"977":{"code":"BAM","name":"mark convertible bosniaque"},"978":{"code":"EUR","name":"euro"},"979":{"code":"MXV","name":"unité de conversion mexicaine (UDI)"},"980":{"code":"UAH","name":"hryvnia ukrainienne"},"981":{"code":"GEL","name":"lari géorgien"},"984":{"code":"BOV","name":"mvdol bolivien"},"985":{"code":"PLN","name":"zloty polonais"},"986":{"code":"BRL","name":"réal brésilien"},"990":{"code":"CLF","name":"unité d’investissement chilienne"},"994":{"code":"XSU","name":"sucre"},"997":{"code":"USN","name":"dollar des Etats-Unis (jour suivant)"},"999":{"code":"XXX","name":"devise inconnue ou non valide"}};
 const COUNTRY_DICT = {"004":"Afghanistan","008":"Albanie","010":"Antarctique","012":"Algérie","016":"Samoa américaines","020":"Andorre","024":"Angola","028":"Antigua-et-Barbuda","031":"Azerbaïdjan","032":"Argentine","036":"Australie","040":"Autriche","044":"Bahamas","048":"Bahreïn","050":"Bangladesh","051":"Arménie","052":"Barbade","056":"Belgique","060":"Bermudes","064":"Bhoutan","068":"Bolivie","070":"Bosnie-Herzégovine","072":"Botswana","074":"Île Bouvet","076":"Brésil","084":"Belize","086":"Territoire britannique de l’océan Indien","090":"Îles Salomon","092":"Îles Vierges britanniques","096":"Brunei","100":"Bulgarie","104":"Myanmar (Birmanie)","108":"Burundi","112":"Biélorussie","116":"Cambodge","120":"Cameroun","124":"Canada","132":"Cap-Vert","136":"Îles Caïmans","140":"République centrafricaine","144":"Sri Lanka","148":"Tchad","152":"Chili","156":"Chine","158":"Taïwan","162":"Île Christmas","166":"Îles Cocos","170":"Colombie","174":"Comores","175":"Mayotte","178":"Congo-Brazzaville","180":"Congo-Kinshasa","184":"Îles Cook","188":"Costa Rica","191":"Croatie","192":"Cuba","196":"Chypre","203":"Tchéquie","204":"Bénin","208":"Danemark","212":"Dominique","214":"République dominicaine","218":"Équateur","222":"Salvador","226":"Guinée équatoriale","231":"Éthiopie","232":"Érythrée","233":"Estonie","234":"Îles Féroé","238":"Îles Malouines","239":"Géorgie du Sud-et-les Îles Sandwich du Sud","242":"Fidji","246":"Finlande","248":"Îles Åland","250":"France","254":"Guyane française","258":"Polynésie française","260":"Terres australes françaises","262":"Djibouti","266":"Gabon","268":"Géorgie","270":"Gambie","275":"Territoires palestiniens","276":"Allemagne","288":"Ghana","292":"Gibraltar","296":"Kiribati","300":"Grèce","304":"Groenland","308":"Grenade","312":"Guadeloupe","316":"Guam","320":"Guatemala","324":"Guinée","328":"Guyana","332":"Haïti","334":"Îles Heard-et-MacDonald","336":"État de la Cité du Vatican","340":"Honduras","344":"R.A.S. chinoise de Hong Kong","348":"Hongrie","352":"Islande","356":"Inde","360":"Indonésie","364":"Iran","368":"Irak","372":"Irlande","376":"Israël","380":"Italie","384":"Côte d’Ivoire","388":"Jamaïque","392":"Japon","398":"Kazakhstan","400":"Jordanie","404":"Kenya","408":"Corée du Nord","410":"Corée du Sud","414":"Koweït","417":"Kirghizstan","418":"Laos","422":"Liban","426":"Lesotho","428":"Lettonie","430":"Liberia","434":"Libye","438":"Liechtenstein","440":"Lituanie","442":"Luxembourg","446":"R.A.S. chinoise de Macao","450":"Madagascar","454":"Malawi","458":"Malaisie","462":"Maldives","466":"Mali","470":"Malte","474":"Martinique","478":"Mauritanie","480":"Maurice","484":"Mexique","492":"Monaco","496":"Mongolie","498":"Moldavie","499":"Monténégro","500":"Montserrat","504":"Maroc","508":"Mozambique","512":"Oman","516":"Namibie","520":"Nauru","524":"Népal","528":"Pays-Bas","531":"Curaçao","533":"Aruba","534":"Saint-Martin (partie néerlandaise)","535":"Pays-Bas caribéens","540":"Nouvelle-Calédonie","548":"Vanuatu","554":"Nouvelle-Zélande","558":"Nicaragua","562":"Niger","566":"Nigeria","570":"Niue","574":"Île Norfolk","578":"Norvège","580":"Îles Mariannes du Nord","581":"Îles mineures éloignées des États-Unis","583":"Micronésie","584":"Îles Marshall","585":"Palaos","586":"Pakistan","591":"Panama","598":"Papouasie-Nouvelle-Guinée","600":"Paraguay","604":"Pérou","608":"Philippines","612":"Îles Pitcairn","616":"Pologne","620":"Portugal","624":"Guinée-Bissau","626":"Timor oriental","630":"Porto Rico","634":"Qatar","638":"La Réunion","642":"Roumanie","643":"Russie","646":"Rwanda","652":"Saint-Barthélemy","654":"Sainte-Hélène","659":"Saint-Christophe-et-Niévès","660":"Anguilla","662":"Sainte-Lucie","663":"Saint-Martin","666":"Saint-Pierre-et-Miquelon","670":"Saint-Vincent-et-les Grenadines","674":"Saint-Marin","678":"Sao Tomé-et-Principe","682":"Arabie saoudite","686":"Sénégal","688":"Serbie","690":"Seychelles","694":"Sierra Leone","702":"Singapour","703":"Slovaquie","704":"Viêt Nam","705":"Slovénie","706":"Somalie","710":"Afrique du Sud","716":"Zimbabwe","724":"Espagne","728":"Soudan du Sud","729":"Soudan","732":"Sahara occidental","740":"Suriname","744":"Svalbard et Jan Mayen","748":"Eswatini","752":"Suède","756":"Suisse","760":"Syrie","762":"Tadjikistan","764":"Thaïlande","768":"Togo","772":"Tokelau","776":"Tonga","780":"Trinité-et-Tobago","784":"Émirats arabes unis","788":"Tunisie","792":"Turquie","795":"Turkménistan","796":"Îles Turques-et-Caïques","798":"Tuvalu","800":"Ouganda","804":"Ukraine","807":"Macédoine du Nord","818":"Égypte","826":"Royaume-Uni","831":"Guernesey","832":"Jersey","833":"Île de Man","834":"Tanzanie","840":"États-Unis","850":"Îles Vierges des États-Unis","854":"Burkina Faso","858":"Uruguay","860":"Ouzbékistan","862":"Venezuela","876":"Wallis-et-Futuna","882":"Samoa","887":"Yémen","894":"Zambie"};
-/* === EMV_DICTIONARY:END === */
 
 /* ============================================================
    Paiement Décrypté, EMV TLV Parser v3, moteur (sans DOM)
@@ -1171,53 +996,6 @@ function tagClass(tagHex) {
 
 function cleanHex(input) {
   return (input || '').toUpperCase().replace(/0X/g, '').replace(/[^0-9A-F]/g, '');
-}
-
-/* --- Détection du format d'entrée ---
-   Beaucoup de logs, d'API et de traces terminal ne sortent pas de l'hexadécimal
-   mais du Base64 (le TLV brut encodé en base 64 pour tenir dans du JSON ou du XML).
-   normalizeInput() reconnaît les deux et renvoie toujours de l'hexadécimal au parser.
-   Règle de priorité : si la chaîne ne contient QUE des caractères hexadécimaux
-   (séparateurs et 0x mis à part), c'est de l'hexadécimal. Sinon on tente le Base64,
-   standard (+ /) comme URL-safe (- _), avec ou sans padding. */
-function base64ToHex(b64) {
-  const bin = atob(b64);
-  let hex = '';
-  for (let i = 0; i < bin.length; i++) {
-    hex += bin.charCodeAt(i).toString(16).padStart(2, '0');
-  }
-  return hex.toUpperCase();
-}
-
-function normalizeInput(input) {
-  const raw = (input || '').trim();
-  if (!raw) return { hex: '', format: 'hex', note: '' };
-
-  // 1) Hexadécimal, séparateurs courants tolérés
-  const stripped = raw.replace(/0x/gi, '').replace(/[\s:;,._-]/g, '');
-  if (/^[0-9A-Fa-f]+$/.test(stripped)) {
-    return { hex: stripped.toUpperCase(), format: 'hex', note: '' };
-  }
-
-  // 2) Base64 (standard ou URL-safe)
-  const b64 = raw.replace(/\s/g, '').replace(/-/g, '+').replace(/_/g, '/');
-  const core = b64.replace(/=+$/, '');
-  if (/^[A-Za-z0-9+/]+$/.test(core) && core.length >= 4 && core.length % 4 !== 1) {
-    try {
-      const hex = base64ToHex(core + '='.repeat((4 - core.length % 4) % 4));
-      if (hex.length >= 4) {
-        return { hex, format: 'base64', note: 'Base64 détecté et décodé en ' + (hex.length / 2) + ' octets.' };
-      }
-    } catch (e) { /* pas du Base64 exploitable : on retombe sur l'hexadécimal */ }
-  }
-
-  // 3) Repli : on garde ce qui ressemble à de l'hexadécimal
-  const fallback = cleanHex(raw);
-  return {
-    hex: fallback,
-    format: 'hex',
-    note: fallback ? 'Caractères non hexadécimaux ignorés dans la saisie.' : ''
-  };
 }
 
 function hexToBytes(hex) {
@@ -1354,7 +1132,7 @@ function lookupAid(hex) {
 /* decodeValue(tagHex, valueHex) → { summary, details[] }
    summary : une ligne lisible ; details : lignes bit à bit / éléments */
 function decodeValue(tagHex, valueHex, DATA) {
-  const D = DATA || { EMV_AIDS, DF_NAMES, COUNTRY_CODES, CURRENCY_CODES, CURRENCY_DICT, COUNTRY_DICT, TVR_BITS, AIP_BITS, TSI_BITS, TERMCAP_BITS, ADDTERMCAP_BITS, TTQ_BITS, CVM_CODES, CVM_CONDITIONS, CVM_RESULTS, ARC_CODES, EMV_TAGS, TX_TYPES, TAG_REFS };
+  const D = DATA || { EMV_AIDS, DF_NAMES, COUNTRY_CODES, CURRENCY_CODES, CURRENCY_DICT, COUNTRY_DICT, TVR_BITS, AIP_BITS, TSI_BITS, TERMCAP_BITS, TTQ_BITS, CVM_CODES, CVM_CONDITIONS, CVM_RESULTS, ARC_CODES, EMV_TAGS, TX_TYPES, TAG_REFS };
   const meta = D.EMV_TAGS[tagHex];
   const dec = meta && meta.dec;
   if (!dec) return null;
@@ -1509,10 +1287,6 @@ function decodeValue(tagHex, valueHex, DATA) {
         const r = decodeBits(valueHex, D.TERMCAP_BITS);
         return { summary: r.set.length ? `${r.set.length} capacité(s) déclarée(s)` : "Aucune capacité déclarée", details: r.set.map(b => `✓ ${b.label}`), bits: r };
       }
-      case 'addtermcap': {
-        const r = decodeBits(valueHex, D.ADDTERMCAP_BITS);
-        return { summary: r.set.length ? `${r.set.length} capacité(s) déclarée(s)` : "Aucune capacité déclarée", details: r.set.map(b => `✓ ${b.label}`), bits: r };
-      }
       case 'ttq': {
         const r = decodeBits(valueHex, D.TTQ_BITS);
         return { summary: r.set.length ? `${r.set.length} qualifieur(s) déclaré(s)` : "Aucun qualifieur déclaré", details: r.set.map(b => `✓ ${b.label}`), bits: r };
@@ -1572,1062 +1346,856 @@ function decodeValue(tagHex, valueHex, DATA) {
   } catch (e) { return null; }
 }
 
-/* ============ Transaction Explainer ============
-   tags : map tagHex→valueHex (collectTags)
-   tacs : { denial, online, default } hex optionnels (saisie manuelle)
-   Retourne une liste de sections { title, icon, sev, lines[] } + verdict */
-function buildExplainer(tags, tacs, DATA) {
-  const D = DATA || { EMV_AIDS, DF_NAMES, COUNTRY_CODES, CURRENCY_CODES, CURRENCY_DICT, COUNTRY_DICT, TVR_BITS, AIP_BITS, TSI_BITS, TERMCAP_BITS, ADDTERMCAP_BITS, TTQ_BITS, CVM_CODES, CVM_CONDITIONS, CVM_RESULTS, ARC_CODES, EMV_TAGS, TX_TYPES, TAG_REFS };
-  const S = [];
-  const has = t => tags[t] !== undefined;
-  if (!has('95') && !has('82') && !has('9B') && !has('9F27') && !has('8A') && !has('9F34')) return null;
 
-  /* 1. Profil carte (AIP) */
-  if (has('82')) {
-    const r = decodeBits(tags['82'], D.AIP_BITS);
-    S.push({
-      title: "Ce que la carte annonce (AIP)", icon: "🪪", sev: 'info',
-      lines: r.set.length ? r.set.map(b => b.label) : ["Profil minimal : aucune capacité annoncée."],
-    });
-  }
+const NEXO_XML = {"req": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n   xmlns=\"urn:iso:std:iso:20022:tech:xsd:caaa.001.001.06\">\n <AccptrAuthstnReq>\n    <Hdr>\n        <MsgFctn>AUTQ</MsgFctn>\n        <PrtcolVrsn>6.0</PrtcolVrsn>\n        <XchgId>149</XchgId>\n        <CreDtTm>2013-08-11T17:22:54.13+01:00</CreDtTm>\n        <InitgPty>\n            <Id>66000001</Id>\n            <Tp>OPOI</Tp>\n            <Issr>ACQR</Issr>\n        </InitgPty>\n        <RcptPty>\n            <Id>epas-acquirer-1</Id>\n            <Tp>ACQR</Tp>\n        </RcptPty>\n    </Hdr>\n    <AuthstnReq>\n        <Envt>\n           <Acqrr>\n              <Id>\n                 <Id>9287351</Id>\n                 <Tp>ACQR</Tp>\n              </Id>\n              <ParamsVrsn>2013-08-07 08:00:00</ParamsVrsn>\n           </Acqrr>\n           <Mrchnt>\n              <Id>\n                 <Id>EPASMER001</Id>\n              </Id>\n              <CmonNm>EPASOrg Merchant 1</CmonNm>\n              <LctnCtgy>FIXD</LctnCtgy>\n              <LctnAndCtct>\n                 <PstlAdr>\n                    <TwnNm>Paris</TwnNm>\n                    <Ctry>FR</Ctry>\n                 </PstlAdr>\n              </LctnAndCtct>\n           </Mrchnt>\n           <POI>\n              <Id>\n                 <Id>1</Id>\n                 <Issr>ACQR</Issr>\n              </Id>\n              <SysNm>POI01</SysNm>\n              <Cpblties>\n                 <CardRdngCpblties>CICC</CardRdngCpblties>\n                 <CardRdngCpblties>MGST</CardRdngCpblties>\n                 <CardRdngCpblties>PHYS</CardRdngCpblties>\n                 <CrdhldrVrfctnCpblties>MNSG</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>FCPN</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>FEPN</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>NPIN</CrdhldrVrfctnCpblties>\n                 <OnLineCpblties>SMON</OnLineCpblties>\n                 <MsgCpblties>\n                    <Dstn>CDSP</Dstn>\n                    <NbOfLines>2</NbOfLines>\n                    <LineWidth>20</LineWidth>\n                 </MsgCpblties>\n                  <MsgCpblties>\n                     <Dstn>MRCP</Dstn>\n                     <NbOfLines>2</NbOfLines>\n                     <LineWidth>40</LineWidth>\n                  </MsgCpblties>\n               </Cpblties>\n               <Cmpnt>\n                  <Tp>TERM</Tp>\n                  <Id>\n                     <ItmNb>1</ItmNb>\n                     <PrvdrId>EPASVendor001</PrvdrId>\n                     <Id>SmartPOI-8539</Id>\n                     <SrlNb>7825410759</SrlNb>\n                  </Id>\n               </Cmpnt>\n               <Cmpnt>\n                  <Tp>APLI</Tp>\n                  <Id>\n                     <ItmNb>1</ItmNb>\n                     <PrvdrId>EPASVendor001</PrvdrId>\n                  </Id>\n                  <Sts>\n                     <VrsnNb>1.0</VrsnNb>\n                  </Sts>\n                  <StdCmplc>\n                     <Id>SEPA-FAST</Id>\n                     <Vrsn>3.0</Vrsn>\n                     <Issr>CIR</Issr>\n                  </StdCmplc>\n               </Cmpnt>\n            </POI>\n             <Card>\n                  <PrtctdCardData>\n                      <CnttTp>EVLP</CnttTp>\n                      <EnvlpdData>\n                         <Rcpt>\n                            <KEK>\n                               <KEKId>\n                                  <KeyId>SpecV1TestKey</KeyId>\n                                  <KeyVrsn>2010060715</KeyVrsn>\n                                  <DerivtnId>OYclpQE=</DerivtnId>\n                               </KEKId>\n                               <KeyNcrptnAlgo>\n                                  <Algo>DKP9</Algo>\n                               </KeyNcrptnAlgo>\n                               <NcrptdKey>4pAgABc=</NcrptdKey>\n                            </KEK>\n                         </Rcpt>\n                         <NcrptdCntt>\n                            <CnttTp>DATA</CnttTp>\n                            <CnttNcrptnAlgo>\n                               <Algo>E3DC</Algo>\n                               <Param>\n                                  <InitlstnVctr>onu0bRwwbgk=</InitlstnVctr>\n                               </Param>\n                            </CnttNcrptnAlgo>\n                            <NcrptdData>\n                             y4VI8vNjPE3pcY4L8YXodPla1Avuab/P6vt8V8EJmF++uqdgRdQvD\n                             i6PR9JkMbQtf98wo/khtlxmmN7OCMmkRIOBRnO/3gXSK3gzJHlmXI\n                             yZuzcReZRMJGMWJ929V+jbcp4YDDGw0TStnfi2U0pKMfXUOkB0ZjP\n                             95uqdwkm6Xpsz58X+RuZK49H7xRLperR5+a8BjCFcDftWqeJ3x2ER\n                             Odc9HmknWHqrZa/4Eh8vBBTjrLE0ScnCWokNknub4Nyd4o5n2sqpo\n                             TM=\n                              </NcrptdData>\n                          </NcrptdCntt>\n                       </EnvlpdData>\n                 </PrtctdCardData>\n                 <CardCtryCd>056</CardCtryCd>\n                 <CardPdctPrfl>0003</CardPdctPrfl>\n                 <CardBrnd>TestCard</CardBrnd>\n            </Card>\n            <Crdhldr>\n                 <Lang>fr</Lang>\n                 <TxVrfctnRslt>\n                     <Mtd>FPIN</Mtd>\n                     <VrfctnNtty>ICCD</VrfctnNtty>\n                     <Rslt>SUCC</Rslt>\n                 </TxVrfctnRslt>\n            </Crdhldr>\n        </Envt>\n        <Cntxt>\n           <PmtCntxt>\n              <CardPres>true</CardPres>\n              <CrdhldrPres>true</CrdhldrPres>\n              <AttndncCntxt>ATTD</AttndncCntxt>\n              <AttndntMsgCpbl>true</AttndntMsgCpbl>\n              <AttndntLang>fr</AttndntLang>\n              <CardDataNtryMd>CICC</CardDataNtryMd>\n              </PmtCntxt>\n           <SaleCntxt>\n              <SaleId>ST06</SaleId>\n              <SaleRefNb>S78-T06-0029</SaleRefNb>\n              <SaleRcncltnId>S78-8469</SaleRcncltnId>\n           </SaleCntxt>\n        </Cntxt>\n        <Tx>\n           <TxCaptr>false</TxCaptr>\n           <TxTp>CRDP</TxTp>\n           <MrchntCtgyCd>5411</MrchntCtgyCd>\n           <TxId>\n              <TxDtTm>2013-08-11T17:22:04.51+01:00</TxDtTm>\n              <TxRef>002949</TxRef>\n           </TxId>\n           <RcncltnId>8469</RcncltnId>\n           <TxDtls>\n              <Ccy>EUR</Ccy>\n              <TtlAmt>43.14</TtlAmt>\n              <OnLineRsn>ICCF</OnLineRsn>\n              <ICCRltdData>\n                 XyoCCXhfNAEAggJ8AIQHoAAAAAk1EJUFAAAAgACaAxEEEZwBAJ8CBgAAAABDFJ\n                 8JAgACnxASAhCngAMEAACfIQAAAAAAAAD/nxoCAlCfJgguPqsXzuxQDJ8nAYCf\n                 MwNgoECfNANEAwKfNQEinzYCABafNwS8demzn0AFoACQ8AGfTAifIbAuDurEVA\n                 ==\n              </ICCRltdData>\n           </TxDtls>\n        </Tx>\n    </AuthstnReq>\n    <SctyTrlr>\n        <CnttTp>AUTH</CnttTp>\n        <AuthntcdData>\n            <Rcpt>\n                 <KEK>\n                     <KEKId>\n                         <KeyId>SpecV1TestKey</KeyId>\n                         <KeyVrsn>2010060715</KeyVrsn>\n                         <DerivtnId>OYclpQE=</DerivtnId>\n                     </KEKId>\n                     <KeyNcrptnAlgo>\n                         <Algo>DKP9</Algo>\n                     </KeyNcrptnAlgo>\n                     <NcrptdKey>4pAgABc=</NcrptdKey>\n                 </KEK>\n            </Rcpt>\n            <MACAlgo>\n                <Algo>MCCS</Algo>\n            </MACAlgo>\n            <NcpsltdCntt>\n                <CnttTp>DATA</CnttTp>\n            </NcpsltdCntt>\n            <MAC>26UTbkkcQeQ=</MAC>\n        </AuthntcdData>\n    </SctyTrlr>\n </AccptrAuthstnReq>\n</Document>", "resp": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n   xmlns=\"urn:iso:std:iso:20022:tech:xsd:caaa.002.001.06\">\n <AccptrAuthstnRspn>\n    <Hdr>\n        <MsgFctn>AUTP</MsgFctn>\n        <PrtcolVrsn>6.0</PrtcolVrsn>\n        <XchgId>149</XchgId>\n        <CreDtTm>2013-08-11T17:22:55.11+01:00</CreDtTm>\n        <InitgPty>\n            <Id>66000001</Id>\n            <Tp>OPOI</Tp>\n            <Issr>ACQR</Issr>\n        </InitgPty>\n        <RcptPty>\n            <Id>epas-acquirer-1</Id>\n            <Tp>ACQR</Tp>\n        </RcptPty>\n    </Hdr>\n    <AuthstnRspn>\n        <Envt>\n           <AcqrrId>\n              <Id>9287351</Id>\n              <Tp>ACQR</Tp>\n           </AcqrrId>\n           <MrchntId>\n              <Id>EPASMER001</Id>\n           </MrchntId>\n           <POIId>\n              <Id>1</Id>\n              <Issr>ACQR</Issr>\n           </POIId>\n           <Card>\n               <PrtctdCardData>\n                   <CnttTp>EVLP</CnttTp>\n                   <EnvlpdData>\n                      <Rcpt>\n                         <KEK>\n                            <KEKId>\n                               <KeyId>SpecV1TestKey</KeyId>\n                               <KeyVrsn>2010060715</KeyVrsn>\n                               <DerivtnId>OYclpQE=</DerivtnId>\n                            </KEKId>\n                            <KeyNcrptnAlgo>\n                               <Algo>DKP9</Algo>\n                            </KeyNcrptnAlgo>\n                            <NcrptdKey>4pAgABc=</NcrptdKey>\n                         </KEK>\n                      </Rcpt>\n                      <NcrptdCntt>\n                         <CnttTp>DATA</CnttTp>\n                         <CnttNcrptnAlgo>\n                            <Algo>E3DC</Algo>\n                            <Param>\n                               <InitlstnVctr>onu0bRwwbgk=</InitlstnVctr>\n                            </Param>\n                          </CnttNcrptnAlgo>\n                          <NcrptdData>\n                        CAagOqDDQiVw/J5uM3vWxfRy1hzoxccje0xums6+s/EmqMK5\n                        +7xfxcx3y+FNTw1+5sU7Tu98xgODcLDaU2Nxmb7jyYe9mDlN\n                        /Q1/NJHPTbtLkh981WSeWnjFqB2YGXmkNKmnvxBT+LB2H+n+\n                        1hVpwA==\n                          </NcrptdData>\n                       </NcrptdCntt>\n                    </EnvlpdData>\n               </PrtctdCardData>\n           </Card>\n        </Envt>\n        <Tx>\n           <TxId>\n              <TxDtTm>2013-08-11T17:22:04.51+01:00</TxDtTm>\n              <TxRef>002949</TxRef>\n           </TxId>\n           <TxDtls>\n              <Ccy>EUR</Ccy>\n              <TtlAmt>43.14</TtlAmt>\n              <ICCRltdData>kQp05S/FnWreKgASigIwMA==</ICCRltdData>\n           </TxDtls>\n        </Tx>\n        <TxRspn>\n           <AuthstnRslt>\n              <AuthstnNtty>\n                 <Tp>CISS</Tp>\n              </AuthstnNtty>\n              <RspnToAuthstn>\n                 <Rspn>APPR</Rspn>\n              </RspnToAuthstn>\n              <AuthstnCd>032983</AuthstnCd>\n              <CmpltnReqrd>true</CmpltnReqrd>\n           </AuthstnRslt>\n        </TxRspn>\n    </AuthstnRspn>\n    <SctyTrlr>\n        <CnttTp>AUTH</CnttTp>\n        <AuthntcdData>\n            <Rcpt>\n                 <KEK>\n                     <KEKId>\n                          <KeyId>SpecV1TestKey</KeyId>\n                          <KeyVrsn>2010060715</KeyVrsn>\n                          <DerivtnId>OYclpQE=</DerivtnId>\n                     </KEKId>\n                     <KeyNcrptnAlgo>\n                          <Algo>DKP9</Algo>\n                     </KeyNcrptnAlgo>\n                     <NcrptdKey>4pAgABc=</NcrptdKey>\n                 </KEK>\n            </Rcpt>\n            <MACAlgo>\n                 <Algo>MCCS</Algo>\n            </MACAlgo>\n            <NcpsltdCntt>\n                 <CnttTp>DATA</CnttTp>\n            </NcpsltdCntt>\n            <MAC>ul48wruAeOI=</MAC>\n        </AuthntcdData>\n    </SctyTrlr>\n </AccptrAuthstnRspn>\n</Document>", "compl": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n   xmlns=\"urn:iso:std:iso:20022:tech:xsd:caaa.003.001.06\">\n <AccptrCmpltnAdvc>\n    <Hdr>\n        <MsgFctn>FCMV</MsgFctn>\n        <PrtcolVrsn>6.0</PrtcolVrsn>\n        <XchgId>150</XchgId>\n        <CreDtTm>2013-08-11T17:22:59.35+01:00</CreDtTm>\n        <InitgPty>\n            <Id>66000001</Id>\n            <Tp>OPOI</Tp>\n            <Issr>ACQR</Issr>\n        </InitgPty>\n        <RcptPty>\n            <Id>epas-acquirer-1</Id>\n            <Tp>ACQR</Tp>\n        </RcptPty>\n    </Hdr>\n    <CmpltnAdvc>\n        <Envt>\n           <Acqrr>\n              <Id>\n                 <Id>9287351</Id>\n                 <Tp>ACQR</Tp>\n              </Id>\n              <ParamsVrsn>2013-08-07 08:00:00</ParamsVrsn>\n           </Acqrr>\n           <Mrchnt>\n              <Id>\n                 <Id>EPASMER001</Id>\n              </Id>\n              <CmonNm>EPASOrg Merchant 1</CmonNm>\n              <LctnCtgy>FIXD</LctnCtgy>\n              <LctnAndCtct>\n                 <PstlAdr>\n                    <TwnNm>Paris</TwnNm>\n                    <Ctry>FR</Ctry>\n                 </PstlAdr>\n              </LctnAndCtct>\n           </Mrchnt>\n           <POI>\n              <Id>\n                 <Id>1</Id>\n                 <Issr>ACQR</Issr>\n              </Id>\n              <SysNm>POI01</SysNm>\n              <Cpblties>\n                 <CardRdngCpblties>CICC</CardRdngCpblties>\n                 <CardRdngCpblties>MGST</CardRdngCpblties>\n                 <CardRdngCpblties>PHYS</CardRdngCpblties>\n                 <CrdhldrVrfctnCpblties>MNSG</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>FCPN</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>FEPN</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>NPIN</CrdhldrVrfctnCpblties>\n                 <OnLineCpblties>SMON</OnLineCpblties>\n                 <MsgCpblties>\n                    <Dstn>CDSP</Dstn>\n                     <NbOfLines>2</NbOfLines>\n                     <LineWidth>20</LineWidth>\n                  </MsgCpblties>\n                  <MsgCpblties>\n                     <Dstn>MDSP</Dstn>\n                     <NbOfLines>4</NbOfLines>\n                     <LineWidth>40</LineWidth>\n                  </MsgCpblties>\n               </Cpblties>\n               <Cmpnt>\n                  <Tp>TERM</Tp>\n                  <Id>\n                     <ItmNb>1</ItmNb>\n                     <PrvdrId>EPASVendor001</PrvdrId>\n                     <Id>SmartPOI-8539</Id>\n                     <SrlNb>7825410759</SrlNb>\n                  </Id>\n               </Cmpnt>\n               <Cmpnt>\n                  <Tp>APLI</Tp>\n                  <Id>\n                     <ItmNb>1</ItmNb>\n                     <PrvdrId>EPASVendor001</PrvdrId>\n                  </Id>\n                  <Sts>\n                     <VrsnNb>1.0</VrsnNb>\n                  </Sts>\n                  <StdCmplc>\n                     <Id>SEPA-FAST</Id>\n                     <Vrsn>3.0</Vrsn>\n                     <Issr>CIR</Issr>\n                  </StdCmplc>\n               </Cmpnt>\n            </POI>\n             <Card>\n                  <PrtctdCardData>\n                      <CnttTp>EVLP</CnttTp>\n                      <EnvlpdData>\n                         <Rcpt>\n                            <KEK>\n                               <KEKId>\n                                  <KeyId>SpecV1TestKey</KeyId>\n                                  <KeyVrsn>2010060715</KeyVrsn>\n                                  <DerivtnId>OYclpQE=</DerivtnId>\n                               </KEKId>\n                               <KeyNcrptnAlgo>\n                                  <Algo>DKP9</Algo>\n                               </KeyNcrptnAlgo>\n                               <NcrptdKey>4pAgABg=</NcrptdKey>\n                            </KEK>\n                         </Rcpt>\n                         <NcrptdCntt>\n                            <CnttTp>DATA</CnttTp>\n                            <CnttNcrptnAlgo>\n                               <Algo>E3DC</Algo>\n                               <Param>\n                                  <InitlstnVctr>onu0bRwwbgk=</InitlstnVctr>\n                               </Param>\n                            </CnttNcrptnAlgo>\n                            <NcrptdData>\n                             dhg1XEC2olzVHlhdZo633BT5MtnPgdzCY2HSICQvUunFZY16\n                             d2/id3gmemx9+0xHPWOTfjpqasffgTpr1/y0HWH94g06vk/B\n                             p+mYj5rzvVnOxvD6RXd4Tm+w0nfmKpEgceweGaVESKiuu6j6\n                             X7BIrw==\n                            </NcrptdData>\n                         </NcrptdCntt>\n                      </EnvlpdData>\n                 </PrtctdCardData>\n                 <CardCtryCd>056</CardCtryCd>\n                 <CardPdctPrfl>0003</CardPdctPrfl>\n                 <CardBrnd>TestCard</CardBrnd>\n            </Card>\n        </Envt>\n        <Cntxt>\n           <PmtCntxt>\n              <AttndncCntxt>ATTD</AttndncCntxt>\n              <CardDataNtryMd>CICC</CardDataNtryMd>\n              </PmtCntxt>\n           <SaleCntxt>\n              <SaleId>ST06</SaleId>\n              <SaleRefNb>S78-T06-0029</SaleRefNb>\n              <SaleRcncltnId>S78-8469</SaleRcncltnId>\n           </SaleCntxt>\n        </Cntxt>\n        <Tx>\n           <TxCaptr>true</TxCaptr>\n           <TxTp>CRDP</TxTp>\n           <MrchntCtgyCd>5411</MrchntCtgyCd>\n           <TxId>\n              <TxDtTm>2013-08-11T17:22:04.51+01:00</TxDtTm>\n              <TxRef>002949</TxRef>\n           </TxId>\n           <TxSucss>true</TxSucss>\n           <RcncltnId>8469</RcncltnId>\n           <TxDtls>\n              <Ccy>EUR</Ccy>\n              <TtlAmt>43.14</TtlAmt>\n              <ICCRltdData>\n               XyoCCXhfNAEAggJ8AIQHoAAAAAk1EIoCMDCRCnTlL8Wdat4qABKVBQAAAIAA\n               mgMRBBGcAQCfAgYAAAAAQxSfCQIAAp8QEgIQZ4ADBAAAnyEAAAAAAAAA/58a\n               AgJQnyYIKaO8IORh6AyfJwFAnzMDYKBAnzQDRAMCnzUBIp82AgAWnzcEvHXp\n               s59ABaAAkPABn0wInyGwLg7qxFQ=\n              </ICCRltdData>\n           </TxDtls>\n           <AuthstnRslt>\n              <AuthstnNtty>\n                  <Tp>CISS</Tp>\n              </AuthstnNtty>\n              <RspnToAuthstn>\n                  <Rspn>APPR</Rspn>\n              </RspnToAuthstn>\n              <AuthstnCd>032983</AuthstnCd>\n           </AuthstnRslt>\n           <TxVrfctnRslt>\n              <Mtd>FPIN</Mtd>\n              <VrfctnNtty>ICCD</VrfctnNtty>\n              <Rslt>SUCC</Rslt>\n           </TxVrfctnRslt>\n        </Tx>\n    </CmpltnAdvc>\n    <SctyTrlr>\n        <CnttTp>AUTH</CnttTp>\n        <AuthntcdData>\n            <Rcpt>\n                 <KEK>\n                     <KEKId>\n                         <KeyId>SpecV1TestKey</KeyId>\n                         <KeyVrsn>2010060715</KeyVrsn>\n                         <DerivtnId>OYclpQE=</DerivtnId>\n                     </KEKId>\n                     <KeyNcrptnAlgo>\n                         <Algo>DKP9</Algo>\n                     </KeyNcrptnAlgo>\n                     <NcrptdKey>4pAgABg=</NcrptdKey>\n                </KEK>\n            </Rcpt>\n            <MACAlgo>\n                <Algo>MCCS</Algo>\n            </MACAlgo>\n            <NcpsltdCntt>\n                <CnttTp>DATA</CnttTp>\n            </NcpsltdCntt>\n            <MAC>rG34lCw8QQM=</MAC>\n        </AuthntcdData>\n    </SctyTrlr>\n </AccptrCmpltnAdvc>\n</Document>", "cxladvc": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n   xmlns=\"urn:iso:std:iso:20022:tech:xsd:caaa.007.001.06\">\n <AccptrCxlAdvc>\n    <Hdr>\n        <MsgFctn>CCAV</MsgFctn>\n        <PrtcolVrsn>6.0</PrtcolVrsn>\n        <XchgId>151</XchgId>\n        <CreDtTm>2013-08-11T18:34:44.00+01:00</CreDtTm>\n        <InitgPty>\n            <Id>66000001</Id>\n            <Tp>OPOI</Tp>\n            <Issr>ACQR</Issr>\n        </InitgPty>\n        <RcptPty>\n            <Id>epas-acquirer-1</Id>\n            <Tp>ACQR</Tp>\n        </RcptPty>\n    </Hdr>\n    <CxlAdvc>\n        <Envt>\n           <Acqrr>\n              <Id>\n                 <Id>9287351</Id>\n                 <Tp>ACQR</Tp>\n              </Id>\n              <ParamsVrsn>2013-08-07 08:00:00</ParamsVrsn>\n           </Acqrr>\n           <Mrchnt>\n              <Id>\n                 <Id>EPASMER001</Id>\n              </Id>\n              <CmonNm>EPASOrg Merchant 1</CmonNm>\n              <LctnCtgy>FIXD</LctnCtgy>\n              <LctnAndCtct>\n                 <PstlAdr>\n                    <TwnNm>Paris</TwnNm>\n                    <Ctry>FR</Ctry>\n                 </PstlAdr>\n              </LctnAndCtct>\n           </Mrchnt>\n           <POI>\n              <Id>\n                 <Id>1</Id>\n                 <Issr>ACQR</Issr>\n              </Id>\n              <SysNm>POI01</SysNm>\n              <Cpblties>\n                 <CardRdngCpblties>CICC</CardRdngCpblties>\n                 <CardRdngCpblties>MGST</CardRdngCpblties>\n                 <CardRdngCpblties>PHYS</CardRdngCpblties>\n                 <CrdhldrVrfctnCpblties>MNSG</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>FCPN</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>FEPN</CrdhldrVrfctnCpblties>\n                 <CrdhldrVrfctnCpblties>NPIN</CrdhldrVrfctnCpblties>\n                 <OnLineCpblties>SMON</OnLineCpblties>\n               </Cpblties>\n               <Cmpnt>\n                  <Tp>TERM</Tp>\n                  <Id>\n                     <ItmNb>1</ItmNb>\n                     <PrvdrId>EPASVendor001</PrvdrId>\n                     <Id>SmartPOI-8539</Id>\n                     <SrlNb>7825410759</SrlNb>\n                  </Id>\n               </Cmpnt>\n               <Cmpnt>\n                  <Tp>APLI</Tp>\n                  <Id>\n                     <ItmNb>1</ItmNb>\n                     <PrvdrId>EPASVendor001</PrvdrId>\n                  </Id>\n                  <Sts>\n                     <VrsnNb>1.0</VrsnNb>\n                  </Sts>\n                  <StdCmplc>\n                     <Id>SEPA-FAST</Id>\n                     <Vrsn>3.0</Vrsn>\n                     <Issr>CIR</Issr>\n                  </StdCmplc>\n               </Cmpnt>\n            </POI>\n             <Card>\n                  <PrtctdCardData>\n                      <CnttTp>EVLP</CnttTp>\n                      <EnvlpdData>\n                         <Rcpt>\n                            <KEK>\n                               <KEKId>\n                                  <KeyId>SpecV1TestKey</KeyId>\n                                  <KeyVrsn>2010060715</KeyVrsn>\n                                  <DerivtnId>OYclpQE=</DerivtnId>\n                               </KEKId>\n                               <KeyNcrptnAlgo>\n                                  <Algo>DKP9</Algo>\n                               </KeyNcrptnAlgo>\n                               <NcrptdKey>4pAgABk=</NcrptdKey>\n                            </KEK>\n                         </Rcpt>\n                         <NcrptdCntt>\n                            <CnttTp>DATA</CnttTp>\n                            <CnttNcrptnAlgo>\n                               <Algo>E3DC</Algo>\n                               <Param>\n                                  <InitlstnVctr>onu0bRwwbgk=</InitlstnVctr>\n                               </Param>\n                            </CnttNcrptnAlgo>\n                            <NcrptdData>\n                             XGPHcvxnMG2V/586YcjX73/lsiSul3UYgAhL7YseefIjZPQ0\n                             83T2QPFxa4Uc3Vfgw1RqrOf8C6+7/r/UuT3HByDoIeANdNcz\n                             FNOSeGsec1RpT6fLDcl8JxYju0bfC8PFLwJIwFyp8aLZW9p3\n                             1Y80kg==\n                            </NcrptdData>\n                         </NcrptdCntt>\n                      </EnvlpdData>\n                  </PrtctdCardData>\n                  <CardCtryCd>056</CardCtryCd>\n                  <CardPdctPrfl>0003</CardPdctPrfl>\n                  <CardBrnd>TestCard</CardBrnd>\n             </Card>\n         </Envt>\n         <Cntxt>\n            <PmtCntxt>\n              <AttndncCntxt>ATTD</AttndncCntxt>\n              <CardDataNtryMd>CICC</CardDataNtryMd>\n              </PmtCntxt>\n           <SaleCntxt>\n              <SaleId>ST06</SaleId>\n              <SaleRefNb>S78-T06-0029</SaleRefNb>\n              <SaleRcncltnId>S78-8469</SaleRcncltnId>\n           </SaleCntxt>\n        </Cntxt>\n        <Tx>\n           <MrchntCtgyCd>5411</MrchntCtgyCd>\n           <TxId>\n              <TxDtTm>2013-08-11T18:34:19.00+01:00</TxDtTm>\n              <TxRef>002950</TxRef>\n           </TxId>\n         <OrgnlTx>\n            <TxId>\n              <TxDtTm>2013-08-11T17:22:04.51+01:00</TxDtTm>\n              <TxRef>002949</TxRef>\n            </TxId>\n            <TxTp>CRDP</TxTp>\n            <TxRslt>\n              <AuthstnNtty>\n                     <Tp>CISS</Tp>\n              </AuthstnNtty>\n              <RspnToAuthstn>\n                     <Rspn>APPR</Rspn>\n              </RspnToAuthstn>\n              <AuthstnCd>032983</AuthstnCd>\n            </TxRslt>\n         </OrgnlTx>\n           <TxSucss>true</TxSucss>\n           <RcncltnId>8469</RcncltnId>\n           <TxDtls>\n              <Ccy>EUR</Ccy>\n              <TtlAmt>43.14</TtlAmt>\n           </TxDtls>\n        </Tx>\n    </CxlAdvc>\n    <SctyTrlr>\n        <CnttTp>AUTH</CnttTp>\n        <AuthntcdData>\n            <Rcpt>\n                 <KEK>\n                     <KEKId>\n                         <KeyId>SpecV1TestKey</KeyId>\n                         <KeyVrsn>2010060715</KeyVrsn>\n                         <DerivtnId>OYclpQE=</DerivtnId>\n                     </KEKId>\n                     <KeyNcrptnAlgo>\n                         <Algo>DKP9</Algo>\n                     </KeyNcrptnAlgo>\n                     <NcrptdKey>4pAgABk=</NcrptdKey>\n                 </KEK>\n            </Rcpt>\n            <MACAlgo>\n                 <Algo>MCCS</Algo>\n            </MACAlgo>\n            <NcpsltdCntt>\n                 <CnttTp>DATA</CnttTp>\n            </NcpsltdCntt>\n            <MAC>/jOqjbrLqAk=</MAC>\n        </AuthntcdData>\n    </SctyTrlr>\n </AccptrCxlAdvc>\n</Document>"};
 
-  /* 2. Constat terminal (TVR) */
-  let tvrBits = null;
-  if (has('95')) {
-    tvrBits = decodeBits(tags['95'], D.TVR_BITS);
-    const bad = tvrBits.set.filter(b => b.sev === 'bad');
-    S.push({
-      title: "Ce que le terminal a constaté (TVR)", icon: "🧾",
-      sev: bad.length ? 'bad' : (tvrBits.set.length ? 'warn' : 'ok'),
-      lines: tvrBits.set.length
-        ? tvrBits.set.map(b => `${b.sev === 'bad' ? '✗' : '⚠'} ${b.label}`)
-        : ["Aucun incident : tous les contrôles du terminal sont passés."],
-    });
-  }
+/* ============================================================
+   Paiement Décrypté – NEXO Acquirer Protocol Explainer
+   Décodage des messages standard du protocole nexo Acquirer
+   (Card Payment Message Usage Guide v6.0, nexo Standards) :
+   Autorisation, Complétion, Annulation. Champs standard NEXO
+   uniquement + tags EMV standard embarqués (ICCRelatedData).
+   Aucun champ, log ou donnée d'un système propriétaire.
+   Source unique : nis_v4-0_fullpack (MUG Acquirer v6, Card
+   Payment Message Examples v6.0), nexo-standards.org.
 
-  /* 3. Étapes effectuées (TSI) */
-  if (has('9B')) {
-    const r = decodeBits(tags['9B'], D.TSI_BITS);
-    S.push({
-      title: "Les étapes réellement effectuées (TSI)", icon: "☑️", sev: 'info',
-      lines: r.set.length ? r.set.map(b => b.label) : ["Aucune étape marquée comme effectuée."],
-    });
-  }
+   3 modes : décoder un message, cycle de vie (plusieurs
+   messages liés), comparer deux messages (diff champ à champ).
+   ============================================================ */
 
-  /* 4. Vérification du porteur (CVM Results) */
-  if (has('9F34')) {
-    const r = decodeValue('9F34', tags['9F34'], D);
-    if (r && r.cvm) {
-      S.push({
-        title: "Vérification du porteur", icon: "🔑",
-        sev: r.cvm.resCode === 0x01 ? 'bad' : 'info',
-        lines: [`Méthode appliquée : ${r.cvm.method}.`, `Résultat : ${r.cvm.res}.`],
-      });
-    }
-  }
+/* ---------- Dictionnaire des messages (racine XML → libellé) ---------- */
+const NEXO_MSG_TYPES = {
+  AccptrAuthstnReq:     { label: "Requête d'autorisation",           xsd: "caaa.001.001.06", family: 'auth' },
+  AccptrAuthstnRspn:    { label: "Réponse d'autorisation",           xsd: "caaa.002.001.06", family: 'auth' },
+  AccptrCmpltnAdvc:     { label: "Avis de complétion",               xsd: "caaa.003.001.06", family: 'completion' },
+  AccptrCmpltnAdvcRspn: { label: "Réponse à l'avis de complétion",   xsd: "caaa.004.001.06", family: 'completion' },
+  AccptrCxlReq:         { label: "Requête d'annulation",             xsd: "caaa.005.001.06", family: 'cancellation' },
+  AccptrCxlRspn:        { label: "Réponse à la requête d'annulation",xsd: "caaa.006.001.06", family: 'cancellation' },
+  AccptrCxlAdvc:        { label: "Avis d'annulation",                xsd: "caaa.007.001.06", family: 'cancellation' },
+  AccptrCxlAdvcRspn:    { label: "Réponse à l'avis d'annulation",    xsd: "caaa.008.001.06", family: 'cancellation' },
+};
 
-  /* 5. Croisement TVR × IAC/TAC (Terminal Action Analysis) */
-  const masks = [
-    { key: 'denial', tag: '9F0E', label: "Refus offline", verb: "refuser la transaction sans passer en ligne" },
-    { key: 'online', tag: '9F0F', label: "Passage en ligne", verb: "envoyer la transaction en autorisation en ligne" },
-    { key: 'default', tag: '9F0D', label: "Défaut (si en ligne impossible)", verb: "refuser si le passage en ligne est impossible" },
-  ];
-  if (tvrBits && (has('9F0D') || has('9F0E') || has('9F0F') || (tacs && (tacs.denial || tacs.online || tacs.default)))) {
-    const lines = [];
-    let anyMatch = false;
-    for (const m of masks) {
-      const iacHex = tags[m.tag];
-      const tacHex = tacs && tacs[m.key] ? cleanHex(tacs[m.key]) : null;
-      if (!iacHex && !tacHex) continue;
-      // union IAC | TAC, puis ET avec TVR
-      const tvrB = hexToBytes(tags['95']);
-      const iacB = iacHex ? hexToBytes(iacHex) : [0, 0, 0, 0, 0];
-      const tacB = tacHex ? hexToBytes(tacHex) : [0, 0, 0, 0, 0];
-      const matched = [];
-      for (const [byteIdx, mask, label] of D.TVR_BITS) {
-        const u = ((iacB[byteIdx - 1] || 0) | (tacB[byteIdx - 1] || 0));
-        if ((tvrB[byteIdx - 1] & mask) && (u & mask)) matched.push(label);
-      }
-      if (matched.length) {
-        anyMatch = true;
-        lines.push(`▶ ${m.label} : « ${matched.join(' » + « ')} » → le terminal doit ${m.verb}.`);
-      } else {
-        lines.push(`○ ${m.label} : aucun bit du TVR ne croise ce masque${tacHex && iacHex ? ' (IAC ∪ TAC)' : tacHex ? ' (TAC seul)' : ' (IAC seul)'}.`);
-      }
-    }
-    if (lines.length) {
-      S.push({
-        title: "Croisement TVR × seuils émetteur/terminal (TAC-IAC)", icon: "⚖️",
-        sev: anyMatch ? 'warn' : 'ok', lines,
-        note: "Règle du jeu : chaque bit levé du TVR est comparé aux masques de l'émetteur (IAC, dans la carte) et de l'acquéreur (TAC, dans le terminal). Union des deux, bit à bit. C'est la « Terminal Action Analysis » du Book 3.",
-      });
-    }
-  }
+/* MessageFunction : uniquement les codes directement confirmés dans le MUG Acquirer v6
+   (texte de la spec ou exemples officiels) – sinon, valeur brute affichée sans traduction. */
+const NEXO_MSGFCTN = {
+  AUTQ: "Requête d'autorisation (AuthorisationRequest)",
+  AUTP: "Réponse d'autorisation (AuthorisationResponse)",
+  FCMV: "Avis de complétion avec capture financière (FinancialCompletionAdvice)",
+  CCAQ: "Requête d'annulation (CancellationRequest)",
+  CCAV: "Avis d'annulation (CancellationAdvice)",
+};
 
-  /* 6. Verdict carte (CID) + réponse émetteur (ARC) */
-  let verdict = null;
-  if (has('9F27')) {
-    const r = decodeValue('9F27', tags['9F27'], D);
-    if (r) {
-      const map = {
-        'AAC': { sev: 'bad', txt: "La carte a rendu un AAC : transaction REFUSÉE. C'est le dernier mot, même si le terminal était prêt à accepter." },
-        'TC': { sev: 'ok', txt: "La carte a rendu un TC : transaction APPROUVÉE (offline si aucun passage en ligne n'a eu lieu). Le TC est la preuve cryptographique que le commerçant présentera au règlement." },
-        'ARQC': { sev: 'info', txt: "La carte a rendu un ARQC : elle demande l'avis de l'émetteur, la transaction part en ligne. La décision finale viendra de la réponse d'autorisation." },
-        'RFU/AAR': { sev: 'warn', txt: "Valeur réservée/héritée, rare en production." },
-      };
-      const v = map[r.cidType];
-      verdict = { title: `Décision de la carte : ${CID_LABELS[r.cidType]} (${r.cidType})`, sev: v.sev, txt: v.txt, extra: r.details };
-    }
-  }
-  if (has('8A')) {
-    const r = decodeValue('8A', tags['8A'], D);
-    if (r) {
-      const line = `Réponse d'autorisation (ARC) : ${r.summary}.`;
-      if (verdict) verdict.arc = { line, ok: r.arcOk };
-      else verdict = { title: "Réponse d'autorisation", sev: r.arcOk ? 'ok' : 'bad', txt: line };
-    }
-  }
+/* Dictionnaires de codes NEXO, uniquement des paires directement sourcées
+   (texte du MUG Acquirer v6 ou Card Payment Message Examples v6.0). */
+const NEXO_CODES = {
+  partyType:  { OPOI: "Terminal (POI) d'origine", ACQR: "Acquéreur", IAGT: "Agent intermédiaire" },
+  cardEntry:  { CICC: "Puce (ICC, contact)", MGST: "Piste magnétique", PHYS: "Carte physique, lecture manuelle" },
+  verifCap:   { MNSG: "Signature manuscrite", FCPN: "PIN offline en clair", FEPN: "PIN offline chiffré", NPIN: "PIN en ligne" },
+  onlineCap:  { SMON: "Semi hors-ligne (bascule en ligne si l'émetteur l'exige)" },
+  msgDest:    { CDSP: "Écran du porteur", MRCP: "Écran/ticket commerçant" },
+  component:  { TERM: "Terminal (matériel)", APLI: "Application de paiement" },
+  locationCat:{ FIXD: "Point de vente fixe" },
+  attendance: { ATTD: "Vente assistée (attended)" },
+  txType:     { CRDP: "Paiement carte (CardPayment)" },
+  onlineRsn:  { ICCF: "Exigé par la puce (ICC Forced)" },
+  response:   { APPR: "Approuvée" },
+  authEntity: { CISS: "Émetteur de la carte (Card Issuer)" },
+  verifMethod:{ FPIN: "PIN offline" },
+  verifEntity:{ ICCD: "Puce (ICC)" },
+  verifResult:{ SUCC: "Réussie" },
+  contentType:{ EVLP: "Enveloppe chiffrée (EnvelopedData)", DATA: "Données en clair (PlainData)", AUTH: "Données authentifiées (AuthenticatedData)" },
+};
 
-  return { sections: S, verdict };
+function nexoCode(dictName, code) {
+  if (!code) return null;
+  const dict = NEXO_CODES[dictName] || {};
+  return dict[code] ? `${dict[code]} · code ${code}` : code;
+}
+function nexoMsgFctn(code) {
+  if (!code) return null;
+  return NEXO_MSGFCTN[code] ? `${NEXO_MSGFCTN[code]}` : `${code} (code non répertorié ici)`;
 }
 
+/* ---------- Aides XML (DOMParser, insensible au namespace) ---------- */
+function parseXml(str) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(str, 'application/xml');
+  const err = doc.getElementsByTagName('parsererror')[0];
+  if (err) {
+    const m = err.textContent.match(/error on line \d+ at column \d+:\s*([^\n]*?)(?:Below|$)/i);
+    const reason = m && m[1].trim() ? m[1].trim() : "vérifiez que le message collé est bien un document XML complet et bien formé.";
+    throw new Error("XML invalide : " + reason);
+  }
+  return doc;
+}
+/* enfant direct par nom local (premier trouvé) */
+function child1(el, name) {
+  if (!el) return null;
+  for (const c of el.children) if (c.localName === name) return c;
+  return null;
+}
+/* enfant direct, alternatives (premier nom trouvé) */
+function child1of(el, names) {
+  for (const n of names) { const c = child1(el, n); if (c) return c; }
+  return null;
+}
+/* tous les enfants directs par nom local */
+function childAll(el, name) {
+  if (!el) return [];
+  return [...el.children].filter(c => c.localName === name);
+}
+/* recherche en profondeur, premier trouvé dans l'ordre du document */
+function findFirst(el, name) {
+  if (!el) return null;
+  for (const c of el.children) {
+    if (c.localName === name) return c;
+    const r = findFirst(c, name);
+    if (r) return r;
+  }
+  return null;
+}
+function findFirstOf(el, names) {
+  for (const n of names) { const r = findFirst(el, n); if (r) return r; }
+  return null;
+}
+function findAllDeep(el, name, out) {
+  out = out || [];
+  if (!el) return out;
+  for (const c of el.children) {
+    if (c.localName === name) out.push(c);
+    findAllDeep(c, name, out);
+  }
+  return out;
+}
+function txt(el) {
+  if (!el) return null;
+  const t = el.textContent.replace(/\s+/g, ' ').trim();
+  return t || null;
+}
+function t1(el, name) { return txt(child1(el, name)); }
 
-/* ============ Couche interface (DOM), v4 ============ */
+/* ---------- Décodage base64 → hex (pour ICCRelatedData) ---------- */
+function b64ToHex(b64) {
+  const clean = (b64 || '').replace(/\s+/g, '');
+  if (!clean) return null;
+  try {
+    const bin = atob(clean);
+    let hex = '';
+    for (let i = 0; i < bin.length; i++) hex += bin.charCodeAt(i).toString(16).padStart(2, '0');
+    return hex.toUpperCase();
+  } catch (e) { return null; }
+}
 
-const EXAMPLES = [
-  { id: 'simple', label: 'flux simple (analyse d\'un refus)', desc: "Log de transaction refusée : TVR, IAC, CVM, AAC, l'analyseur raconte ce qui s'est passé.",
-    hex: '82021D0095050000A080009B02E8009F34030103019F0E0500002000009F0F05F0406498009F0D05F0402498009F2701009A032608089C01009F02060000000125505F2A020978' },
-  { id: 'imbrique', label: 'flux imbriqué (carte co-badgée CB × Mastercard)', desc: "Deux applications dans le répertoire sans contact (PPSE) : le co-badgeage à la française, tag par tag.",
-    hex: '6F41840E325041592E5359532E4444463031A52FBF0C2C61104F07A00000004210105002434287010161184F07A0000000041010500A4D415354455243415244870102' },
-];
+/* ============ Détection du message ============ */
+function detectMessage(doc) {
+  let root = doc.documentElement;
+  if (!root) return null;
+  if (root.localName === 'Document') {
+    const first = [...root.children].find(c => c.nodeType === 1);
+    if (!first) return null;
+    root = first;
+  }
+  const meta = NEXO_MSG_TYPES[root.localName];
+  if (!meta) return null;
+  return { root, key: root.localName, meta };
+}
 
-const BITFIELD_TABLES = { '82': null, '95': null, '9B': null, '9F33': null, '9F40': null, '9F66': null }; // rempli au chargement (tables globales)
-
-const $ = id => document.getElementById(id);
-function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-
-function bitTableFor(tagHex) {
-  if (tagHex === '82') return AIP_BITS;
-  if (tagHex === '95') return TVR_BITS;
-  if (tagHex === '9B') return TSI_BITS;
-  if (tagHex === '9F33') return TERMCAP_BITS;
-  if (tagHex === '9F40') return ADDTERMCAP_BITS;
-  if (tagHex === '9F66') return TTQ_BITS;
-  if (tagHex === 'TAC') return TVR_BITS;
+/* corps du message : l'enfant direct qui n'est ni Hdr ni SctyTrlr */
+function bodyOf(root) {
+  for (const c of root.children) {
+    if (c.localName !== 'Hdr' && c.localName !== 'SctyTrlr') return c;
+  }
   return null;
 }
 
-/* ---------- Grille bit à bit (issue de la v3-décodeurs) ---------- */
-function renderBitGrid(tagHex, valueHex) {
-  const table = bitTableFor(tagHex);
-  if (!table) return '';
-  const bytes = [];
-  for (let i = 0; i < valueHex.length; i += 2) bytes.push(parseInt(valueHex.slice(i, i + 2), 16));
-  // index des bits connus : byteIdx -> {bitNum: {label, sev}}
-  const known = {};
-  for (const [byteIdx, mask, label, sev] of table) {
-    let bit = 0; for (let n = 1; n <= 8; n++) if (mask === (1 << (n - 1))) bit = n;
-    (known[byteIdx] = known[byteIdx] || {})[bit] = { label, sev };
+/* ============ Extraction champ par champ ============ */
+function extractHeader(root) {
+  const hdr = child1(root, 'Hdr');
+  if (!hdr) return null;
+  const initg = child1(hdr, 'InitgPty');
+  const rcpt = child1(hdr, 'RcptPty');
+  return {
+    msgFctn: t1(hdr, 'MsgFctn'),
+    prtcolVrsn: t1(hdr, 'PrtcolVrsn'),
+    xchgId: t1(hdr, 'XchgId'),
+    creDtTm: t1(hdr, 'CreDtTm'),
+    initg: initg ? { id: t1(initg, 'Id'), tp: t1(initg, 'Tp'), issr: t1(initg, 'Issr') } : null,
+    rcpt: rcpt ? { id: t1(rcpt, 'Id'), tp: t1(rcpt, 'Tp') } : null,
+  };
+}
+
+function extractParty(envt) {
+  if (!envt) return {};
+  // Acquéreur : <Acqrr><Id><Id/><Tp/></Id><ParamsVrsn/></Acqrr>  (requêtes/avis)
+  //          ou <AcqrrId><Id/><Tp/></AcqrrId>                    (réponses)
+  const acqrrFull = child1(envt, 'Acqrr');
+  const acqrrFlat = child1(envt, 'AcqrrId');
+  let acquirer = null;
+  if (acqrrFull) {
+    const id = child1(acqrrFull, 'Id');
+    acquirer = { id: id ? t1(id, 'Id') : null, tp: id ? t1(id, 'Tp') : null, paramsVrsn: t1(acqrrFull, 'ParamsVrsn') };
+  } else if (acqrrFlat) {
+    acquirer = { id: t1(acqrrFlat, 'Id'), tp: t1(acqrrFlat, 'Tp'), paramsVrsn: null };
   }
-  let html = '<div class="decode-block">';
-  bytes.forEach((b, i) => {
-    const byteIdx = i + 1;
-    const spec = known[byteIdx] || {};
-    if (Object.keys(spec).length === 0 && b === 0) return; // octet entièrement RFU et vide : ne pas encombrer
-    html += `<div class="decode-byte"><div class="decode-byte-label">Octet ${byteIdx}, ${b.toString(16).toUpperCase().padStart(2, '0')}</div><div class="bit-grid">`;
-    for (let n = 8; n >= 1; n--) {
-      const isSet = (b >> (n - 1)) & 1;
-      const k = spec[n];
-      html += `<span class="bit-chip${isSet ? ' on' : ''}${k ? '' : ' rfu'}" title="${k ? esc(k.label) : 'RFU (réservé, non défini publiquement)'}">b${n}</span>`;
+
+  const mrchntFull = child1(envt, 'Mrchnt');
+  const mrchntFlat = child1(envt, 'MrchntId');
+  let merchant = null;
+  if (mrchntFull) {
+    const id = child1(mrchntFull, 'Id');
+    const loc = child1(mrchntFull, 'LctnAndCtct');
+    const adr = loc ? child1(loc, 'PstlAdr') : null;
+    merchant = {
+      id: id ? t1(id, 'Id') : null,
+      cmonNm: t1(mrchntFull, 'CmonNm'),
+      lctnCtgy: t1(mrchntFull, 'LctnCtgy'),
+      town: adr ? t1(adr, 'TwnNm') : null,
+      country: adr ? t1(adr, 'Ctry') : null,
+    };
+  } else if (mrchntFlat) {
+    merchant = { id: t1(mrchntFlat, 'Id') };
+  }
+
+  const poiFull = child1(envt, 'POI');
+  const poiFlat = child1(envt, 'POIId');
+  let poi = null;
+  if (poiFull) {
+    const id = child1(poiFull, 'Id');
+    const cpb = child1(poiFull, 'Cpblties');
+    poi = {
+      id: id ? t1(id, 'Id') : null,
+      issr: id ? t1(id, 'Issr') : null,
+      sysNm: t1(poiFull, 'SysNm'),
+      cardRdng: cpb ? childAll(cpb, 'CardRdngCpblties').map(txt) : [],
+      verifCap: cpb ? childAll(cpb, 'CrdhldrVrfctnCpblties').map(txt) : [],
+      onlineCap: cpb ? childAll(cpb, 'OnLineCpblties').map(txt) : [],
+      components: childAll(poiFull, 'Cmpnt').map(c => ({ tp: t1(c, 'Tp') })),
+    };
+  } else if (poiFlat) {
+    poi = { id: t1(poiFlat, 'Id'), issr: t1(poiFlat, 'Issr') };
+  }
+
+  const card = child1(envt, 'Card');
+  const cardInfo = card ? {
+    ctryCd: t1(card, 'CardCtryCd'),
+    pdctPrfl: t1(card, 'CardPdctPrfl'),
+    brand: t1(card, 'CardBrnd'),
+    // ProtectedCardData : présent = données carte chiffrées (enveloppe), on ne décode jamais le contenu
+    protected: !!child1(card, 'PrtctdCardData'),
+  } : null;
+
+  const crdhldr = child1(envt, 'Crdhldr');
+  const verifRes = crdhldr ? child1(crdhldr, 'TxVrfctnRslt') : null;
+  const cardholder = crdhldr ? {
+    lang: t1(crdhldr, 'Lang'),
+    verif: verifRes ? { mtd: t1(verifRes, 'Mtd'), entity: t1(verifRes, 'VrfctnNtty'), result: t1(verifRes, 'Rslt') } : null,
+  } : null;
+
+  return { acquirer, merchant, poi, card: cardInfo, cardholder };
+}
+
+function extractContext(cntxt) {
+  if (!cntxt) return null;
+  const pmt = child1(cntxt, 'PmtCntxt');
+  const sale = child1(cntxt, 'SaleCntxt');
+  return {
+    payment: pmt ? {
+      cardPres: t1(pmt, 'CardPres'), crdhldrPres: t1(pmt, 'CrdhldrPres'),
+      attndnc: t1(pmt, 'AttndncCntxt'), attndntLang: t1(pmt, 'AttndntLang'),
+      entryMode: t1(pmt, 'CardDataNtryMd'),
+    } : null,
+    sale: sale ? { id: t1(sale, 'SaleId'), refNb: t1(sale, 'SaleRefNb'), rcncltnId: t1(sale, 'SaleRcncltnId') } : null,
+  };
+}
+
+function extractResult(scope) {
+  const rslt = findFirst(scope, 'AuthstnRslt') || findFirst(scope, 'TxRslt');
+  if (!rslt) return null;
+  const entity = child1(rslt, 'AuthstnNtty');
+  const rspn = child1(rslt, 'RspnToAuthstn');
+  // Action(s) envoyée(s) par l'acquéreur quand la réponse est déclinée (ex. reprise PIN, capture carte…).
+  // Extraction best-effort (nom de balise XML abrégé non confirmé par un exemple officiel dans nos sources) :
+  // on n'affiche que la valeur brute si trouvée, jamais de traduction devinée.
+  const actions = findAllDeep(rslt, 'Actn').concat(findAllDeep(rslt, 'Action'))
+    .map(a => t1(a, 'ActnTp') || t1(a, 'ActionType') || txt(a))
+    .filter(Boolean);
+  return {
+    entity: entity ? t1(entity, 'Tp') : null,
+    response: rspn ? t1(rspn, 'Rspn') : null,
+    reason: rspn ? t1(rspn, 'RspnReason') : null,
+    authCd: t1(rslt, 'AuthstnCd'),
+    cmpltnReqrd: t1(rslt, 'CmpltnReqrd'),
+    actions,
+  };
+}
+
+function extractTx(tx) {
+  if (!tx) return null;
+  const txId = child1(tx, 'TxId');
+  const dtls = child1(tx, 'TxDtls');
+  // Motif d'échec (FailureReason) : mandatoire si TransactionSuccess=False (MUG Acquirer v6, AcceptorCompletionAdvice).
+  // Nom de balise abrégé non confirmé par un exemple officiel (aucun de nos 4 exemples n'est en échec) :
+  // best-effort, valeur brute seulement si trouvée.
+  const failureReasons = childAll(tx, 'FlrRsn').concat(childAll(tx, 'FailureReason')).map(txt).filter(Boolean);
+  return {
+    captr: t1(tx, 'TxCaptr'),
+    tp: t1(tx, 'TxTp'),
+    mcc: t1(tx, 'MrchntCtgyCd'),
+    dtTm: txId ? t1(txId, 'TxDtTm') : null,
+    ref: txId ? t1(txId, 'TxRef') : null,
+    rcncltnId: t1(tx, 'RcncltnId'),
+    success: t1(tx, 'TxSucss'),
+    ccy: dtls ? t1(dtls, 'Ccy') : null,
+    amount: dtls ? t1(dtls, 'TtlAmt') : null,
+    onlineRsn: dtls ? t1(dtls, 'OnLineRsn') : null,
+    iccRelatedB64: dtls ? t1(dtls, 'ICCRltdData') : null,
+    failureReasons,
+  };
+}
+
+function extractOriginal(tx) {
+  const orgnl = tx ? child1(tx, 'OrgnlTx') : null;
+  if (!orgnl) return null;
+  const txId = child1(orgnl, 'TxId');
+  return {
+    dtTm: txId ? t1(txId, 'TxDtTm') : null,
+    ref: txId ? t1(txId, 'TxRef') : null,
+    tp: t1(orgnl, 'TxTp'),
+    result: extractResult(orgnl),
+  };
+}
+
+/* ============ Construction des champs (label/valeur), partagée entre
+   le rendu HTML détaillé et le mode comparaison (diff) ============ */
+function esc(s) {
+  return (s == null ? '' : String(s)).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+function boolFr(v) {
+  if (v === 'true') return 'Oui';
+  if (v === 'false') return 'Non';
+  return v;
+}
+function isoNumFromAlpha(alpha) {
+  for (const [num, c] of Object.entries(CURRENCY_DICT)) if (c.code === alpha) return num;
+  return null;
+}
+
+function fieldsHeader(h) {
+  if (!h) return [];
+  const f = [];
+  f.push(["Fonction du message", nexoMsgFctn(h.msgFctn)]);
+  f.push(["Version du protocole", h.prtcolVrsn]);
+  f.push(["Identifiant d'échange", h.xchgId]);
+  f.push(["Date/heure de création", h.creDtTm]);
+  if (h.initg) f.push(["Émis par", h.initg.id, nexoCode('partyType', h.initg.tp)]);
+  if (h.rcpt) f.push(["Destiné à", h.rcpt.id, nexoCode('partyType', h.rcpt.tp)]);
+  return f;
+}
+
+function fieldsActors(a) {
+  if (!a) return [];
+  const f = [];
+  if (a.acquirer) f.push(["Acquéreur", a.acquirer.id, a.acquirer.paramsVrsn ? `version des paramètres : ${a.acquirer.paramsVrsn}` : null]);
+  if (a.merchant) {
+    f.push(["Commerçant", a.merchant.cmonNm || a.merchant.id]);
+    if (a.merchant.id && a.merchant.cmonNm) f.push(["Identifiant commerçant", a.merchant.id]);
+    f.push(["Catégorie de point de vente", nexoCode('locationCat', a.merchant.lctnCtgy)]);
+    if (a.merchant.town || a.merchant.country) f.push(["Localisation", [a.merchant.town, a.merchant.country].filter(Boolean).join(', ')]);
+  }
+  if (a.poi) {
+    f.push(["Terminal (POI)", a.poi.sysNm || a.poi.id, a.poi.sysNm ? `identifiant : ${a.poi.id}` : null]);
+    if (a.poi.cardRdng && a.poi.cardRdng.length) f.push(["Lecture carte supportée", a.poi.cardRdng.map(c => nexoCode('cardEntry', c)).join(' · ')]);
+    if (a.poi.verifCap && a.poi.verifCap.length) f.push(["Vérification porteur supportée", a.poi.verifCap.map(c => nexoCode('verifCap', c)).join(' · ')]);
+    if (a.poi.onlineCap && a.poi.onlineCap.length) f.push(["Comportement en ligne", a.poi.onlineCap.map(c => nexoCode('onlineCap', c)).join(' · ')]);
+    if (a.poi.components && a.poi.components.length) f.push(["Composants déclarés", a.poi.components.map(c => nexoCode('component', c.tp)).join(' · ')]);
+  }
+  if (a.card) {
+    f.push(["Marque de la carte", a.card.brand]);
+    f.push(["Profil produit carte", a.card.pdctPrfl]);
+    f.push(["Pays de la carte (code numérique)", a.card.ctryCd]);
+    if (a.card.protected) f.push(["Données carte", "Chiffrées (ProtectedCardData)", "Aucun PAN en clair dans ce message : l'outil ne décode jamais cette enveloppe."]);
+  }
+  if (a.cardholder) {
+    f.push(["Langue du porteur", a.cardholder.lang]);
+    if (a.cardholder.verif) {
+      const v = a.cardholder.verif;
+      f.push(["Vérification du porteur", nexoCode('verifMethod', v.mtd), `${nexoCode('verifEntity', v.entity) || ''} · ${nexoCode('verifResult', v.result) || ''}`.trim()]);
     }
-    html += '</div><div class="bit-meanings">';
-    const rfuBits = [];
-    for (let n = 8; n >= 1; n--) {
-      const k = spec[n];
-      if (!k) { rfuBits.push(n); continue; }
-      const isSet = (b >> (n - 1)) & 1;
-      html += `<div class="bit-meaning ${isSet ? 'on' : 'off'}"><span class="bit-num">b${n}</span><span class="dot"></span><span>${esc(k.label)}, ${isSet ? '<b>oui</b>' : 'non'}</span></div>`;
-    }
-    if (rfuBits.length) {
-      html += `<div class="bit-meaning rfu-line"><span class="bit-num">${rfuBits.map(n => 'b' + n).join(' ')}</span><span class="dot"></span><span>RFU, réservé par la norme, sans signification publique</span></div>`;
-    }
-    html += '</div></div>';
-  });
-  html += '</div>';
+  }
+  return f;
+}
+
+function fieldsContext(c) {
+  if (!c) return [];
+  const f = [];
+  if (c.payment) {
+    const p = c.payment;
+    if (p.cardPres) f.push(["Carte présente", boolFr(p.cardPres)]);
+    if (p.crdhldrPres) f.push(["Porteur présent", boolFr(p.crdhldrPres)]);
+    if (p.attndnc) f.push(["Contexte de vente", nexoCode('attendance', p.attndnc)]);
+    if (p.attndntLang) f.push(["Langue caissier", p.attndntLang]);
+    if (p.entryMode) f.push(["Mode de saisie de la carte", nexoCode('cardEntry', p.entryMode)]);
+  }
+  if (c.sale) {
+    f.push(["Identifiant caisse", c.sale.id]);
+    f.push(["Référence caisse", c.sale.refNb]);
+    f.push(["Identifiant de rapprochement caisse", c.sale.rcncltnId]);
+  }
+  return f;
+}
+
+function fieldsTransaction(tx) {
+  if (!tx) return [];
+  const f = [];
+  if (tx.captr !== null) f.push(["Capture financière demandée", boolFr(tx.captr)]);
+  f.push(["Type de transaction", nexoCode('txType', tx.tp)]);
+  f.push(["Code catégorie commerçant (MCC)", tx.mcc]);
+  f.push(["Date/heure de la transaction", tx.dtTm]);
+  f.push(["Référence de transaction", tx.ref]);
+  f.push(["Identifiant de rapprochement", tx.rcncltnId]);
+  if (tx.success !== null) f.push(["Transaction réussie", boolFr(tx.success)]);
+  if (tx.ccy || tx.amount) f.push(["Montant", tx.amount && tx.ccy ? `${tx.amount} ${tx.ccy}` : (tx.amount || tx.ccy)]);
+  if (tx.onlineRsn) f.push(["Raison du passage en ligne", nexoCode('onlineRsn', tx.onlineRsn)]);
+  if (tx.failureReasons && tx.failureReasons.length) f.push(["Motif d'échec (valeur brute)", tx.failureReasons.join(' · '), "non traduit : voir l'encart de référence ci-dessous"]);
+  return f;
+}
+
+function fieldsOriginal(o) {
+  if (!o) return [];
+  const f = [];
+  f.push(["Date/heure de la transaction annulée", o.dtTm]);
+  f.push(["Référence de la transaction annulée", o.ref]);
+  f.push(["Type", nexoCode('txType', o.tp)]);
+  if (o.result) {
+    f.push(["Résultat d'origine", nexoCode('response', o.result.response), o.result.authCd ? `code d'autorisation : ${o.result.authCd}` : null]);
+    f.push(["Entité ayant autorisé", nexoCode('authEntity', o.result.entity)]);
+  }
+  return f;
+}
+
+function fieldsResult(r) {
+  if (!r) return [];
+  const f = [];
+  f.push(["Réponse", nexoCode('response', r.response)]);
+  f.push(["Entité ayant autorisé", nexoCode('authEntity', r.entity)]);
+  f.push(["Code d'autorisation", r.authCd]);
+  if (r.cmpltnReqrd !== null) f.push(["Complétion requise", boolFr(r.cmpltnReqrd)]);
+  if (r.actions && r.actions.length) f.push(["Action(s) demandée(s) (valeur brute)", r.actions.join(' · '), "non traduit : voir l'encart de référence ci-dessous"]);
+  return f;
+}
+
+/* ============ Rendu HTML ============ */
+function row(f) {
+  if (!f) return '';
+  const [label, value, hint] = f;
+  if (value === null || value === undefined || value === '') return '';
+  return `<div class="field-row"><span class="field-label">${esc(label)}</span><span class="field-value">${esc(value)}</span>${hint ? `<span class="field-hint">${esc(hint)}</span>` : ''}</div>`;
+}
+function rowsHtml(fields) { return (fields || []).map(row).join(''); }
+function section(title, icon, bodyHtml) {
+  if (!bodyHtml) return '';
+  return `<section class="field-section"><h3><span class="fs-icon">${icon}</span>${esc(title)}</h3><div class="field-grid">${bodyHtml}</div></section>`;
+}
+
+function renderHeader(h) { return section("En-tête du message", "◧", rowsHtml(fieldsHeader(h))); }
+function renderActors(a) { return section("Acteurs", "◫", rowsHtml(fieldsActors(a))); }
+function renderContext(c) { return section("Contexte de paiement", "◔", rowsHtml(fieldsContext(c))); }
+function renderTransaction(tx) { return section("Transaction", "◒", rowsHtml(fieldsTransaction(tx))); }
+function renderOriginal(o) { return section("Transaction annulée (référence à l'originale)", "↺", rowsHtml(fieldsOriginal(o))); }
+function renderResult(r) { return section("Résultat", r && r.response === 'APPR' ? "✓" : "◆", rowsHtml(fieldsResult(r))); }
+
+/* Non-approbation : uniquement du contenu de référence (spec MUG Acquirer v6.0), jamais une
+   traduction du code exact rencontré – seul APPR a été confirmé par un exemple XML officiel. */
+function renderRejectNote(result, txData) {
+  const notApproved = result && result.response && result.response !== 'APPR';
+  const failed = txData && txData.success === 'false';
+  if (!notApproved && !failed) return '';
+  let html = `<section class="field-section reject-note"><h3><span class="fs-icon">◆</span>Non-approbation : ce que documente la spec</h3>`;
+  html += `<p class="field-hint">Ce message ne correspond pas à une approbation simple (code <code>APPR</code>). Le(s) code(s) exact(s) affiché(s) plus haut sont repris tels quels, sans traduction devinée : seul <code>APPR</code> est confirmé par un exemple XML officiel dans nos sources.</p>`;
+  if (result && result.response !== undefined) {
+    html += `<p><b>Le champ Réponse</b> (MUG Acquirer v6.0, §4.2 Authorisation Messages) peut documentairement valoir : <i>Approuvée</i> (transaction acceptée), <i>Déclinée</i> (autorisation refusée, ou capture demandée non effectuée), <i>Partiellement approuvée</i> (montant accepté inférieur au montant demandé), <i>Erreur technique</i> (message non traitable, ex. délai dépassé côté émetteur, panne HSM).</p>`;
+  }
+  if (result && result.actions && result.actions.length) {
+    html += `<p><b>Action(s) demandée(s)</b> (valeur brute reprise ci-dessus) : la spec documente qu'en cas de refus, l'acquéreur peut demander une suite au terminal – nouvelle tentative de code confidentiel, capture de la carte, autorisation vocale (référence), demande de pièce d'identité, entre autres. Le code littéral n'a pas pu être confirmé par un exemple officiel : affiché brut, non traduit.</p>`;
+  }
+  if (txData && txData.failureReasons && txData.failureReasons.length) {
+    html += `<p><b>Motif d'échec</b> (valeur brute reprise ci-dessus) : à l'étape complétion/annulation, la spec documente des causes telles que carte ayant refusé la transaction, annulation par le porteur, dysfonctionnement suspecté, refus en ligne ou hors ligne, fraude suspectée par le commerçant, délai dépassé, réponse arrivée trop tard, ou impossibilité de finaliser/transmettre le message. Le code littéral n'a pas pu être confirmé par un exemple officiel : affiché brut, non traduit.</p>`;
+  }
+  html += `</section>`;
   return html;
 }
 
-/* ---------- Contenu du panneau d'un tag (partagé arbre / mode tag seul) ---------- */
-function panelContent(tagHex, valueHex, constructed) {
-  const meta = EMV_TAGS[tagHex];
-  const known = !!meta;
-  const cls = tagClass(tagHex);
-  const dv = known ? decodeValue(tagHex, valueHex, null) : null;
-  let inner = '';
-  /* La valeur décodée passe en premier : c'est elle qui compte le plus.
-     L'explication pédagogique vient ensuite, en appui, pas en préambule. */
-  if (dv) {
-    inner += `<div class="decoded"><div class="decoded-main">${esc(dv.summary)}</div>`;
-    const grid = renderBitGrid(tagHex, valueHex);
-    if (grid) inner += grid;
-    else if (dv.details && dv.details.length) inner += `<ul class="decoded-list">${dv.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`;
-    inner += `</div>`;
-    if (grid && tagHex === '9F34' && dv.details.length) {
-      inner += `<ul class="decoded-list">${dv.details.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`;
-    }
-  }
-  if (known) {
-    inner += `<div class="pedago-wrap"><span class="cat-chip" title="${esc(CAT_HELP[meta.cat] || '')}">${esc(meta.cat)}</span><p class="pedago">${esc(meta.p)}</p></div>`;
-  } else if (cls === 'private') {
-    inner += `<p class="pedago"><b>Tag de classe privée BER-TLV</b> (bits 8-7 du premier octet = 11) : par construction, sa signification est propriétaire, émetteur, réseau ou acquéreur. Ce n'est pas un manque du dictionnaire : aucun outil public ne peut décoder ce tag sans la documentation propriétaire correspondante.</p>`;
-  } else {
-    inner += `<p class="pedago">Ce tag n'est pas dans le dictionnaire public de l'outil, classe ${cls === 'context-specific' ? 'context-specific' : cls}, sans définition publique documentée à notre connaissance. Plutôt que d'inventer une signification, l'outil vous montre la valeur brute telle quelle.</p>`;
-  }
-  if (!constructed && valueHex) {
-    inner += `<div class="rawval"><span class="rawlabel">valeur brute<button type="button" class="copy-btn" data-copy="${esc(valueHex)}">Copier</button></span><code>${esc(valueHex)}</code></div>`;
-  }
-  if (known && TAG_REFS[tagHex]) {
-    inner += `<div class="ref-line">Réf. ${esc(TAG_REFS[tagHex])}</div>`;
-  }
-  if (known && meta.ep) {
-    inner += meta.ep.href
-      ? `<a class="ep-link" href="https://paiement-decrypte.fr${meta.ep.href}">🎓 Épisode lié : ${esc(meta.ep.label)}</a>`
-      : `<div class="ep-link soon">🎓 Épisode lié : ${esc(meta.ep.label)}</div>`;
-  }
-  return inner;
-}
-
-/* ---------- Rendu de l'arbre ---------- */
-function renderNode(node, depth) {
-  const meta = EMV_TAGS[node.tagHex];
-  const known = !!meta;
-  const cls = tagClass(node.tagHex);
-  const dv = known ? decodeValue(node.tagHex, node.valueHex, null) : null;
-  const wrap = document.createElement('div');
-  wrap.className = 'node' + (node.constructed ? ' constructed' : '');
-  wrap.style.marginLeft = (depth * 16) + 'px';
-
-  const row = document.createElement('button');
-  row.type = 'button';
-  row.className = 'noderow' + (known ? '' : ' unknown');
-  row.setAttribute('aria-expanded', 'false');
-  const unknownLabel = cls === 'private' ? 'Tag propriétaire (classe privée)' : 'Tag non répertorié';
-  const inlineSummary = dv && dv.summary && !node.constructed
-    ? `<span class="inline-sum">${esc(dv.summary.length > 46 ? dv.summary.slice(0, 44) + '…' : dv.summary)}</span>` : '';
-  row.innerHTML =
-    `<span class="tag-badge">${esc(node.tagHex)}</span>` +
-    `<span class="tag-name">${known ? esc(meta.n) : unknownLabel}${inlineSummary}</span>` +
-    `<span class="tag-len">${node.length} o</span>` +
-    `<span class="chev" aria-hidden="true">›</span>`;
-
-  const panel = document.createElement('div');
-  panel.className = 'nodepanel';
-  panel.innerHTML = panelContent(node.tagHex, node.valueHex, node.constructed);
-
-  row.addEventListener('click', () => {
-    const open = wrap.classList.toggle('open');
-    row.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-
-  wrap.appendChild(row);
-  wrap.appendChild(panel);
-
-  if (node.children.length) {
-    const kids = document.createElement('div');
-    kids.className = 'kids';
-    node.children.forEach(c => kids.appendChild(renderNode(c, depth + 1)));
-    wrap.appendChild(kids);
-  }
-  return wrap;
-}
-
-/* ---------- Bandeau verdict (différenciateur mis en avant) ---------- */
-function renderVerdictBanner(exp) {
-  const host = $('verdict');
-  if (!exp) { host.hidden = true; host.innerHTML = ''; return; }
-  let sev = 'info', headline = null, sub = "Lecture guidée disponible ci-dessous.";
-  if (exp.verdict) {
-    sev = exp.verdict.sev;
-    headline = exp.verdict.title;
-    sub = exp.verdict.txt;
-    if (exp.verdict.arc) sub += ' ' + exp.verdict.arc.line;
-  } else {
-    const tvrSec = exp.sections.find(s => s.title.includes('TVR'));
-    if (tvrSec) {
-      sev = tvrSec.sev;
-      headline = tvrSec.sev === 'ok' ? "Aucun incident détecté par le terminal" : "Le terminal a relevé des incidents";
-      sub = "Le détail bit à bit et la lecture guidée sont ci-dessous.";
-    }
-  }
-  /* Pas de verdict de carte (CID/ARC) ni de constat terminal (TVR) : rien d'assez
-     substantiel à résumer dans le bandeau, on le masque plutôt que d'afficher une
-     bannière vide. Les sections de l'explainer restent visibles plus bas. */
-  if (!headline) { host.hidden = true; host.innerHTML = ''; return; }
-  host.className = 'verdict sev-' + sev;
-  host.innerHTML = `<div class="verdict-badge">Analyse</div><div><div class="verdict-head">${esc(headline)}</div><p>${esc(sub)}</p></div><a href="#explainer" class="verdict-jump">Lecture complète ↓</a>`;
-  host.hidden = false;
-}
-
-/* ---------- Rendu de l'explainer ---------- */
-function renderExplainer(exp) {
-  const host = $('explainer');
-  host.innerHTML = '';
-  renderVerdictBanner(exp);
-  if (!exp) { host.hidden = true; $('analysis-empty').hidden = false; return; }
-  host.hidden = false;
-  $('analysis-empty').hidden = true;
-
-  const h = document.createElement('div');
-  h.className = 'exp-head';
-  h.innerHTML = `<h2>Lecture de la transaction</h2><p>L'outil croise les tags de décision présents dans vos données et explique les événements associés à la transaction.</p>`;
-  host.appendChild(h);
-
-  exp.sections.forEach(s => {
-    const el = document.createElement('div');
-    el.className = 'exp-card sev-' + s.sev;
-    el.innerHTML = `<div class="exp-title">${s.icon} ${esc(s.title)}</div>` +
-      `<ul>${s.lines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` +
-      (s.note ? `<p class="exp-note">${esc(s.note)}</p>` : '');
-    host.appendChild(el);
-  });
-
-  if (exp.verdict) {
-    const v = document.createElement('div');
-    v.className = 'exp-verdict sev-' + exp.verdict.sev;
-    v.innerHTML = `<div class="exp-title">🏁 ${esc(exp.verdict.title)}</div><p>${esc(exp.verdict.txt)}</p>` +
-      (exp.verdict.extra && exp.verdict.extra.length ? `<ul>${exp.verdict.extra.map(l => `<li>${esc(l)}</li>`).join('')}</ul>` : '') +
-      (exp.verdict.arc ? `<p class="${exp.verdict.arc.ok ? 'arc-ok' : 'arc-bad'}">${esc(exp.verdict.arc.line)}</p>` : '');
-    host.appendChild(v);
-  }
-
-  /* Saisie TAC optionnelle */
-  const tacBox = document.createElement('details');
-  tacBox.className = 'tac-box';
-  tacBox.innerHTML = `<summary>Mode avancé : croiser aussi les TAC du terminal</summary>
-    <p>Les TAC (Terminal Action Codes) sont configurés dans le terminal par l'acquéreur, ils ne circulent pas dans les données de la carte. Si vous les connaissez, collez-les ici (5 octets hex chacun) pour compléter l'analyse.</p>
-    <div class="tac-grid">
-      <label>TAC – Denial <input id="tac-denial" placeholder="ex. 0010000000" spellcheck="false"></label>
-      <label>TAC – Online <input id="tac-online" placeholder="ex. F860ACF800" spellcheck="false"></label>
-      <label>TAC – Default <input id="tac-default" placeholder="ex. F860ACA000" spellcheck="false"></label>
-    </div>
-    <button type="button" class="btn secondary" id="tac-apply">Recalculer avec les TAC</button>`;
-  host.appendChild(tacBox);
-  $('tac-apply').addEventListener('click', () => {
-    lastTacs = { denial: $('tac-denial').value, online: $('tac-online').value, default: $('tac-default').value };
-    runParse(lastHex, { tacValues: lastTacs });
-  });
-}
-
-/* ---------- Orchestration flux ---------- */
-let lastHex = '';
-let lastTacs = null;
-
-function showInputNote(norm) {
-  const box = $('input-note');
-  if (!box) return;
-  if (!norm.note) { box.hidden = true; box.innerHTML = ''; return; }
-  box.innerHTML = '';
-  if (norm.format === 'base64') {
-    const badge = document.createElement('span');
-    badge.className = 'fmt';
-    badge.textContent = 'Base64';
-    box.appendChild(badge);
-  }
-  const txt = document.createElement('span');
-  txt.textContent = norm.note;
-  box.appendChild(txt);
-  if (norm.format === 'base64' && norm.hex) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = 'Remplacer la saisie par l’hexadécimal';
-    btn.addEventListener('click', () => {
-      const ta = $('hex-input');
-      if (ta) { ta.value = norm.hex; ta.focus(); }
-      box.hidden = true;
-    });
-    box.appendChild(btn);
-  }
-  box.hidden = false;
-}
-
-
-/* === PD:READ_FLASH === */
-/* Annonce le résultat là où l'utilisateur a cliqué, puis l'amène à l'écran.
-   Voir patch_emv_feedback.py pour le pourquoi.
-
-   anchorIds est une LISTE, dans l'ordre de préférence : on s'arrête au
-   premier bloc réellement affiché. On vise le bloc « Analyse » (#verdict)
-   avant l'arbre TLV — c'est la réponse, l'arbre n'est que la matière — et
-   on se rabat sur les erreurs puis sur la grille de résultats quand il n'y
-   a pas de tag de décision dans les données. */
-function pdAnnounce(msg, anchorIds) {
-  var el = document.getElementById('read-flash');
-  if (!el) return;
-  el.hidden = false;
-  el.textContent = msg;
-  el.classList.remove('flash');
-  void el.offsetWidth;
-  el.classList.add('flash');
-  for (var i = 0; i < anchorIds.length; i++) {
-    var t = document.getElementById(anchorIds[i]);
-    if (t && !t.hidden && t.offsetParent !== null && t.scrollIntoView) {
-      t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-  }
-}
-var ANCHORS_STREAM = ['verdict', 'errors', 'results-grid'];
-function pdClearAnnounce() {
-  var el = document.getElementById('read-flash');
-  if (el) { el.hidden = true; el.textContent = ''; }
-}
-
-function runParse(rawInput, opts) {
-  opts = opts || {};
-  const norm = normalizeInput(rawInput);
-  const hex = norm.hex;
-  showInputNote(norm);
-  const out = $('result');
-  const errBox = $('errors');
-  errBox.hidden = true; errBox.innerHTML = '';
-  $('single-result').hidden = true;
-
-  if (!hex) { out.hidden = true; $('explainer').hidden = true; $('verdict').hidden = true; $('permalink-bar').hidden = true; $('results-grid').hidden = true; return; }
-  if (hex.length % 2 !== 0) {
-    errBox.hidden = false;
-    errBox.innerHTML = `<li>Nombre impair de caractères hexadécimaux (${hex.length}), il manque probablement un chiffre.</li>`;
-    out.hidden = true; $('explainer').hidden = true; $('verdict').hidden = true; $('results-grid').hidden = true;
-    return;
-  }
-  lastHex = hex;
-
+/* ---------- Section EMV embarquée (ICCRelatedData) ---------- */
+function renderEmv(b64) {
+  if (!b64) return '';
+  const hex = b64ToHex(b64);
+  if (!hex) return `<section class="field-section"><h3><span class="fs-icon">◨</span>Données EMV embarquées</h3><p class="field-hint">ICCRelatedData présent mais non décodable (base64 invalide).</p></section>`;
   const { nodes, errors } = parseTLV(hex);
-  if (errors.length) {
-    errBox.hidden = false;
-    errBox.innerHTML = errors.map(e => `<li>${esc(e)}</li>`).join('');
-  }
-
-  const tree = $('tree');
-  tree.innerHTML = '';
-  nodes.forEach(n => tree.appendChild(renderNode(n, 0)));
-  const nb = countNodes(nodes);
-  $('tree-count').textContent = `${nb} tag${nb > 1 ? 's' : ''} · ${hex.length / 2} octets`;
-  out.hidden = false;
-  $('results-grid').hidden = false;
-
-  const tags = collectTags(nodes);
-  const exp = buildExplainer(tags, opts.tacValues || null, null);
-  renderExplainer(exp);
-  if (opts.tacValues) {
-    const box = document.querySelector('.tac-box');
-    if (box) {
-      box.open = true;
-      $('tac-denial').value = opts.tacValues.denial || '';
-      $('tac-online').value = opts.tacValues.online || '';
-      $('tac-default').value = opts.tacValues.default || '';
+  const tags = collectTags(nodes, {});
+  const count = Object.keys(tags).length;
+  let rowsHtml2 = '';
+  // ordre du flux TLV (pas un tri alphabétique) : c'est l'ordre réellement transmis
+  function walk(list) {
+    for (const n of list) {
+      const meta = EMV_TAGS[n.tagHex];
+      const name = meta ? meta.n : 'tag non répertorié dans notre dictionnaire';
+      const dv = meta ? decodeValue(n.tagHex, n.valueHex) : null;
+      rowsHtml2 += `<div class="emv-row${meta ? '' : ' unknown'}">
+        <div class="emv-row-head"><span class="tag-badge">${esc(n.tagHex)}</span><span class="emv-row-name">${esc(name)}</span></div>
+        ${dv ? `<div class="emv-row-decoded">${esc(dv.summary)}</div>` : ''}
+        <div class="emv-row-raw"><code>${esc(n.valueHex)}</code></div>
+      </div>`;
+      if (n.children && n.children.length) walk(n.children);
     }
   }
-
-  try { history.replaceState(null, '', '#d=' + hex); } catch (e) {}
-  $('permalink-bar').hidden = false;
-  pdAnnounce('Décodé : ' + nb + ' tag' + (nb > 1 ? 's' : '') + ', ' + (hex.length / 2) + ' octets.', ANCHORS_STREAM);
-
-  if (typeof window.pdTrack === 'function') window.pdTrack('tool_interaction', { tool: 'emv-parser', bytes: hex.length / 2 });
+  walk(nodes);
+  const errHtml = errors.length ? `<p class="field-hint">${errors.length} anomalie(s) de parsing TLV rencontrée(s).</p>` : '';
+  return `<section class="field-section"><h3><span class="fs-icon">◨</span>Données EMV embarquées (ICCRelatedData)</h3>
+    <p class="field-hint">${count} tag(s) EMV standard détecté(s) dans ce message, décodés avec le même dictionnaire que le <a href="/outils/flux-tlv/">Transaction Explainer</a>.</p>
+    ${errHtml}
+    <div class="emv-taglist">${rowsHtml2}</div>
+  </section>`;
 }
 
-function countNodes(nodes) {
-  let n = 0;
-  for (const x of nodes) { n += 1 + countNodes(x.children); }
-  return n;
-}
-
-/* ---------- Mode « Tag seul » : recherche de tag (remplace le <select> à défilement) ---------- */
-let selectedTagHex = '95';
-let tagDropdownIndex = -1;
-const TAG_CAT_ORDER = ['Décision', 'Porteur', 'Sécurité', 'Transaction', 'Terminal', 'Identification', 'Structure'];
-/* La recherche filtre aussi sur la description (searchText) : les noms de tags sont en
-   anglais (« Transaction Currency Code »), la description est en français (« devise »,
-   « code confidentiel »…), sans ça une recherche en français ne trouve presque rien. */
-const TAG_LIST = Object.keys(EMV_TAGS)
-  .map(t => ({ hex: t, name: EMV_TAGS[t].n, cat: EMV_TAGS[t].cat, searchText: `${t} ${EMV_TAGS[t].n} ${EMV_TAGS[t].p || ''}`.toUpperCase() }))
-  .sort((a, b) => TAG_CAT_ORDER.indexOf(a.cat) - TAG_CAT_ORDER.indexOf(b.cat) || a.hex.localeCompare(b.hex));
-
-function tagInputLabel(hex) {
-  const meta = EMV_TAGS[hex];
-  return meta ? `${hex}, ${meta.n}` : hex;
-}
-
-function setSelectedTag(hex) {
-  selectedTagHex = hex;
-  $('tag-search').value = tagInputLabel(hex);
-}
-
-function filterTags(query) {
-  const q = query.trim().toUpperCase();
-  if (!q) return TAG_LIST;
-  return TAG_LIST.filter(t => t.searchText.includes(q));
-}
-
-function renderTagDropdown(query) {
-  const dd = $('tag-dropdown');
-  const results = filterTags(query);
-  tagDropdownIndex = -1;
-  dd.innerHTML = results.length
-    ? results.map(t =>
-        `<button type="button" class="tag-opt" role="option" data-tag="${t.hex}">` +
-        `<span class="tag-opt-hex">${t.hex}</span>` +
-        `<span class="tag-opt-name">${esc(t.name)}</span>` +
-        `<span class="tag-opt-cat">${esc(t.cat)}</span>` +
-        `</button>`
-      ).join('')
-    : `<div class="tag-opt-empty">Aucun tag ne correspond, essayez un numéro (9F34) ou un mot du nom (CVM, devise, PIN…).</div>`;
-  dd.hidden = false;
-  $('tag-search').setAttribute('aria-expanded', 'true');
-}
-
-function closeTagDropdown() {
-  $('tag-dropdown').hidden = true;
-  $('tag-search').setAttribute('aria-expanded', 'false');
-}
-
-function moveTagDropdownActive(delta) {
-  const opts = [...document.querySelectorAll('#tag-dropdown .tag-opt')];
-  if (!opts.length) return;
-  tagDropdownIndex = (tagDropdownIndex + delta + opts.length) % opts.length;
-  opts.forEach((o, i) => o.classList.toggle('active', i === tagDropdownIndex));
-  opts[tagDropdownIndex].scrollIntoView({ block: 'nearest' });
-}
-
-function runSingleTag(tagHex, valueRaw) {
-  const value = cleanHex(valueRaw);
-  const errBox = $('errors');
-  errBox.hidden = true; errBox.innerHTML = '';
-  $('results-grid').hidden = true; $('result').hidden = true; $('explainer').hidden = true; $('verdict').hidden = true;
-  const host = $('single-result');
-  if (!value || value.length % 2 !== 0) {
-    errBox.hidden = false;
-    errBox.innerHTML = `<li>${!value ? 'Collez la valeur hexadécimale du tag (sans le tag ni la longueur).' : 'Nombre impair de caractères hexadécimaux.'}</li>`;
-    host.hidden = true;
-    return;
+/* ============ Orchestration : analyse structurée d'un message ============ */
+function analyzeMessage(xmlStr) {
+  const doc = parseXml(xmlStr);
+  const detected = detectMessage(doc);
+  if (!detected) {
+    throw new Error("Message non reconnu : la racine doit être un des messages Autorisation / Complétion / Annulation du protocole nexo Acquirer (AccptrAuthstnReq, AccptrAuthstnRspn, AccptrCmpltnAdvc, AccptrCmpltnAdvcRspn, AccptrCxlReq, AccptrCxlRspn, AccptrCxlAdvc, AccptrCxlAdvcRspn).");
   }
-  const meta = EMV_TAGS[tagHex];
-  host.hidden = false;
-  host.innerHTML = `<div class="single-head"><span class="tag-badge">${esc(tagHex)}</span><h2>${esc(meta ? meta.n : 'Tag')}</h2></div>` +
-    `<div class="nodepanel always-open">${panelContent(tagHex, value, false)}</div>`;
-  try { history.replaceState(null, '', '#t=' + tagHex + '&v=' + value); } catch (e) {}
-  $('permalink-bar').hidden = false;
-  pdAnnounce('Tag ' + tagHex + ' décodé.', ['single-result']);
-  if (typeof window.pdTrack === 'function') window.pdTrack('tool_interaction', { tool: 'emv-parser', mode: 'single-tag', tag: tagHex });
-}
+  const { root, key, meta } = detected;
+  const body = bodyOf(root);
+  const envt = body ? child1(body, 'Envt') : null;
+  const cntxt = body ? child1(body, 'Cntxt') : null;
+  const tx = body ? child1(body, 'Tx') : null;
 
-/* ---------- Mode « Construire un tag » ----------
-   Round 1 (2026-08-09) : 9F33 (Terminal Capabilities) seul.
-   Round 2 (2026-08-09) : ajout de 9F40 (Additional Terminal Capabilities),
-   table ADDTERMCAP_BITS sourcée EMV 4.3 Book 4 Annexe A3 (Material/EMV),
-   réutilisée telle quelle par le décodeur (case 'addtermcap') et par ce
-   mode construction, jamais dupliquée entre les deux.
-   Round 4 (2026-08-09) : ajout de 9F66 (TTQ, voir TTQ_BITS plus haut).
-   Round 5 (2026-08-09) : ajout de 9F35 (Terminal Type) et des TAC.
-   Round 6 (2026-08-09), sur retours de Charles :
-   - Sélecteur de tag : remplacé le <select> par la même recherche combobox
-     que le mode « Décoder un tag seul » (tag-search/tag-dropdown), scopée
-     aux seuls tags constructibles (BUILD_TAG_LIST). Fonctions dupliquées
-     avec préfixe « build » plutôt que généralisées sur les IDs DOM, les
-     deux modes restent indépendants, plus simple à ne pas casser l'un en
-     touchant l'autre.
-   - TAC : Charles a fait remarquer que Denial/Online/Default partagent le
-     même catalogue de bits (vrai, confirmé EMV 4.3 Book 3 §10.7 Terminal
-     Action Analysis : « the format of each of the Terminal Action Codes is
-     identical to the TVR and to the Issuer Action Codes ») et a demandé si
-     3 entrées séparées dans la liste n'étaient pas redondantes. Elles le
-     sont : fusionnées en une seule entrée 'TAC' avec un formulaire à 3
-     colonnes (Denial/Online/Default) partageant les mêmes lignes de bits,
-     mais gardant 3 valeurs hexadécimales indépendantes (ce sont 3 réglages
-     distincts, contrairement au catalogue de bits qui lui est unique).
-   - 9F35 : remplacé la liste déroulante à 15 entrées par un sélecteur à 2
-     axes (qui contrôle le terminal × son environnement), qui correspond à
-     la structure réelle du code décrite dans EMV_TAGS['9F35'].p et évite
-     à l'utilisateur de parcourir 15 libellés proches pour trouver le sien. */
-
-/* Terminal Action Codes : configuration TERMINAL, jamais transmise par la
-   carte, contrairement à son équivalent côté carte/émetteur, l'IAC (Issuer
-   Action Code, tags 9F0D/9F0E/9F0F, déjà décodables plus haut via
-   case 'iac'), qui réutilise déjà exactement la même structure de bits.
-   Pas de tag BER-TLV standardisé pour le TAC (EMV 4.3 Book 3, §10.7) : d'où
-   cette clé pseudo (pas dans EMV_TAGS) plutôt qu'un vrai tag hexadécimal.
-   Réutilise TVR_BITS telle quelle (voir bitTableFor) : zéro table dupliquée. */
-const BUILD_PSEUDO_TAGS = {
-  'TAC': { n: "TAC (Denial / Online / Default), config terminal", p: "Trois valeurs de configuration terminal, une par type de décision, partageant le même catalogue de bits que le TVR." },
-};
-
-/* Type de formulaire de construction par tag :
-   'bits'  - checkboxes sur un masque de bits (défaut)
-   'enum2' - 2 listes déroulantes qui se combinent en un code (9F35 : qui
-             contrôle le terminal × son environnement, table TERM_TYPE)
-   'multi' - 3 colonnes de checkboxes partageant le même catalogue de bits,
-             produisant 3 valeurs hexadécimales indépendantes (TAC) */
-const BUILD_TAG_TYPE = { '9F35': 'enum2', 'TAC': 'multi' };
-function buildTypeOf(tagHex) { return BUILD_TAG_TYPE[tagHex] || 'bits'; }
-
-/* Libellé + fiche d'un tag ou pseudo-tag constructible, sans dupliquer
-   EMV_TAGS pour les vrais tags ni réinventer un format pour les pseudo-tags. */
-function buildTagMeta(tagHex) {
-  if (EMV_TAGS[tagHex]) return { optionLabel: `${tagHex}, ${EMV_TAGS[tagHex].n}`, badge: tagHex };
-  const pseudo = BUILD_PSEUDO_TAGS[tagHex];
-  return { optionLabel: pseudo.n, badge: tagHex };
-}
-
-const BUILD_TAGS = ['9F33', '9F40', '9F66', '9F35', 'TAC'];
-const BUILD_TAG_LEN = { '9F33': 3, '9F40': 5, '9F66': 4, '9F35': 1 };
-
-/* Avertissement affiché dans le formulaire de construction, tag par tag (visible
-   dans l'outil, pas seulement en commentaire de code, pour que « pourquoi pas de
-   sélecteur de réseau ici ? » ou « pourquoi 3 colonnes ? » ait une réponse sans
-   avoir à demander). */
-const BUILD_NOTES = {
-  '9F66': "Table générique EMVCo (Contactless Book A v2.11, Table 5-4), commune à tous les kernels sans contact, y compris Visa (Kernel 3), qui la reçoit telle quelle en « Copy of TTQ ». Aucune variante propre à un réseau (Visa Kernel 3 / Book C-3, UnionPay Kernel 7 / Book C-7 / qPBOC, Discover Kernel 6 / Book C-6) n'est sourcée ici à ce jour : les bits listés « RFU » ci-dessous pourraient avoir une signification propre à un kernel donné, non couverte par cet outil pour l'instant. Pas de sélecteur de réseau tant qu'une seule source est vérifiée.",
-  '9F35': "<p>Qui contrôle le terminal ?</p><ul><li>Institution financière, c'est une agence bancaire si avec opérateur, ou un GAB/automate bancaire si sans opérateur.</li><li>Commerçant, le cas le plus courant, c'est une caisse/un terminal de paiement classique si avec opérateur, ou un automate de paiement, une pompe à essence, un distributeur si sans opérateur.</li><li>Porteur, reste rare, c'est un équipement possédé par le porteur (terminal domicile, PC, décodeur TV), toujours sans opérateur.</li></ul><p>Source EMV 4.3 Book 4, §5.1 Terminal Types et Annexe A.</p>",
-  'TAC': "Configuration TERMINAL, jamais transmise par la carte ni codée sur un tag EMV standardisé (EMV 4.3 Book 3, §10.7 Terminal Action Analysis). Les 3 colonnes ci-dessous partagent exactement le même catalogue de bits que le TVR (tag 95), le format est identique dixit la spec, mais Denial / Online / Default restent 3 réglages indépendants : le terminal peut par exemple bloquer offline sur une condition donnée (TAC-Denial) sans forcer un passage en ligne sur cette même condition (TAC-Online).",
-};
-
-function groupBitsByByte(table) {
-  const groups = {};
-  for (const [byteIdx, mask, label] of table) {
-    let bit = 0; for (let n = 1; n <= 8; n++) if (mask === (1 << (n - 1))) bit = n;
-    (groups[byteIdx] = groups[byteIdx] || []).push({ bit, mask, label });
+  const header = extractHeader(root);
+  const actors = extractParty(envt);
+  const context = extractContext(cntxt);
+  const txData = extractTx(tx);
+  const original = extractOriginal(tx);
+  let result = null;
+  if (meta.family !== 'cancellation') {
+    result = extractResult(body);
   }
-  Object.values(groups).forEach(g => g.sort((a, b) => b.bit - a.bit));
-  return groups;
-}
 
-/* Longueur en octets : voir BUILD_TAG_LEN, défini plus haut avec BUILD_TAGS.
-   Ne PAS la déduire du plus grand octet présent dans la table de bits, ça
-   fonctionne par coïncidence pour 9F33/9F40 (dernier octet toujours avec un
-   bit défini) mais casse pour 9F66 (octet 4 entièrement RFU, Book A Table 5-4). */
-
-function updateBuildHex(tagHex) {
-  const type = buildTypeOf(tagHex);
-  let hex;
-  if (type === 'enum2') {
-    const a = $('build-enum2-a').value, b = $('build-enum2-b').value;
-    const code = (a + b).toUpperCase();
-    const hexSpan = $('build-byte-hex-1');
-    if (hexSpan) hexSpan.textContent = code;
-    const resEl = $('build-enum2-result');
-    if (resEl) resEl.textContent = TERM_TYPE[code] ? `= ${code} - ${TERM_TYPE[code]}` : `Combinaison ${code} non répertoriée dans la Table 24.`;
-    hex = code;
-  } else {
-    const nBytes = BUILD_TAG_LEN[tagHex];
-    const bytes = [];
-    for (let i = 1; i <= nBytes; i++) {
-      let v = 0;
-      $('build-fields').querySelectorAll(`input[data-byte="${i}"]:checked`).forEach(cb => { v |= Number(cb.dataset.mask); });
-      bytes.push(v);
-      const hexSpan = $('build-byte-hex-' + i);
-      if (hexSpan) hexSpan.textContent = v.toString(16).toUpperCase().padStart(2, '0');
-    }
-    hex = bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
-  }
-  $('build-hex').textContent = hex;
-  $('build-copy').setAttribute('data-copy', hex);
-}
-
-/* Remplit la 2ème liste (environnement) du sélecteur 9F35 en fonction de la
-   1ère (qui contrôle le terminal) : seules les combinaisons qui existent
-   réellement dans TERM_TYPE sont proposées (ex. « Porteur » n'a que les 3
-   variantes « sans opérateur », jamais « avec opérateur »). */
-function populateEnum2Axis2() {
-  const a = $('build-enum2-a').value;
-  const sel = $('build-enum2-b');
-  const prev = sel.value;
-  const validB = Object.keys(TERM_TYPE_AXIS_B).filter(b => TERM_TYPE[a + b]);
-  sel.innerHTML = validB.map(b => `<option value="${b}">${esc(TERM_TYPE_AXIS_B[b])}</option>`).join('');
-  if (validB.includes(prev)) sel.value = prev;
-}
-
-function renderBuildForm(tagHex) {
-  $('build-tag-badge').textContent = buildTagMeta(tagHex).badge;
-  const type = buildTypeOf(tagHex);
-  $('build-single-host').hidden = type === 'multi';
-  $('build-multi-host').hidden = type !== 'multi';
-  if (type === 'multi') {
-    renderTacForm();
-    $('build-note').innerHTML = BUILD_NOTES[tagHex] || '';
-    $('build-note').hidden = !BUILD_NOTES[tagHex];
-    return;
-  }
   let html = '';
-  if (type === 'enum2') {
-    $('build-hint').textContent = "Choisissez qui contrôle le terminal, puis son environnement : les deux se combinent en un seul code, prêt à coller dans un fichier ou un terminal de config.";
-    html = `<div class="build-byte"><div class="build-byte-head"><span class="build-byte-label">Octet 1</span><span class="build-byte-hex" id="build-byte-hex-1">00</span></div>` +
-      `<div class="build-enum2-row"><label for="build-enum2-a">Qui contrôle le terminal</label><select id="build-enum2-a" class="build-enum-select">` +
-      Object.entries(TERM_TYPE_AXIS_A).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join('') +
-      `</select></div>` +
-      `<div class="build-enum2-row"><label for="build-enum2-b">Environnement</label><select id="build-enum2-b" class="build-enum-select"></select></div>` +
-      `<p class="build-enum2-result" id="build-enum2-result"></p>` +
-      `</div>`;
-    $('build-fields').innerHTML = html;
-    populateEnum2Axis2();
-    $('build-enum2-a').addEventListener('change', () => { populateEnum2Axis2(); updateBuildHex(tagHex); });
-    $('build-enum2-b').addEventListener('change', () => updateBuildHex(tagHex));
-  } else {
-    $('build-hint').textContent = "Cochez les capacités du terminal : la valeur hexadécimale se met à jour en direct, prête à coller dans un fichier ou un terminal de config. Les bits non listés ci-dessous sont réservés (RFU) et restent à 0.";
-    const groups = groupBitsByByte(bitTableFor(tagHex));
-    const nBytes = BUILD_TAG_LEN[tagHex];
-    for (let i = 1; i <= nBytes; i++) {
-      const bits = groups[i] || [];
-      html += `<div class="build-byte"><div class="build-byte-head"><span class="build-byte-label">Octet ${i}</span><span class="build-byte-hex" id="build-byte-hex-${i}">00</span></div>`;
-      bits.forEach(b => {
-        html += `<label class="build-check"><input type="checkbox" data-byte="${i}" data-mask="${b.mask}"><span>${esc(b.label)}</span></label>`;
-      });
-      html += `</div>`;
-    }
-    $('build-fields').innerHTML = html;
-    $('build-fields').querySelectorAll('input[type=checkbox]').forEach(cb => {
-      cb.addEventListener('change', () => updateBuildHex(tagHex));
-    });
+  html += `<div class="msg-badge">${esc(meta.label)} <span class="msg-badge-xsd">${esc(meta.xsd)}</span></div>`;
+  html += renderHeader(header);
+  html += renderActors(actors);
+  html += renderContext(context);
+  html += renderTransaction(txData);
+  html += renderOriginal(original);
+  html += renderResult(result);
+  html += renderRejectNote(result, txData);
+  html += renderEmv(txData ? txData.iccRelatedB64 : null);
+
+  // Référence de transaction pour le rapprochement inter-messages (cycle de vie / diff) :
+  // priorité à la transaction D'ORIGINE référencée (OrgnlTx) quand elle existe – une annulation
+  // porte sa propre référence (nouvel événement) mais appartient, pour le regroupement, au cycle
+  // de vie de la transaction qu'elle annule, pas à un cycle qui lui serait propre.
+  const txRef = (original && original.ref) || (txData && txData.ref) || null;
+  const txDtTm = (txData && txData.dtTm) || (original && original.dtTm) || (header && header.creDtTm) || null;
+
+  return { key, meta, header, actors, context, txData, original, result, html, txRef, txDtTm };
+}
+
+function decodeMessage(xmlStr) { return analyzeMessage(xmlStr).html; }
+
+/* ============ Découpage de plusieurs messages collés ensemble ============ */
+function splitMessages(raw) {
+  const s = (raw || '').trim();
+  if (!s) return [];
+  // Cas 1 : plusieurs prologues XML (<?xml ...?>) – le cas le plus fiable, et celui produit par
+  // un simple copier-coller de plusieurs exports successifs.
+  let parts = s.split(/(?=<\?xml)/i).map(p => p.trim()).filter(Boolean);
+  if (parts.length > 1) return parts;
+  // Cas 2 : un seul bloc semble présent (0 ou 1 prologue). On vérifie d'abord qu'il s'agit bien
+  // d'UN document XML valide unique avant de tenter un découpage – sinon un message <Document>
+  // unique, dont la racine imbriquée porte aussi un nom de message, serait fragmenté à tort en
+  // 2 morceaux invalides (le nom du message apparaît alors deux fois : comme enveloppe ET imbriqué).
+  try {
+    parseXml(s);
+    return [s];
+  } catch (e) {
+    // pas un document XML unique valide : peut-être plusieurs messages (fragments, sans
+    // enveloppe <Document> ni prologue répété) collés à la suite – on découpe sur leurs racines.
   }
-  updateBuildHex(tagHex);
-  const note = BUILD_NOTES[tagHex];
-  $('build-note').hidden = !note;
-  $('build-note').innerHTML = note || '';
-  /* Changer de tag invalide toute valeur de départ chargée (longueur en octets différente) */
-  $('build-load-value').value = '';
-  $('build-load-hint').textContent = '';
-  $('build-load-hint').classList.remove('error');
+  const alt = Object.keys(NEXO_MSG_TYPES).join('|');
+  const re = new RegExp(`(?=<(?:\\w+:)?(?:${alt})[\\s>])`, 'g');
+  parts = s.split(re).map(p => p.trim()).filter(Boolean);
+  return parts.length ? parts : [s];
 }
 
-/* Repartir d'une valeur existante : coche les cases (ou sélectionne les options,
-   en mode enum2) correspondantes plutôt que de tout remettre à 0, pour
-   l'itération sur une config déjà en place (cf. besoin de Charles : il modifie
-   des tags existants, il ne part pas de zéro). Non utilisé en mode 'multi'
-   (TAC) : chacune de ses 3 colonnes a son propre chargeur, voir loadTacValue. */
-function loadBuildValue(tagHex) {
-  const hex = cleanHex($('build-load-value').value);
-  const hintEl = $('build-load-hint');
-  const nBytes = BUILD_TAG_LEN[tagHex];
-  if (!hex) { hintEl.textContent = ''; hintEl.classList.remove('error'); return; }
-  if (hex.length !== nBytes * 2) {
-    hintEl.textContent = `${tagHex} fait ${nBytes} octets (${nBytes * 2} caractères hex attendus), ${hex.length} reçus.`;
-    hintEl.classList.add('error');
-    return;
-  }
-  if (buildTypeOf(tagHex) === 'enum2') {
-    const code = hex.toUpperCase();
-    if (!TERM_TYPE[code]) {
-      hintEl.textContent = `Code ${code} non répertorié (Table 24, EMV 4.3 Book 4 Annexe A1).`;
-      hintEl.classList.add('error');
-      return;
-    }
-    hintEl.classList.remove('error');
-    $('build-enum2-a').value = code[0];
-    populateEnum2Axis2();
-    $('build-enum2-b').value = code[1];
-    updateBuildHex(tagHex);
-    hintEl.textContent = 'Valeur chargée.';
-    return;
-  }
-  hintEl.classList.remove('error');
-  const bytes = [];
-  for (let i = 0; i < hex.length; i += 2) bytes.push(parseInt(hex.slice(i, i + 2), 16));
-  $('build-fields').querySelectorAll('input[type=checkbox]').forEach(cb => {
-    const byteIdx = Number(cb.dataset.byte);
-    const mask = Number(cb.dataset.mask);
-    cb.checked = !!((bytes[byteIdx - 1] || 0) & mask);
-  });
-  updateBuildHex(tagHex);
-  hintEl.textContent = 'Valeur chargée, modifiez les cases ci-dessous.';
-}
+/* ============ Exemples pré-remplis (sourcés de Card Payment Message Examples v6.0) ============ */
+const NEXO_EXAMPLES = [
+  { id: 'req', label: "requête d'autorisation", desc: "AcceptorAuthorisationRequest : paiement carte de 43,14 €, EMV sans contact, passage en ligne exigé par la puce." },
+  { id: 'resp', label: "réponse d'autorisation", desc: "AcceptorAuthorisationResponse : la même transaction, approuvée par l'émetteur, code d'autorisation 032983." },
+  { id: 'compl', label: "avis de complétion", desc: "AcceptorCompletionAdvice : la transaction est capturée après succès, avec vérification PIN offline." },
+  { id: 'cxladvc', label: "avis d'annulation", desc: "AcceptorCancellationAdvice : la même transaction est annulée après coup, avec référence à l'originale." },
+];
 
-/* ---------- TAC : formulaire à 3 colonnes (Denial/Online/Default) ----------
-   Un seul catalogue de bits (TVR_BITS, comme le décodeur tvr/iac) rendu une
-   fois, avec 3 checkboxes par ligne au lieu d'une, et 3 valeurs hexadécimales
-   + 3 chargeurs indépendants en sortie, un par colonne. */
-const TAC_COLS = [['denial', 'Denial'], ['online', 'Online'], ['default', 'Default']];
+/* ============ Câblage DOM ============ */
+const $ = id => document.getElementById(id);
+let currentMode = 'single';
 
-function renderTacForm() {
-  const groups = groupBitsByByte(TVR_BITS);
-  let html = `<div class="build-tac-colhead"><span>Condition (bit du TVR)</span>${TAC_COLS.map(([, l]) => `<span>${l}</span>`).join('')}</div>`;
-  for (let i = 1; i <= 5; i++) {
-    const bits = groups[i] || [];
-    html += `<div class="build-tac-byte"><div class="build-byte-head"><span class="build-byte-label">Octet ${i}</span></div>`;
-    bits.forEach(b => {
-      html += `<div class="build-tac-row"><span>${esc(b.label)}</span>` +
-        TAC_COLS.map(([c]) => `<input type="checkbox" data-col="${c}" data-byte="${i}" data-mask="${b.mask}">`).join('') +
-        `</div>`;
-    });
-    html += `</div>`;
-  }
-  html += `<div class="build-tac-outputs">` + TAC_COLS.map(([c, label]) => `
-    <div class="build-tac-output">
-      <div class="build-tac-load"><input type="text" id="build-tac-load-${c}" placeholder="repartir d'une valeur"><button type="button" class="btn secondary" id="build-tac-load-btn-${c}">Charger</button></div>
-      <span class="rawlabel">TAC-${label}<button type="button" class="copy-btn" id="build-tac-copy-${c}" data-copy="">Copier</button></span>
-      <code id="build-tac-hex-${c}"></code>
-      <p class="hint build-load-hint" id="build-tac-hint-${c}"></p>
-    </div>`).join('') + `</div>`;
-  $('build-multi-host').innerHTML = html;
-  $('build-multi-host').querySelectorAll('input[type=checkbox]').forEach(cb => {
-    cb.addEventListener('change', updateTacHex);
-  });
-  TAC_COLS.forEach(([c]) => {
-    $('build-tac-load-btn-' + c).addEventListener('click', () => loadTacValue(c));
-    $('build-tac-load-' + c).addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); loadTacValue(c); } });
-  });
-  updateTacHex();
-}
-
-function updateTacHex() {
-  TAC_COLS.forEach(([c]) => {
-    const bytes = [];
-    for (let i = 1; i <= 5; i++) {
-      let v = 0;
-      $('build-multi-host').querySelectorAll(`input[data-col="${c}"][data-byte="${i}"]:checked`).forEach(cb => { v |= Number(cb.dataset.mask); });
-      bytes.push(v);
-    }
-    const hex = bytes.map(b => b.toString(16).toUpperCase().padStart(2, '0')).join('');
-    $('build-tac-hex-' + c).textContent = hex;
-    $('build-tac-copy-' + c).setAttribute('data-copy', hex);
-  });
-}
-
-function loadTacValue(col) {
-  const hex = cleanHex($('build-tac-load-' + col).value);
-  const hintEl = $('build-tac-hint-' + col);
-  if (!hex) { hintEl.textContent = ''; hintEl.classList.remove('error'); return; }
-  if (hex.length !== 10) {
-    hintEl.textContent = `5 octets attendus (10 caractères hex), ${hex.length} reçus.`;
-    hintEl.classList.add('error');
-    return;
-  }
-  hintEl.classList.remove('error');
-  const bytes = [];
-  for (let i = 0; i < hex.length; i += 2) bytes.push(parseInt(hex.slice(i, i + 2), 16));
-  $('build-multi-host').querySelectorAll(`input[data-col="${col}"]`).forEach(cb => {
-    const byteIdx = Number(cb.dataset.byte), mask = Number(cb.dataset.mask);
-    cb.checked = !!((bytes[byteIdx - 1] || 0) & mask);
-  });
-  updateTacHex();
-  hintEl.textContent = 'Valeur chargée.';
-}
-
-/* ---------- Sélecteur de tag à construire : même UX que « Décoder un tag
-   seul » (tag-search/tag-dropdown), scopée aux seuls tags constructibles. ---------- */
-const BUILD_TAG_LIST = BUILD_TAGS.map(t => {
-  const meta = buildTagMeta(t);
-  const p = EMV_TAGS[t] ? (EMV_TAGS[t].p || '') : (BUILD_PSEUDO_TAGS[t] ? BUILD_PSEUDO_TAGS[t].p : '');
-  return { hex: t, name: meta.optionLabel, searchText: `${t} ${meta.optionLabel} ${p}`.toUpperCase() };
-});
-let selectedBuildTagHex = BUILD_TAGS[0];
-let buildTagDropdownIndex = -1;
-
-function filterBuildTags(query) {
-  const q = query.trim().toUpperCase();
-  if (!q) return BUILD_TAG_LIST;
-  return BUILD_TAG_LIST.filter(t => t.searchText.includes(q));
-}
-
-function renderBuildTagDropdown(query) {
-  const dd = $('build-tag-dropdown');
-  const results = filterBuildTags(query);
-  buildTagDropdownIndex = -1;
-  dd.innerHTML = results.length
-    ? results.map(t =>
-        `<button type="button" class="tag-opt" role="option" data-tag="${t.hex}">` +
-        `<span class="tag-opt-hex">${esc(t.hex)}</span>` +
-        `<span class="tag-opt-name">${esc(t.name)}</span>` +
-        `</button>`
-      ).join('')
-    : `<div class="tag-opt-empty">Aucun tag constructible ne correspond.</div>`;
-  dd.hidden = false;
-  $('build-tag-search').setAttribute('aria-expanded', 'true');
-}
-
-function closeBuildTagDropdown() {
-  $('build-tag-dropdown').hidden = true;
-  $('build-tag-search').setAttribute('aria-expanded', 'false');
-}
-
-function moveBuildTagDropdownActive(delta) {
-  const opts = [...document.querySelectorAll('#build-tag-dropdown .tag-opt')];
-  if (!opts.length) return;
-  buildTagDropdownIndex = (buildTagDropdownIndex + delta + opts.length) % opts.length;
-  opts.forEach((o, i) => o.classList.toggle('active', i === buildTagDropdownIndex));
-  opts[buildTagDropdownIndex].scrollIntoView({ block: 'nearest' });
-}
-
-function setSelectedBuildTag(hex) {
-  selectedBuildTagHex = hex;
-  $('build-tag-search').value = buildTagMeta(hex).optionLabel;
-  renderBuildForm(hex);
-}
-
-function initBuildTagSearch() {
-  setSelectedBuildTag(selectedBuildTagHex);
-  const s = $('build-tag-search');
-  s.addEventListener('focus', () => { s.select(); renderBuildTagDropdown(''); });
-  s.addEventListener('input', () => renderBuildTagDropdown(s.value));
-  s.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeBuildTagDropdown(); s.blur(); return; }
-    if (e.key === 'ArrowDown') { e.preventDefault(); if ($('build-tag-dropdown').hidden) renderBuildTagDropdown(s.value); moveBuildTagDropdownActive(1); return; }
-    if (e.key === 'ArrowUp') { e.preventDefault(); if ($('build-tag-dropdown').hidden) renderBuildTagDropdown(s.value); moveBuildTagDropdownActive(-1); return; }
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const opts = [...document.querySelectorAll('#build-tag-dropdown .tag-opt')];
-      const pick = buildTagDropdownIndex >= 0 ? opts[buildTagDropdownIndex] : opts[0];
-      if (pick) { setSelectedBuildTag(pick.getAttribute('data-tag')); closeBuildTagDropdown(); }
-    }
-  });
-  $('build-tag-dropdown').addEventListener('click', e => {
-    const btn = e.target.closest('.tag-opt');
-    if (!btn) return;
-    setSelectedBuildTag(btn.getAttribute('data-tag'));
-    closeBuildTagDropdown();
-  });
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.build-tag-picker')) closeBuildTagDropdown();
-  });
-  $('build-load-btn').addEventListener('click', () => loadBuildValue(selectedBuildTagHex));
-  $('build-load-value').addEventListener('keydown', e => {
-    if (e.key === 'Enter') { e.preventDefault(); loadBuildValue(selectedBuildTagHex); }
-  });
-}
-
-/* ---------- Bascule de mode ---------- */
-function setMode(mode) {
-  ['stream', 'tag', 'build'].forEach(m => {
-    $('panel-' + m).hidden = m !== mode;
-    $('mode-' + m).classList.toggle('active', m === mode);
-    $('mode-' + m).setAttribute('aria-selected', m === mode ? 'true' : 'false');
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const input = $('hex-input');
-
-  /* Exemples (discret, deux liens seulement) */
-  const exHost = $('examples');
-  EXAMPLES.forEach((ex, i) => {
-    if (i > 0) {
-      const sep = document.createElement('span');
-      sep.className = 'ex-sep';
-      sep.textContent = ' · ';
-      exHost.appendChild(sep);
-    }
+function init() {
+  const exWrap = $('nexo-examples');
+  NEXO_EXAMPLES.forEach((ex, i) => {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'ex-link';
     b.textContent = ex.label;
-    b.title = ex.desc;
     b.addEventListener('click', () => {
-      setMode('stream');
-      input.value = ex.hex;
-      $('ex-desc').textContent = ex.desc + ' (exemple 100 % synthétique)';
-      runParse(ex.hex);
+      $('nexo-input').value = NEXO_XML[ex.id];
+      $('ex-desc').textContent = ex.desc;
+      runDecode();
     });
-    exHost.appendChild(b);
-  });
-
-  /* Recherche de tag (mode « tag seul ») */
-  setSelectedTag(selectedTagHex);
-  const tagSearch = $('tag-search');
-  tagSearch.addEventListener('focus', () => { tagSearch.select(); renderTagDropdown(''); });
-  tagSearch.addEventListener('input', () => renderTagDropdown(tagSearch.value));
-  tagSearch.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeTagDropdown(); tagSearch.blur(); return; }
-    if (e.key === 'ArrowDown') { e.preventDefault(); if ($('tag-dropdown').hidden) renderTagDropdown(tagSearch.value); moveTagDropdownActive(1); return; }
-    if (e.key === 'ArrowUp') { e.preventDefault(); if ($('tag-dropdown').hidden) renderTagDropdown(tagSearch.value); moveTagDropdownActive(-1); return; }
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const opts = [...document.querySelectorAll('#tag-dropdown .tag-opt')];
-      const pick = tagDropdownIndex >= 0 ? opts[tagDropdownIndex] : opts[0];
-      if (pick) { setSelectedTag(pick.getAttribute('data-tag')); closeTagDropdown(); $('tag-value').focus(); }
+    exWrap.appendChild(b);
+    if (i < NEXO_EXAMPLES.length - 1) {
+      const sep = document.createElement('span');
+      sep.className = 'ex-sep';
+      sep.textContent = ' · ';
+      exWrap.appendChild(sep);
     }
   });
-  $('tag-dropdown').addEventListener('click', e => {
-    const btn = e.target.closest('.tag-opt');
-    if (!btn) return;
-    setSelectedTag(btn.getAttribute('data-tag'));
-    closeTagDropdown();
-    $('tag-value').focus();
-  });
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.tag-picker')) closeTagDropdown();
-  });
 
-  /* Mode « construire » : même UX de recherche que « décoder un tag seul » */
-  initBuildTagSearch();
-
-  $('mode-stream').addEventListener('click', () => setMode('stream'));
-  $('mode-tag').addEventListener('click', () => setMode('tag'));
-  $('mode-build').addEventListener('click', () => setMode('build'));
-
-  $('btn-parse').addEventListener('click', () => { $('ex-desc').textContent = ''; runParse(input.value); });
-  input.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { runParse(input.value); }
-  });
+  $('btn-decode').addEventListener('click', runDecode);
   $('btn-clear').addEventListener('click', () => {
-    pdClearAnnounce();
-    input.value = ''; $('ex-desc').textContent = '';
-    if ($('input-note')) { $('input-note').hidden = true; $('input-note').innerHTML = ''; }
-    $('result').hidden = true; $('explainer').hidden = true; $('errors').hidden = true;
-    $('permalink-bar').hidden = true; $('verdict').hidden = true; $('results-grid').hidden = true; $('single-result').hidden = true;
-    try { history.replaceState(null, '', location.pathname); } catch (e) {}
-    input.focus();
+    $('nexo-input').value = '';
+    $('ex-desc').textContent = '';
+    $('nexo-errors').hidden = true;
+    $('nexo-result').hidden = true;
+    $('nexo-result').innerHTML = '';
+  });
+  $('nexo-input').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runDecode();
   });
 
-  $('btn-tag-decode').addEventListener('click', () => runSingleTag(selectedTagHex, $('tag-value').value));
-  $('tag-value').addEventListener('keydown', e => {
-    if (e.key === 'Enter') runSingleTag(selectedTagHex, $('tag-value').value);
+  /* ---- Mode : cycle de vie ---- */
+  $('btn-lifecycle-demo').addEventListener('click', () => {
+    $('lifecycle-input').value = ['req', 'resp', 'compl', 'cxladvc'].map(id => NEXO_XML[id]).join('\n\n');
+    runLifecycle();
+  });
+  $('btn-lifecycle-run').addEventListener('click', runLifecycle);
+  $('btn-lifecycle-clear').addEventListener('click', () => {
+    $('lifecycle-input').value = '';
+    $('lifecycle-errors').hidden = true;
+    $('lifecycle-result').hidden = true;
+    $('lifecycle-result').innerHTML = '';
   });
 
-  $('btn-copy').addEventListener('click', async () => {
-    const url = location.href;
-    try {
-      await navigator.clipboard.writeText(url);
-      $('btn-copy').textContent = 'Lien copié ✓';
-    } catch (e) {
-      const t = document.createElement('textarea');
-      t.value = url; document.body.appendChild(t); t.select();
-      document.execCommand('copy'); t.remove();
-      $('btn-copy').textContent = 'Lien copié ✓';
-    }
-    setTimeout(() => { $('btn-copy').textContent = 'Copier le lien de ce décodage'; }, 1800);
+  /* ---- Mode : comparer deux messages ---- */
+  $('btn-diff-demo').addEventListener('click', () => {
+    $('diff-input-a').value = NEXO_XML.req;
+    $('diff-input-b').value = NEXO_XML.resp;
+    $('diff-desc').textContent = "Exemple : la requête d'autorisation à gauche, la réponse de l'émetteur à droite – la même transaction, avant/après.";
+    runDiff();
+  });
+  $('btn-diff-run').addEventListener('click', runDiff);
+  $('btn-diff-clear').addEventListener('click', () => {
+    $('diff-input-a').value = '';
+    $('diff-input-b').value = '';
+    $('diff-desc').textContent = '';
+    $('diff-errors').hidden = true;
+    $('diff-result').hidden = true;
+    $('diff-result').innerHTML = '';
   });
 
-  /* Copie en un clic de la valeur brute d'un tag (délégation : le contenu des panneaux est généré dynamiquement) */
-  document.addEventListener('click', async e => {
-    const btn = e.target.closest('.copy-btn');
-    if (!btn) return;
-    const val = btn.getAttribute('data-copy') || '';
-    try {
-      await navigator.clipboard.writeText(val);
-    } catch (err) {
-      const t = document.createElement('textarea');
-      t.value = val; document.body.appendChild(t); t.select();
-      document.execCommand('copy'); t.remove();
-    }
-    const orig = btn.textContent;
-    btn.textContent = 'Copié ✓';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1400);
-  });
+  /* ---- Bascule de mode ---- */
+  $('mode-single').addEventListener('click', () => setMode('single'));
+  $('mode-lifecycle').addEventListener('click', () => setMode('lifecycle'));
+  $('mode-diff').addEventListener('click', () => setMode('diff'));
+}
 
-  /* Permaliens entrants : #d=flux ou #t=tag&v=valeur */
-  const md = location.hash.match(/[#&]d=([0-9A-Fa-f]+)/);
-  const mt = location.hash.match(/[#&]t=([0-9A-Fa-f]+)&v=([0-9A-Fa-f]+)/);
-  if (mt) {
-    setMode('tag');
-    if (EMV_TAGS[mt[1].toUpperCase()]) setSelectedTag(mt[1].toUpperCase());
-    $('tag-value').value = mt[2].toUpperCase();
-    runSingleTag(mt[1].toUpperCase(), mt[2]);
-  } else if (md) {
-    input.value = md[1].toUpperCase();
-    runParse(md[1]);
+function setMode(mode) {
+  currentMode = mode;
+  ['single', 'lifecycle', 'diff'].forEach(m => {
+    $('mode-' + m).classList.toggle('active', m === mode);
+    $('mode-' + m).setAttribute('aria-selected', m === mode ? 'true' : 'false');
+    $('panel-' + m).hidden = m !== mode;
+  });
+}
+
+function runDecode() {
+  const errBox = $('nexo-errors');
+  const resBox = $('nexo-result');
+  errBox.hidden = true;
+  resBox.hidden = true;
+  resBox.innerHTML = '';
+  const input = $('nexo-input').value.trim();
+  if (!input) return;
+  try {
+    const html = decodeMessage(input);
+    resBox.innerHTML = html;
+    resBox.hidden = false;
+    resBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (e) {
+    errBox.textContent = e.message || String(e);
+    errBox.hidden = false;
   }
-});
+}
+
+/* ============ Mode : cycle de vie ============ */
+function fmtDtTm(s) { return s || '–'; }
+
+function runLifecycle() {
+  const errBox = $('lifecycle-errors');
+  const resBox = $('lifecycle-result');
+  errBox.hidden = true;
+  resBox.hidden = true;
+  resBox.innerHTML = '';
+  const raw = $('lifecycle-input').value.trim();
+  if (!raw) return;
+  const chunks = splitMessages(raw);
+  if (chunks.length < 2) {
+    errBox.textContent = "Collez au moins 2 messages (un seul message a été détecté) : le cycle de vie relie plusieurs messages d'une même transaction.";
+    errBox.hidden = false;
+    return;
+  }
+  const items = chunks.map((chunk, i) => {
+    try {
+      return { ok: true, i, analysis: analyzeMessage(chunk) };
+    } catch (e) {
+      return { ok: false, i, error: e.message || String(e) };
+    }
+  });
+  const ok = items.filter(it => it.ok);
+  if (!ok.length) {
+    errBox.textContent = "Aucun des messages collés n'a pu être décodé. Vérifiez que chaque message est un document XML nexo Acquirer complet et bien formé.";
+    errBox.hidden = false;
+    return;
+  }
+  // Tri chronologique (date/heure de la transaction si connue, sinon date de création du message).
+  ok.sort((a, b) => {
+    const da = a.analysis.txDtTm || '', db = b.analysis.txDtTm || '';
+    return da < db ? -1 : da > db ? 1 : 0;
+  });
+
+  const refs = [...new Set(ok.map(it => it.analysis.txRef).filter(Boolean))];
+  let html = '';
+  if (refs.length > 1) {
+    html += `<p class="lifecycle-warning">⚠️ Ces messages ne portent pas tous la même référence de transaction (${refs.length} références différentes détectées : ${refs.map(esc).join(', ')}). Ils sont affichés dans l'ordre chronologique quand même, mais vérifiez qu'il s'agit bien d'un seul et même cycle de vie.</p>`;
+  } else if (refs.length === 1) {
+    html += `<p class="lifecycle-summary">Référence de transaction commune : <code>${esc(refs[0])}</code> – ${ok.length} message(s) enchaîné(s).</p>`;
+  }
+
+  html += `<div class="lifecycle-track">`;
+  ok.forEach((it, idx) => {
+    const a = it.analysis;
+    const isLast = idx === ok.length - 1;
+    const respBit = a.result && a.result.response ? nexoCode('response', a.result.response) : null;
+    const successBit = a.txData && a.txData.success !== null ? boolFr(a.txData.success) : null;
+    let summary = respBit ? `Réponse : ${respBit}` : (successBit ? `Réussie : ${successBit}` : "Requête / avis (pas de résultat propre)");
+    html += `<div class="lifecycle-item">
+      <div class="lifecycle-dot${a.result && a.result.response && a.result.response !== 'APPR' ? ' reject' : ''}"></div>
+      ${!isLast ? '<div class="lifecycle-line"></div>' : ''}
+      <div class="lifecycle-card">
+        <div class="lifecycle-card-head">
+          <span class="msg-badge">${esc(a.meta.label)} <span class="msg-badge-xsd">${esc(a.meta.xsd)}</span></span>
+          <span class="lifecycle-time">${esc(fmtDtTm(a.txDtTm))}</span>
+        </div>
+        <p class="lifecycle-oneline">${esc(summary)}</p>
+        <button type="button" class="lifecycle-toggle" data-idx="${idx}">Voir le détail</button>
+        <div class="lifecycle-detail" id="lifecycle-detail-${idx}" hidden>${a.html}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  const failed = items.filter(it => !it.ok);
+  if (failed.length) {
+    html += `<p class="lifecycle-warning">${failed.length} message(s) collé(s) n'a/n'ont pas pu être décodé(s) et ${failed.length > 1 ? 'sont' : 'est'} ignoré(s) de la frise : ${failed.map(f => esc(f.error)).join(' · ')}</p>`;
+  }
+
+  resBox.innerHTML = html;
+  resBox.hidden = false;
+  resBox.querySelectorAll('.lifecycle-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const d = $('lifecycle-detail-' + btn.dataset.idx);
+      const open = !d.hidden;
+      d.hidden = open;
+      btn.textContent = open ? "Voir le détail" : "Masquer le détail";
+    });
+  });
+  resBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ============ Mode : comparer deux messages (diff champ à champ) ============ */
+function flattenAnalysis(a) {
+  const out = [];
+  const add = (section, fields) => { for (const f of (fields || [])) if (f && f[1] !== null && f[1] !== undefined && f[1] !== '') out.push([section, f[0], String(f[1])]); };
+  add("En-tête", fieldsHeader(a.header));
+  add("Acteurs", fieldsActors(a.actors));
+  add("Contexte de paiement", fieldsContext(a.context));
+  add("Transaction", fieldsTransaction(a.txData));
+  add("Transaction annulée (référence)", fieldsOriginal(a.original));
+  add("Résultat", fieldsResult(a.result));
+  return out;
+}
+
+function runDiff() {
+  const errBox = $('diff-errors');
+  const resBox = $('diff-result');
+  errBox.hidden = true;
+  resBox.hidden = true;
+  resBox.innerHTML = '';
+  const inA = $('diff-input-a').value.trim();
+  const inB = $('diff-input-b').value.trim();
+  if (!inA || !inB) {
+    errBox.textContent = "Collez un message dans chacune des deux zones (A et B) pour lancer la comparaison.";
+    errBox.hidden = false;
+    return;
+  }
+  let a, b;
+  try { a = analyzeMessage(inA); } catch (e) { errBox.textContent = "Message A : " + (e.message || String(e)); errBox.hidden = false; return; }
+  try { b = analyzeMessage(inB); } catch (e) { errBox.textContent = "Message B : " + (e.message || String(e)); errBox.hidden = false; return; }
+
+  const flatA = flattenAnalysis(a);
+  const flatB = flattenAnalysis(b);
+  const mapA = new Map(flatA.map(([sec, lbl, val]) => [sec + '|' + lbl, val]));
+  const mapB = new Map(flatB.map(([sec, lbl, val]) => [sec + '|' + lbl, val]));
+  const orderedKeys = [];
+  const seen = new Set();
+  [...flatA, ...flatB].forEach(([sec, lbl]) => {
+    const k = sec + '|' + lbl;
+    if (!seen.has(k)) { seen.add(k); orderedKeys.push([sec, lbl, k]); }
+  });
+
+  let diffCount = 0;
+  let html = `<div class="diff-badges">
+    <span class="msg-badge">A · ${esc(a.meta.label)} <span class="msg-badge-xsd">${esc(a.meta.xsd)}</span></span>
+    <span class="msg-badge">B · ${esc(b.meta.label)} <span class="msg-badge-xsd">${esc(b.meta.xsd)}</span></span>
+  </div>`;
+  html += `<table class="diff-table"><thead><tr><th>Champ</th><th>A</th><th>B</th></tr></thead><tbody>`;
+  let curSection = null;
+  for (const [sec, lbl, k] of orderedKeys) {
+    if (sec !== curSection) {
+      html += `<tr class="diff-section-row"><td colspan="3">${esc(sec)}</td></tr>`;
+      curSection = sec;
+    }
+    const va = mapA.has(k) ? mapA.get(k) : null;
+    const vb = mapB.has(k) ? mapB.get(k) : null;
+    const differs = va !== vb;
+    if (differs) diffCount++;
+    html += `<tr class="${differs ? 'diff-row diff-differs' : 'diff-row'}">
+      <td class="diff-label">${esc(lbl)}</td>
+      <td class="diff-val">${va !== null ? esc(va) : '<span class="diff-empty">–</span>'}</td>
+      <td class="diff-val">${vb !== null ? esc(vb) : '<span class="diff-empty">–</span>'}</td>
+    </tr>`;
+  }
+  html += `</tbody></table>`;
+  html = `<p class="diff-summary">${diffCount} champ(s) différent(s) sur ${orderedKeys.length} champ(s) comparé(s).</p>` + html;
+
+  resBox.innerHTML = html;
+  resBox.hidden = false;
+  resBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.addEventListener('DOMContentLoaded', init);
 
 </script>
-<script src="https://paiement-decrypte.fr/assets/agent-widget.js?v=5462ebf0" data-api-url="https://paiement-decrypte-agent.paiement-decrypte.workers.dev/api/chat"></script>
 <!-- === PD:TOOL_TELEMETRY:BEGIN === ajouté le 2026-08-12
      Mesure l'usage RÉEL de l'outil, pas seulement son ouverture :
        page_open        → la page a été ouverte

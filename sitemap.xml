@@ -62,14 +62,14 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/compare-configurations/"/>
   </url>
   <url>
-    <loc>https://paiement-decrypte.fr/outils/nexo-config-decoder.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/nexo-config-decoder.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/nexo-config-decoder.html"/>
+    <loc>https://paiement-decrypte.fr/outils/configuration-terminal/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/configuration-terminal/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/terminal-configuration/"/>
   </url>
   <url>
-    <loc>https://paiement-decrypte.fr/en/outils/nexo-config-decoder.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/nexo-config-decoder.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/outils/nexo-config-decoder.html"/>
+    <loc>https://paiement-decrypte.fr/en/tools/terminal-configuration/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/configuration-terminal/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/terminal-configuration/"/>
   </url>
   <url>
     <loc>https://paiement-decrypte.fr/outils/luhn/</loc>
@@ -104,5 +104,45 @@
   <url>
     <loc>https://paiement-decrypte.fr/lexique/fiches/tvr/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/lexique/fiches/tvr/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/outils/chercher-un-champ/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/chercher-un-champ/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/look-up-a-field/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/tools/look-up-a-field/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/chercher-un-champ/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/look-up-a-field/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/outils/ecrire-une-valeur/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/ecrire-une-valeur/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/write-a-value/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/tools/write-a-value/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/ecrire-une-valeur/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/write-a-value/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/outils/rangement-nexo/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/rangement-nexo/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/nexo-filing/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/tools/nexo-filing/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/rangement-nexo/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/nexo-filing/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/outils/message-acquereur/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/message-acquereur/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/acquirer-message/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/tools/acquirer-message/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/message-acquereur/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/acquirer-message/"/>
   </url>
 </urlset>
