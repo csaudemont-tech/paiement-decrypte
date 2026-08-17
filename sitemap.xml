@@ -27,6 +27,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e02.html"/>
   </url>
   <url>
+    <loc>https://paiement-decrypte.fr/episodes/s1e03.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e03.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e03.html"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/episodes/s1e03.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e03.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e03.html"/>
+  </url>
+  <url>
     <loc>https://paiement-decrypte.fr/en/episodes/s1e01.html</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e01.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e01.html"/>

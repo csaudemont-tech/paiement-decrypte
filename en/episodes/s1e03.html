@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 · E03 · Co-badging &amp; domestic schemes · Payment Decrypted</title>
+<meta name="description" content="Co-badging in 5 minutes: why many European cards carry two payment applications, who picks the network at the till, and what a domestic scheme is really for. With quizzes.">
+<link rel="canonical" href="https://paiement-decrypte.fr/en/episodes/s1e03.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e03.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e03.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Payment Decrypted">
+<meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/en/episodes/s1e03.html">
+<meta property="og:title" content="S1 · E03 · Co-badging &amp; domestic schemes · Payment Decrypted">
+<meta property="og:description" content="Many European cards carry two networks on one chip. Only one processes each payment. Who chooses, and why it matters. 5 minutes, with quizzes.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png?v=41c0b62d">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1254">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-en.png?v=41c0b62d">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg?v=42d12093">
+
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../../assets/fonts/bricolage-grotesque-var.woff2?v=11f6ab2d') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../../assets/fonts/instrument-sans-var.woff2?v=adbdfd9a') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../../assets/fonts/jetbrains-mono-var.woff2?v=e7277e71') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8;
+    --ink:#0E1B2C;
+    --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8;
+    --cobalt-deep:#153A9E;
+    --mint:#17B587;
+    --coral:#E85C4A;
+    --line:#D8DEE9;
+    --card:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{height:100%}
+  body{min-height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;justify-content:center;
+    line-height:1.5;
+  }
+  .app{
+    width:100%;max-width:480px;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Progress ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;min-height:28px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .segments{display:flex;gap:6px;flex:1}
+  .seg{
+    height:6px;flex:1;border-radius:3px;background:var(--line);
+    transition:background .35s ease;
+  }
+  .seg.done{background:var(--cobalt)}
+  .seg.now{background:linear-gradient(90deg,var(--cobalt),var(--mint));animation:segpulse 1.6s ease infinite}
+  @keyframes segpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .streak{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--mint);white-space:nowrap;display:none;
+  }
+  .streak.on{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.6)}to{transform:none}}
+
+  /* ---------- Écrans ---------- */
+  .screen{flex:1;display:none;flex-direction:column;animation:slideIn .32s ease}
+  .screen.active{display:flex}
+  @keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen,.streak.on,.seg.now,.sheet,.opt.correct,.opt.wrong,.term-key.hint,.term-app.hint{animation:none !important;transition:none !important}
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(30px,8vw,38px);line-height:1.08;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:22px;line-height:1.15;margin-bottom:12px;
+  }
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
+  }
+  p{color:var(--ink-soft);font-size:15.5px}
+  p + p{margin-top:10px}
+  p strong{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover{justify-content:space-between}
+  .cover-mark{width:44px;height:44px;display:block;margin:26px 0 22px}
+  .cover-meta{
+    display:flex;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-meta span b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cartes concept ---------- */
+  .concept-card{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;border:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(14,27,44,.05);
+  }
+  .keyfact{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;color:var(--ink);
+  }
+  .keyfact b{font-weight:600}
+  .hub-illus{display:flex;justify-content:center;margin-top:14px}
+  .hub-cap{margin-top:8px;font-size:13px;color:var(--ink-soft);text-align:center}
+  .fee-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px}
+  .fee-table th{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-soft);text-align:left;
+    padding:0 10px 6px;font-weight:600;
+  }
+  .fee-table td{
+    border-top:1px solid var(--line);padding:10px;vertical-align:top;color:var(--ink);
+  }
+  .fee-table td b{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cobalt-deep)}
+  .fee-table small{display:block;color:var(--ink-soft);font-size:12px;margin-top:2px}
+  .fee-note{margin-top:8px;font-size:12px;color:var(--ink-soft)}
+  .case{
+    margin-top:14px;padding:14px 16px;border-radius:12px;
+    background:#0E1B2C;color:#C9D4E4;font-size:14px;line-height:1.5;
+  }
+  .case b{color:#fff}
+  .case .case-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:#7FA0F0;margin-bottom:6px;
+  }
+
+
+  /* ---------- Moment interactif : le pari (origine S1E02) ---------- */
+  .bet{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px 14px;margin-top:14px;
+  }
+  .flow-caption{
+    margin-top:12px;min-height:66px;padding:12px 14px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;line-height:1.5;color:var(--ink);text-align:left;
+  }
+  .flow-caption b{color:var(--cobalt-deep)}
+
+  /* ---------- Quiz ---------- */
+  .qnum{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .question{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;line-height:1.25;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:14.5px;color:var(--ink);
+    cursor:pointer;transition:border-color .2s, background .2s, transform .1s;
+  }
+  .opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .opt.correct{border-color:var(--mint);background:#E9F8F2;animation:popIn .35s ease}
+  .opt.wrong{border-color:var(--coral);background:#FCEEEB;animation:shake .3s ease}
+  @keyframes popIn{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  .opt:disabled{cursor:default}
+
+  /* ---------- Feedback sheet (façon Duolingo) ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;pointer-events:none;
+    transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  }
+  .sheet.show{transform:none;pointer-events:auto}
+  .sheet-inner{
+    width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(14,27,44,.18);
+  }
+  .sheet.good .sheet-inner{background:#E9F8F2}
+  .sheet.bad .sheet-inner{background:#FCEEEB}
+  .sheet-title{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .sheet.good .sheet-title{color:#0C6B4E}
+  .sheet.bad .sheet-title{color:#9C3527}
+  .sheet-text{font-size:14px;line-height:1.5}
+  .sheet.good .sheet-text{color:#0C6B4E}
+  .sheet.bad .sheet-text{color:#9C3527}
+  .sheet-text b{font-weight:600}
+  .sheet .cta{margin-top:16px}
+  .sheet.good .cta{background:var(--mint)}
+  .sheet.bad .cta{background:var(--coral)}
+
+  /* ---------- Recap / score ---------- */
+  .score-big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;
+    line-height:1;margin:10px 0 4px;
+  }
+  .score-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+  .stats{
+    display:flex;gap:10px;margin-top:18px;
+  }
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;display:block}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft)}
+  .recap-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .recap-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:14px;color:var(--ink);display:flex;gap:10px;
+  }
+  .recap-item::before{content:"→";color:var(--cobalt);font-weight:700;flex-shrink:0}
+  .recap-item.ok::before{content:"✓";color:var(--mint)}
+  .recap-item.ko::before{content:"✗";color:var(--coral)}
+  .teaser{
+    margin-top:20px;padding:15px 16px;border-radius:12px;background:#0E1B2C;color:#C9D4E4;
+    font-size:13.5px;
+  }
+  .teaser b{color:#fff}
+  .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+  .teaser form{display:flex;gap:8px;margin-top:14px}
+  .teaser input{
+    flex:1;min-width:0;font:inherit;font-size:14px;padding:11px 14px;border-radius:10px;
+    border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
+  }
+  .teaser input::placeholder{color:#7286A0}
+  .teaser input:focus{border-color:var(--mint)}
+  .teaser form button{
+    font:inherit;font-weight:600;font-size:14px;color:var(--ink);
+    background:var(--mint);border:0;border-radius:10px;padding:11px 14px;cursor:pointer;white-space:nowrap;
+  }
+  .teaser form button:disabled{opacity:.6}
+  .teaser .sub-note{font-size:11.5px;color:#7286A0;margin-top:8px}
+  .suggest{margin-top:18px;text-align:center;font-size:13px;line-height:1.5;color:var(--ink-soft)}
+  .suggest a{color:var(--cobalt);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(31,79,216,.35)}
+  .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
+  .teaser .sub-ok.show{display:block}
+
+  /* ---------- Bloc voix : « Ce qu'on entend » / « Ce qui compte vraiment » / « Mon avis »
+       OBLIGATOIRE, exactement 1 par épisode. Voir references/quiz-et-terrain.md ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
+  /* ---------- Confetti (sans faute) ---------- */
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:12px;opacity:.95;border-radius:2px;
+    animation:fall 2.6s ease-in forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(105vh) rotate(540deg);opacity:.7}
+  }
+
+  /* ---------- CTA bas ---------- */
+  .cta-zone{margin-top:auto;padding-top:22px}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;
+    background:var(--cobalt);color:#fff;font-family:'Instrument Sans',sans-serif;
+    font-weight:600;font-size:16px;cursor:pointer;
+    transition:opacity .2s, background .2s, transform .1s;
+  }
+  .cta:disabled{opacity:.35;cursor:default}
+  .cta:not(:disabled):active{background:var(--cobalt-deep);transform:scale(.98)}
+  .cta.ghost{background:transparent;color:var(--cobalt);border:1.5px solid var(--cobalt);margin-top:10px}
+  .cta.ghost:not(:disabled):active{background:#EDF1FB}
+
+  /* ---------- Moment interactif : le terminal et son menu d'application (pattern CHOIX) ---------- */
+  .term{
+    background:#0E1B2C;border-radius:20px;padding:12px 12px 10px;margin:4px auto 14px;
+    max-width:270px;box-shadow:0 2px 10px rgba(14,27,44,.18);
+  }
+  .term-screen{
+    background:#16283F;border:1px solid #33445C;border-radius:10px;padding:12px;
+    font-family:'JetBrains Mono',monospace;color:#C9D4E4;
+  }
+  .tpe-line{font-size:10px;letter-spacing:.14em;color:#7FA0F0}
+  .tpe-amt{font-size:24px;font-weight:700;color:#fff;margin:2px 0 10px;font-variant-numeric:tabular-nums}
+  .term-apps{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+  .term-app{
+    padding:12px 14px;border-radius:8px;border:1.5px solid #33445C;background:#0E1B2C;
+    color:#fff;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;
+    letter-spacing:.06em;text-align:left;cursor:pointer;
+    transition:border-color .2s,opacity .25s,transform .1s;
+  }
+  .term-app:not(:disabled):active{border-color:var(--mint);transform:scale(.98)}
+  .term-app.chosen{border-color:var(--mint);background:#10352C}
+  .term-app.dim{opacity:.38}
+  .term-app:disabled{cursor:default}
+  .term-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+  .term-pad i,.term-pad .term-key{
+    font-style:normal;display:flex;align-items:center;justify-content:center;height:28px;
+    border-radius:6px;background:#1C2C44;color:#E6ECF5;border:0;padding:0;
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+  }
+  .term-pad .term-key{cursor:pointer;transition:transform .1s, filter .15s}
+  .term-pad .term-key:not(:disabled):active{transform:scale(.94);filter:brightness(1.3)}
+  .term-pad .term-key:disabled{cursor:default;opacity:.6}
+  .tpe-dots{font-size:18px;color:#fff;letter-spacing:.3em;margin-top:2px;min-height:24px}
+  .term-pad .k-red{background:#E85C4A;color:#fff}
+  .term-pad .k-yel{background:#F0B429;color:#0E1B2C}
+  .term-pad .k-grn{background:#17B587;color:#fff}
+  .term-pad .pad-gap{background:transparent}
+  .term-key.hint{animation:keyGlow 1.5s ease-out infinite}
+  @keyframes keyGlow{0%{box-shadow:0 0 0 0 rgba(240,180,41,.8)}70%{box-shadow:0 0 0 12px rgba(240,180,41,0)}100%{box-shadow:0 0 0 0 rgba(240,180,41,0)}}
+  .term-app.hint{animation:appGlow 1.5s ease-out infinite}
+  @keyframes appGlow{0%{box-shadow:0 0 0 0 rgba(23,181,135,.65)}70%{box-shadow:0 0 0 10px rgba(23,181,135,0)}100%{box-shadow:0 0 0 0 rgba(23,181,135,0)}}
+</style>
+</head>
+<body data-ep="s1e03-en">
+<div class="app">
+
+  <div class="topbar" id="topbar" style="visibility:hidden">
+    <span class="eyebrow">S1 · E03</span>
+    <div class="segments" id="segments"></div>
+    <span class="streak" id="streak"></span>
+  </div>
+
+  <!-- ============ COVER ============ -->
+  <section class="screen cover active" data-step="cover">
+    <div>
+      <div class="kicker">Micro-lesson · Season 1 · Episode 03</div>
+      <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <defs>
+          <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1F4FD8"/>
+            <stop offset="100%" stop-color="#17B587"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="37" height="37" rx="9" fill="url(#markGrad)"/>
+        <rect x="9" y="11" width="22" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2.4"/>
+        <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
+        <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
+      </svg>
+      <h1>Your card may carry two networks. Only one processes the payment.</h1>
+      <p style="margin-top:14px;font-size:16.5px">Germany has girocard, Belgium Bancontact, Denmark Dankort, Italy PagoBancomat, France CB. Most of these cards also carry Visa or Mastercard, and each payment picks a single winner. For you the result looks identical. For the merchant, it isn't. And for the country, even less so.</p>
+      <div class="cover-meta">
+        <span><b>5 min</b> · read</span>
+        <span><b>4</b> concepts</span>
+        <span><b>4</b> quizzes</span>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" onclick="start()">Start</button>
+      <button class="cta ghost" id="resumebtn" style="display:none"></button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 1 ============ -->
+  <section class="screen" data-step="1">
+    <div class="concept-card">
+      <div class="kicker">Concept 1 / 4</div>
+      <h2>CB is a network, and its members own it</h2>
+      <p>Every domestic scheme has the same job; France's CB, this episode's example, is Europe's largest. CB, for Cartes Bancaires, is a network in episode 1's sense: a grouping created in 1984 so that a card issued by one bank is accepted at another bank's merchants. It sets the rules, publishes the interchange schedule, arbitrates disputes and carries the brand.</p>
+      <p>Its particularity is its legal form. It is not a listed company selling a service to customers, it is a member-owned grouping whose members are both owners and users. Long an affair of French banks, it is opening up: J.P. Morgan has been a principal member since March 2024, Adyen since April 2026, becoming along the way a direct participant in STET, the system that clears interbank payments in France.</p>
+      <div class="keyfact">💡 <b>Key fact:</b> A member-owned grouping has no shareholders to pay: it funds itself from its members and redistributes to them. That is what lets it charge less than the international networks on the one line the IFR never capped, the fees each network bills to banks. It is also what makes its pace of innovation depend on what its members are willing to fund.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Check I've got it</button></div>
+  </section>
+
+  <!-- ============ QUIZ 1 ============ -->
+  <section class="screen" data-step="2">
+    <div class="qnum">QUIZ 1 / 4</div>
+    <div class="question">A merchant tells you: "my card fee, I pay it to Visa." Where is the mistake?</div>
+    <div class="options" data-quiz="0" data-answer="2" data-next="3">
+      <button class="opt">the name: in France it actually goes to CB</button>
+      <button class="opt">the scope: it is only true for cards that carry no domestic application</button>
+      <button class="opt">the recipient: the bill comes from their acquirer, no network has a contract with them</button>
+      <button class="opt">none: merchants do pay a fee to Visa</button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 2 + MOMENT INTERACTIF ============ -->
+  <!-- Le moment interactif se place ici par defaut (comme E02). Voir references/moments-interactifs.md
+       pour les patterns disponibles : SLIDER (ci-dessous) et CHOIX-REVELATION. -->
+  <section class="screen" data-step="3">
+    <div class="concept-card" style="padding-bottom:16px">
+      <div class="kicker">Concept 2 / 4 · Co-badging</div>
+      <h2>One card, two applications</h2>
+      <p>A co-badged card carries two logos and, above all, two payment applications in its chip, each with its own identifier, the Application ID (AID): A000000042 for CB, A000000003 for Visa. Two rule books, two fee schedules, two possible routes, on the same card and the same account. At the moment of payment, the terminal reads both and keeps one.</p>
+      <p>This double kit is not redundancy, it is a division of labour: the domestic application optimises everyday use at home, on a network whose members control the conditions, and the Visa or Mastercard application makes the same card accepted everywhere else. Daily life on the domestic scheme, travel on the international one.</p>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 320 150" width="100%" style="max-width:320px">
+          <defs>
+            <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#153A9E"/>
+              <stop offset="100%" stop-color="#1F4FD8"/>
+            </linearGradient>
+          </defs>
+          <rect x="4" y="16" width="180" height="118" rx="12" fill="url(#cardGrad)"/>
+          <rect x="22" y="40" width="34" height="26" rx="4" fill="#F0B429" opacity=".92"/>
+          <path d="M39 40v26M22 49h34M22 57h34" stroke="#B98700" stroke-width="1.2" fill="none"/>
+          <path d="M66 44a12 12 0 0 1 0 18M71 40a18 18 0 0 1 0 26M76 36a24 24 0 0 1 0 34" stroke="#fff" stroke-width="1.6" fill="none" opacity=".85"/>
+          <text x="22" y="92" font-family="'JetBrains Mono',monospace" font-size="11" fill="#C9D4E4">4970 10•• •••• 4212</text>
+          <rect x="22" y="102" width="34" height="22" rx="5" fill="#fff"/>
+          <text x="30" y="118" font-family="'JetBrains Mono',monospace" font-size="12" font-weight="700" fill="#153A9E">CB</text>
+          <text x="128" y="120" font-family="'Instrument Sans',sans-serif" font-size="15" font-weight="700" font-style="italic" fill="#fff">VISA</text>
+          <path d="M184 60h14V50h14" stroke="#1F4FD8" stroke-width="1.6" fill="none"/>
+          <path d="M184 60h14v46h14" stroke="#17B587" stroke-width="1.6" fill="none"/>
+          <rect x="212" y="32" width="104" height="36" rx="9" fill="#EDF1FB" stroke="#1F4FD8" stroke-width="1.5"/>
+          <text x="222" y="47" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#153A9E">A000000042</text>
+          <text x="222" y="60" font-family="'Instrument Sans',sans-serif" font-size="10.5" fill="#0E1B2C">application CB</text>
+          <rect x="212" y="88" width="104" height="36" rx="9" fill="#E9F8F2" stroke="#17B587" stroke-width="1.5"/>
+          <text x="222" y="103" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#0C6B4E">A000000003</text>
+          <text x="222" y="116" font-family="'Instrument Sans',sans-serif" font-size="10.5" fill="#0E1B2C">application Visa</text>
+        </svg>
+      </div>
+      <p class="hub-cap">A co-badged card: one chip, two payment applications, each with its own AID.</p>
+    </div>
+    <div class="bet">
+      <div class="bet-q">Do you know how to choose which network processes your payment? Try it on this terminal. A hint: it all starts with the <b>yellow key</b>, the one usually meant for corrections.</div>
+      <div class="term">
+        <div class="term-screen">
+          <div class="tpe-line">AMOUNT</div>
+          <div class="tpe-amt">40.00 EUR</div>
+          <div id="scr-pin">
+            <div class="tpe-line">ENTER PIN</div>
+            <div class="tpe-dots" id="pindots">_ _ _ _</div>
+          </div>
+          <div id="scr-app" style="display:none">
+            <div class="tpe-line">SELECT YOUR APPLICATION</div>
+            <div class="term-apps" id="pick" role="group" aria-label="Select an application">
+              <button class="term-app" data-k="cb">1 · CB</button>
+              <button class="term-app" data-k="visa">2 · VISA</button>
+            </div>
+          </div>
+        </div>
+        <div class="term-pad">
+          <button class="term-key" data-d="1">1</button><button class="term-key" data-d="2">2</button><button class="term-key" data-d="3">3</button>
+          <button class="term-key" data-d="4">4</button><button class="term-key" data-d="5">5</button><button class="term-key" data-d="6">6</button>
+          <button class="term-key" data-d="7">7</button><button class="term-key" data-d="8">8</button><button class="term-key" data-d="9">9</button>
+          <button class="term-key k-red" data-k="clear" aria-label="Cancel">✕</button><button class="term-key" data-d="0">0</button><button class="pick-opt term-key k-grn" data-k="code" aria-label="Validate">●</button>
+          <i class="pad-gap"></i><button class="pick-opt term-key k-yel hint" data-k="jaune" aria-label="Yellow key, correct">‹</button><i class="pad-gap"></i>
+        </div>
+      </div>
+      <div class="flow-caption" id="betcap" aria-live="polite">Your turn: press the <b>yellow key</b> to open the menu.</div>
+      <div class="keyfact" id="betfact" style="display:none">💡 The final choice of network has belonged to the cardholder since 2016.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continue</button></div>
+  </section>
+
+  <!-- ============ QUIZ 2 ============ -->
+  <section class="screen" data-step="4">
+    <div class="qnum">QUIZ 2 / 4</div>
+    <div class="question">You force "VISA" in the terminal menu instead of letting the domestic application through. What does it change for you?</div>
+    <div class="options" data-quiz="1" data-answer="2" data-next="5">
+      <button class="opt">strictly nothing: both applications follow the same rules, in every case</button>
+      <button class="opt">the amount debited and the timing, which follow the network's schedule</button>
+      <button class="opt">nothing at the moment of payment, but a commercial dispute will be handled under the rules of the network used</button>
+      <button class="opt">your card insurance, which only holds on the brand's own network</button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 3 ============ -->
+  <section class="screen" data-step="5">
+    <div class="concept-card">
+      <div class="kicker">Concept 3 / 4</div>
+      <h2>Who has the right to choose</h2>
+      <p>The EU Interchange Fee Regulation, applicable since June 2016, settles it: the merchant may pre-configure a default network on its terminal, the cardholder may override it. Neither the issuer nor the network is allowed to impose automatic routing that would remove that choice.</p>
+      <p>In practice, everything depends on the channel. With chip insertion, the selection menu exists almost everywhere, if you know how to open it. In contactless, brand selection arrived much later and remains unevenly deployed. Online, it comes down to clicking a logo, when the page offers one. The network itself is working on its visibility: CB's billboard campaign "Payé in France", launched for its fortieth anniversary, turns paying domestic into a selling point, tricolour logo included.</p>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 300 176" width="100%" style="max-width:300px">
+          <rect x="4" y="6" width="292" height="164" rx="12" fill="#FFFFFF" stroke="#D8DEE9" stroke-width="1.5"/>
+          <rect x="4" y="6" width="292" height="26" rx="12" fill="#F2F4F8"/>
+          <rect x="4" y="24" width="292" height="8" fill="#F2F4F8"/>
+          <circle cx="20" cy="19" r="3.5" fill="#D8DEE9"/><circle cx="32" cy="19" r="3.5" fill="#D8DEE9"/><circle cx="44" cy="19" r="3.5" fill="#D8DEE9"/>
+          <text x="20" y="54" font-family="'Instrument Sans',sans-serif" font-size="12" font-weight="700" fill="#0E1B2C">Payment · €40.00</text>
+          <rect x="20" y="64" width="260" height="26" rx="7" fill="#FAFBFD" stroke="#D8DEE9" stroke-width="1.2"/>
+          <text x="30" y="81" font-family="'JetBrains Mono',monospace" font-size="11" fill="#4A5A70">5555 55•• •••• 4444</text>
+          <text x="20" y="112" font-family="'JetBrains Mono',monospace" font-size="9" letter-spacing="1.2" fill="#4A5A70">PAY WITH</text>
+          <rect x="20" y="120" width="72" height="34" rx="8" fill="#EDF1FB" stroke="#1F4FD8" stroke-width="2"/>
+          <text x="43" y="141" font-family="'JetBrains Mono',monospace" font-size="13" font-weight="700" fill="#153A9E">CB</text>
+          <rect x="102" y="120" width="72" height="34" rx="8" fill="#FAFBFD" stroke="#D8DEE9" stroke-width="1.5"/>
+          <text x="115" y="141" font-family="'JetBrains Mono',monospace" font-size="13" font-weight="700" fill="#4A5A70">VISA</text>
+          <path d="M78 148l7 16 3-6 6 3z" fill="#0E1B2C"/>
+        </svg>
+      </div>
+      <p class="hub-cap">Online, the choice comes down to a clickable logo, when the page thinks to offer one.</p>
+      <div class="keyfact">💡 This right is ten years old and remains known only to insiders: neither the terminal nor the payment page announces it. Changes are under way to make it visible at the moment of payment, rather than hidden behind a key or a logo you would have to know about.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Check I've got it</button></div>
+  </section>
+
+  <!-- ============ QUIZ 3 ============ -->
+  <section class="screen" data-step="6">
+    <div class="qnum">QUIZ 3 / 4</div>
+    <div class="question">"In contactless I never get to pick the brand, that's illegal." What do you answer?</div>
+    <div class="options" data-quiz="2" data-answer="2" data-next="7">
+      <button class="opt">it is indeed illegal: the regulation requires a choice screen at every payment</button>
+      <button class="opt">contactless is outside the regulation's scope</button>
+      <button class="opt">the right exists on every channel; its contactless roll-out is what is recent and uneven</button>
+      <button class="opt">in contactless, the domestic network always processes anyway</button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 4 - L'ANGLE FRANCE/UE + MON AVIS ============ -->
+  <section class="screen" data-step="7">
+    <div class="concept-card">
+      <div class="kicker">Concept 4 / 4 · The domestic angle</div>
+      <h2>What a domestic scheme is for</h2>
+      <p>Co-badging stacks two promises. Visa's or Mastercard's is obvious: the same card works everywhere in the world. The domestic scheme's shows less: conditions decided and controlled locally, and continuity of service that depends on nobody else. That second promise only really reads on a day of crisis.</p>
+      <p>And the border? If domestic cards rarely work abroad, it is not a legal fate but a technical inheritance: their contactless runs on proprietary software kernels, Visa's and Mastercard's, which do not export. A common European kernel now exists, CPACE, developed by the cooperation of the continent's domestic schemes, and it opens the door to a CB card being accepted abroad. Bancontact is on the same path in Belgium.</p>
+      <!-- Composants reutilisables disponibles ici (voir references/format-spec.md) :
+           <div class="case"><div class="case-kicker">Cas d'ecole · X</div>...</div>
+           <table class="fee-table">...</table> + <p class="fee-note">...</p> -->
+      <div class="case">
+        <div class="case-kicker">Case study · Russia, March 2022</div>
+        Visa and Mastercard suspend their operations in the country. Russian cards stop working abroad, foreign cards stop working in Russia. <b>Inside the country, nothing stops.</b> Since a 2015 law, passed after the 2014 sanctions, every domestic transaction has had to run through a national switch, the NSPK, which also operates the domestic MIR scheme. The withdrawal of the two international networks was only ever a cross-border story.
+      </div>
+      <div class="keyfact">💡 Three links, three certifications: the card, the terminal and the acquirer. If a single one is missing, the transaction falls back to the other network. That is why part of the market still escapes CB, even in France: not every payment-acceptance player is certified.</div>
+
+      <!-- [VOIX ?] BLOC VOIX - OBLIGATOIRE, exactement 1 par episode.
+           VOIX_KICKER : « Ce qu'on entend » | « Ce qui compte vraiment » | « Mon avis »
+           VOIX_BLOC   : 3-4 phrases MAX, contenant un chiffre, une consequence ou une
+                         decision. Sans l'un des trois, le bloc est decoratif : le couper.
+           Matiere fournie ou validee par Charles (atelier matiere, cf. SKILL.md etape 3).
+           Ne jamais publier une version generee seule. Proposer A/B en commentaire ici.
+           Deplacable sur un autre ecran concept si la matiere y tombe mieux. -->
+      <div class="voix">
+        <div class="voix-kicker">My take</div>
+        <!-- Bloc voix VALIDÉ par Charles le 2026-08-17 : variante « assurance », kicker « Mon avis ». -->
+        A domestic network earns the cardholder nothing day to day. It is an insurance policy: you only notice it the day it serves, and on that day it is worth every point of commission in the world.
+      </div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Last question</button></div>
+  </section>
+
+  <!-- ============ QUIZ 4 ============ -->
+  <section class="screen" data-step="8">
+    <div class="qnum">QUIZ 4 / 4</div>
+    <div class="question">A retail chain wants its payments to run on CB and has its terminals configured. Is that enough?</div>
+    <div class="options" data-quiz="3" data-answer="1" data-next="9">
+      <button class="opt">yes: the terminal's application priority decides everything</button>
+      <button class="opt">no: the card must also carry the CB application, and the acquirer must be CB-certified</button>
+      <button class="opt">no: the cardholder's consent must be collected at every payment</button>
+      <button class="opt">yes, except for foreign-issued cards</button>
+    </div>
+  </section>
+
+  <!-- ============ SCORE ============ -->
+  <section class="screen" data-step="9">
+    <div>
+      <div class="kicker">Episode complete</div>
+      <div class="score-big" id="scoreval">–</div>
+      <div class="score-label" id="scoremsg">SCORE</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TIME</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>BEST STREAK</span></div>
+      </div>
+      <div class="recap-list" id="recaplist">
+        <div class="recap-item" data-q="0">CB is a network, and a member-owned grouping: its members are both owners and users. It bills the merchant nothing; the acquirer collects and re-bills.</div>
+        <div class="recap-item" data-q="1">A co-badged card carries two applications, so two rule books. Without action on your part, the terminal's configured priority decides, and it also decides which rules apply to a dispute.</div>
+        <div class="recap-item" data-q="2">Since 2016, the merchant sets the default and the cardholder can override it. The right holds on every channel; the interface does not.</div>
+        <div class="recap-item" data-q="3">A domestic scheme is continuity insurance, not a saving for the cardholder. And its border is technical: card, terminal and acquirer must all be certified.</div>
+      </div>
+      <div class="teaser">
+        <div class="kicker">Next episode</div>
+        <b>S1 · E04 · The three-party model</b> – In episode 1's four-party model, the issuer and the acquirer are two different companies. Some networks are one and the same. Your meal-voucher card is one of them.
+        <form id="ep-signup" novalidate data-kit-form="9773354"
+              data-sending="Sending…" data-sent="Sent ✓"
+              data-msg-invalid="Please enter a valid email address."
+              data-msg-rejected="Subscription failed, check the address and try again."
+              data-msg-network="Couldn't send, check your connection and try again.">
+          <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
+          <button type="submit">Get E04</button>
+        </form>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
+        <p class="sub-note">One email per episode, nothing else. Double opt-in, one-click unsubscribe.</p>
+      </div>
+      <p class="suggest">A payment notion that still escapes you?<br>
+        <a href="mailto:bonjour@paiement-decrypte.fr?subject=Topic%20suggestion&amp;body=The%20topic%20or%20tool%20I%27d%20like%20to%20see%20decrypted%3A%0A%0A">Suggest the next topic</a>
+      </p>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" id="sharebtn" onclick="shareScore()">Share my score</button>
+      <button class="cta ghost" onclick="location.reload()">Play again</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Feedback sheet -->
+<div class="sheet" id="sheet" aria-live="polite">
+  <div class="sheet-inner">
+    <div class="sheet-title" id="sheet-title"></div>
+    <div class="sheet-text" id="sheet-text"></div>
+    <button class="cta" id="sheet-cta"></button>
+  </div>
+</div>
+
+<script src="../../assets/telemetry.js?v=4b17031c"></script>
+<script src="../../assets/progress.js?v=d99060c2"></script>
+<script src="../../assets/subscribe.js?v=d1cf0f38"></script>
+<script>
+  // ===== MOTEUR D'EPISODE - NE PAS MODIFIER SANS RAISON =====
+  // Seuls EXPLAIN, le bloc « moment interactif » et SHARE_TITLE changent d'un episode a l'autre.
+  const EP = document.body.dataset.ep;                 // ex. "s1e03"
+  const SHARE_TITLE = "S1 · E03 · Co-badging";
+
+  const PDT = window.PD || { track(){}, screen(){}, complete(){} };
+  const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open');
+
+  let current = 0, score = 0, streakNow = 0, streakBest = 0, t0 = null;
+  const results = [null,null,null,null];
+  const order = ['cover','1','2','3','4','5','6','7','8','9'];
+
+  const segWrap = document.getElementById('segments');
+  for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
+
+  function start(){ t0 = Date.now(); PDP.save(EP, {completed:false}); PDT.track('ep_start'); go(1); }
+
+  function go(n){
+    current = n;
+    PDT.screen(order[n]);
+    if(n > 0 && order[n] !== '9'){
+      PDP.save(EP, {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+    }
+    document.getElementById('sheet').classList.remove('show','good','bad');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
+    document.getElementById('topbar').style.visibility = n===0 ? 'hidden' : 'visible';
+    document.querySelectorAll('.seg').forEach((s,i)=>{
+      s.classList.toggle('done', i < n-1);
+      s.classList.toggle('now', i === n-1);
+    });
+    if(order[n]==='9') showScore();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Quiz : 1 entree par question, dans l'ordre. `bad` doit contenir la bonne reponse en <b>. ----
+  const EXPLAIN = [
+    {good:"The network sets the rules, the acquirer sends the bill. A merchant signs with neither Visa nor CB.", bad:"The bill comes from <b>their acquirer</b>. Neither Visa nor CB has a contract with the merchant: networks set the rules and the schedules, the acquirer collects and re-bills."},
+    {good:"At the till, nothing moves. It plays out downstream: the grounds, the deadlines and the arbitration of a commercial dispute depend on the network that processed the transaction.", bad:"<b>Nothing at the moment of payment</b>, but not everything is equal afterwards. Your insurance follows your card product whichever network is used, and a fraud refund is a matter of law. The handling of a commercial dispute, the chargeback, is no legal right though: it is a facility defined by each network, with its own grounds and deadlines."},
+    {good:"The regulation says who chooses, not how to ask them. The whole gap between channels sits in that missing sentence.", bad:"The right <b>exists on every channel</b>. What is missing in contactless is the interface: brand selection arrived much later there and remains unevenly deployed."},
+    {good:"Three links, three certifications. One missing link is enough to send the transaction back to the other network.", bad:"It takes <b>three</b>: a card carrying the CB application, a terminal offering it, and a CB-certified acquirer. Not all of them are, including among the players equipping small merchants."}
+  ];
+  const GOOD_TITLES = ["Correct!","Nice one!","Flawless!","Exactly!"];
+  const BAD_TITLES = ["The everyday shortcut","True at the till, false afterwards","The right vs the interface","The forgotten link"];
+
+  document.querySelectorAll('.options').forEach(block=>{
+    const qi = +block.dataset.quiz, ans = +block.dataset.answer, next = +block.dataset.next;
+    block.querySelectorAll('.opt').forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const good = i===ans;
+        results[qi] = good;
+        PDT.track('quiz_answer', {quiz:qi, choice:i, correct:good});
+        if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); } else { streakNow = 0; }
+        btn.classList.add(good?'correct':'wrong');
+        if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
+        if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
+        const st = document.getElementById('streak');
+        if(streakNow >= 2){ st.textContent = '\u2713 \u00d7' + streakNow; st.classList.add('on'); } else { st.classList.remove('on'); }
+        const sheet = document.getElementById('sheet');
+        document.getElementById('sheet-title').textContent =
+          good ? '\u2713 ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '\u2717 ' + BAD_TITLES[qi];
+        document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
+        const cta = document.getElementById('sheet-cta');
+        cta.textContent = next===9 ? 'See my score' : 'Continue';
+        cta.onclick = ()=>go(next);
+        sheet.classList.add('show', good?'good':'bad');
+        sheet.classList.remove(good?'bad':'good');
+      });
+    });
+  });
+
+  // ---- MOMENT INTERACTIF (pattern CHOIX-REVELATION, les deux issues consultables) ----
+  // [VOIX ?] pointe d'humour proposee pour la legende du menu (MENU_CAP), a trancher par Charles :
+  //   « … Presque personne ne le sait, et une bonne partie de ceux qui l'ont appuyee par
+  //     erreur ont cru casser le terminal. »
+  const REVEAL = {
+    code: "Payment accepted, on the network the terminal had <b>as priority</b>, the one the acquirer configured. You chose nothing, and the receipt will not tell you which network was used. The yellow key is still there: try it.",
+    cb: "The payment runs on <b>CB</b>, the default path on most French terminals. The difference: this time, you decided it.<br><br><b>What if you had chosen VISA?</b> Same account, same debit, but Visa's fee schedule and rules, and the merchant's bill changes.",
+    visa: "The payment leaves the domestic network: same account, same debit, but <b>Visa</b>'s fee schedule and rules now apply, and the merchant's bill changes.<br><br><b>What if you had chosen CB?</b> Back to the default path, the one the acquirer configures, but this time decided by you."
+  };
+  const MENU_CAP = "The menu almost nobody has ever opened. Select your application.";
+  let pin = 0, finished = false;
+  const sentChoices = {};
+  const dots = document.getElementById('pindots');
+  function trackOnce(c){ if(!sentChoices[c]){ sentChoices[c] = 1; PDT.track('interactive_used', {choice: c}); } }
+  function reveal(kind){
+    document.getElementById('betcap').innerHTML = REVEAL[kind];
+    document.getElementById('betfact').style.display = 'block';
+    document.getElementById('next-bet').disabled = false;
+  }
+  const menuOpen = () => document.getElementById('scr-app').style.display !== 'none';
+  document.querySelectorAll('.term-key[data-d]').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(finished || menuOpen()) return;
+      if(pin < 4) pin++;
+      dots.textContent = ('\u2022 '.repeat(pin) + '_ '.repeat(4 - pin)).trim();
+    });
+  });
+  document.querySelector('.term-key[data-k="clear"]').addEventListener('click', ()=>{
+    if(finished || menuOpen()) return;
+    pin = 0; dots.textContent = '_ _ _ _';
+  });
+  document.querySelector('.term-key[data-k="code"]').addEventListener('click', ()=>{
+    if(finished || menuOpen()) return;
+    trackOnce('code');
+    reveal('code');
+  });
+  document.querySelector('.term-key[data-k="jaune"]').addEventListener('click', function(){
+    if(finished || menuOpen()) return;
+    this.classList.remove('hint');
+    document.getElementById('scr-pin').style.display = 'none';
+    document.getElementById('scr-app').style.display = 'block';
+    document.querySelectorAll('.term-app').forEach(x=>x.classList.add('hint'));
+    document.getElementById('betcap').innerHTML = MENU_CAP;
+    trackOnce('jaune');
+  });
+  document.querySelectorAll('.term-app').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(finished) return;
+      finished = true;
+      document.querySelectorAll('.term-app').forEach(x=>{ x.disabled = true; x.classList.remove('hint'); if(x !== b) x.classList.add('dim'); });
+      b.classList.add('chosen');
+      document.querySelectorAll('.term-key').forEach(k=>{ k.disabled = true; });
+      trackOnce(b.dataset.k);
+      reveal(b.dataset.k);
+    });
+  });
+
+  // ---- Score ----
+  function fmtTime(ms){ const s = Math.round(ms/1000); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+  function showScore(){
+    PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
+    PDP.save(EP, {completed:true, screen:9, score, streakBest, results});
+    document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const revisit = missed.length===1 ? "REVISIT CONCEPT "+missed[0]
+                 : "REVISIT CONCEPTS "+missed.slice(0,-1).join(", ")+" AND "+missed[missed.length-1];
+    const msg = score===4 ? "PERFECT \u2013 EXPERT LEVEL" :
+                score>=3 ? "SOLID \u2013 "+revisit+" AND YOU'RE THERE" :
+                score>=2 ? "FAIR \u2013 "+revisit : "WORTH A REPLAY";
+    document.getElementById('scoremsg').textContent = msg;
+    document.getElementById('stat-score').textContent = score + '/4';
+    document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '\u2013';
+    document.getElementById('stat-best').textContent = '\u00d7' + streakBest;
+    document.querySelectorAll('.recap-item').forEach(el=>{
+      const r = results[+el.dataset.q];
+      if(r===true) el.classList.add('ok');
+      if(r===false) el.classList.add('ko');
+    });
+    if(score===4) confetti();
+  }
+
+  function confetti(){
+    const c = document.createElement('div'); c.className = 'confetti';
+    const colors = ['#1F4FD8','#17B587','#E85C4A','#0E1B2C'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('i');
+      p.style.left = (Math.random()*100)+'%';
+      p.style.background = colors[i%4];
+      p.style.animationDelay = (Math.random()*0.9)+'s';
+      p.style.animationDuration = (2+Math.random()*1.4)+'s';
+      c.appendChild(p);
+    }
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+
+  // ---- Partage facon Wordle ----
+  function shareScore(){
+    const grid = results.map(r=>r?'\u{1F7E9}':'\u{1F7E5}').join('');
+    const time = t0 ? fmtTime(Date.now()-t0) : '';
+    const txt = `${SHARE_TITLE} \u2013 ${score}/4 ${grid} in ${time}\nPayment micro-lesson, 5 min.\npaiement-decrypte.fr/en/`;
+    const btn = document.getElementById('sharebtn');
+    const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile && navigator.share){
+      navigator.share({text:txt}).catch(()=>{});
+    } else {
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(()=>{}); }
+      btn.textContent = 'Copied \u2713 \u2013 your LinkedIn post is ready';
+      setTimeout(()=>btn.textContent='Share my score', 3000);
+      window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
+    }
+    PDT.track('share', {score});
+  }
+
+  // ---- Abonnement fin d'episode ----
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
+      var el = document.getElementById('ep-signup-ok');
+      el.textContent = ok ? 'Almost there! Confirm via the email we just sent.' : (msg || 'Something went wrong \u2013 please try again.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+      if(ok) PDT.track('subscribe_ok');
+    });
+  }
+
+  // ---- Reprise ----
+  (function(){
+    const p = PDP.load(EP);
+    if(!p || p.completed || !(p.screen > 0)) return;
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9};
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3};
+    let target = p.screen;
+    if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){ target = QUIZ_NEXT[target]; }
+    const b = document.getElementById('resumebtn');
+    b.textContent = 'Pick up where I left off';
+    b.style.display = 'block';
+    b.onclick = ()=>{
+      score = p.score || 0; streakBest = p.streakBest || 0;
+      (p.results || []).forEach((r,i)=>{ results[i] = r; });
+      t0 = Date.now() - (p.elapsed || 0);
+      PDT.track('resume', {screen: target});
+      go(target);
+    };
+  })();
+</script>
+</body>
+</html>
