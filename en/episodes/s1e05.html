@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 · E05 · Acquiring</title>
+<meta name="description" content="Direct acquirer, processor, agent, payment facilitator: who takes a merchant on, who answers for them, and why the fee is a percentage. A 5-minute payments micro-training, with quizzes.">
+<link rel="canonical" href="https://paiement-decrypte.fr/en/episodes/s1e05.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e05.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e05.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Paiement Décrypté">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://paiement-decrypte.fr/en/episodes/s1e05.html">
+<meta property="og:title" content="S1 · E05 · Acquiring – Paiement Décrypté">
+<meta property="og:description" content="Direct acquirer, processor, agent, payment facilitator: four set-ups behind one word, and the name on the contract does not always tell you who answers for the merchant.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1254">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-en.png">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8;
+    --ink:#0E1B2C;
+    --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8;
+    --cobalt-deep:#153A9E;
+    --mint:#17B587;
+    --coral:#E85C4A;
+    --line:#D8DEE9;
+    --card:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{height:100%}
+  body{min-height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;justify-content:center;
+    line-height:1.5;
+  }
+  .app{
+    width:100%;max-width:480px;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Progress ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;min-height:28px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .segments{display:flex;gap:6px;flex:1}
+  .seg{
+    height:6px;flex:1;border-radius:3px;background:var(--line);
+    transition:background .35s ease;
+  }
+  .seg.done{background:var(--cobalt)}
+  .seg.now{background:linear-gradient(90deg,var(--cobalt),var(--mint));animation:segpulse 1.6s ease infinite}
+  @keyframes segpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .streak{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--mint);white-space:nowrap;display:none;
+  }
+  .streak.on{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.6)}to{transform:none}}
+
+  /* ---------- Écrans ---------- */
+  .screen{flex:1;display:none;flex-direction:column;animation:slideIn .32s ease}
+  .screen.active{display:flex}
+  @keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen,.streak.on,.seg.now,.sheet,.opt.correct,.opt.wrong,.tl-row.coral .tl-rail::before,.tl-row.blue .tl-rail::before{animation:none !important;transition:none !important}
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(30px,8vw,38px);line-height:1.08;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:22px;line-height:1.15;margin-bottom:12px;
+  }
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
+  }
+  p{color:var(--ink-soft);font-size:15.5px}
+  p + p{margin-top:10px}
+  p strong{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover{justify-content:space-between}
+  .cover-mark{width:44px;height:44px;display:block;margin:26px 0 22px}
+  .cover-meta{
+    display:flex;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-meta span b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cartes concept ---------- */
+  .concept-card{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;border:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(14,27,44,.05);
+  }
+  .keyfact{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;color:var(--ink);
+  }
+  .keyfact b{font-weight:600}
+  /* listes dans un concept (C1, C2) */
+  .concept-card ul{list-style:none;margin:8px 0 0;padding:0}
+  .concept-card ul li{position:relative;padding-left:16px;color:var(--ink-soft);font-size:15px;line-height:1.45}
+  .concept-card ul li + li{margin-top:8px}
+  .concept-card ul li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--cobalt)}
+  .concept-card ul li strong{color:var(--ink);font-weight:600}
+  .concept-card ul + p,.concept-card .kyb-out + p{margin-top:10px}
+  .hub-illus{display:flex;justify-content:center;margin-top:14px}
+  .hub-cap{margin-top:8px;font-size:13px;color:var(--ink-soft);text-align:center}
+
+  /* ---------- Chaînes des 4 montages (Concept 2, une sous chaque cas) ---------- */
+  .chain{display:flex;align-items:stretch;gap:3px;margin:8px 0 2px;max-width:300px}
+  .chip{
+    flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;
+    padding:5px 3px;border-radius:8px;border:1.5px solid var(--line);background:#FAFBFD;text-align:center;
+    font-size:10.5px;font-weight:600;line-height:1.15;color:var(--ink);hyphens:manual;
+  }
+  .chip small{display:block;font-weight:400;font-size:8.5px;letter-spacing:-.01em;color:var(--ink-soft);margin-top:2px;overflow-wrap:normal}
+  .chip.acq{border-color:var(--cobalt);background:#EDF1FB;color:var(--cobalt-deep)}
+  .chip.acq small{color:var(--cobalt-deep)}
+  .chip.net{border-color:var(--ink);background:var(--ink);color:#fff}
+  .chip.net small{color:#C9D4E4}
+  .chip.sign{box-shadow:inset 0 -3px 0 var(--coral)}
+  .arrow{align-self:center;color:var(--ink-soft);font-size:11px;flex:none}
+  .legend{margin-top:12px;font-size:11.5px;color:var(--ink-soft);line-height:1.6}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-right:4px;border:1.5px solid var(--cobalt);background:#EDF1FB}
+  .legend u{text-decoration:none;box-shadow:inset 0 -3px 0 var(--coral);padding:0 2px}
+
+  /* ---------- Quiz ---------- */
+  .qnum{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .question{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;line-height:1.25;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:14.5px;color:var(--ink);
+    cursor:pointer;transition:border-color .2s, background .2s, transform .1s;
+  }
+  .opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .opt.correct{border-color:var(--mint);background:#E9F8F2;animation:popIn .35s ease}
+  .opt.wrong{border-color:var(--coral);background:#FCEEEB;animation:shake .3s ease}
+  @keyframes popIn{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  .opt:disabled{cursor:default}
+
+  /* ---------- Feedback sheet (façon Duolingo) ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;pointer-events:none;
+    transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  }
+  .sheet.show{transform:none;pointer-events:auto}
+  .sheet-inner{
+    width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(14,27,44,.18);
+  }
+  .sheet.good .sheet-inner{background:#E9F8F2}
+  .sheet.bad .sheet-inner{background:#FCEEEB}
+  .sheet-title{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .sheet.good .sheet-title{color:#0C6B4E}
+  .sheet.bad .sheet-title{color:#9C3527}
+  .sheet-text{font-size:14px;line-height:1.5}
+  .sheet.good .sheet-text{color:#0C6B4E}
+  .sheet.bad .sheet-text{color:#9C3527}
+  .sheet-text b{font-weight:600}
+  .sheet .cta{margin-top:16px}
+  .sheet.good .cta{background:var(--mint)}
+  .sheet.bad .cta{background:var(--coral)}
+
+  /* ---------- Recap / score ---------- */
+  .score-big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;
+    line-height:1;margin:10px 0 4px;
+  }
+  .score-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+  .stats{
+    display:flex;gap:10px;margin-top:18px;
+  }
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;display:block}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft)}
+  .recap-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .recap-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:14px;color:var(--ink);display:flex;gap:10px;
+  }
+  .recap-item::before{content:"→";color:var(--cobalt);font-weight:700;flex-shrink:0}
+  .recap-item.ok::before{content:"✓";color:var(--mint)}
+  .recap-item.ko::before{content:"✗";color:var(--coral)}
+  .teaser{
+    margin-top:20px;padding:15px 16px;border-radius:12px;background:#0E1B2C;color:#C9D4E4;
+    font-size:13.5px;
+  }
+  .teaser b{color:#fff}
+  .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+  .teaser form{display:flex;gap:8px;margin-top:14px}
+  .teaser input{
+    flex:1;min-width:0;font:inherit;font-size:14px;padding:11px 14px;border-radius:10px;
+    border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
+  }
+  .teaser input::placeholder{color:#7286A0}
+  .teaser input:focus{border-color:var(--mint)}
+  .teaser form button{
+    font:inherit;font-weight:600;font-size:14px;color:var(--ink);
+    background:var(--mint);border:0;border-radius:10px;padding:11px 14px;cursor:pointer;white-space:nowrap;
+  }
+  .teaser form button:disabled{opacity:.6}
+  .teaser .sub-note{font-size:11.5px;color:#7286A0;margin-top:8px}
+  .suggest{margin-top:18px;text-align:center;font-size:13px;line-height:1.5;color:var(--ink-soft)}
+  .suggest a{color:var(--cobalt);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(31,79,216,.35)}
+  .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
+  .teaser .sub-ok.show{display:block}
+
+  /* ---------- Bloc voix : « Ce qu'on entend » / « Ce qui compte vraiment » / « Mon avis »
+       OBLIGATOIRE, exactement 1 par épisode. Voir references/quiz-et-terrain.md ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
+  /* ---------- Frise d'exposition (Concept 3, écran 5) : seule animation de l'épisode ---------- */
+  .tl{display:grid;grid-template-columns:46px 18px 1fr;margin-top:14px;font-size:13.5px}
+  .tl-row{display:contents}
+  .tl-d{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--ink);padding-top:1px}
+  .tl-rail{position:relative}
+  .tl-rail::after{content:"";position:absolute;left:50%;top:5px;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;background:#fff;border:2.5px solid var(--ink-soft);box-sizing:border-box}
+  .tl-rail::before{content:"";position:absolute;left:50%;top:14px;bottom:0;width:3px;margin-left:-1.5px;background:var(--line);transform-origin:top center}
+  .tl-row.last .tl-rail::before{display:none}
+  .tl-row.blue .tl-rail::after{border-color:var(--cobalt)}
+  .tl-row.blue .tl-rail::before{background:var(--cobalt)}
+  .tl-row.coral .tl-rail::after{border-color:var(--coral)}
+  .tl-row.coral .tl-rail::before{background:var(--coral)}
+  .tl-row.end .tl-rail::after{border-color:var(--coral);background:var(--coral)}
+  .tl-row.end .tl-rail::before{background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 8px)}
+  .tl-row.faint .tl-rail::after{border-color:var(--line)}
+  .tl-row.faint .tl-rail::before{background:repeating-linear-gradient(to bottom,var(--line) 0 4px,transparent 4px 8px)}
+  .tl-t{padding:0 0 16px 8px;color:var(--ink-soft);line-height:1.4}
+  .tl-t b{color:var(--ink);font-weight:600}
+  .tl-t .tag{display:inline-block;margin-top:5px;padding:2px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em}
+  .tag.blue{background:#EDF1FB;color:var(--cobalt-deep)}
+  .tag.coral{background:#FCEEEB;color:#9C3527}
+  .tl-row.faint .tl-t{color:#8A97AB;font-size:12.5px}
+  @keyframes growDown{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  [data-step="5"].active .tl-row.blue .tl-rail::before{animation:growDown .25s ease forwards}
+  [data-step="5"].active .tl-row.coral .tl-rail::before{transform:scaleY(0);animation:growDown .4s ease forwards;animation-delay:.25s}
+  /* parades de l'acquéreur (Concept 3) */
+  .parades{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 12px}
+  .parades span{padding:6px 10px;border-radius:999px;border:1.5px solid var(--line);background:#FAFBFD;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .parades span.no{border-color:var(--coral);color:#9C3527;background:#FCEEEB}
+  /* KYB : à la signature, puis dans la durée (Concept 4) */
+  .kyb{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch;margin:14px 0}
+  .kyb-box{border:1.5px solid var(--line);border-radius:12px;padding:10px 10px 8px;background:#FAFBFD}
+  .kyb-box.later{border-color:var(--cobalt);background:#EDF1FB}
+  .kyb-h{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--cobalt-deep);margin-bottom:6px}
+  .kyb-box ul{list-style:none;margin:0;padding:0}
+  .kyb-box li{font-size:11.5px;line-height:1.3;color:var(--ink);padding:3px 0 3px 12px;position:relative}
+  .kyb-box li::before{content:"";position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--cobalt)}
+  .kyb-arrow{align-self:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);text-align:center;line-height:1.2}
+  .kyb-out{margin:-4px 0 0;font-size:12.5px;color:var(--ink-soft);text-align:center}
+  .kyb-out b{color:#9C3527;font-weight:600}
+
+  /* ---------- Confetti (sans faute) ---------- */
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:12px;opacity:.95;border-radius:2px;
+    animation:fall 2.6s ease-in forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(105vh) rotate(540deg);opacity:.7}
+  }
+
+  /* ---------- CTA bas ---------- */
+  .cta-zone{margin-top:auto;padding-top:22px}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;
+    background:var(--cobalt);color:#fff;font-family:'Instrument Sans',sans-serif;
+    font-weight:600;font-size:16px;cursor:pointer;
+    transition:opacity .2s, background .2s, transform .1s;
+  }
+  .cta:disabled{opacity:.35;cursor:default}
+  .cta:not(:disabled):active{background:var(--cobalt-deep);transform:scale(.98)}
+  .cta.ghost{background:transparent;color:var(--cobalt);border:1.5px solid var(--cobalt);margin-top:10px}
+  .cta.ghost:not(:disabled):active{background:#EDF1FB}
+</style>
+</head>
+<body data-ep="s1e05-en">
+<div class="app">
+
+  <div class="topbar" id="topbar" style="visibility:hidden">
+    <span class="eyebrow">S1 · E05</span>
+    <div class="segments" id="segments"></div>
+    <span class="streak" id="streak"></span>
+  </div>
+
+  <!-- ============ COVER ============ -->
+  <section class="screen cover active" data-step="cover">
+    <div>
+      <div class="kicker">Micro-training · Season 1 · Episode 05</div>
+      <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <defs>
+          <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1F4FD8"/>
+            <stop offset="100%" stop-color="#17B587"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="37" height="37" rx="9" fill="url(#markGrad)"/>
+        <rect x="9" y="11" width="22" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2.4"/>
+        <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
+        <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
+      </svg>
+      <h1>Acquiring</h1>
+      <p style="margin-top:14px;font-size:16.5px">To accept cards, a merchant signs a contract. Behind that contract, four set-ups are possible, and the one who sold it is not always the one who answers for it.</p>
+      <div class="cover-meta">
+        <span><b>5 min</b> · read</span>
+        <span><b>4</b> concepts</span>
+        <span><b>4</b> quiz</span>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" onclick="start()">Start</button>
+      <button class="cta ghost" id="resumebtn" style="display:none"></button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 1 ============ -->
+  <section class="screen" data-step="1">
+    <div class="concept-card">
+      <div class="kicker">Concept 1 / 4</div>
+      <h2>Acquiring means taking a merchant on</h2>
+      <p>No merchant deals with Visa or Mastercard directly. They go through an intermediary that signs them up, registers them with the networks (the schemes), carries their transactions and pays them their money. That business is acquiring.</p>
+      <p>Four tasks, two permissions, two authorities:</p>
+      <ul>
+        <li><strong>Contracting the merchant and paying out their funds</strong> requires the regulator's authorisation. Acquiring is a payment service: the authorisation is what grants the right to receive the money from sales and pass it on.</li>
+        <li><strong>Registering them with Visa or Mastercard</strong> requires the network's licence.</li>
+        <li><strong>Carrying their transactions</strong> requires no permission at all. It is a technical connection, which the acquirer runs itself or outsources to a provider.</li>
+      </ul>
+      <p>Two applications, two authorities, and a connection that is either built or bought.</p>
+      <div class="hub-illus">
+        <svg viewBox="0 0 340 175" role="img" aria-label="Three distinct layers: the technical connection, the network licence, the regulator's authorisation, held by one company or spread across three.">
+          <rect x="8" y="8" width="210" height="44" rx="10" fill="#FAFBFD" stroke="#D8DEE9" stroke-width="1.5"/>
+          <text x="20" y="26" font-family="'JetBrains Mono',monospace" font-size="10" letter-spacing="1" fill="#4A5A70">THE CONNECTION</text>
+          <text x="20" y="41" font-family="'Instrument Sans',sans-serif" font-size="10.5" fill="#4A5A70">carry the transactions</text>
+          <rect x="8" y="60" width="210" height="44" rx="10" fill="#EDF1FB" stroke="#1F4FD8" stroke-width="1.5"/>
+          <text x="20" y="78" font-family="'JetBrains Mono',monospace" font-size="10" letter-spacing="1" fill="#153A9E">THE NETWORK LICENCE</text>
+          <text x="20" y="93" font-family="'Instrument Sans',sans-serif" font-size="10.5" fill="#0E1B2C">register the merchant</text>
+          <rect x="8" y="112" width="210" height="44" rx="10" fill="#0E1B2C"/>
+          <text x="20" y="130" font-family="'JetBrains Mono',monospace" font-size="10" letter-spacing="1" fill="#8FA8E8">REGULATOR'S AUTHORISATION</text>
+          <text x="20" y="145" font-family="'Instrument Sans',sans-serif" font-size="10.5" fill="#C9D4E4">contract, pay out the funds</text>
+          <path d="M224,8 Q238,8 238,35 Q238,62 250,84 Q238,106 238,133 Q238,160 224,160" fill="none" stroke="#4A5A70" stroke-width="1.5"/>
+          <text x="256" y="76" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing=".5" fill="#4A5A70">ONE</text>
+          <text x="256" y="88" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing=".5" fill="#4A5A70">COMPANY,</text>
+          <text x="256" y="100" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing=".5" fill="#4A5A70">OR THREE</text>
+        </svg>
+      </div>
+      <p class="hub-cap">Three layers, obtained separately. The merchant only ever sees one name.</p>
+      <div class="keyfact">💡 <b>Remember:</b> An authorised acquirer is not necessarily licensed on every network: many cover only two, Visa and Mastercard, and some rely on an existing member to sponsor them. The reverse is impossible: a network only licenses institutions that are already authorised.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Check I've got it</button></div>
+  </section>
+
+  <!-- ============ QUIZ 1 ============ -->
+  <section class="screen" data-step="2">
+    <div class="qnum">QUIZ 1 / 4</div>
+    <div class="question">The regulator's authorisation and the network's licence do not permit the same thing. What does the authorisation, and it alone, permit?</div>
+    <div class="options" data-quiz="0" data-answer="2" data-next="3">
+      <button class="opt">The right to register merchants with Visa and Mastercard</button>
+      <button class="opt">The right to connect technically to the authorisation networks</button>
+      <button class="opt">The right to receive the money from sales and pass it on to the merchant</button>
+      <button class="opt">The right to set the fee charged to the merchant freely</button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 2 + MOMENT INTERACTIF ============ -->
+  <section class="screen" data-step="3">
+    <div class="concept-card">
+      <div class="kicker">Concept 2 / 4 · Who answers</div>
+      <h2>One word, four set-ups</h2>
+      <p>Four different players can say “we do acquiring”. What sets them apart: who holds the permissions, who you sign with, and who answers for you to the network.</p>
+      <ul>
+        <li><strong>The direct acquirer</strong> holds the authorisation and the licence, and is a member of the networks. You sign with them, they answer for you. The simple case.<div class="chain"><span class="chip acq sign">Your bank<small>authorisation + licence</small></span><span class="arrow">›</span><span class="chip net">Network<small>Visa, MC…</small></span></div></li>
+        <li><strong>The acquiring processor</strong> has nothing but the technical connection. It carries your transactions on behalf of an acquirer, who holds the permissions and the liability. You never see it.<div class="chain"><span class="chip acq sign">Acquirer<small>answers for you</small></span><span class="arrow">›</span><span class="chip ">Proces&shy;sor<small>carries</small></span><span class="arrow">›</span><span class="chip net">Network<small>Visa, MC…</small></span></div></li>
+        <li><strong>The agent</strong> works under an acquirer's authorisation, and does not exist without it. Registered with the regulator, it sells to you and services you under its own brand, but the contract carries the acquirer's name, and the acquirer answers for everything.<div class="chain"><span class="chip ">Agent<small>sells, services</small></span><span class="arrow">›</span><span class="chip acq sign">Acquirer<small>the name on the contract</small></span><span class="arrow">›</span><span class="chip net">Network<small>Visa, MC…</small></span></div></li>
+        <li><strong>The payment facilitator</strong> signs its own acceptance contract with an acquirer, then attaches sub-merchants who sign only with it. The sub-merchant has no contract with the acquirer, and its money passes through the facilitator. Two contracts exist; it signed only one. In Europe, a platform that handles funds this way is itself authorised, or an agent of its acquirer.<div class="chain"><span class="chip sign">Facili&shy;tator<small>your only contract</small></span><span class="arrow">›</span><span class="chip acq">Acquirer<small>answers for you</small></span><span class="arrow">›</span><span class="chip net">Network<small>Visa, MC…</small></span></div></li>
+      </ul>
+      <p class="legend"><i></i> holds the permissions and answers for you to the network<br><u>underlined</u> the name on your contract</p>
+      <div class="keyfact">💡 In all four cases, someone holds the licence and answers for the merchant to the network. It is not necessarily the one who signed, and rarely the one the merchant remembers.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(4)">Check I've got it</button></div>
+  </section>
+
+  <!-- ============ QUIZ 2 ============ -->
+  <section class="screen" data-step="4">
+    <div class="qnum">QUIZ 2 / 4</div>
+    <div class="question">A merchant negotiated everything with a local provider, but the contract names an institution they had never heard of. The provider goes bankrupt. What happens to their card acceptance?</div>
+    <div class="options" data-quiz="1" data-answer="1" data-next="5">
+      <button class="opt">Their contract falls with the provider; they have to start over elsewhere</button>
+      <button class="opt">Their contract holds: they are the institution's customer, not the provider's</button>
+      <button class="opt">Funds awaiting payout are lost along with the provider</button>
+      <button class="opt">They are automatically moved to another authorised provider, nothing to sign</button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 3 ============ -->
+  <section class="screen" data-step="5">
+    <div class="concept-card">
+      <div class="kicker">Concept 3 / 4</div>
+      <h2>What the acquirer really carries is the merchant's risk</h2>
+      <p>A kitchen retailer sells a €8,000 kitchen, paid by card in store, delivery in three months. The company is liquidated in the meantime. The customer disputes the charge, their bank refunds them and recovers the money from the acquirer, who has no one left to turn to. The fee earned was a few dozen euros; the loss runs to thousands. In this chain, it is the only one that can lose a hundred times what it earned on the sale. And that was card-present, in a shop.</p>
+      <div class="tl" role="img" aria-label="Timeline: the merchant is paid two days after the purchase; the acquirer remains exposed until 120 days after the expected delivery, i.e. seven months, with an absolute cap of 540 days.">
+        <div class="tl-row blue"><span class="tl-d">D0</span><span class="tl-rail"></span><span class="tl-t"><b>The kitchen is paid for</b>, €8,000 by card, in store.</span></div>
+        <div class="tl-row coral"><span class="tl-d">D+2</span><span class="tl-rail"></span><span class="tl-t"><b>The merchant is paid.</b> For them, the story ends here.<br><span class="tag blue">2 days</span></span></div>
+        <div class="tl-row coral"><span class="tl-d">D+90</span><span class="tl-rail"></span><span class="tl-t"><b>Expected delivery.</b> The retailer has been liquidated; nothing arrives. The customer can dispute for 120 days.</span></div>
+        <div class="tl-row end"><span class="tl-d">D+210</span><span class="tl-rail"></span><span class="tl-t"><b>Last day to dispute.</b> If they do, the acquirer refunds the €8,000.<br><span class="tag coral">7 months of exposure</span></span></div>
+        <div class="tl-row faint last"><span class="tl-d">D+540</span><span class="tl-rail"></span><span class="tl-t">Absolute cap, whatever delivery date was promised. Eighteen months in the worst case.</span></div>
+      </div>
+      <p>Except the acquirer knows this risk. With a merchant that gets paid before delivering, it has four defences:</p>
+      <div class="parades" aria-label="The acquirer's four defences"><span>Rolling reserve</span><span>Guarantee</span><span>Delayed payout</span><span class="no">Application declined</span></div>
+      <p>None can be improvised on the day the loss hits: all of them assume it took a close look at who it was signing up.</p>
+      <p>The dispute window, meanwhile, stays long: on goods paid for in advance, the networks give the cardholder up to 120 days after the expected delivery date. That is also why accepting cards online costs more than in store. Not because of interchange (the European caps are the same on both channels), but because of fraud and a longer exposure.</p>
+      <div class="keyfact">💡 On goods paid for in advance and never delivered, the dispute stays open for 120 days after the expected delivery date, capped at 540 days after the payment.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Check I've got it</button></div>
+  </section>
+
+  <!-- ============ QUIZ 3 ============ -->
+  <section class="screen" data-step="6">
+    <div class="qnum">QUIZ 3 / 4</div>
+    <div class="question">Technically processing a €20 transaction costs the acquirer the same as processing a €2,000 one. Why is its own margin a percentage too?</div>
+    <div class="options" data-quiz="2" data-answer="1" data-next="7">
+      <button class="opt">Because it simply passes on interchange, which is a percentage</button>
+      <button class="opt">Because an unpaid €2,000 costs it a hundred times more than an unpaid €20</button>
+      <button class="opt">Because the networks require acquirers to price proportionally</button>
+      <button class="opt">Because a percentage is easier to present to the merchant</button>
+    </div>
+  </section>
+
+  <!-- ============ CONCEPT 4 - THE EUROPEAN ANGLE + MY TAKE ============ -->
+  <section class="screen" data-step="7">
+    <div class="concept-card">
+      <div class="kicker">Concept 4 / 4 · The European angle</div>
+      <h2>The acquirer chooses who gets to accept cards</h2>
+      <p>Because it answers for its merchants, the acquirer chooses which ones it accepts, and it has to know who it is dealing with before signing. That is KYB (<em>Know Your Business</em>), due diligence on the business customer. It is not a commercial precaution; it is an anti-money-laundering and counter-terrorist-financing obligation, and the acquirer is accountable for it to its regulator. A commercially excellent application can be declined on that ground alone.</p>
+      <div class="kyb" role="img" aria-label="Checks happen at signing, then over time; failing that, the application is declined or the contract closed.">
+        <div class="kyb-box">
+          <div class="kyb-h">At signing</div>
+          <ul><li>legal existence</li><li>actual activity</li><li>directors</li><li>beneficial owners</li><li>sometimes the accounts</li></ul>
+        </div>
+        <div class="kyb-arrow">then<br>›</div>
+        <div class="kyb-box later">
+          <div class="kyb-h">Over time</div>
+          <ul><li>activity has changed</li><li>undeclared products</li><li>owners who change</li></ul>
+        </div>
+      </div>
+      <p class="kyb-out">Otherwise: <b>declined</b> at the door, contract <b>closed</b> along the way.</p>
+      <p>The checks do not stop at onboarding: the merchant has to be monitored over time, to spot the one whose activity no longer matches what was declared. Every institution appoints a compliance officer, and the monitoring gets automated as portfolios grow. In Europe, the framework is tightening: the anti-money-laundering package adopted in 2024 moves most obligations into a directly applicable regulation, in force from July 2027, and creates a European supervisory authority, AMLA.</p>
+      <div class="keyfact">💡 Of everything the acquirer checks about its merchants, this is the only failure that can cost it its authorisation. A bad merchant costs it money; a bad compliance set-up costs it the right to operate.</div>
+
+      <div class="voix">
+        <div class="voix-kicker">My take</div>
+        <!-- [VOIX ?] EN mirror of the FR v6 voice block. -->
+        Add up what it takes to acquire: an authorisation, a licence, capital, compliance to keep up every single day. At that price, no new player would ever enter. What brings them into existence is being able to borrow someone else's permissions: you start as an agent or a payment facilitator under someone's umbrella, you grow, and one day you go and get your own. It is the only way into a mature market, and it is what keeps that market from closing.
+      </div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Last question</button></div>
+  </section>
+
+  <!-- ============ QUIZ 4 ============ -->
+  <section class="screen" data-step="8">
+    <div class="qnum">QUIZ 4 / 4</div>
+    <div class="question">An acquirer discovers that a merchant in its portfolio has, for six months, been selling something other than what it declared at signing. Which risk weighs heaviest on the acquirer itself?</div>
+    <div class="options" data-quiz="3" data-answer="2" data-next="9">
+      <button class="opt">Customer disputes it will have to refund</button>
+      <button class="opt">A network fine for undeclared activity</button>
+      <button class="opt">Its regulator faulting it for not having spotted it</button>
+      <button class="opt">Losing the merchant, who will sign with a competitor</button>
+    </div>
+  </section>
+
+  <!-- ============ SCORE ============ -->
+  <section class="screen" data-step="9">
+    <div>
+      <div class="kicker">Episode complete</div>
+      <div class="score-big" id="scoreval">–</div>
+      <div class="score-label" id="scoremsg">SCORE</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TIME</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>BEST STREAK</span></div>
+      </div>
+      <div class="recap-list" id="recaplist">
+        <div class="recap-item" data-q="0">Acquiring means contracting the merchant, registering them, carrying their transactions and paying them. Authorisation and licence are two separate permissions.</div>
+        <div class="recap-item" data-q="1">Direct acquirer, processor, agent, payment facilitator: four set-ups behind one word, and the name on the contract does not say who answers.</div>
+        <div class="recap-item" data-q="2">The acquirer carries the merchant's risk, long after the sale. Hence the percentage.</div>
+        <div class="recap-item" data-q="3">It also carries the duty to know who it is signing up, and that is the only risk that can cost it its authorisation.</div>
+      </div>
+      <div class="teaser">
+        <div class="kicker">Next episode</div>
+        <b>S1 · E06 · Issuing</b> – We have seen who takes the merchant on. At the other end, the cardholder's bank does more than keep an account: depending on the card, it advances the money for a month, or not for a second. Three ways of paying for the same thing, three different exposures, and the merchant cannot see which one is in front of them.
+        <form id="ep-signup" data-kit-form="9773354" novalidate>
+          <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
+          <button type="submit">Get E06</button>
+        </form>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
+        <p class="sub-note">One email per episode, nothing else. Double opt-in, one-click unsubscribe.</p>
+      </div>
+      <p class="suggest">A payments concept that still escapes you?<br>
+        <a href="mailto:bonjour@paiement-decrypte.fr?subject=Topic%20suggestion&amp;body=The%20topic%20or%20tool%20I%27d%20like%20to%20see%20decoded%3A%0A%0A">Suggest the next topic</a>
+      </p>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" id="sharebtn" onclick="shareScore()">Share my score</button>
+      <button class="cta ghost" onclick="location.reload()">Redo the episode</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Feedback sheet -->
+<div class="sheet" id="sheet" aria-live="polite">
+  <div class="sheet-inner">
+    <div class="sheet-title" id="sheet-title"></div>
+    <div class="sheet-text" id="sheet-text"></div>
+    <button class="cta" id="sheet-cta"></button>
+  </div>
+</div>
+
+<script src="../../assets/telemetry.js"></script>
+<script src="../../assets/progress.js"></script>
+<script src="../../assets/subscribe.js"></script>
+<script>
+  // ===== MOTEUR D'EPISODE - NE PAS MODIFIER SANS RAISON =====
+  // Seuls EXPLAIN, le bloc « moment interactif » et SHARE_TITLE changent d'un episode a l'autre.
+  const EP = document.body.dataset.ep;                 // ex. "s1e03"
+  const SHARE_TITLE = "S1 · E05 · Acquiring";
+
+  const PDT = window.PD || { track(){}, screen(){}, complete(){} };
+  const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open');
+
+  let current = 0, score = 0, streakNow = 0, streakBest = 0, t0 = null;
+  const results = [null,null,null,null];
+  const order = ['cover','1','2','3','4','5','6','7','8','9'];
+
+  const segWrap = document.getElementById('segments');
+  for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
+
+  function start(){ t0 = Date.now(); PDP.save(EP, {completed:false}); PDT.track('ep_start'); go(1); }
+
+  function go(n){
+    current = n;
+    PDT.screen(order[n]);
+    if(n > 0 && order[n] !== '9'){
+      PDP.save(EP, {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+    }
+    document.getElementById('sheet').classList.remove('show','good','bad');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
+    document.getElementById('topbar').style.visibility = n===0 ? 'hidden' : 'visible';
+    document.querySelectorAll('.seg').forEach((s,i)=>{
+      s.classList.toggle('done', i < n-1);
+      s.classList.toggle('now', i === n-1);
+    });
+    if(order[n]==='9') showScore();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Quiz : 1 entree par question, dans l'ordre. `bad` doit contenir la bonne reponse en <b>. ----
+  const EXPLAIN = [
+    {good:"The authorisation is about other people's money: receiving it, passing it on. Everything else (registering, connecting, pricing) is settled elsewhere.", bad:"Registering merchants with the network is the licence. Connecting is a technical contract. Pricing is commerce. <b>What the regulator permits is receiving money that is not yours, and passing it on.</b>"},
+    {good:"The agent sells and services, the institution carries. The merchant loses their contact, not their contract.", bad:"This is the whole difference between the agent and the facilitator: <b>with an agent, the merchant is the institution's customer</b>; with a facilitator, their only contract is with the facilitator. The same “local provider” covers both, and the consequence is not the same."},
+    {good:"Processing a transaction costs the same whatever the amount; losing it does not. The percentage is a risk premium before it is a processing price, which is also why large baskets are always negotiated.", bad:"Interchange is indeed proportional, and a percentage is easier to sell. But nothing would stop the acquirer from charging its own margin as a flat fee. <b>What stops it is what it stands to lose.</b>"},
+    {good:"A loss gets provisioned, a fine gets paid. A failing control set-up gets paid for in authorisation.", bad:"Disputes and fines cost money, and money can be earned back. <b>What cannot be earned back is the right to operate</b>, and the regulator holds it, not the network."}
+  ];
+  const GOOD_TITLES = ["Correct!","Well spotted!","Flawless!","Precisely!"];
+  const BAD_TITLES = ["Not the authorisation","The contract does not fall with them","Look at what it can lose","Money comes back, authorisation does not"];
+
+  document.querySelectorAll('.options').forEach(block=>{
+    const qi = +block.dataset.quiz, ans = +block.dataset.answer, next = +block.dataset.next;
+    block.querySelectorAll('.opt').forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const good = i===ans;
+        results[qi] = good;
+        PDT.track('quiz_answer', {quiz:qi, choice:i, correct:good});
+        if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); } else { streakNow = 0; }
+        btn.classList.add(good?'correct':'wrong');
+        if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
+        if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
+        const st = document.getElementById('streak');
+        if(streakNow >= 2){ st.textContent = '✓ ×' + streakNow; st.classList.add('on'); } else { st.classList.remove('on'); }
+        const sheet = document.getElementById('sheet');
+        document.getElementById('sheet-title').textContent =
+          good ? '✓ ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '✗ ' + BAD_TITLES[qi];
+        document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
+        const cta = document.getElementById('sheet-cta');
+        cta.textContent = next===9 ? 'See my score' : 'Continue';
+        cta.onclick = ()=>go(next);
+        sheet.classList.add('show', good?'good':'bad');
+        sheet.classList.remove(good?'bad':'good');
+      });
+    });
+  });
+
+  // ---- Pas de moment interactif dans cet épisode (arbitrage Charles, 08/09) : les quatre montages sont illustrés sous chaque cas du Concept 2. ----
+
+  // ---- Score ----
+  function fmtTime(ms){ const s = Math.round(ms/1000); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+  function showScore(){
+    PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
+    PDP.save(EP, {completed:true, screen:9, score, streakBest, results});
+    document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const relire = missed.length===1 ? "REREAD CONCEPT "+missed[0]
+                 : "REREAD CONCEPTS "+missed.slice(0,-1).join(", ")+" AND "+missed[missed.length-1];
+    const msg = score===4 ? "FLAWLESS – EXPERT LEVEL" :
+                score>=3 ? "SOLID – "+relire+" AND IT'S PERFECT" :
+                score>=2 ? "FAIR – "+relire : "NEEDS WORK – REDO THE EPISODE";
+    document.getElementById('scoremsg').textContent = msg;
+    document.getElementById('stat-score').textContent = score + '/4';
+    document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '–';
+    document.getElementById('stat-best').textContent = '×' + streakBest;
+    document.querySelectorAll('.recap-item').forEach(el=>{
+      const r = results[+el.dataset.q];
+      if(r===true) el.classList.add('ok');
+      if(r===false) el.classList.add('ko');
+    });
+    if(score===4) confetti();
+  }
+
+  function confetti(){
+    const c = document.createElement('div'); c.className = 'confetti';
+    const colors = ['#1F4FD8','#17B587','#E85C4A','#0E1B2C'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('i');
+      p.style.left = (Math.random()*100)+'%';
+      p.style.background = colors[i%4];
+      p.style.animationDelay = (Math.random()*0.9)+'s';
+      p.style.animationDuration = (2+Math.random()*1.4)+'s';
+      c.appendChild(p);
+    }
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+
+  // ---- Partage facon Wordle ----
+  function shareScore(){
+    const grid = results.map(r=>r?'\u{1F7E9}':'\u{1F7E5}').join('');
+    const time = t0 ? fmtTime(Date.now()-t0) : '';
+    const txt = `${SHARE_TITLE} – ${score}/4 ${grid} in ${time}\nPayments micro-training, 5 min.\npaiement-decrypte.fr/en`;
+    const btn = document.getElementById('sharebtn');
+    const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile && navigator.share){
+      navigator.share({text:txt}).catch(()=>{});
+    } else {
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(()=>{}); }
+      btn.textContent = 'Copied ✓ – your LinkedIn post is ready';
+      setTimeout(()=>btn.textContent='Share my score', 3000);
+      window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
+    }
+    PDT.track('share', {score});
+  }
+
+  // ---- Abonnement fin d'episode ----
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
+      var el = document.getElementById('ep-signup-ok');
+      el.textContent = ok ? 'Almost there! Confirm via the email we just sent.' : (msg || 'Something went wrong – please try again.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+      if(ok) PDT.track('subscribe_ok');
+    });
+  }
+
+  // ---- Reprise ----
+  (function(){
+    const p = PDP.load(EP);
+    if(!p || p.completed || !(p.screen > 0)) return;
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9};
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3};
+    let target = p.screen;
+    if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){ target = QUIZ_NEXT[target]; }
+    const b = document.getElementById('resumebtn');
+    b.textContent = 'Resume where I left off';
+    b.style.display = 'block';
+    b.onclick = ()=>{
+      score = p.score || 0; streakBest = p.streakBest || 0;
+      (p.results || []).forEach((r,i)=>{ results[i] = r; });
+      t0 = Date.now() - (p.elapsed || 0);
+      PDT.track('resume', {screen: target});
+      go(target);
+    };
+  })();
+</script>
+</body>
+</html>
