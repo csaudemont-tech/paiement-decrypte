@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 · E06 · Issuing</title>
+<meta name="description" content="Immediate, deferred, credit: what the issuer actually advances to the cardholder, how it blocks an amount without taking it, and why it has already prepared its answer before your payment even happens. A 5-minute payments micro-training, with quizzes.">
+<link rel="canonical" href="https://paiement-decrypte.fr/en/episodes/s1e06.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e06.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e06.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Paiement Décrypté">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://paiement-decrypte.fr/en/episodes/s1e06.html">
+<meta property="og:title" content="S1 · E06 · Issuing – Paiement Décrypté">
+<meta property="og:description" content="It advances the cardholder's money, it blocks without taking, it already answered before it ever saw you. The issuer in 5 minutes, with quizzes.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-en.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1254">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-en.png">
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8;
+    --ink:#0E1B2C;
+    --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8;
+    --cobalt-deep:#153A9E;
+    --mint:#17B587;
+    --coral:#E85C4A;
+    --line:#D8DEE9;
+    --card:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{height:100%}
+  body{min-height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;justify-content:center;
+    line-height:1.5;
+  }
+  .app{
+    width:100%;max-width:480px;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Progress ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;min-height:28px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .segments{display:flex;gap:6px;flex:1}
+  .seg{
+    height:6px;flex:1;border-radius:3px;background:var(--line);
+    transition:background .35s ease;
+  }
+  .seg.done{background:var(--cobalt)}
+  .seg.now{background:linear-gradient(90deg,var(--cobalt),var(--mint));animation:segpulse 1.6s ease infinite}
+  @keyframes segpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .streak{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--mint);white-space:nowrap;display:none;
+  }
+  .streak.on{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.6)}to{transform:none}}
+
+  /* ---------- Écrans ---------- */
+  .screen{flex:1;display:none;flex-direction:column;animation:slideIn .32s ease}
+  .screen.active{display:flex}
+  @keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen,.streak.on,.seg.now,.sheet,.opt.correct,.opt.wrong{animation:none !important;transition:none !important}
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(30px,8vw,38px);line-height:1.08;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:22px;line-height:1.15;margin-bottom:12px;
+  }
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
+  }
+  p{color:var(--ink-soft);font-size:15.5px}
+  p + p{margin-top:10px}
+  p strong{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover{justify-content:space-between}
+  .cover-mark{width:44px;height:44px;display:block;margin:26px 0 22px}
+  .cover-meta{
+    display:flex;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-meta span b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cartes concept ---------- */
+  .concept-card{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;border:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(14,27,44,.05);
+  }
+  .keyfact{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;color:var(--ink);
+  }
+  .keyfact b{font-weight:600}
+  .concept-card p + p{margin-top:12px}
+  .hub-illus{display:flex;justify-content:center;margin:16px 0 0}
+  .hub-illus svg{width:100%;max-width:420px;height:auto;display:block}
+  .hub-cap{margin:8px 0 0;font-size:13px;color:var(--ink-soft);text-align:center}
+  .fee-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+  .fee-table td:first-child,.fee-table th:first-child{white-space:nowrap;padding-left:0}
+  .fee-table th{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-soft);text-align:left;
+    padding:0 10px 6px;font-weight:600;
+  }
+  .fee-table td{
+    border-top:1px solid var(--line);padding:10px;vertical-align:top;color:var(--ink);
+  }
+  .fee-table td b{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cobalt-deep)}
+  .fee-table small{display:block;color:var(--ink-soft);font-size:12px;margin-top:2px}
+  .case{
+    margin-top:14px;padding:14px 16px;border-radius:12px;
+    background:#0E1B2C;color:#C9D4E4;font-size:14px;line-height:1.5;
+  }
+  .case b{color:#fff}
+  .case .case-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:#7FA0F0;margin-bottom:6px;
+  }
+  .case-steps{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:10px}
+  .case-steps li{display:flex;flex-direction:column;gap:2px;padding-left:10px;border-left:2px solid #33445C}
+  .case-steps li > b{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:600;color:#7FA0F0}
+  /* ---------- Moment interactif : frise révélée après le pari ---------- */
+  .bet-timeline{display:none;margin-top:12px}
+  .bet-timeline.show{display:block;animation:slideIn .32s ease}
+  .bet-timeline .tl-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;border:1px solid var(--line)}
+  .bet-timeline .tl-bar span{display:block;height:100%}
+  .bet-timeline .tl-bar .tl-m{width:25%;background:var(--cobalt)}
+  .bet-timeline .tl-bar .tl-e{width:75%;background:var(--mint)}
+  .bet-timeline .tl-lab{display:flex;justify-content:space-between;gap:8px;margin-top:6px;font-size:12px;color:var(--ink-soft)}
+  .bet-timeline .tl-lab b{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink)}
+  /* ---------- Moment interactif : le pari (origine S1E02) ---------- */
+  .bet{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px 14px;margin-top:14px;
+  }
+  .bet-q{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;
+    line-height:1.25;margin-bottom:14px;color:var(--ink);
+  }
+  .bet-val{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:40px;
+    text-align:center;color:var(--cobalt);line-height:1;margin:6px 0 2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .bet-val small{
+    display:block;font-size:11px;font-weight:400;letter-spacing:.08em;
+    color:var(--ink-soft);margin-top:6px;
+  }
+  input[type=range].bet-range{
+    -webkit-appearance:none;appearance:none;width:100%;height:34px;
+    background:transparent;margin-top:10px;cursor:pointer;
+  }
+  input[type=range].bet-range::-webkit-slider-runnable-track{
+    height:6px;border-radius:3px;background:linear-gradient(90deg,var(--cobalt),var(--mint));
+  }
+  input[type=range].bet-range::-moz-range-track{
+    height:6px;border-radius:3px;background:linear-gradient(90deg,var(--cobalt),var(--mint));
+  }
+  input[type=range].bet-range::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+    background:#fff;border:3px solid var(--cobalt);margin-top:-10px;
+    box-shadow:0 2px 8px rgba(14,27,44,.25);
+  }
+  input[type=range].bet-range::-moz-range-thumb{
+    width:20px;height:20px;border-radius:50%;
+    background:#fff;border:3px solid var(--cobalt);
+    box-shadow:0 2px 8px rgba(14,27,44,.25);
+  }
+  input[type=range].bet-range:disabled{opacity:.45;cursor:default}
+  .bet-scale{
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);
+    margin-top:-4px;
+  }
+  .flow-caption{
+    margin-top:12px;min-height:66px;padding:12px 14px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;line-height:1.5;color:var(--ink);text-align:left;
+  }
+  .flow-caption b{color:var(--cobalt-deep)}
+
+  /* ---------- Quiz ---------- */
+  .qnum{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .question{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;line-height:1.25;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:14.5px;color:var(--ink);
+    cursor:pointer;transition:border-color .2s, background .2s, transform .1s;
+  }
+  .opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .opt.correct{border-color:var(--mint);background:#E9F8F2;animation:popIn .35s ease}
+  .opt.wrong{border-color:var(--coral);background:#FCEEEB;animation:shake .3s ease}
+  @keyframes popIn{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  .opt:disabled{cursor:default}
+
+  /* ---------- Feedback sheet (façon Duolingo) ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;pointer-events:none;
+    transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  }
+  .sheet.show{transform:none;pointer-events:auto}
+  .sheet-inner{
+    width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(14,27,44,.18);
+  }
+  .sheet.good .sheet-inner{background:#E9F8F2}
+  .sheet.bad .sheet-inner{background:#FCEEEB}
+  .sheet-title{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .sheet.good .sheet-title{color:#0C6B4E}
+  .sheet.bad .sheet-title{color:#9C3527}
+  .sheet-text{font-size:14px;line-height:1.5}
+  .sheet.good .sheet-text{color:#0C6B4E}
+  .sheet.bad .sheet-text{color:#9C3527}
+  .sheet-text b{font-weight:600}
+  .sheet .cta{margin-top:16px}
+  .sheet.good .cta{background:var(--mint)}
+  .sheet.bad .cta{background:var(--coral)}
+
+  /* ---------- Recap / score ---------- */
+  .score-big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;
+    line-height:1;margin:10px 0 4px;
+  }
+  .score-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+  .stats{
+    display:flex;gap:10px;margin-top:18px;
+  }
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;display:block}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft)}
+  .recap-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .recap-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:14px;color:var(--ink);display:flex;gap:10px;
+  }
+  .recap-item::before{content:"→";color:var(--cobalt);font-weight:700;flex-shrink:0}
+  .recap-item.ok::before{content:"✓";color:var(--mint)}
+  .recap-item.ko::before{content:"✗";color:var(--coral)}
+  .teaser{
+    margin-top:20px;padding:15px 16px;border-radius:12px;background:#0E1B2C;color:#C9D4E4;
+    font-size:13.5px;
+  }
+  .teaser b{color:#fff}
+  .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+  .teaser form{display:flex;gap:8px;margin-top:14px}
+  .teaser input{
+    flex:1;min-width:0;font:inherit;font-size:14px;padding:11px 14px;border-radius:10px;
+    border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
+  }
+  .teaser input::placeholder{color:#7286A0}
+  .teaser input:focus{border-color:var(--mint)}
+  .teaser form button{
+    font:inherit;font-weight:600;font-size:14px;color:var(--ink);
+    background:var(--mint);border:0;border-radius:10px;padding:11px 14px;cursor:pointer;white-space:nowrap;
+  }
+  .teaser form button:disabled{opacity:.6}
+  .teaser .sub-note{font-size:11.5px;color:#7286A0;margin-top:8px}
+  .suggest{margin-top:18px;text-align:center;font-size:13px;line-height:1.5;color:var(--ink-soft)}
+  .suggest a{color:var(--cobalt);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(31,79,216,.35)}
+  .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
+  .teaser .sub-ok.show{display:block}
+
+  /* ---------- Bloc voix : « Ce qu'on entend » / « Ce qui compte vraiment » / « Mon avis »
+       OBLIGATOIRE, exactement 1 par épisode. Voir references/quiz-et-terrain.md ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
+  /* ---------- Confetti (sans faute) ---------- */
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:12px;opacity:.95;border-radius:2px;
+    animation:fall 2.6s ease-in forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(105vh) rotate(540deg);opacity:.7}
+  }
+
+  /* ---------- CTA bas ---------- */
+  .cta-zone{margin-top:auto;padding-top:22px}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;
+    background:var(--cobalt);color:#fff;font-family:'Instrument Sans',sans-serif;
+    font-weight:600;font-size:16px;cursor:pointer;
+    transition:opacity .2s, background .2s, transform .1s;
+  }
+  .cta:disabled{opacity:.35;cursor:default}
+  .cta:not(:disabled):active{background:var(--cobalt-deep);transform:scale(.98)}
+  .cta.ghost{background:transparent;color:var(--cobalt);border:1.5px solid var(--cobalt);margin-top:10px}
+  .cta.ghost:not(:disabled):active{background:#EDF1FB}
+</style>
+</head>
+<body data-ep="s1e06-en">
+<div class="app">
+
+  <div class="topbar" id="topbar" style="visibility:hidden">
+    <span class="eyebrow">S1 · E06</span>
+    <div class="segments" id="segments"></div>
+    <span class="streak" id="streak"></span>
+  </div>
+
+  <!-- 0 · COVER -->
+  <section class="screen cover active" data-step="cover">
+    <div>
+      <div class="kicker">Micro-training · Season 1 · Episode 06</div>
+      <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <defs>
+          <linearGradient id="markGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#1F4FD8"/>
+            <stop offset="100%" stop-color="#17B587"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="37" height="37" rx="9" fill="url(#markGrad)"/>
+        <rect x="9" y="11" width="22" height="18" rx="3.5" fill="none" stroke="#fff" stroke-width="2.4"/>
+        <line x1="20" y1="11" x2="20" y2="29" stroke="#fff" stroke-width="2"/>
+        <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
+      </svg>
+      <h1>Issuing</h1>
+      <p style="margin-top:14px;font-size:16.5px">Depending on the card, the issuer advances the cardholder's money for a day or a month. It blocks amounts it never actually takes. And when its servers stop answering, it has often already said yes.</p>
+      <div class="cover-meta">
+        <span><b>5 min</b> · read</span>
+        <span><b>4</b> concepts</span>
+        <span><b>4</b> quiz</span>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" onclick="start()">Start</button>
+      <button class="cta ghost" id="resumebtn" style="display:none"></button>
+    </div>
+  </section>
+
+  <!-- 1 · CONCEPT : ce que l'émetteur avance vraiment -->
+  <section class="screen" data-step="1">
+    <div class="concept-card">
+      <div class="kicker">Concept 1 / 4 · Immediate, deferred, credit</div>
+      <h2>What the issuer actually advances</h2>
+      <p>On the merchant side, the card presented changes nothing about the settlement timeline: they get paid under their acquiring contract, whatever the card. On the cardholder side, everything depends on the card type. Either way, it is the issuer who advances the money.</p>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 340 186" xmlns="http://www.w3.org/2000/svg" font-family="Instrument Sans, system-ui, sans-serif">
+          <defs>
+            <linearGradient id="fadeAdv" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#1F4FD8" stop-opacity=".45"/>
+              <stop offset="1" stop-color="#1F4FD8" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <text x="130" y="13" font-size="10.5" text-anchor="middle" fill="#4A5A70" font-family="JetBrains Mono, monospace">purchase</text>
+          <text x="332" y="13" font-size="10.5" text-anchor="end" fill="#4A5A70" font-family="JetBrains Mono, monospace">time →</text>
+          <line x1="130" y1="20" x2="112" y2="176" stroke="#D8DEE9" stroke-dasharray="3 3"/>
+          <!-- immediate debit -->
+          <text x="0" y="42" font-size="13" font-weight="600" fill="#0E1B2C">Immediate debit</text>
+          <line x1="130" y1="38" x2="332" y2="38" stroke="#D8DEE9" stroke-width="2"/>
+          <rect x="130" y="32" width="16" height="12" rx="6" fill="#1F4FD8" opacity=".45"/>
+          <circle cx="146" cy="38" r="5" fill="#0E1B2C"/>
+          <text x="130" y="60" font-size="11.5" fill="#4A5A70">debited the next day</text>
+          <!-- deferred debit -->
+          <text x="0" y="97" font-size="13" font-weight="600" fill="#0E1B2C">Deferred debit</text>
+          <line x1="130" y1="93" x2="332" y2="93" stroke="#D8DEE9" stroke-width="2"/>
+          <rect x="130" y="87" width="130" height="12" rx="6" fill="#1F4FD8" opacity=".45"/>
+          <circle cx="260" cy="93" r="5" fill="#0E1B2C"/>
+          <text x="130" y="115" font-size="11.5" fill="#4A5A70">debited at the statement date, once a month</text>
+          <!-- credit -->
+          <text x="0" y="152" font-size="13" font-weight="600" fill="#0E1B2C">Credit</text>
+          <line x1="130" y1="148" x2="332" y2="148" stroke="#D8DEE9" stroke-width="2"/>
+          <rect x="130" y="142" width="202" height="12" rx="6" fill="url(#fadeAdv)"/>
+          <text x="130" y="170" font-size="11.5" fill="#4A5A70">repaid whenever the cardholder chooses</text>
+        </svg>
+      </div>
+      <p class="hub-cap">In blue: the period during which the issuer carries the money.</p>
+      <p><strong>Immediate debit.</strong> The account is debited when the transaction is processed, usually the next day. The issuer advances the money for barely a day.</p>
+      <p><strong>Deferred debit.</strong> The account is debited only once a month, on the statement date. Since each cardholder is debited once a month, the issuer permanently carries half a month's spending across its whole portfolio.</p>
+      <p><strong>Credit.</strong> The cardholder repays whenever they choose and pays interest. The balance never empties.</p>
+      <p>An issuer does not issue a card. It opens a line of risk, and holds it for years.</p>
+      <div class="keyfact">💡 <b>Remember:</b> what you can still spend on the card drops the moment it is authorised, whatever the card type. The account itself is only debited later: the next day, at the statement date, or on repayment. What moves immediately is a limit, not a balance.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Check I've got it</button></div>
+  </section>
+
+  <!-- 2 · QUIZ 1 -->
+  <section class="screen" data-step="2">
+    <div class="qnum">QUIZ 1 / 4</div>
+    <div class="question">In France, a cardholder has a deferred debit card. On the 3rd of the month, they withdraw €200 from a cash machine. When is their account debited?</div>
+    <div class="options" data-quiz="0" data-answer="1" data-next="3">
+      <button class="opt">On their card's statement date, along with the rest of the month's transactions</button>
+      <button class="opt">Immediately: withdrawals do not follow the payment calendar</button>
+      <button class="opt">Immediately, and the amount is also added on top of their deferred balance</button>
+      <button class="opt">Immediately for the withdrawal fee, on the statement date for the €200</button>
+    </div>
+  </section>
+
+  <!-- 3 · CONCEPT + INTERACTIF : la pré-autorisation -->
+  <section class="screen" data-step="3">
+    <div class="concept-card" style="padding-bottom:16px">
+      <div class="kicker">Concept 2 / 4 · The pre-authorisation</div>
+      <h2>Blocked is not debited</h2>
+      <p>When you fill up the tank or check into a room, nobody yet knows how much you will owe. So the merchant asks for authorisation on an estimated amount, the pre-authorisation. That amount is reserved against what your card can still commit, the limit. Nothing has actually left, your balance is unchanged.</p>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 340 112" xmlns="http://www.w3.org/2000/svg" font-family="Instrument Sans, system-ui, sans-serif">
+          <text x="0" y="14" font-size="13" font-weight="600" fill="#0E1B2C">1. Authorisation</text>
+          <text x="340" y="14" font-size="11.5" text-anchor="end" fill="#4A5A70">estimated amount</text>
+          <rect x="1" y="22" width="338" height="22" rx="11" fill="#EDF1FB" stroke="#1F4FD8" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <text x="170" y="37" font-size="12" text-anchor="middle" fill="#153A9E">reserved on the card, nothing is debited</text>
+          <text x="0" y="78" font-size="13" font-weight="600" fill="#0E1B2C">2. Actual amount</text>
+          <text x="340" y="78" font-size="11.5" text-anchor="end" fill="#4A5A70">a few minutes later</text>
+          <rect x="1" y="86" width="196" height="22" rx="11" fill="#1F4FD8"/>
+          <text x="99" y="101" font-size="12" text-anchor="middle" fill="#fff">what will be debited</text>
+          <rect x="203" y="86" width="136" height="22" rx="11" fill="#E9F8F2" stroke="#17B587" stroke-width="1.5"/>
+          <text x="271" y="101" font-size="12" text-anchor="middle" fill="#0C6B4E">surplus to release</text>
+        </svg>
+      </div>
+      <p class="hub-cap">The second message replaces the first. The surplus never left the account.</p>
+      <p>The actual amount arrives in a second message, and the surplus then has to be released. At a fuel pump, network rules count that delay in minutes. On a hotel room or a car rental, the reservation can stay valid for thirty days.</p>
+    </div>
+    <div class="bet">
+      <div class="bet-q">You put the nozzle back. Under the network rules, at most how long does it take for the surplus to be released?</div>
+      <div class="bet-val"><span id="betval">120 min</span><small>Your bet</small></div>
+      <input type="range" class="bet-range" id="betrange" min="0" max="240" step="10" value="120" aria-label="Under the network rules, at most how long does it take for the surplus to be released?">
+      <div class="bet-scale"><span>immediate</span><span>2h</span><span>4h</span></div>
+      <div class="flow-caption" id="betcap" aria-live="polite">Move the slider and release: the real duration appears.</div>
+      <div class="bet-timeline" id="bettl" aria-hidden="true">
+        <div class="tl-bar"><span class="tl-m"></span><span class="tl-e"></span></div>
+        <div class="tl-lab"><span><b>20 min</b> the merchant sends the actual amount</span><span><b>+ 60 min</b> the issuer releases the surplus</span></div>
+      </div>
+      <div class="keyfact" id="betfact" style="display:none">💡 That's the rule. In practice, the French Banking Federation describes blocks running “from a few hours to several days”. The gap between the two is your money.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continue</button></div>
+  </section>
+
+  <!-- 4 · QUIZ 2 -->
+  <section class="screen" data-step="4">
+    <div class="qnum">QUIZ 2 / 4</div>
+    <div class="question">A hotel takes a €400 pre-authorisation at check-in. At check-out, the guest pays their €250 bill in cash. What happens on their card?</div>
+    <div class="options" data-quiz="1" data-answer="2" data-next="5">
+      <button class="opt">The €400 is debited, then the hotel refunds the difference</button>
+      <button class="opt">The hotel has to process a €400 refund on the card</button>
+      <button class="opt">The hotel has to send the cancellation: nothing was ever debited</button>
+      <button class="opt">Nothing to do, the reservation disappears by itself at the end of the day</button>
+    </div>
+  </section>
+
+  <!-- 5 · CONCEPT : le oui réglé à l'avance -->
+  <section class="screen" data-step="5">
+    <div class="concept-card">
+      <div class="kicker">Concept 3 / 4 · Authorisation</div>
+      <h2>A payment without the issuer's say-so</h2>
+      <p>In August 2025, the authorisation servers of several major French banks went down. For more than two hours, their customers could not pay or withdraw by card. Logical enough: the issuer had stopped answering. And yet a payment can go through without the issuer ever answering. There are two mechanisms for that, and in both cases it is the issuer who set the rules in advance.</p>
+      <table class="fee-table">
+        <thead><tr><th>Where</th><th>Who decides in its place</th></tr></thead>
+        <tbody>
+          <tr><td><b>In the chip</b><small>offline payment</small></td><td>the card and the terminal, without calling anyone</td></tr>
+          <tr><td><b>At the network</b><small>stand-in</small></td><td>the network, within limits the issuer has entrusted to it</td></tr>
+        </tbody>
+      </table>
+      <p><strong>In the chip.</strong> When the card is manufactured, the issuer writes its rules into it. Below certain thresholds, the card and the terminal decide on their own, without calling anyone: that is offline payment, a standard mechanism defined by the EMV specification. CB has used it since its early days, initially to limit calls to the server and cut costs.</p>
+      <p><strong>At the network.</strong> When the transaction goes out for online authorisation, a resilience mechanism is needed too. The issuer sets limits that the network applies in its place if it does not answer in time: that is stand-in (STIP). The message reaches the network but not the issuer.</p>
+      <p>That day in August exposed the limit: contactless, now the majority of payments, cannot do without an answer from the issuer. Acceptance resilience has become a critical issue for the whole industry.</p>
+      <div class="keyfact">💡 Since 24 January 2026, after long requiring systematic online authorisation, Visa now requires every new card in Europe to support EMV Offline mode, and allows up to €200 in contact mode at essential merchants (groceries, fuel, pharmacies) when the terminal cannot reach the network. EMV Offline is becoming a resilience tool.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Check I've got it</button></div>
+  </section>
+
+  <!-- 6 · QUIZ 3 -->
+  <section class="screen" data-step="6">
+    <div class="qnum">QUIZ 3 / 4</div>
+    <div class="question">An issuer's authorisation server is down for half an hour; Visa's or Mastercard's stand-in takes over. When it comes back, the issuer finds that one of the accounts it accepted was overdrawn. Who bears the loss?</div>
+    <div class="options" data-quiz="2" data-answer="1" data-next="7">
+      <button class="opt">The network, since it was the one that sent the answer</button>
+      <button class="opt">The issuer: it had accepted these transactions before they even existed</button>
+      <button class="opt">The acquirer, as on a forced transaction in degraded mode</button>
+      <button class="opt">Nobody: transactions accepted in fallback mode are cancelled once the issuer is back</button>
+    </div>
+  </section>
+
+  <!-- 7 · CONCEPT : le choix du pays -->
+  <section class="screen" data-step="7">
+    <div class="concept-card">
+      <div class="kicker">Concept 4 / 4 · Choosing a country</div>
+      <h2>And it chose its country</h2>
+      <p>The previous episode said it: you start under someone else's licence, then go and get your own. What it did not say is where. An authorisation obtained in one European Economic Area state is valid in the other twenty-nine: that is the passport. So the country is a choice, and a single trajectory is enough to see what it turns on.</p>
+      <div class="case">
+        <div class="case-kicker">Case study · Revolut</div>
+        <ul class="case-steps">
+          <li><b>2015</b><span>Starts in London under a provider's licence.</span></li>
+          <li><b>Dec. 2018</b><span><b>Lithuania.</b> Brexit is approaching, and a British licence will soon be worthless in the Union. A European authorisation is needed, fast: Lithuania processes applications in English, in a few months, with direct access to SEPA.</span></li>
+          <li><b>Dec. 2021</b><span><b>Bank.</b> Full banking licence, still Lithuanian. It can now hold deposits.</span></li>
+          <li><b>Jan. 2024</b><span><b>ECB.</b> Same licence, different supervisor: the European Central Bank directly oversees the euro area's large banks, and Revolut had become one. It asked for nothing.</span></li>
+          <li><b>Aug. 2026</b><span><b>France.</b> A second banking licence. The Lithuanian passport was enough to sell to 8 million French customers, not to attach them to the French deposit guarantee scheme or build an offer designed for that market.</span></li>
+        </ul>
+        <p style="color:#C9D4E4;font-size:14px;margin-top:10px">A country of authorisation is not a permanent address: it is an operating trade-off, redone every time scale changes.</p>
+      </div>
+      <div class="keyfact">💡 The passport lets you sell everywhere, not do everything everywhere. The deposit guarantee, though, stays that of the country of authorisation: until 2026, a French Revolut customer was covered by the Lithuanian fund.</div>
+
+      <!-- [VOIX ?] EN mirror of the FR voice block, signed by Charles 12/09. -->
+      <div class="voix">
+        <div class="voix-kicker">What actually matters</div>
+        An authorisation is not a trophy, it is a supplier you choose. And you choose it on operating criteria: the language the file gets processed in, the published turnaround time, direct access to infrastructure. What reads from the outside as a tax strategy or a PR move is almost always, seen from the inside, an operations decision.
+      </div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Last question</button></div>
+  </section>
+
+  <!-- 8 · QUIZ 4 -->
+  <section class="screen" data-step="8">
+    <div class="qnum">QUIZ 4 / 4</div>
+    <div class="question">The Lithuanian regulator withdraws the licence of an e-money institution with customers in twelve countries, including France. What happens to its French customers?</div>
+    <div class="options" data-quiz="3" data-answer="2" data-next="9">
+      <button class="opt">Nothing: its French branch carries on, under the ACPR's supervision</button>
+      <button class="opt">The ACPR takes over the licence for the French part of the business</button>
+      <button class="opt">The service stops for them just like everyone else: one single licence, valid everywhere, lost everywhere</button>
+      <button class="opt">Only Lithuanian customers are affected, the others fall under their own country's regulator</button>
+    </div>
+  </section>
+
+  <!-- 9 · RECAP -->
+  <section class="screen" data-step="9">
+    <div>
+      <div class="kicker">Episode complete</div>
+      <div class="score-big" id="scoreval">–</div>
+      <div class="score-label" id="scoremsg">SCORE</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TIME</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>BEST STREAK</span></div>
+      </div>
+      <div class="recap-list" id="recaplist">
+        <div class="recap-item" data-q="0">Depending on the card, the issuer advances the cardholder's money for a day, a month, or months with interest. The merchant, meanwhile, gets paid at the same moment in all three cases.</div>
+        <div class="recap-item" data-q="1">A blocked amount is not a taken amount. The real amount arrives later, the surplus has to be released, and it is not refunded: it is lifted.</div>
+        <div class="recap-item" data-q="2">A payment can go through without an answer from the issuer: through the rules written into the chip (EMV offline) or those lodged with the network (stand-in). Either way, the loss stays with the issuer.</div>
+        <div class="recap-item" data-q="3">The country of authorisation is chosen on operating criteria, and it gets re-chosen. One single licence is valid everywhere: lost, it is lost everywhere.</div>
+      </div>
+      <div class="teaser">
+        <div class="kicker">Next episode</div>
+        <b>S1 · E07 · The authorisation</b> – We've seen who says yes, and how that yes can go out without them. Next time, we follow the request itself: what it carries, who reads it along the way, and what a decline actually means, which is almost never “insufficient funds”.
+        <form id="ep-signup" data-kit-form="9773354" novalidate>
+          <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
+          <button type="submit">Get E07</button>
+        </form>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
+        <p class="sub-note">One email per episode, nothing else. Double opt-in, one-click unsubscribe.</p>
+      </div>
+      <p class="suggest">A payments concept that still escapes you?<br>
+        <a href="mailto:bonjour@paiement-decrypte.fr?subject=Topic%20suggestion&amp;body=The%20topic%20or%20tool%20I%27d%20like%20to%20see%20decoded%3A%0A%0A">Suggest the next topic</a>
+      </p>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" id="sharebtn" onclick="shareScore()">Share my score</button>
+      <button class="cta ghost" onclick="location.reload()">Redo the episode</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Feedback sheet -->
+<div class="sheet" id="sheet" aria-live="polite">
+  <div class="sheet-inner">
+    <div class="sheet-title" id="sheet-title"></div>
+    <div class="sheet-text" id="sheet-text"></div>
+    <button class="cta" id="sheet-cta"></button>
+  </div>
+</div>
+
+<script src="../../assets/telemetry.js"></script>
+<script src="../../assets/progress.js"></script>
+<script src="../../assets/subscribe.js"></script>
+<script>
+  // ===== MOTEUR D'EPISODE - NE PAS MODIFIER SANS RAISON =====
+  // Seuls EXPLAIN, le bloc « moment interactif » et SHARE_TITLE changent d'un episode a l'autre.
+  const EP = document.body.dataset.ep;                 // ex. "s1e03"
+  const SHARE_TITLE = "S1 · E06 · Issuing";
+
+  const PDT = window.PD || { track(){}, screen(){}, complete(){} };
+  const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open');
+
+  let current = 0, score = 0, streakNow = 0, streakBest = 0, t0 = null;
+  const results = [null,null,null,null];
+  const order = ['cover','1','2','3','4','5','6','7','8','9'];
+
+  const segWrap = document.getElementById('segments');
+  for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
+
+  function start(){ t0 = Date.now(); PDP.save(EP, {completed:false}); PDT.track('ep_start'); go(1); }
+
+  function go(n){
+    current = n;
+    PDT.screen(order[n]);
+    if(n > 0 && order[n] !== '9'){
+      PDP.save(EP, {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+    }
+    document.getElementById('sheet').classList.remove('show','good','bad');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
+    document.getElementById('topbar').style.visibility = n===0 ? 'hidden' : 'visible';
+    document.querySelectorAll('.seg').forEach((s,i)=>{
+      s.classList.toggle('done', i < n-1);
+      s.classList.toggle('now', i === n-1);
+    });
+    if(order[n]==='9') showScore();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Quiz : 1 entree par question, dans l'ordre. `bad` doit contenir la bonne reponse en <b>. ----
+  const EXPLAIN = [
+    {good:"Deferred debit covers payments, not cash withdrawals. The issuer agrees to fund purchases for a month, not to lend out cash for free. Same card, two calendars.", bad:"Deferred debit covers purchases, not cash: <b>a withdrawal immediately steps outside the card's calendar and hits the account straight away</b>. The issuer funds your payments for a month, not your cash."},
+    {good:"Nothing has moved on the account, so there is nothing to refund: there is a reservation to lift, and it is the merchant who sends it. A refund, by contrast, would create a real movement of money the other way, for a sum nobody ever actually took.", bad:"A pre-authorisation does not take anything, it locks it up: <b>it is up to the hotel to send the cancellation, since nothing was ever debited</b>. Until it does, the guest has €400 unavailable for a night already paid for in cash."},
+    {good:"The network decided nothing on its own account: it applied limits the issuer had lodged with it, knowing full well what they allowed. It is a delegation, not a transfer of risk. And the network is not generous with the issuer's money: when it answers in its place, the acceptance rate drops from 93% to 67%.", bad:"Nobody took the risk in its place: <b>the issuer took it itself, upfront, the day it lodged its parameters with the network</b>. Setting a limit means accepting everything that falls under it, including what it would have declined by actually looking at the account."},
+    {good:"The passport is one single licence, valid in thirty countries. When it falls, it falls in all thirty: the ACPR has nothing to take over, it never issued anything. Customer funds are returned under the rules of the country of authorisation. Since 2023, several Lithuanian licence withdrawals have cut off fintechs' services across Europe this way.", bad:"A branch has no licence of its own, and the ACPR cannot take over what it never issued: <b>one single licence is valid everywhere, and when it is withdrawn, the service stops everywhere, in France as elsewhere</b>. Funds are returned under the rules of the country of authorisation."}
+  ];
+  const GOOD_TITLES = ["Correct!","Well spotted!","Flawless!","Precisely!"];
+  const BAD_TITLES = ["Cash machines don't do credit","You don't refund a reservation","Delegating isn't transferring","One licence, lost everywhere"];
+
+  document.querySelectorAll('.options').forEach(block=>{
+    const qi = +block.dataset.quiz, ans = +block.dataset.answer, next = +block.dataset.next;
+    block.querySelectorAll('.opt').forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const good = i===ans;
+        results[qi] = good;
+        PDT.track('quiz_answer', {quiz:qi, choice:i, correct:good});
+        if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); } else { streakNow = 0; }
+        btn.classList.add(good?'correct':'wrong');
+        if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
+        if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
+        const st = document.getElementById('streak');
+        if(streakNow >= 2){ st.textContent = '✓ ×' + streakNow; st.classList.add('on'); } else { st.classList.remove('on'); }
+        const sheet = document.getElementById('sheet');
+        document.getElementById('sheet-title').textContent =
+          good ? '✓ ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '✗ ' + BAD_TITLES[qi];
+        document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
+        const cta = document.getElementById('sheet-cta');
+        cta.textContent = next===9 ? 'See my score' : 'Continue';
+        cta.onclick = ()=>go(next);
+        sheet.classList.add('show', good?'good':'bad');
+        sheet.classList.remove(good?'bad':'good');
+      });
+    });
+  });
+
+  // ---- Le pari (moment interactif) ----
+  const ANSWER = 80;
+  const range = document.getElementById('betrange');
+  const betval = document.getElementById('betval');
+  let betDone = false;
+  function fmtVal(v){ return v + ' min'; }
+  range.addEventListener('input', ()=>{ betval.textContent = fmtVal(+range.value); });
+  range.addEventListener('change', ()=>{ if(!betDone) revealBet(); });
+  function revealBet(){
+    betDone = true;
+    const g = +range.value;
+    PDT.track('interactive_used', {guess: g});
+    range.disabled = true;
+    const verdict = g<60 ? "You bet shorter than the rule, but you have the right instinct: it plays out in minutes."
+                  : g<=100 ? "Spot on, almost to the minute."
+                  : "Much shorter than your bet: it is counted in minutes, not hours.";
+    document.getElementById('betcap').innerHTML = verdict + " <b>About eighty minutes, at most.</b> Mastercard's rules in Europe give the merchant twenty minutes to send the actual amount, then the issuer sixty minutes to release what it had over-blocked.";
+    document.getElementById('bettl').classList.add('show');
+    document.getElementById('betfact').style.display = 'block';
+    document.getElementById('next-bet').disabled = false;
+  }
+
+  // ---- Score ----
+  function fmtTime(ms){ const s = Math.round(ms/1000); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+  function showScore(){
+    PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
+    PDP.save(EP, {completed:true, screen:9, score, streakBest, results});
+    document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const relire = missed.length===1 ? "REREAD CONCEPT "+missed[0]
+                 : "REREAD CONCEPTS "+missed.slice(0,-1).join(", ")+" AND "+missed[missed.length-1];
+    const msg = score===4 ? "FLAWLESS – EXPERT LEVEL" :
+                score>=3 ? "SOLID – "+relire+" AND IT'S PERFECT" :
+                score>=2 ? "FAIR – "+relire : "NEEDS WORK – REDO THE EPISODE";
+    document.getElementById('scoremsg').textContent = msg;
+    document.getElementById('stat-score').textContent = score + '/4';
+    document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '–';
+    document.getElementById('stat-best').textContent = '×' + streakBest;
+    document.querySelectorAll('.recap-item').forEach(el=>{
+      const r = results[+el.dataset.q];
+      if(r===true) el.classList.add('ok');
+      if(r===false) el.classList.add('ko');
+    });
+    if(score===4) confetti();
+  }
+
+  function confetti(){
+    const c = document.createElement('div'); c.className = 'confetti';
+    const colors = ['#1F4FD8','#17B587','#E85C4A','#0E1B2C'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('i');
+      p.style.left = (Math.random()*100)+'%';
+      p.style.background = colors[i%4];
+      p.style.animationDelay = (Math.random()*0.9)+'s';
+      p.style.animationDuration = (2+Math.random()*1.4)+'s';
+      c.appendChild(p);
+    }
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+
+  // ---- Partage facon Wordle ----
+  function shareScore(){
+    const grid = results.map(r=>r?'\u{1F7E9}':'\u{1F7E5}').join('');
+    const time = t0 ? fmtTime(Date.now()-t0) : '';
+    const txt = `${SHARE_TITLE} – ${score}/4 ${grid} in ${time}\nPayments micro-training, 5 min.\npaiement-decrypte.fr/en`;
+    const btn = document.getElementById('sharebtn');
+    const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile && navigator.share){
+      navigator.share({text:txt}).catch(()=>{});
+    } else {
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(()=>{}); }
+      btn.textContent = 'Copied ✓ – your LinkedIn post is ready';
+      setTimeout(()=>btn.textContent='Share my score', 3000);
+      window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
+    }
+    PDT.track('share', {score});
+  }
+
+  // ---- Abonnement fin d'episode ----
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
+      var el = document.getElementById('ep-signup-ok');
+      el.textContent = ok ? 'Almost there! Confirm via the email we just sent.' : (msg || 'Something went wrong – please try again.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+      if(ok) PDT.track('subscribe_ok');
+    });
+  }
+
+  // ---- Reprise ----
+  (function(){
+    const p = PDP.load(EP);
+    if(!p || p.completed || !(p.screen > 0)) return;
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9};
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3};
+    let target = p.screen;
+    if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){ target = QUIZ_NEXT[target]; }
+    const b = document.getElementById('resumebtn');
+    b.textContent = 'Resume where I left off';
+    b.style.display = 'block';
+    b.onclick = ()=>{
+      score = p.score || 0; streakBest = p.streakBest || 0;
+      (p.results || []).forEach((r,i)=>{ results[i] = r; });
+      t0 = Date.now() - (p.elapsed || 0);
+      PDT.track('resume', {screen: target});
+      go(target);
+    };
+  })();
+</script>
+</body>
+</html>
