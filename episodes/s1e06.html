@@ -90,6 +90,17 @@
     font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
     font-size:22px;line-height:1.15;margin-bottom:12px;
   }
+  .home-link{
+    display:inline-block;margin-bottom:14px;font-size:13px;
+    color:var(--ink-soft);text-decoration:none;
+  }
+  .home-link:hover,.home-link:focus{color:var(--cobalt)}
+  .teaser .next-ep{
+    display:block;box-sizing:border-box;margin-top:14px;padding:13px 16px;
+    border-radius:10px;background:var(--cobalt);color:#fff;font-weight:600;
+    font-size:14px;text-align:center;text-decoration:none;
+  }
+  .teaser .next-ep:hover,.teaser .next-ep:focus{background:#153A9E}
   .kicker{
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
     text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
@@ -251,8 +262,8 @@
   .sheet.bad .sheet-text{color:#9C3527}
   .sheet-text b{font-weight:600}
   .sheet .cta{margin-top:16px}
-  .sheet.good .cta{background:var(--mint)}
-  .sheet.bad .cta{background:var(--coral)}
+  .sheet.good .cta{background:var(--mint);color:var(--ink)}
+  .sheet.bad .cta{background:var(--coral);color:var(--ink)}
 
   /* ---------- Recap / score ---------- */
   .score-big{
@@ -349,6 +360,7 @@
   <!-- 0 · COVER -->
   <section class="screen cover active" data-step="cover">
     <div>
+      <a class="home-link" href="/#formation">← Tous les épisodes</a>
       <div class="kicker">Micro-formation · Saison 1 · Épisode 6</div>
       <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
         <defs>

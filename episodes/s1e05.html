@@ -90,6 +90,17 @@
     font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
     font-size:22px;line-height:1.15;margin-bottom:12px;
   }
+  .home-link{
+    display:inline-block;margin-bottom:14px;font-size:13px;
+    color:var(--ink-soft);text-decoration:none;
+  }
+  .home-link:hover,.home-link:focus{color:var(--cobalt)}
+  .teaser .next-ep{
+    display:block;box-sizing:border-box;margin-top:14px;padding:13px 16px;
+    border-radius:10px;background:var(--cobalt);color:#fff;font-weight:600;
+    font-size:14px;text-align:center;text-decoration:none;
+  }
+  .teaser .next-ep:hover,.teaser .next-ep:focus{background:#153A9E}
   .kicker{
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
     text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
@@ -191,8 +202,8 @@
   .sheet.bad .sheet-text{color:#9C3527}
   .sheet-text b{font-weight:600}
   .sheet .cta{margin-top:16px}
-  .sheet.good .cta{background:var(--mint)}
-  .sheet.bad .cta{background:var(--coral)}
+  .sheet.good .cta{background:var(--mint);color:var(--ink)}
+  .sheet.bad .cta{background:var(--coral);color:var(--ink)}
 
   /* ---------- Recap / score ---------- */
   .score-big{
@@ -330,6 +341,7 @@
   <!-- ============ COVER ============ -->
   <section class="screen cover active" data-step="cover">
     <div>
+      <a class="home-link" href="/#formation">← Tous les épisodes</a>
       <div class="kicker">Micro-formation · Saison 1 · Épisode 05</div>
       <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
         <defs>
@@ -531,9 +543,10 @@
       <div class="teaser">
         <div class="kicker">Prochain épisode</div>
         <b>S1 · E06 · L'émission</b> – On a vu qui prend le commerçant en charge. À l'autre bout, la banque du porteur ne se contente pas de tenir un compte&nbsp;: selon la carte, elle avance l'argent pendant un mois, ou pas une seconde. Trois façons de payer la même chose, trois expositions différentes, et le commerçant ne voit pas laquelle il a en face.
+        <a class="cta next-ep" href="/episodes/s1e06.html">Commencer E06 · L'émission</a>
         <form id="ep-signup" novalidate>
           <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
-          <button type="submit">Recevoir E06</button>
+          <button type="submit">Recevoir les suivants</button>
         </form>
         <p class="sub-ok" id="ep-signup-ok" role="status"></p>
         <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>

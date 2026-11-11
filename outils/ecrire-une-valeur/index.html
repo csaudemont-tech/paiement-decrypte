@@ -782,7 +782,7 @@ const EMV_TAGS = {
   '87': { n: "Application Priority Indicator", cat: "Identification",
     p: "Un octet qui règle deux choses dans le répertoire des applications (chaque application candidate y est listée dans un gabarit Application Template, tag 61) : le bit de poids fort (b8) indique si une confirmation explicite du porteur est exigée avant de sélectionner cette application (1 = oui) ; les 4 bits de poids faible donnent le rang de priorité, de 1 (le plus prioritaire) à 15, la valeur 0 signifiant que l'émetteur n'exprime aucune préférence entre plusieurs applications. Sur une carte co-badgée en France, le commerçant peut configurer sa préférence d'affichage mais le client garde le droit de choisir la marque (règlement IFR, art. 8)." },
   '88': { n: "SFI, Short File Identifier", cat: "Structure",
-    p: "Identifiant court du fichier où lire les enregistrements du répertoire. Détail de plomberie de la sélection d'application, utile quand on déroule un SELECT PSE à la main." },
+    p: "Identifiant court du fichier où lire les enregistrements du répertoire. Détail technique de la sélection d'application, utile quand on déroule un SELECT PSE à la main." },
   '8A': { n: "ARC, Authorisation Response Code", cat: "Décision", dec: 'arc', ep: EP_AUTORISATION,
     p: "Le verdict du circuit d'autorisation, sur 2 caractères : 00 = approbation, 05 = refus… Les codes Y1/Z1/Y3/Z3 sont générés par le terminal lui-même quand la transaction se décide offline. À ne pas confondre avec le cryptogramme : l'ARC est le verdict, le cryptogramme est la preuve." },
   '8C': { n: "CDOL1, Card Risk Management DOL 1", cat: "Décision", dec: 'dol',

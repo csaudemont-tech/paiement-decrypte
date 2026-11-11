@@ -90,6 +90,17 @@
     font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
     font-size:22px;line-height:1.15;margin-bottom:12px;
   }
+  .home-link{
+    display:inline-block;margin-bottom:14px;font-size:13px;
+    color:var(--ink-soft);text-decoration:none;
+  }
+  .home-link:hover,.home-link:focus{color:var(--cobalt)}
+  .teaser .next-ep{
+    display:block;box-sizing:border-box;margin-top:14px;padding:13px 16px;
+    border-radius:10px;background:var(--cobalt);color:#fff;font-weight:600;
+    font-size:14px;text-align:center;text-decoration:none;
+  }
+  .teaser .next-ep:hover,.teaser .next-ep:focus{background:#153A9E}
   .kicker{
     font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
     text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
@@ -191,8 +202,8 @@
   .sheet.bad .sheet-text{color:#9C3527}
   .sheet-text b{font-weight:600}
   .sheet .cta{margin-top:16px}
-  .sheet.good .cta{background:var(--mint)}
-  .sheet.bad .cta{background:var(--coral)}
+  .sheet.good .cta{background:var(--mint);color:var(--ink)}
+  .sheet.bad .cta{background:var(--coral);color:var(--ink)}
 
   /* ---------- Recap / score ---------- */
   .score-big{
@@ -330,6 +341,7 @@
   <!-- ============ COVER ============ -->
   <section class="screen cover active" data-step="cover">
     <div>
+      <a class="home-link" href="/en/#training">← All episodes</a>
       <div class="kicker">Micro-training · Season 1 · Episode 05</div>
       <svg class="cover-mark" viewBox="0 0 40 40" aria-hidden="true">
         <defs>
@@ -531,9 +543,10 @@
       <div class="teaser">
         <div class="kicker">Next episode</div>
         <b>S1 · E06 · Issuing</b> – We have seen who takes the merchant on. At the other end, the cardholder's bank does more than keep an account: depending on the card, it advances the money for a month, or not for a second. Three ways of paying for the same thing, three different exposures, and the merchant cannot see which one is in front of them.
+        <a class="cta next-ep" href="/en/episodes/s1e06.html">Start E06 · Issuing</a>
         <form id="ep-signup" data-kit-form="9773354" novalidate>
           <input type="email" name="email_address" placeholder="you@email.com" required autocomplete="email" inputmode="email">
-          <button type="submit">Get E06</button>
+          <button type="submit">Get the next ones</button>
         </form>
         <p class="sub-ok" id="ep-signup-ok" role="status"></p>
         <p class="sub-note">One email per episode, nothing else. Double opt-in, one-click unsubscribe.</p>
