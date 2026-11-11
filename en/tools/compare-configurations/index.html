@@ -753,7 +753,7 @@ const COUNTRY_DICT = {"004":"Afghanistan","008":"Albania","010":"Antarctica","01
 /* ============================================================
    Paiement Décrypté – socle du dictionnaire nexo FAST (neutre)
    ============================================================
-   GÉNÉRÉ AUTOMATIQUEMENT — NE PAS ÉDITER À LA MAIN.
+   GÉNÉRÉ AUTOMATIQUEMENT – NE PAS ÉDITER À LA MAIN.
    Régénérer avec les scripts d'extraction décrits dans la mémoire
    projet [[nexo-fast-extraction]] :
      pdftotext -layout "<nexo-FAST Part 1_V3.3_200827.pdf>" nf33.txt
@@ -771,13 +771,13 @@ const COUNTRY_DICT = {"004":"Afghanistan","008":"Albania","010":"Antarctica","01
    document solely for the purpose of implementing the
    Specification ». Un décodeur relève de cet usage. Chaque table
    affichée dans un outil doit porter sa référence normative
-   (document, version, section, tag) — c'est ce qui matérialise
+   (document, version, section, tag) – c'est ce qui matérialise
    la finalité d'implémentation. Arbitrage Charles du 11/08/2026,
    voir [[dictionnaire-config-nexo]].
    ============================================================ */
 
 const NEXO_SOURCE = {
-  document: 'nexo FAST Part 1 — Financial Application Specification for Terminals',
+  document: 'nexo FAST Part 1 – Financial Application Specification for Terminals',
   version: '3.3',
   date: '27.08.2020',
   copyright: '© 2009-2020 nexo FAST Technical Working Group',
@@ -1651,7 +1651,7 @@ const NEXO_KINDS = {
   "kernel-e": "Element defini par nexo FAST pour le Kernel E"
 };
 
-/* Glossaire §13.1 / 13.2 / 13.3 / 13.4 — 391 entrées.
+/* Glossaire §13.1 / 13.2 / 13.3 / 13.4 – 391 entrées.
    kind : voir NEXO_KINDS. Généré, ne pas éditer. */
 const NEXO_GLOSSARY = {
   "acquireridentifier": {"name": "Acquirer Identifier", "section": "13.1.1", "kind": "externe", "tag": "9F01", "length": "6", "format": "n 6-11"},
@@ -2149,7 +2149,7 @@ const NEXO_VARIANTS = {
   "transactionreferencedataobjectlist": "transactionreferencedataobjectlistdol"
 };
 
-/* Blocs construits et leurs tables d'entrée — 15 blocs, 88 tags. */
+/* Blocs construits et leurs tables d'entrée – 15 blocs, 88 tags. */
 const NEXO_BLOCKS = {
   "ED": {
     "tag": "ED",
@@ -2371,7 +2371,7 @@ const NEXO_BLOCKS = {
         "name": "BIN based Card Product Identifier (BID)",
         "format": "5-16",
         "correctif": "nf33.txt:52320",
-        "specNote": "colonnes Length/Format telles qu'imprimees dans la spec (Length='1', Format='5-16') — incoherence apparente, comparer avec E7 DF01 (Length='5-16', Format='b')"
+        "specNote": "colonnes Length/Format telles qu'imprimees dans la spec (Length='1', Format='5-16') – incoherence apparente, comparer avec E7 DF01 (Length='5-16', Format='b')"
       },
       {
         "tag": "DF02",
@@ -2927,7 +2927,7 @@ const NEXO_EDITOR_ONLY_BLOCKS = {
 };
 
 /* ------------------------------------------------------------
-   Décodage — volontairement ici et pas dans chaque outil.
+   Décodage – volontairement ici et pas dans chaque outil.
    Le précédent du 10/08 sur le moteur EMV (TTQ décodé à la main
    dans nexo-acquirer-explainer, bit 1/0x08 interprété à l'envers
    pendant des semaines) montre que dupliquer la logique de
@@ -2944,7 +2944,7 @@ function nexoKey(name) {
 
 /* Résout un nom de champ vers son entrée normative.
    Renvoie { entry, match, tag } ou null. Ordre de résolution, du plus
-   sûr au moins sûr — c'est l'ordre qui porte l'honnêteté de l'affichage :
+   sûr au moins sûr – c'est l'ordre qui porte l'honnêteté de l'affichage :
 
    1. DANS LE BLOC PARENT. Les tags sont locaux au bloc : si le champ
       correspond à une ligne de la table d'entrée du bloc, c'est cette
@@ -2988,7 +2988,7 @@ function nexoResolve(name, block) {
 /* Résout un tag DANS un bloc construit. Indispensable : les tags
    sont LOCAUX au bloc. 'DF03' vaut Supported Services dans E2 mais
    CA Public Key Algorithm Indicator dans E3. Résoudre à plat est
-   faux — c'est la découverte du 11/08. */
+   faux – c'est la découverte du 11/08. */
 function nexoResolveTagInBlock(tag, block) {
   const b = NEXO_BLOCKS[String(block).toUpperCase()];
   if (!b) return null;
@@ -3119,7 +3119,7 @@ const NEXO_EN = {
   enum: {},
   blocks: {},
 
-  /* Reading notes we add — not from the specification. */
+  /* Reading notes we add – not from the specification. */
   fieldNotes: {
     DF67: "Up to nexo FAST 3.2 this field was tag DF13 and 2 bytes long. Since 3.3 it is DF67 over 4 bytes. An older file and a recent one therefore do not decode with the same table.",
     DF19: "A plain number, with no coding table: it is the join key linking a selection table entry to the matching parameter block.",
@@ -3242,7 +3242,7 @@ function specRefHtml(name, blockTag) {
   if (r.match === 'exact-bloc') bits.splice(1, 0, `in ${esc(r.blockName)} (${esc(LBL.ui.tagIsLocal)})`);
   if (inferred) bits.unshift(esc(LBL.ui.inferred) + (r.why ? ': ' + esc(r.why) : ''));
   const mark = inferred ? ' ≈' : '';
-  return `<div class="${cls}" title="${bits.join(' — ')}">${prefix} ${scope}${esc(tag)}${mark}</div>`;
+  return `<div class="${cls}" title="${bits.join(' – ')}">${prefix} ${scope}${esc(tag)}${mark}</div>`;
 }
 
 function fieldValueToString(v) {
@@ -3714,7 +3714,7 @@ wireFileInput('file-b', 'xml-b', 'fname-b');
      Aucun contenu saisi n'est transmis. e.isTrusted + garde de geste
      évitent de compter les rendus automatiques faits au chargement.
      Sous a-publier/, le src ci-dessous ne résout pas (profondeur
-     différente de site/) : c'est VOULU — un outil ouvert en local ne
+     différente de site/) : c'est VOULU – un outil ouvert en local ne
      pollue pas la télémétrie. -->
 <script src="../../../assets/telemetry.js?v=4b17031c"></script>
 <script>
@@ -3743,7 +3743,7 @@ wireFileInput('file-b', 'xml-b', 'fname-b');
     }, true);
   });
 
-  // Points d'entrée nommés des outils — enveloppés sans toucher à leur code.
+  // Points d'entrée nommés des outils – enveloppés sans toucher à leur code.
   ['runParse','runSingleTag','runDiff','render'].forEach(function(n){
     var f = window[n];
     if(typeof f !== 'function') return;

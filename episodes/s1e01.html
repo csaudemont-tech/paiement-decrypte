@@ -122,7 +122,7 @@
   .concept-card{
     background:var(--card);border-radius:var(--radius);
     padding:22px;border:1px solid var(--line);
-    box-shadow:0 2px 10px rgba(14,27,44,.05);
+    
   }
   .keyfact{
     margin-top:16px;padding:14px 16px;border-radius:12px;
@@ -158,6 +158,7 @@
     text-align:center;font-size:13px;font-weight:600;background:#FAFBFD;
     transition:border-color .3s, background .3s;
   }
+  .actor .ico{display:block;margin:0 auto 4px}
   .actor small{display:block;font-weight:400;font-size:11px;color:var(--ink-soft);margin-top:2px}
   .actor.lit{border-color:var(--cobalt);background:#EDF1FB}
   .actor.scheme{
@@ -363,7 +364,7 @@
         </svg>
       </div>
       <p class="hub-cap">Chaque banque, chaque commerçant, chaque carte parle déjà ce même langage – c'est ce maillage déjà en place qui rend un scheme quasi impossible à remplacer.</p>
-      <div class="keyfact">💡 <b>À retenir :</b> le réseau est l'arbitre et l'infrastructure du match – jamais un joueur qui touche le ballon (l'argent).</div>
+      <div class="keyfact"><b>À retenir :</b> le réseau est l'arbitre et l'infrastructure du match – jamais un joueur qui touche le ballon (l'argent).</div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
   </section>
@@ -389,10 +390,10 @@
     </div>
     <div class="diagram">
       <div class="diagram-grid">
-        <div class="actor" id="a-porteur">🧍 Porteur<small>le client</small></div>
-        <div class="actor" id="a-marchand">🏪 Marchand<small>le commerçant</small></div>
-        <div class="actor" id="a-emetteur">🏦 Émetteur<small>banque du client</small></div>
-        <div class="actor" id="a-acquereur">🏦 Acquéreur<small>banque du marchand</small></div>
+        <div class="actor" id="a-porteur"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg> Porteur<small>le client</small></div>
+        <div class="actor" id="a-marchand"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10l1.5-5h13L20 10M4 10h16v10H4zM10 20v-5h4v5"/></svg> Marchand<small>le commerçant</small></div>
+        <div class="actor" id="a-emetteur"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-5 9 5M5 9v8M9 9v8M15 9v8M19 9v8M3 20h18"/></svg> Émetteur<small>banque du client</small></div>
+        <div class="actor" id="a-acquereur"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-5 9 5M5 9v8M9 9v8M15 9v8M19 9v8M3 20h18"/></svg> Acquéreur<small>banque du marchand</small></div>
         <div class="actor scheme" id="a-scheme">◈ RÉSEAU<small>Visa, Mastercard, CB…</small></div>
       </div>
       <div class="flow-caption" id="flowcap" aria-live="polite">Suivez le trajet d'un paiement de 60 € – appuyez sur le bouton.</div>
@@ -422,7 +423,7 @@
       <p><strong>2 · La compensation.</strong> Il calcule qui doit combien à qui chaque jour entre des milliers de banques, et orchestre le règlement.</p>
       <p><strong>3 · L'arbitrage.</strong> Litige, fraude, chargeback : quand un porteur (le client) conteste un paiement, c'est le règlement du réseau qui tranche entre émetteur et acquéreur.</p>
       <p><strong>4 · La marque.</strong> La notoriété et l'acceptation du réseau : plus une marque est reconnue et acceptée dans le monde, plus elle a de valeur pour les banques et les commerçants. Visa et Mastercard communiquent d'ailleurs sur le nombre de pays où leur carte est acceptée – c'est leur indicateur phare.</p>
-      <div class="keyfact">💡 <b>Son revenu :</b> les frais de réseau (les « scheme fees »), facturés aux banques membres – à ne pas confondre avec l'interchange, qui va à l'émetteur.</div>
+      <div class="keyfact"><b>Son revenu :</b> les frais de réseau (les « scheme fees »), facturés aux banques membres – à ne pas confondre avec l'interchange, qui va à l'émetteur.</div>
 
       <!-- [VOIX ?] 11/08 : bloc voix de l'épisode, matière de Charles (atelier schemes). Validé par lui, chute comprise. -->
       <div class="voix">
@@ -452,7 +453,7 @@
       <h2>CB : le réseau domestique, et le co-badgeage</h2>
       <p>La France a son propre réseau : <strong>CB (Cartes Bancaires)</strong>, créé par les banques françaises. La plupart des cartes françaises sont <strong>co-badgées</strong> : CB <em>et</em> Visa (ou Mastercard) sur la même carte.</p>
       <p>En France, le terminal applique en priorité CB (coûts plus bas pour le marchand), selon une liste de priorité définie par l'acquéreur ; à l'étranger, le badge international prend le relais.</p>
-      <div class="keyfact">💡 <b>Depuis le règlement européen IFR (2015)</b>, le consommateur peut imposer la marque de son choix au point de vente : la priorité définie par l'acquéreur ne s'applique que s'il n'exprime aucun choix.</div>
+      <div class="keyfact"><b>Depuis le règlement européen IFR (2015)</b>, le consommateur peut imposer la marque de son choix au point de vente : la priorité définie par l'acquéreur ne s'applique que s'il n'exprime aucun choix.</div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
   </section>

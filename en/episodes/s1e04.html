@@ -123,7 +123,7 @@
   .concept-card{
     background:var(--card);border-radius:var(--radius);
     padding:22px;border:1px solid var(--line);
-    box-shadow:0 2px 10px rgba(14,27,44,.05);
+    
   }
   .keyfact{
     margin-top:16px;padding:14px 16px;border-radius:12px;
@@ -360,7 +360,7 @@
       <p class="hub-cap">The AMEX case: three parties, two contracts, one price.</p>
       <p>Interchange and scheme fees therefore have no reason to exist. The merchant sees a single rate and an invoice with one line, the commission.</p>
       <div class="chart"><svg viewBox="0 0 320 214" role="img" aria-label="American Express against Visa: fewer cards, less volume, but eight times the spend per card"><rect x="6" y="190" width="9" height="9" rx="2" fill="#1F4FD8"/><text x="20" y="198" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#4A5A70">AMEX</text><rect x="60" y="190" width="9" height="9" rx="2" fill="#D8DEE9"/><text x="74" y="198" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#4A5A70">VISA</text><text x="6" y="15" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing="1" fill="#4A5A70">CARDS IN CIRCULATION</text><rect x="6" y="22" width="3" height="14" rx="3" fill="#1F4FD8"/><text x="16" y="33" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#0E1B2C">86.6 M</text><rect x="6" y="42" width="150" height="14" rx="3" fill="#D8DEE9"/><text x="163" y="53" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#4A5A70">4.7 bn</text><text x="6" y="77" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing="1" fill="#4A5A70">ANNUAL SPEND</text><rect x="6" y="84" width="18" height="14" rx="3" fill="#1F4FD8"/><text x="31" y="95" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#0E1B2C">$1,670 bn</text><rect x="6" y="104" width="150" height="14" rx="3" fill="#D8DEE9"/><text x="163" y="115" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#4A5A70">$14,200 bn</text><text x="6" y="139" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing="1" fill="#4A5A70">SPEND PER CARD PER YEAR</text><rect x="6" y="146" width="150" height="14" rx="3" fill="#1F4FD8"/><text x="163" y="157" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#0E1B2C">$25,453</text><rect x="6" y="166" width="18" height="14" rx="3" fill="#D8DEE9"/><text x="31" y="177" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#4A5A70">~$3,000</text></svg></div>
-      <div class="keyfact">💡 <b>À retenir :</b> a three-party model does not chase volume, it targets a customer base. AMEX goes for high spend, $25,453 per card per year. Meal-voucher issuers go the other way: a small but captive spend, confined to food, exempt from employer social charges and untaxed for the employee. <i>(FY2025. Visa's spend per card is an order of magnitude, computed as volume &divide; cards.)</i></div>
+      <div class="keyfact"><b>À retenir :</b> a three-party model does not chase volume, it targets a customer base. AMEX goes for high spend, $25,453 per card per year. Meal-voucher issuers go the other way: a small but captive spend, confined to food, exempt from employer social charges and untaxed for the employee. <i>(FY2025. Visa's spend per card is an order of magnitude, computed as volume &divide; cards.)</i></div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(2)">Check I've got it</button></div>
   </section>
@@ -396,7 +396,7 @@
         <button class="pick-opt" data-k="b">merchants</button>
       </div>
       <div class="flow-caption" id="betcap" aria-live="polite">Pick one, the rest follows.</div>
-      <div class="keyfact" id="betfact" style="display:none">💡 <b>Neither order works on its own.</b> A three-party scheme has to pay one side to attract the other, and get repaid by the side that cannot walk away. It is the only model available, and it explains the rest of this episode.</div>
+      <div class="keyfact" id="betfact" style="display:none"><b>Neither order works on its own.</b> A three-party scheme has to pay one side to attract the other, and get repaid by the side that cannot walk away. It is the only model available, and it explains the rest of this episode.</div>
     </div>
     <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continue</button></div>
   </section>
@@ -420,7 +420,7 @@
       <h2>Conecs, the scheme four issuers share</h2>
       <p>Pure three-party schemes have almost died out worldwide, yet one still runs at scale in a G7 country. Dematerialised French meal vouchers run on the three-party model, and the French competition authority labels them that way in writing. Conecs, created in 2012 and owned in equal shares by Edenred, Pluxee, Swile and Up, carries card transactions <strong>outside the banking schemes</strong>. Conecs does not authorise payments and does not fund merchants: Conecs plays a role similar to CB and Visa.</p>
       <p>Each Conecs member signs both sides: the company that buys the vouchers for its staff, and the merchant that accepts them. The scheme itself is shared: <strong>four competing issuers run on the same infrastructure, closed and independent from the banking schemes.</strong> For the restaurant owner that means four issuers, four contracts and four rates.</p>
-      <div class="keyfact">💡 <b>Worth keeping:</b> on a &euro;10 transaction in 2022, the commission charged to the merchant ranged from <b>3.50&nbsp;% to 4.55&nbsp;%</b> depending on the issuer: Edenred 4.20&nbsp;%, Sodexo now Pluxee 4.55&nbsp;%, Bimpli 4.25&nbsp;%, Up 4.45&nbsp;%, Swile 3.50&nbsp;%. <i>(French competition authority, opinion 23-A-16, 12 October 2023.)</i></div>
+      <div class="keyfact"><b>Worth keeping:</b> on a &euro;10 transaction in 2022, the commission charged to the merchant ranged from <b>3.50&nbsp;% to 4.55&nbsp;%</b> depending on the issuer: Edenred 4.20&nbsp;%, Sodexo now Pluxee 4.55&nbsp;%, Bimpli 4.25&nbsp;%, Up 4.45&nbsp;%, Swile 3.50&nbsp;%. <i>(French competition authority, opinion 23-A-16, 12 October 2023.)</i></div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(6)">Check I've got it</button></div>
   </section>
@@ -447,7 +447,7 @@
       <!-- Composants reutilisables disponibles ici (voir references/format-spec.md) :
            <div class="case"><div class="case-kicker">Cas d'ecole · X</div>...</div>
            <table class="fee-table">...</table> + <p class="fee-note">...</p> -->
-      <div class="keyfact">💡 <b>Worth keeping:</b> between late 2022 and mid-2024, the share of meal vouchers spent in supermarkets went from <b>22.4&nbsp;% to 30.8&nbsp;%</b>, and the restaurant share from 46.5&nbsp;% to 40.1&nbsp;%. <i>(French National Assembly report no.&nbsp;552.)</i></div>
+      <div class="keyfact"><b>Worth keeping:</b> between late 2022 and mid-2024, the share of meal vouchers spent in supermarkets went from <b>22.4&nbsp;% to 30.8&nbsp;%</b>, and the restaurant share from 46.5&nbsp;% to 40.1&nbsp;%. <i>(French National Assembly report no.&nbsp;552.)</i></div>
 
       <!-- [VOIX ?] BLOC VOIX - OBLIGATOIRE, exactement 1 par episode.
            VOIX_KICKER : « Ce qu'on entend » | « Ce qui compte vraiment » | « Mon avis »

@@ -185,4 +185,14 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/outils/message-acquereur/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/tools/acquirer-message/"/>
   </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/mentions-legales/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/mentions-legales/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/legal/"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/legal/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/mentions-legales/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/legal/"/>
+  </url>
 </urlset>

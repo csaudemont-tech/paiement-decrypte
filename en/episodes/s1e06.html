@@ -122,7 +122,7 @@
   .concept-card{
     background:var(--card);border-radius:var(--radius);
     padding:22px;border:1px solid var(--line);
-    box-shadow:0 2px 10px rgba(14,27,44,.05);
+    
   }
   .keyfact{
     margin-top:16px;padding:14px 16px;border-radius:12px;
@@ -429,7 +429,7 @@
       <p><strong>Deferred debit.</strong> The account is debited only once a month, on the statement date. Since each cardholder is debited once a month, the issuer permanently carries half a month's spending across its whole portfolio.</p>
       <p><strong>Credit.</strong> The cardholder repays whenever they choose and pays interest. The balance never empties.</p>
       <p>An issuer does not issue a card. It opens a line of risk, and holds it for years.</p>
-      <div class="keyfact">💡 <b>Remember:</b> what you can still spend on the card drops the moment it is authorised, whatever the card type. The account itself is only debited later: the next day, at the statement date, or on repayment. What moves immediately is a limit, not a balance.</div>
+      <div class="keyfact"><b>Remember:</b> what you can still spend on the card drops the moment it is authorised, whatever the card type. The account itself is only debited later: the next day, at the statement date, or on repayment. What moves immediately is a limit, not a balance.</div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(2)">Check I've got it</button></div>
   </section>
@@ -479,7 +479,7 @@
         <div class="tl-bar"><span class="tl-m"></span><span class="tl-e"></span></div>
         <div class="tl-lab"><span><b>20 min</b> the merchant sends the actual amount</span><span><b>+ 60 min</b> the issuer releases the surplus</span></div>
       </div>
-      <div class="keyfact" id="betfact" style="display:none">💡 That's the rule. In practice, the French Banking Federation describes blocks running “from a few hours to several days”. The gap between the two is your money.</div>
+      <div class="keyfact" id="betfact" style="display:none">That's the rule. In practice, the French Banking Federation describes blocks running “from a few hours to several days”. The gap between the two is your money.</div>
     </div>
     <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continue</button></div>
   </section>
@@ -512,7 +512,7 @@
       <p><strong>In the chip.</strong> When the card is manufactured, the issuer writes its rules into it. Below certain thresholds, the card and the terminal decide on their own, without calling anyone: that is offline payment, a standard mechanism defined by the EMV specification. CB has used it since its early days, initially to limit calls to the server and cut costs.</p>
       <p><strong>At the network.</strong> When the transaction goes out for online authorisation, a resilience mechanism is needed too. The issuer sets limits that the network applies in its place if it does not answer in time: that is stand-in (STIP). The message reaches the network but not the issuer.</p>
       <p>That day in August exposed the limit: contactless, now the majority of payments, cannot do without an answer from the issuer. Acceptance resilience has become a critical issue for the whole industry.</p>
-      <div class="keyfact">💡 Since 24 January 2026, after long requiring systematic online authorisation, Visa now requires every new card in Europe to support EMV Offline mode, and allows up to €200 in contact mode at essential merchants (groceries, fuel, pharmacies) when the terminal cannot reach the network. EMV Offline is becoming a resilience tool.</div>
+      <div class="keyfact">Since 24 January 2026, after long requiring systematic online authorisation, Visa now requires every new card in Europe to support EMV Offline mode, and allows up to €200 in contact mode at essential merchants (groceries, fuel, pharmacies) when the terminal cannot reach the network. EMV Offline is becoming a resilience tool.</div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(6)">Check I've got it</button></div>
   </section>
@@ -546,7 +546,7 @@
         </ul>
         <p style="color:#C9D4E4;font-size:14px;margin-top:10px">A country of authorisation is not a permanent address: it is an operating trade-off, redone every time scale changes.</p>
       </div>
-      <div class="keyfact">💡 The passport lets you sell everywhere, not do everything everywhere. The deposit guarantee, though, stays that of the country of authorisation: until 2026, a French Revolut customer was covered by the Lithuanian fund.</div>
+      <div class="keyfact">The passport lets you sell everywhere, not do everything everywhere. The deposit guarantee, though, stays that of the country of authorisation: until 2026, a French Revolut customer was covered by the Lithuanian fund.</div>
 
       <!-- [VOIX ?] EN mirror of the FR voice block, signed by Charles 12/09. -->
       <div class="voix">

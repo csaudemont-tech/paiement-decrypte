@@ -123,7 +123,7 @@
   .concept-card{
     background:var(--card);border-radius:var(--radius);
     padding:22px;border:1px solid var(--line);
-    box-shadow:0 2px 10px rgba(14,27,44,.05);
+    
   }
   .keyfact{
     margin-top:16px;padding:14px 16px;border-radius:12px;
@@ -360,7 +360,7 @@
       <p class="hub-cap">Le cas AMEX : trois acteurs, deux contrats, un seul prix.</p>
       <p>Par conséquent, l'interchange et les frais de réseau n'ont plus lieu d'être. Le commerçant voit un taux unique et une facture avec une seule ligne, qui correspond à la commission.</p>
       <div class="chart"><svg viewBox="0 0 320 214" role="img" aria-label="American Express face à Visa : moins de cartes, moins de volume, mais une dépense par carte huit fois supérieure"><rect x="6" y="190" width="9" height="9" rx="2" fill="#1F4FD8"/><text x="20" y="198" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#4A5A70">AMEX</text><rect x="60" y="190" width="9" height="9" rx="2" fill="#D8DEE9"/><text x="74" y="198" font-family="'JetBrains Mono',monospace" font-size="9.5" fill="#4A5A70">VISA</text><text x="6" y="15" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing="1" fill="#4A5A70">CARTES EN CIRCULATION</text><rect x="6" y="22" width="3" height="14" rx="3" fill="#1F4FD8"/><text x="16" y="33" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#0E1B2C">86,6 M</text><rect x="6" y="42" width="150" height="14" rx="3" fill="#D8DEE9"/><text x="163" y="53" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#4A5A70">4,7 Md</text><text x="6" y="77" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing="1" fill="#4A5A70">VOLUME ANNUEL DÉPENSÉ</text><rect x="6" y="84" width="18" height="14" rx="3" fill="#1F4FD8"/><text x="31" y="95" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#0E1B2C">1 670 Md$</text><rect x="6" y="104" width="150" height="14" rx="3" fill="#D8DEE9"/><text x="163" y="115" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#4A5A70">14 200 Md$</text><text x="6" y="139" font-family="'JetBrains Mono',monospace" font-size="9.5" letter-spacing="1" fill="#4A5A70">DÉPENSE PAR CARTE ET PAR AN</text><rect x="6" y="146" width="150" height="14" rx="3" fill="#1F4FD8"/><text x="163" y="157" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#0E1B2C">25 453 $</text><rect x="6" y="166" width="18" height="14" rx="3" fill="#D8DEE9"/><text x="31" y="177" font-family="'JetBrains Mono',monospace" font-size="11.5" fill="#4A5A70">~3 000 $</text></svg></div>
-      <div class="keyfact">💡 <b>À retenir :</b> un modèle à 3 coins ne cherche pas le volume, il cible une clientèle. AMEX vise la dépense élevée, 25&nbsp;453 dollars par carte et par an. Les émetteurs de titres-restaurant visent l'inverse : une dépense petite mais captive, cantonnée à l'alimentaire, exonérée de charges pour l'employeur et non imposable pour le salarié. <i>(Exercices 2025. La dépense Visa par carte est un ordre de grandeur, calculé volume &divide; cartes.)</i></div>
+      <div class="keyfact"><b>À retenir :</b> un modèle à 3 coins ne cherche pas le volume, il cible une clientèle. AMEX vise la dépense élevée, 25&nbsp;453 dollars par carte et par an. Les émetteurs de titres-restaurant visent l'inverse : une dépense petite mais captive, cantonnée à l'alimentaire, exonérée de charges pour l'employeur et non imposable pour le salarié. <i>(Exercices 2025. La dépense Visa par carte est un ordre de grandeur, calculé volume &divide; cartes.)</i></div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
   </section>
@@ -396,7 +396,7 @@
         <button class="pick-opt" data-k="b">des commerçants</button>
       </div>
       <div class="flow-caption" id="betcap" aria-live="polite">Choisissez, la suite s'affiche.</div>
-      <div class="keyfact" id="betfact" style="display:none">💡 <b>Aucun des deux ordres ne marche seul.</b> Un 3 coins doit payer un côté pour attirer l'autre, et se faire rembourser par celui qui ne peut pas partir. C'est le seul modèle disponible, et il explique la suite de l'épisode.</div>
+      <div class="keyfact" id="betfact" style="display:none"><b>Aucun des deux ordres ne marche seul.</b> Un 3 coins doit payer un côté pour attirer l'autre, et se faire rembourser par celui qui ne peut pas partir. C'est le seul modèle disponible, et il explique la suite de l'épisode.</div>
     </div>
     <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continuer</button></div>
   </section>
@@ -420,7 +420,7 @@
       <h2>Conecs, le réseau que quatre émetteurs se partagent</h2>
       <p>Les titres-restaurant dématérialisés fonctionnent en 3 coins, et l'Autorité de la concurrence les qualifie ainsi noir sur blanc. Conecs, créée en 2012 et détenue à parts égales par Edenred, Pluxee, Swile et Up, achemine les transactions carte <strong>hors du réseau bancaire</strong>. Conecs n'autorise pas les paiements et ne finance pas les commerçants : Conecs joue un rôle similaire à CB et Visa.</p>
       <p>Chaque membre de Conecs signe les deux côtés : l'entreprise qui achète les titres pour ses salariés, et le commerçant qui les accepte. Le réseau, lui, est mis en commun : <strong>quatre émetteurs concurrents partagent la même infrastructure, fermée et indépendante du réseau bancaire.</strong> Conséquence pour le restaurateur : quatre émetteurs, ce sont quatre contrats et quatre taux.</p>
-      <div class="keyfact">💡 <b>À retenir :</b> sur une transaction de 10 euros en 2022, la commission prélevée au commerçant allait de <b>3,50&nbsp;% à 4,55&nbsp;%</b> selon l'émetteur : Edenred 4,20&nbsp;%, Sodexo devenu Pluxee 4,55&nbsp;%, Bimpli 4,25&nbsp;%, Up 4,45&nbsp;%, Swile 3,50&nbsp;%. <i>(Autorité de la concurrence, avis 23-A-16 du 12 octobre 2023.)</i></div>
+      <div class="keyfact"><b>À retenir :</b> sur une transaction de 10 euros en 2022, la commission prélevée au commerçant allait de <b>3,50&nbsp;% à 4,55&nbsp;%</b> selon l'émetteur : Edenred 4,20&nbsp;%, Sodexo devenu Pluxee 4,55&nbsp;%, Bimpli 4,25&nbsp;%, Up 4,45&nbsp;%, Swile 3,50&nbsp;%. <i>(Autorité de la concurrence, avis 23-A-16 du 12 octobre 2023.)</i></div>
     </div>
     <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
   </section>
@@ -447,7 +447,7 @@
       <!-- Composants reutilisables disponibles ici (voir references/format-spec.md) :
            <div class="case"><div class="case-kicker">Cas d'ecole · X</div>...</div>
            <table class="fee-table">...</table> + <p class="fee-note">...</p> -->
-      <div class="keyfact">💡 <b>À retenir :</b> entre fin 2022 et mi-2024, la part des titres-restaurant dépensée en grande distribution est passée de <b>22,4&nbsp;% à 30,8&nbsp;%</b>, celle des restaurants de 46,5&nbsp;% à 40,1&nbsp;%. <i>(Rapport de l'Assemblée nationale n°&nbsp;552.)</i></div>
+      <div class="keyfact"><b>À retenir :</b> entre fin 2022 et mi-2024, la part des titres-restaurant dépensée en grande distribution est passée de <b>22,4&nbsp;% à 30,8&nbsp;%</b>, celle des restaurants de 46,5&nbsp;% à 40,1&nbsp;%. <i>(Rapport de l'Assemblée nationale n°&nbsp;552.)</i></div>
 
       <!-- [VOIX ?] BLOC VOIX - OBLIGATOIRE, exactement 1 par episode.
            VOIX_KICKER : « Ce qu'on entend » | « Ce qui compte vraiment » | « Mon avis »

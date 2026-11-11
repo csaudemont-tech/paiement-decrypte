@@ -1956,7 +1956,7 @@ function showInputNote(norm) {
 
    anchorIds est une LISTE, dans l'ordre de préférence : on s'arrête au
    premier bloc réellement affiché. On vise le bloc « Analyse » (#verdict)
-   avant l'arbre TLV — c'est la réponse, l'arbre n'est que la matière — et
+   avant l'arbre TLV – c'est la réponse, l'arbre n'est que la matière – et
    on se rabat sur les erreurs puis sur la grille de résultats quand il n'y
    a pas de tag de décision dans les données. */
 function pdAnnounce(msg, anchorIds) {
@@ -2636,7 +2636,7 @@ document.addEventListener('DOMContentLoaded', () => {
      Aucun contenu saisi n'est transmis. e.isTrusted + garde de geste
      évitent de compter les rendus automatiques faits au chargement.
      Sous a-publier/, le src ci-dessous ne résout pas (profondeur
-     différente de site/) : c'est VOULU — un outil ouvert en local ne
+     différente de site/) : c'est VOULU – un outil ouvert en local ne
      pollue pas la télémétrie. -->
 <script src="../../assets/telemetry.js?v=4b17031c"></script>
 <script>
@@ -2665,7 +2665,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, true);
   });
 
-  // Points d'entrée nommés des outils — enveloppés sans toucher à leur code.
+  // Points d'entrée nommés des outils – enveloppés sans toucher à leur code.
   ['runParse','runSingleTag','runDiff','render'].forEach(function(n){
     var f = window[n];
     if(typeof f !== 'function') return;
