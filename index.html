@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F2F4F8">
 <title>Paiement Décrypté – le paiement expliqué depuis le terrain</title>
 <meta name="description" content="Micro-formations interactives de 5 minutes sur le paiement : schemes, interchange, acquiring, monétique. Le paiement que personne ne vulgarise.">
 <link rel="canonical" href="https://paiement-decrypte.fr/">
@@ -34,6 +35,7 @@
     --mint:#17B587;
     --mint-deep:#0E9270;
     --coral:#E85C4A;
+    --coral-deep:#C2422F;
     --line:#D8DEE9;
     --card:#FFFFFF;
     --radius:18px;
@@ -54,19 +56,22 @@
   @media (min-width:1040px){ .app{max-width:1120px} }
 
   .eyebrow{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;
     text-transform:uppercase;color:var(--ink-soft);
   }
   .masthead{display:flex;align-items:center;gap:10px;margin-bottom:26px;flex-wrap:wrap}
   .mark{width:20px;height:20px;display:block;flex-shrink:0}
   .masthead-right{margin-left:auto;display:flex;align-items:center;gap:8px}
-  .lang{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+  .lang{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
   .tools-nav{
     display:inline-flex;align-items:center;gap:6px;background:var(--cobalt);color:#fff;
     font-weight:600;font-size:12.5px;padding:8px 14px;border-radius:999px;text-decoration:none;
     
   }
   .tools-nav:hover{background:var(--mint-deep)}
+  .tools-nav,.lang{position:relative}
+  .tools-nav::after,.lang::after{content:"";position:absolute;inset:-5px 0}
+  .lang::after{inset:-9px -4px}
 
   h1{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
@@ -86,7 +91,7 @@
   .section-sub{color:var(--ink-soft);font-size:14.5px;max-width:60ch;margin-bottom:16px}
 
   .season-head{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;
     text-transform:uppercase;color:var(--cobalt);margin-bottom:6px;
   }
   .season-q{
@@ -107,10 +112,11 @@
   .card:active{transform:scale(.985)}
   .card.episode{border-left-color:var(--cobalt)}
   .card.tool{border-left-color:var(--mint)}
-  .card.locked{opacity:.55;pointer-events:none}
+  .card.locked{background:rgba(255,255,255,.55);border-color:rgba(216,222,233,.6);border-left-color:rgba(31,79,216,.5);pointer-events:none}
+  .card.locked > :not(.badge){opacity:.55}
 
   .card-eyebrow{
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;
     color:var(--ink-soft);margin-bottom:6px;display:flex;justify-content:space-between;
   }
   .card-eyebrow .accent{color:var(--mint)}
@@ -120,17 +126,18 @@
     line-height:1.15;margin-bottom:4px;
   }
   .card p{color:var(--ink-soft);font-size:14.5px;flex:1}
+  .card p.card-eyebrow{flex:none}
   .card-cta{
     margin-top:14px;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
     background:var(--cobalt);color:#fff;font-weight:600;font-size:15px;
     padding:12px 20px;border-radius:999px;
   }
-  .card.tool .card-cta{background:var(--mint)}
+  .card.tool .card-cta{background:var(--mint);color:var(--ink)}
   .card-cta::after{content:"→"}
   .card.locked .badge{
     display:inline-block;margin-top:12px;
-    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
-    color:var(--coral);
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;
+    color:var(--coral-deep);
   }
 
   .signup{
@@ -171,10 +178,20 @@
   }
   footer p + p{margin-top:8px}
   footer b{color:var(--ink);font-weight:600}
+  a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+  .signup :focus-visible{outline-color:var(--mint)}
+  .skip{position:absolute;left:-9999px;top:8px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:8px;z-index:10}
+  .skip:focus{left:8px}
+  .hero-cta{margin-top:20px;display:inline-flex;align-items:center;gap:8px;background:var(--cobalt);color:#fff;font-weight:600;font-size:15px;padding:12px 20px;border-radius:999px;text-decoration:none}
+  .hero-cta::after{content:"→"}
+  .hero-cta:hover{background:var(--cobalt-deep)}
+  .author a{display:inline-block;padding:10px 0}
+  @media (prefers-reduced-motion:reduce){.app,.card{transition:none}}
 </style>
 </head>
 <body data-ep="home">
 <div class="app">
+  <a class="skip" href="#main">Aller au contenu</a>
 
   <div class="masthead">
     <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
@@ -190,24 +207,26 @@
       <line x1="9" y1="20" x2="31" y2="20" stroke="#fff" stroke-width="2"/>
     </svg>
     <span class="eyebrow">Paiement Décrypté</span>
-    <div class="masthead-right">
+    <nav class="masthead-right" aria-label="Navigation principale">
       <a class="tools-nav" href="outils/">Ma boîte à outils</a>
       <a class="tools-nav" href="lexique/">Lexique</a>
-      <a class="lang" href="en/" hreflang="en">EN</a>
-    </div>
+      <a class="lang" href="en/" hreflang="en" lang="en" title="English version">EN</a>
+    </nav>
   </div>
 
+  <main id="main">
   <h1>Le paiement, <em>décrypté</em> depuis le terrain.</h1>
   <p class="lede">
     Des micro-formations interactives de <strong>5 minutes</strong> sur le paiement
     que personne ne vulgarise : schemes, interchange, acquiring, monétique.
     <strong>Concepts courts, quiz immédiats, un avis de terrain par épisode.</strong>
   </p>
+  <a class="hero-cta" href="episodes/s1e01.html" data-hero-cta>Commencer l’épisode 1</a>
 
   <section class="section" id="formation">
     <h2 class="section-title-main">Formation</h2>
     <p class="section-sub">Des micro-formations en épisodes, organisées par saison.</p>
-    <p class="season-head">Saison 1 · Le circuit de l'argent</p>
+    <p class="season-head">Saison 1 · Le circuit de l’argent</p>
     <p class="season-q">Que se passe-t-il vraiment quand une carte paie 60&nbsp;€&nbsp;?</p>
 
     <div class="grid">
@@ -215,48 +234,48 @@
         <p class="card-eyebrow"><span>E01</span><span class="accent">~5 min</span></p>
         <h3>Les schemes de paiement</h3>
         <p>Visa, Mastercard, CB : le modèle à 4 coins, expliqué en suivant un paiement de 60&nbsp;€.</p>
-        <span class="card-cta">Commencer l'épisode</span>
+        <span class="card-cta">Commencer l’épisode</span>
       </a>
 
       <a class="card episode" href="episodes/s1e02.html">
         <p class="card-eyebrow"><span>E02</span><span class="accent">~5 min</span></p>
-        <h3>L'interchange</h3>
+        <h3>L’interchange</h3>
         <p>Qui paie quoi sur les 60&nbsp;€ encaissés, la commission la plus mal comprise du paiement. Faites votre pari.</p>
-        <span class="card-cta">Commencer l'épisode</span>
+        <span class="card-cta">Commencer l’épisode</span>
       </a>
 
       <a class="card episode" href="episodes/s1e03.html">
         <p class="card-eyebrow"><span>E03</span><span class="accent">~5 min</span></p>
         <h3>CB &amp; co-badgeage</h3>
-        <p>Deux réseaux sur la même puce, un seul par paiement, l'exception française que les newsletters anglophones ignorent.</p>
-        <span class="card-cta">Commencer l'épisode</span>
+        <p>Deux réseaux sur la même puce, un seul par paiement, l’exception française que les newsletters anglophones ignorent.</p>
+        <span class="card-cta">Commencer l’épisode</span>
       </a>
 
       <a class="card episode" href="episodes/s1e04.html">
         <p class="card-eyebrow"><span>E04</span><span class="accent">~5 min</span></p>
         <h3>Le modèle à 3 coins</h3>
         <p>Le même acteur signe le porteur et le commerçant, finance et encaisse : AMEX, et la carte de titres-restaurant de vos salariés.</p>
-        <span class="card-cta">Commencer l'épisode</span>
+        <span class="card-cta">Commencer l’épisode</span>
       </a>
 
       <a class="card episode" href="episodes/s1e05.html">
         <p class="card-eyebrow"><span>E05</span><span class="accent">~5 min</span></p>
-        <h3>L'acquisition</h3>
+        <h3>L’acquisition</h3>
         <p>Acquéreur direct, processor, agent, facilitateur : quatre montages, et le nom sur le contrat ne dit pas toujours qui répond du commerçant.</p>
-        <span class="card-cta">Commencer l'épisode</span>
+        <span class="card-cta">Commencer l’épisode</span>
       </a>
 
       <a class="card episode" href="episodes/s1e06.html">
         <p class="card-eyebrow"><span>E06</span><span class="accent">~5 min</span></p>
-        <h3>L'émission</h3>
-        <p>Débit immédiat, différé, crédit : ce que l'émetteur avance vraiment, et comment il bloque un montant sans jamais le prélever.</p>
-        <span class="card-cta">Commencer l'épisode</span>
+        <h3>L’émission</h3>
+        <p>Débit immédiat, différé, crédit : ce que l’émetteur avance vraiment, et comment il bloque un montant sans jamais le prélever.</p>
+        <span class="card-cta">Commencer l’épisode</span>
       </a>
 
       <div class="card episode locked" aria-disabled="true">
         <p class="card-eyebrow"><span>E07</span><span class="accent">~5 min</span></p>
-        <h3>L'autorisation</h3>
-        <p>On a vu qui dit oui. Cette fois, on suit la demande elle-même : ce qu'elle transporte, et ce que veut vraiment dire un refus.</p>
+        <h3>L’autorisation</h3>
+        <p>On a vu qui dit oui. Cette fois, on suit la demande elle-même : ce qu’elle transporte, et ce que veut vraiment dire un refus.</p>
         <span class="badge">BIENTÔT</span>
       </div>
     </div>
@@ -271,34 +290,34 @@
         <p class="card-eyebrow"><span>OUTIL</span></p>
         <h3>Décodeur EMV TLV</h3>
         <p>Décode un flux TLV tag par tag, avec un encodeur intégré.</p>
-        <span class="card-cta">Ouvrir l'outil</span>
+        <span class="card-cta">Ouvrir l’outil</span>
       </a>
 
       <a class="card tool" href="outils/comparer-configurations/">
         <p class="card-eyebrow"><span>OUTIL</span></p>
-        <h3>Diff config NEXO</h3>
+        <h3>Diff config nexo</h3>
         <p>Compare deux fichiers de configuration terminal et met en avant ce qui a changé.</p>
-        <span class="card-cta">Ouvrir l'outil</span>
+        <span class="card-cta">Ouvrir l’outil</span>
       </a>
 
       <a class="card tool" href="outils/message-acquereur/">
         <p class="card-eyebrow"><span>OUTIL</span></p>
         <h3>Comprendre un message acquéreur</h3>
-        <p>Le cycle de vie d'une autorisation ou d'une remise, et pourquoi un rejet n'est pas un refus.</p>
-        <span class="card-cta">Ouvrir l'outil</span>
+        <p>Le cycle de vie d’une autorisation ou d’une remise, et pourquoi un rejet n’est pas un refus.</p>
+        <span class="card-cta">Ouvrir l’outil</span>
       </a>
 
       <a class="card tool" href="outils/configuration-terminal/">
         <p class="card-eyebrow"><span>OUTIL</span></p>
         <h3>Lire une configuration nexo</h3>
-        <p>Chaque champ d'un fichier de config résolu dans son bloc, avec la section nexo FAST qui le définit.</p>
-        <span class="card-cta">Ouvrir l'outil</span>
+        <p>Chaque champ d’un fichier de config résolu dans son bloc, avec la section nexo FAST qui le définit.</p>
+        <span class="card-cta">Ouvrir l’outil</span>
       </a>
 
       <a class="card tool" href="lexique/">
         <p class="card-eyebrow"><span>RÉFÉRENCE</span></p>
         <h3>Lexique EMV</h3>
-        <p>Chaque tag de la puce, expliqué : à quoi sert la donnée, ce qu'elle change dans une transaction, où la croiser.</p>
+        <p>Chaque tag de la puce, expliqué : à quoi sert la donnée, ce qu’elle change dans une transaction, où la croiser.</p>
         <span class="card-cta">Ouvrir le lexique</span>
       </a>
 
@@ -320,19 +339,21 @@
 
   <section class="signup" id="inscription">
     <h2>Restez informé·e de nos actualités.</h2>
-    <p>Nouveaux épisodes, nouveaux outils, rien d'autre. Désinscription en un clic.</p>
+    <p>Nouveaux épisodes, nouveaux outils, rien d’autre. Désinscription en un clic.</p>
     <!-- KIT_FORM : branché sur le formulaire Kit n°9768048 (session 4) -->
     <form id="signup-form" novalidate>
-      <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
+      <input type="email" name="email_address" aria-label="Votre adresse e-mail" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
       <button type="submit">Me prévenir</button>
     </form>
     <p class="ok" id="signup-ok" role="status"></p>
     <p class="note">Double opt-in : vous confirmerez votre adresse par email. Désinscription en un clic.</p>
   </section>
 
+  </main>
+
   <footer>
-    <p>Données : ce site mesure des statistiques d'usage <b>anonymes</b>, sans cookie ni traceur. Email : collecté uniquement via le formulaire ci-dessus, avec double confirmation ; désinscription en un clic dans chaque envoi.</p>
-    <p>Une id&eacute;e d'&eacute;pisode ou d'outil&nbsp;? &Eacute;crivez &agrave; <a href="mailto:bonjour@paiement-decrypte.fr?subject=Proposition%20de%20sujet" style="color:var(--cobalt)">bonjour@paiement-decrypte.fr</a>.</p>
+    <p>Données : ce site mesure des statistiques d’usage <b>anonymes</b>, sans cookie ni traceur. Email : collecté uniquement via le formulaire ci-dessus, avec double confirmation ; désinscription en un clic dans chaque envoi.</p>
+    <p>Une id&eacute;e d'&eacute;pisode ou d’outil&nbsp;? &Eacute;crivez &agrave; <a href="mailto:bonjour@paiement-decrypte.fr?subject=Proposition%20de%20sujet" style="color:var(--cobalt)">bonjour@paiement-decrypte.fr</a>.</p>
     <p>© 2026 Paiement Décrypté · <a href="/mentions-legales/" style="color:var(--cobalt)">Mentions légales</a></p>
   </footer>
 
