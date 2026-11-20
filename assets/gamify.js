@@ -23,6 +23,7 @@
     resetConfirm: 'Erase progress, points and badges stored in this browser?',
     thisEp: 'This episode', total: 'Total', serie: 'Streak', newBadge: 'New badge',
     completed: 'Completed', resume: 'Resume · screen', again: 'Replay',
+    ctaResume: 'Resume the episode', ctaAgain: 'Replay the episode', heroResume: 'Resume episode', heroStart: 'Start episode',
     note: 'Stored in your browser only. Nothing is sent anywhere.',
     b: {
       first: ['First episode', 'You completed your first episode.'],
@@ -36,6 +37,7 @@
     resetConfirm: 'Effacer la progression, les points et les badges enregistrés dans ce navigateur ?',
     thisEp: 'Cet épisode', total: 'Total', serie: 'Série', newBadge: 'Nouveau badge',
     completed: 'Terminé', resume: 'Reprendre · écran', again: 'Refaire',
+    ctaResume: 'Reprendre l’épisode', ctaAgain: 'Refaire l’épisode', heroResume: 'Reprendre l’épisode', heroStart: 'Commencer l’épisode',
     note: 'Enregistré dans votre navigateur uniquement. Rien n\'est envoyé.',
     b: {
       first: ['Premier épisode', 'Vous avez terminé votre premier épisode.'],
@@ -120,7 +122,7 @@
       '.pd-game li{margin-top:4px}' +
       '.pd-game li b{color:#0C6B4E}' +
       '.pd-game .note{font-size:12px;color:#4A5A70;margin:8px 0 0}' +
-      '.pd-game button{background:none;border:0;padding:0;font:inherit;font-size:12px;color:#1F4FD8;text-decoration:underline;cursor:pointer;margin-top:6px}' +
+      '.pd-game button{background:none;border:0;padding:0;font:inherit;font-size:12px;color:#1F4FD8;text-decoration:underline;cursor:pointer;padding:10px 0}' +
       '.pd-state{display:block;font-size:12px;font-weight:600;color:#0C6B4E;margin-top:8px}' +
       '.pd-state.resume{color:#1F4FD8}';
     document.head.appendChild(st);
@@ -164,17 +166,33 @@
       Array.prototype.forEach.call(cards, function (a) {
         var m = (a.getAttribute('href') || '').match(/(s1e\d+)\.html/);
         if (!m) return;
-        var s = m[1], d = prog[s] || prog[s + '-en'], tag = null;
+        var s = m[1], d = prog[s] || prog[s + '-en'], tag = null, label = null;
         if (d && d.completed) {
           tag = [T.completed + ' · ' + (d.score != null ? d.score + '/4' : ''), ''];
+          label = T.ctaAgain;
         } else if (d && d.screen > 0) {
           tag = [T.resume + ' ' + d.screen, 'resume'];
+          label = T.ctaResume;
         }
+        var cta = a.querySelector('.card-cta');
+        if (cta && label) cta.textContent = label;
         if (tag) {
           var sp = document.createElement('span'); sp.className = 'pd-state ' + tag[1]; sp.textContent = tag[0];
           a.appendChild(sp);
         }
       });
+
+      // bouton d'accueil : épisode en cours, sinon prochain épisode non terminé
+      var hero = document.querySelector('[data-hero-cta]');
+      if (hero) {
+        var next = null, i;
+        for (i = 0; i < EPISODES.length; i++) { if (!done[EPISODES[i]]) { next = EPISODES[i]; break; } }
+        if (!next) hero.style.display = 'none';
+        else if (n > 0 || (prog[next] && prog[next].screen > 0)) {
+          hero.setAttribute('href', 'episodes/' + next + '.html');
+          hero.textContent = ((prog[next] && prog[next].screen > 0) ? T.heroResume : T.heroStart) + ' ' + parseInt(next.slice(-2), 10);
+        }
+      }
 
       if (!n && !g.badges.length) return;   // rien à montrer à un nouveau visiteur
       css();
