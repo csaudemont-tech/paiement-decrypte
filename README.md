@@ -77,7 +77,7 @@ Le poulpe remplace la puce EMV comme mark du site (en-têtes, couvertures d'épi
 `mark-email.png` des emails Kit, images de partage `og-*.png`).
 
 - `assets/poulpe.js` : le personnage dessiné en code (SVG, aucune image). Le même fichier sert
-  à l'accueil (poulpe animé, bouton « Lancer un paiement »), au prototype d'animation et à la
+  à l'accueil (poulpe animé, sans bouton de paiement depuis le 23/11), au prototype d'animation et à la
   génération des images fixes. Carte à gauche, terminal à droite ; l'écran du terminal porte
   l'état du paiement (montant, attente, 00 en menthe, 05 en corail).
 - `assets/mascotte/poulpe-mark.svg` : tête seule (mark), `assets/favicon.svg` : mark sur tuile
