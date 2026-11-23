@@ -70,3 +70,20 @@ seulement dans la console du navigateur (F12) – rien n'est envoyé.
   l'ancien `s01.html` reste en redirection.
 - La télémétrie reste anonyme (pas de cookie, pas d'identifiant) –
   ne pas « améliorer » ça sans revoir le point RGPD du cadrage.
+
+## Mascotte : le poulpe (novembre 2026)
+
+Le poulpe remplace la puce EMV comme mark du site (en-têtes, couvertures d'épisode, favicon,
+`mark-email.png` des emails Kit, images de partage `og-*.png`).
+
+- `assets/poulpe.js` : le personnage dessiné en code (SVG, aucune image). Le même fichier sert
+  à l'accueil (poulpe animé, bouton « Lancer un paiement »), au prototype d'animation et à la
+  génération des images fixes. Carte à gauche, terminal à droite ; l'écran du terminal porte
+  l'état du paiement (montant, attente, 00 en menthe, 05 en corail).
+- `assets/mascotte/poulpe-mark.svg` : tête seule (mark), `assets/favicon.svg` : mark sur tuile
+  blanche, `assets/mascotte/poulpe.svg` : personnage complet.
+- `assets/mascotte/poulpe-800.png` (LinkedIn, présentations), `poulpe-email.png` (emails,
+  affiché en 110 px), `apple-touch-icon.png`.
+- Respecte `prefers-reduced-motion` (pas de respiration ni de clignement) et s'arrête de
+  dessiner hors de l'écran. Événement de télémétrie : `mascot_pay` (`result` : ok / ko).
+- Source de design : Figma « Mascotte », planche v7 (personnage B).
