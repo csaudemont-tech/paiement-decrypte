@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 · E07 · L'autorisation</title>
+<meta name="description" content="Ce que l'émetteur voit vraiment d'un paiement, où passent les deux secondes d'une autorisation, ce que dit un code de réponse et quand l'émetteur demande une authentification forte. Micro-formation paiement, 5 minutes, avec quiz.">
+<link rel="canonical" href="https://paiement-decrypte.fr/episodes/s1e07.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e07.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e07.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Paiement Décrypté">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/episodes/s1e07.html">
+<meta property="og:title" content="S1 · E07 · L'autorisation – Paiement Décrypté">
+<meta property="og:description" content="La demande part avec le contexte de la carte, du terminal et du commerçant, jamais avec le panier. L'autorisation en 5 minutes, avec quiz.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1254">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8;
+    --ink:#0E1B2C;
+    --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8;
+    --cobalt-deep:#153A9E;
+    --mint:#17B587;
+    --coral:#E85C4A;
+    --line:#D8DEE9;
+    --card:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{height:100%}
+  body{min-height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;justify-content:center;
+    line-height:1.5;
+  }
+  .app{
+    width:100%;max-width:480px;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Progress ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;min-height:28px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .segments{display:flex;gap:6px;flex:1}
+  .seg{
+    height:6px;flex:1;border-radius:3px;background:var(--line);
+    transition:background .35s ease;
+  }
+  .seg.done{background:var(--cobalt)}
+  .seg.now{background:linear-gradient(90deg,var(--cobalt),var(--mint));animation:segpulse 1.6s ease infinite}
+  @keyframes segpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .streak{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--mint);white-space:nowrap;display:none;
+  }
+  .streak.on{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.6)}to{transform:none}}
+
+  /* ---------- Écrans ---------- */
+  .screen{flex:1;display:none;flex-direction:column;animation:slideIn .32s ease}
+  .screen.active{display:flex}
+  @keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen,.streak.on,.seg.now,.sheet,.opt.correct,.opt.wrong{animation:none !important;transition:none !important}
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(30px,8vw,38px);line-height:1.08;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:22px;line-height:1.15;margin-bottom:12px;
+  }
+  .home-link{
+    display:inline-block;margin-bottom:14px;font-size:13px;
+    color:var(--ink-soft);text-decoration:none;
+  }
+  .home-link:hover,.home-link:focus{color:var(--cobalt)}
+  .teaser .next-ep{
+    display:block;box-sizing:border-box;margin-top:14px;padding:13px 16px;
+    border-radius:10px;background:var(--cobalt);color:#fff;font-weight:600;
+    font-size:14px;text-align:center;text-decoration:none;
+  }
+  .teaser .next-ep:hover,.teaser .next-ep:focus{background:#153A9E}
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
+  }
+  p{color:var(--ink-soft);font-size:15.5px}
+  p + p{margin-top:10px}
+  p strong{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover{justify-content:space-between}
+  .cover-mark{width:44px;height:44px;display:block;margin:26px 0 22px}
+  .cover-meta{
+    display:flex;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-meta span b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cartes concept ---------- */
+  .concept-card{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;border:1px solid var(--line);
+    
+  }
+  .keyfact{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;color:var(--ink);
+  }
+  .keyfact b{font-weight:600}
+  .concept-card p + p{margin-top:12px}
+  .hub-illus{display:flex;justify-content:center;margin:16px 0 0}
+  .hub-illus svg{width:100%;max-width:420px;height:auto;display:block}
+  .hub-cap{margin:8px 0 0;font-size:13px;color:var(--ink-soft);text-align:center}
+  .fee-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+  .fee-table td:first-child,.fee-table th:first-child{white-space:nowrap;padding-left:0}
+  .fee-table th{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-soft);text-align:left;
+    padding:0 10px 6px;font-weight:600;
+  }
+  .fee-table td{
+    border-top:1px solid var(--line);padding:10px;vertical-align:top;color:var(--ink);
+  }
+  .fee-table td b{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cobalt-deep)}
+  .fee-table small{display:block;color:var(--ink-soft);font-size:12px;margin-top:2px}
+  .case{
+    margin-top:14px;padding:14px 16px;border-radius:12px;
+    background:#0E1B2C;color:#C9D4E4;font-size:14px;line-height:1.5;
+  }
+  .case b{color:#fff}
+  .case .case-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:#7FA0F0;margin-bottom:6px;
+  }
+  .case-steps{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:10px}
+  .case-steps li{display:flex;flex-direction:column;gap:2px;padding-left:10px;border-left:2px solid #33445C}
+  .case-steps li > b{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;font-weight:600;color:#7FA0F0}
+  /* ---------- Moment interactif : frise révélée après le pari ---------- */
+  .bet-timeline{display:none;margin-top:12px}
+  .bet-timeline.show{display:block;animation:slideIn .32s ease}
+  .bet-timeline .tl-bar{display:flex;height:14px;border-radius:7px;overflow:hidden;border:1px solid var(--line)}
+  .bet-timeline .tl-bar span{display:block;height:100%}
+  .bet-timeline .tl-bar .tl-m{width:25%;background:var(--cobalt)}
+  .bet-timeline .tl-bar .tl-e{width:75%;background:var(--mint)}
+  .bet-timeline .tl-lab{display:flex;justify-content:space-between;gap:8px;margin-top:6px;font-size:12px;color:var(--ink-soft)}
+  .bet-timeline .tl-lab b{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink)}
+  /* ---------- Moment interactif : le pari (origine S1E02) ---------- */
+  .bet{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px 14px;margin-top:14px;
+  }
+  .bet-q{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;
+    line-height:1.25;margin-bottom:14px;color:var(--ink);
+  }
+  .bet-val{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:40px;
+    text-align:center;color:var(--cobalt);line-height:1;margin:6px 0 2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .bet-val small{
+    display:block;font-size:11px;font-weight:400;letter-spacing:.08em;
+    color:var(--ink-soft);margin-top:6px;
+  }
+  input[type=range].bet-range{
+    -webkit-appearance:none;appearance:none;width:100%;height:34px;
+    background:transparent;margin-top:10px;cursor:pointer;
+  }
+  input[type=range].bet-range::-webkit-slider-runnable-track{
+    height:6px;border-radius:3px;background:linear-gradient(90deg,var(--cobalt),var(--mint));
+  }
+  input[type=range].bet-range::-moz-range-track{
+    height:6px;border-radius:3px;background:linear-gradient(90deg,var(--cobalt),var(--mint));
+  }
+  input[type=range].bet-range::-webkit-slider-thumb{
+    -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+    background:#fff;border:3px solid var(--cobalt);margin-top:-10px;
+    box-shadow:0 2px 8px rgba(14,27,44,.25);
+  }
+  input[type=range].bet-range::-moz-range-thumb{
+    width:20px;height:20px;border-radius:50%;
+    background:#fff;border:3px solid var(--cobalt);
+    box-shadow:0 2px 8px rgba(14,27,44,.25);
+  }
+  input[type=range].bet-range:disabled{opacity:.45;cursor:default}
+  .bet-scale{
+    display:flex;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);
+    margin-top:-4px;
+  }
+  .flow-caption{
+    margin-top:12px;min-height:66px;padding:12px 14px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;line-height:1.5;color:var(--ink);text-align:left;
+  }
+  .flow-caption b{color:var(--cobalt-deep)}
+
+  /* ---------- Quiz ---------- */
+  .qnum{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .question{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;line-height:1.25;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:14.5px;color:var(--ink);
+    cursor:pointer;transition:border-color .2s, background .2s, transform .1s;
+  }
+  .opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .opt.correct{border-color:var(--mint);background:#E9F8F2;animation:popIn .35s ease}
+  .opt.wrong{border-color:var(--coral);background:#FCEEEB;animation:shake .3s ease}
+  @keyframes popIn{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  .opt:disabled{cursor:default}
+
+  /* ---------- Feedback sheet (façon Duolingo) ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;pointer-events:none;
+    transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  }
+  .sheet.show{transform:none;pointer-events:auto}
+  .sheet-inner{
+    width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(14,27,44,.18);
+  }
+  .sheet.good .sheet-inner{background:#E9F8F2}
+  .sheet.bad .sheet-inner{background:#FCEEEB}
+  .sheet-title{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .sheet.good .sheet-title{color:#0C6B4E}
+  .sheet.bad .sheet-title{color:#9C3527}
+  .sheet-text{font-size:14px;line-height:1.5}
+  .sheet.good .sheet-text{color:#0C6B4E}
+  .sheet.bad .sheet-text{color:#9C3527}
+  .sheet-text b{font-weight:600}
+  .sheet .cta{margin-top:16px}
+  .sheet.good .cta{background:var(--mint);color:var(--ink)}
+  .sheet.bad .cta{background:var(--coral);color:var(--ink)}
+
+  /* ---------- Recap / score ---------- */
+  .score-big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;
+    line-height:1;margin:10px 0 4px;
+  }
+  .score-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+  .stats{
+    display:flex;gap:10px;margin-top:18px;
+  }
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;display:block}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft)}
+  .recap-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .recap-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:14px;color:var(--ink);display:flex;gap:10px;
+  }
+  .recap-item::before{content:"→";color:var(--cobalt);font-weight:700;flex-shrink:0}
+  .recap-item.ok::before{content:"✓";color:var(--mint)}
+  .recap-item.ko::before{content:"✗";color:var(--coral)}
+  .teaser{
+    margin-top:20px;padding:15px 16px;border-radius:12px;background:#0E1B2C;color:#C9D4E4;
+    font-size:13.5px;
+  }
+  .teaser b{color:#fff}
+  .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+  .teaser form{display:flex;gap:8px;margin-top:14px}
+  .teaser input{
+    flex:1;min-width:0;font:inherit;font-size:14px;padding:11px 14px;border-radius:10px;
+    border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
+  }
+  .teaser input::placeholder{color:#7286A0}
+  .teaser input:focus{border-color:var(--mint)}
+  .teaser form button{
+    font:inherit;font-weight:600;font-size:14px;color:var(--ink);
+    background:var(--mint);border:0;border-radius:10px;padding:11px 14px;cursor:pointer;white-space:nowrap;
+  }
+  .teaser form button:disabled{opacity:.6}
+  .teaser .sub-note{font-size:11.5px;color:#7286A0;margin-top:8px}
+  .suggest{margin-top:18px;text-align:center;font-size:13px;line-height:1.5;color:var(--ink-soft)}
+  .suggest a{color:var(--cobalt);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(31,79,216,.35)}
+  .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
+  .teaser .sub-ok.show{display:block}
+
+  /* ---------- Bloc voix : « Ce qu'on entend » / « Ce qui compte vraiment » / « Mon avis »
+       OBLIGATOIRE, exactement 1 par épisode. Voir references/quiz-et-terrain.md ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
+  /* ---------- Confetti (sans faute) ---------- */
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:12px;opacity:.95;border-radius:2px;
+    animation:fall 2.6s ease-in forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(105vh) rotate(540deg);opacity:.7}
+  }
+
+  /* ---------- CTA bas ---------- */
+  .cta-zone{margin-top:auto;padding-top:22px}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;
+    background:var(--cobalt);color:#fff;font-family:'Instrument Sans',sans-serif;
+    font-weight:600;font-size:16px;cursor:pointer;
+    transition:opacity .2s, background .2s, transform .1s;
+  }
+  .cta:disabled{opacity:.35;cursor:default}
+  .cta:not(:disabled):active{background:var(--cobalt-deep);transform:scale(.98)}
+  .cta.ghost{background:transparent;color:var(--cobalt);border:1.5px solid var(--cobalt);margin-top:10px}
+  .cta.ghost:not(:disabled):active{background:#EDF1FB}
+
+  /* S1E07 : frise animee de l'autorisation (remplace le pari) */
+  .flow{margin-top:16px;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}
+  .flow-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;min-height:30px}
+  .flow-clock{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;color:var(--ink)}
+  .flow-res{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#0C6B4E;background:#E9F8F2;border:1.5px solid var(--mint);border-radius:999px;padding:3px 12px;opacity:0;transition:opacity .25s}
+  .flow-res.show{opacity:1}
+  .flow-bar{display:flex;height:16px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-top:8px;background:#EEF1F6}
+  .flow-bar .fb{position:relative;display:block;height:100%}
+  .flow-bar .fb + .fb{border-left:2px solid #fff}
+  .flow-bar .fb i{position:absolute;left:0;top:0;bottom:0;width:0}
+  .flow-bar .t i{background:var(--cobalt)}
+  .flow-bar .n i{background:var(--mint)}
+  .flow-steps{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:8px}
+  .flow-steps li{display:flex;align-items:center;gap:10px;font-size:14px;line-height:1.3;color:var(--ink-soft);transition:color .2s}
+  .flow-steps .fs-n{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;transition:all .2s}
+  .flow-steps .fs-t{flex:1}
+  .flow-steps .fs-d{font-family:'JetBrains Mono',monospace;font-size:12.5px;white-space:nowrap}
+  .flow-steps li.now{color:var(--ink)}
+  .flow-steps li.now .fs-n{border-color:var(--cobalt);color:var(--cobalt)}
+  .flow-steps li.done{color:var(--ink)}
+  .flow-steps li.done .fs-n{background:var(--ink);border-color:var(--ink);color:#fff}
+  .flow-leg{display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--ink-soft)}
+  .flow-leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .flow-leg .lt::before{background:var(--cobalt)}
+  .flow-leg .ln::before{background:var(--mint)}
+  .flow-leg .ls{margin-left:auto}
+  .flow-leg .ls::before{display:none}
+  .flow .cta{margin-top:14px}
+</style>
+</head>
+<body data-ep="s1e07">
+<div class="app">
+
+  <div class="topbar" id="topbar" style="visibility:hidden">
+    <span class="eyebrow">S1 · E07</span>
+    <div class="segments" id="segments"></div>
+    <span class="streak" id="streak"></span>
+  </div>
+
+  <!-- 0 · COVER -->
+  <section class="screen cover active" data-step="cover">
+    <div>
+      <a class="home-link" href="/#formation">← Tous les épisodes</a>
+      <div class="kicker">Micro-formation · Saison 1 · Épisode 7</div>
+      <h1 style="margin-top:18px">L'autorisation</h1>
+      <p style="margin-top:14px;font-size:16.5px">La demande part avec les données de la transaction, et l'émetteur ne sait pas ce que vous achetez. Le résultat de la réponse tient sur deux caractères.</p>
+      <div class="cover-meta">
+        <span><b>5 min</b> · lecture</span>
+        <span><b>4</b> concepts</span>
+        <span><b>4</b> quiz</span>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" onclick="start()">Commencer</button>
+      <button class="cta ghost" id="resumebtn" style="display:none"></button>
+    </div>
+  </section>
+
+  <!-- 1 · CONCEPT : la demande -->
+  <section class="screen" data-step="1">
+    <div class="concept-card">
+      <div class="kicker">Concept 1 / 4 · La demande d'autorisation</div>
+      <h2>L'émetteur ne voit pas ce que vous achetez</h2>
+      <p>Quand vous payez, le terminal envoie une demande d'autorisation à l'émetteur de la carte. Elle porte le montant et la devise, l'identité du commerçant et du terminal, le code d'activité, le mode de lecture et les données EMV lues sur la puce, dont un cryptogramme. L'émetteur décide à partir de ce contexte, celui de la carte, du terminal et du commerçant. Le ticket et les articles n'y figurent pas.</p>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 340 196" xmlns="http://www.w3.org/2000/svg" font-family="Instrument Sans, system-ui, sans-serif" role="img" aria-label="Illustration : ce que l'émetteur reçoit, et ce qu'il ne voit pas">
+          <text x="0" y="14" font-size="13" font-weight="600" fill="#0E1B2C">Le panier</text>
+          <text x="130" y="14" font-size="13" font-weight="600" fill="#0E1B2C">La demande</text>
+          <!-- panier -->
+          <path d="M30 86c0-24 52-24 52 0" fill="none" stroke="#4A5A70" stroke-width="2.2"/>
+          <circle cx="44" cy="76" r="8" fill="#E85C4A"/>
+          <rect x="58" y="66" width="12" height="20" rx="3" fill="#17B587"/>
+          <rect x="70" y="74" width="14" height="12" rx="3" fill="#1F4FD8"/>
+          <path d="M14 86h84l-9 46H23z" fill="#EDF1FB" stroke="#4A5A70" stroke-width="2"/>
+          <text x="56" y="148" font-size="10.5" text-anchor="middle" fill="#4A5A70">panier</text>
+          <!-- ticket -->
+          <path d="M26 158h60v34l-5-3-5 3-5-3-5 3-5-3-5 3-5-3-5 3-5-3-5 3z" fill="#fff" stroke="#4A5A70" stroke-width="1.6"/>
+          <line x1="34" y1="167" x2="78" y2="167" stroke="#D8DEE9" stroke-width="2"/>
+          <line x1="34" y1="175" x2="70" y2="175" stroke="#D8DEE9" stroke-width="2"/>
+          <text x="56" y="196" font-size="10.5" text-anchor="middle" fill="#4A5A70" dy="-1" opacity="0">ticket</text>
+          <!-- cloison -->
+          <line x1="112" y1="26" x2="112" y2="190" stroke="#D8DEE9" stroke-width="2" stroke-dasharray="4 4"/>
+          <g stroke="#E85C4A" stroke-width="3" stroke-linecap="round"><line x1="105" y1="100" x2="119" y2="114"/><line x1="119" y1="100" x2="105" y2="114"/></g>
+          <!-- enveloppe -->
+          <rect x="130" y="26" width="208" height="162" rx="14" fill="#fff" stroke="#1F4FD8" stroke-width="1.6"/>
+          <path d="M130 40a14 14 0 0 1 14-14h180a14 14 0 0 1 14 14v8H130z" fill="#1F4FD8"/>
+          <!-- picto montant -->
+          <circle cx="165" cy="84" r="13" fill="none" stroke="#0E1B2C" stroke-width="2"/>
+          <text x="165" y="89" font-size="15" font-weight="700" text-anchor="middle" fill="#0E1B2C">€</text>
+          <text x="165" y="116" font-size="9.5" text-anchor="middle" fill="#4A5A70">montant</text>
+          <!-- picto commerçant -->
+          <path d="M219 92v-12l-4-8h38l-4 8v12z" fill="none" stroke="#0E1B2C" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M215 72h38" stroke="#0E1B2C" stroke-width="2"/>
+          <rect x="230" y="82" width="8" height="10" fill="#0E1B2C"/>
+          <text x="234" y="116" font-size="9.5" text-anchor="middle" fill="#4A5A70">commerçant</text>
+          <!-- picto code d'activité -->
+          <rect x="285" y="74" width="36" height="20" rx="5" fill="#EDF1FB" stroke="#1F4FD8" stroke-width="1.6"/>
+          <text x="303" y="88.5" font-size="10" font-weight="600" text-anchor="middle" fill="#153A9E" font-family="JetBrains Mono, monospace">5411</text>
+          <text x="303" y="116" font-size="9.5" text-anchor="middle" fill="#4A5A70">activité</text>
+          <!-- picto puce -->
+          <rect x="187" y="132" width="26" height="22" rx="4" fill="none" stroke="#0E1B2C" stroke-width="2"/>
+          <path d="M187 143h26M200 132v22" stroke="#0E1B2C" stroke-width="1.6"/>
+          <text x="200" y="171" font-size="9.5" text-anchor="middle" fill="#4A5A70">puce</text>
+          <!-- picto cryptogramme -->
+          <path d="M259 142v-6a8 8 0 0 1 16 0v6" fill="none" stroke="#0E1B2C" stroke-width="2"/>
+          <rect x="255" y="142" width="24" height="16" rx="3" fill="#17B587"/>
+          <circle cx="267" cy="150" r="2.4" fill="#fff"/>
+          <text x="267" y="171" font-size="9.5" text-anchor="middle" fill="#4A5A70">cryptogramme</text>
+        </svg>
+      </div>
+      <p class="hub-cap">À droite, ce que reçoit l'émetteur. À gauche, ce qui reste chez le commerçant.</p>
+      <p>Le cryptogramme est calculé par la puce au moment du paiement. Il permet à l'émetteur d'authentifier la carte utilisée. Un cryptogramme intercepté ne peut pas être réutilisé&nbsp;: il est lié à la transaction en cours.</p>
+      <p>Le nom que le client voit dans son appli bancaire vient de l'acquéreur. Un nom incorrect, ou la raison sociale à la place de l'enseigne, se corrige chez lui.</p>
+      <div class="keyfact"><b>À retenir&nbsp;:</b> le code d'activité (<b>MCC</b>, Merchant Category Code) compte 4 chiffres, attribués au commerçant par son acquéreur à l'ouverture. 5411 pour les supermarchés, 5812 pour les restaurants, 5541 pour les stations-service, 7995 pour les jeux d'argent. L'émetteur s'en sert pour évaluer le risque, davantage en ligne qu'en magasin. Il pèse aussi sur les frais&nbsp;: les activités à risque, comme les jeux d'argent, sont facturées plus cher, et certains acquéreurs refusent des secteurs entiers.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 2 · QUIZ 1 -->
+  <section class="screen" data-step="2">
+    <div class="qnum">QUIZ 1 / 4</div>
+    <div class="question">Même carte, même montant de 45&nbsp;€, deux achats en ligne&nbsp;: un site de vêtements, un site de jeux d'argent. Hors nom du site, qu'est-ce que l'émetteur voit de différent&nbsp;?</div>
+    <div class="options" data-quiz="0" data-answer="2" data-next="3">
+      <button class="opt">Le détail de ce qui a été acheté</button>
+      <button class="opt">Le mode de lecture de la carte</button>
+      <button class="opt">Le secteur dans lequel le commerçant exerce</button>
+      <button class="opt">Le pays d'émission de la carte</button>
+    </div>
+  </section>
+
+  <!-- 3 · CONCEPT + MOMENT INTERACTIF : le trajet -->
+  <section class="screen" data-step="3">
+    <div class="concept-card" style="padding-bottom:16px">
+      <div class="kicker">Concept 2 / 4 · Le trajet de la demande</div>
+      <h2>Où passent les deux secondes</h2>
+      <p>Du bip à la réponse, une autorisation en ligne dure environ deux secondes. La demande passe par le terminal, l'acquéreur, le réseau de cartes et l'émetteur, puis la réponse refait le chemin inverse.</p>
+      <p>Les opérations sur le terminal sont les plus longues&nbsp;: il prépare le message et ouvre une connexion sécurisée. Elles s'exécutent en local. Le trajet vers l'acquéreur s'appuie sur le réseau internet. L'aller-retour jusqu'à l'émetteur, réseau de cartes compris, tient en moyenne en moins d'une demi-seconde. Si la réponse n'arrive pas, le terminal attend, puis annule l'opération (<i>reversal</i>).</p>
+      <div class="flow" id="flow" role="group" aria-label="Frise des quatre étapes d'une autorisation, proportionnelle à leur durée">
+        <div class="flow-head"><span class="flow-clock" id="flowclock">0,0&nbsp;s</span><span class="flow-res" id="flowres" role="status">Réponse&nbsp;: 00</span></div>
+        <div class="flow-bar" aria-hidden="true">
+          <span class="fb t" style="width:61%"><i></i></span><span class="fb n" style="width:6%"><i></i></span><span class="fb n" style="width:21%"><i></i></span><span class="fb t" style="width:12%"><i></i></span>
+        </div>
+        <ol class="flow-steps" id="flowsteps">
+      <li data-i="0"><span class="fs-n">1</span><span class="fs-t">Le terminal prépare la demande</span><span class="fs-d">≈&nbsp;1,3&nbsp;s</span></li>
+      <li data-i="1"><span class="fs-n">2</span><span class="fs-t">Il ouvre la connexion sécurisée</span><span class="fs-d">≈&nbsp;0,1&nbsp;s</span></li>
+      <li data-i="2"><span class="fs-n">3</span><span class="fs-t">Aller-retour&nbsp;: acquéreur, réseau de cartes, émetteur</span><span class="fs-d">≈&nbsp;0,4&nbsp;s</span></li>
+      <li data-i="3"><span class="fs-n">4</span><span class="fs-t">Le terminal traite la réponse et affiche le résultat</span><span class="fs-d">≈&nbsp;0,25&nbsp;s</span></li>
+        </ol>
+        <div class="flow-leg"><span class="lt">terminal</span><span class="ln">réseau</span><span class="ls" id="flowslow"></span></div>
+        <button class="cta ghost" id="flowbtn" onclick="runFlow()">Lancer le paiement</button>
+      </div>
+      <div class="keyfact" style="margin-top:16px"><b>À retenir&nbsp;:</b> l'autorisation n'est pas le paiement&nbsp;: elle réserve les fonds, elle ne transfère rien. Ce qui se passe après, on l'abordera à l'épisode suivant.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continuer</button></div>
+  </section>
+
+  <!-- 4 · QUIZ 2 -->
+  <section class="screen" data-step="4">
+    <div class="qnum">QUIZ 2 / 4</div>
+    <div class="question">Un paiement met 8 secondes à s'afficher. Le commerçant en conclut que «&nbsp;c'est le terminal&nbsp;». Quelle partie du trajet varie le plus d'un paiement à l'autre&nbsp;?</div>
+    <div class="options" data-quiz="1" data-answer="1" data-next="5">
+      <button class="opt">La lecture de la carte par le terminal</button>
+      <button class="opt">Le lien entre le terminal et l'acquéreur</button>
+      <button class="opt">Le passage par le réseau de cartes</button>
+      <button class="opt">La réponse de la banque du porteur</button>
+    </div>
+  </section>
+
+  <!-- 5 · CONCEPT : le code de reponse -->
+  <section class="screen" data-step="5">
+    <div class="concept-card">
+      <div class="kicker">Concept 3 / 4 · Le code de réponse</div>
+      <h2>Un code, pas une phrase</h2>
+      <p>La réponse de l'émetteur tient sur deux caractères&nbsp;: 00 pour accepté, et une centaine d'autres valeurs pour les refus et les cas particuliers. Les plus emblématiques&nbsp;:</p>
+      <table class="fee-table">
+        <thead><tr><th>Code</th><th>Message</th></tr></thead>
+        <tbody>
+          <tr><td><b>05</b></td><td>Do not honor</td></tr>
+          <tr><td><b>51</b></td><td>Insufficient funds, fonds insuffisants</td></tr>
+          <tr><td><b>54</b></td><td>Expired card, carte expirée</td></tr>
+          <tr><td><b>43</b></td><td>Stolen card, carte déclarée volée</td></tr>
+        </tbody>
+      </table>
+      <p>Les tables ne sont pas identiques d'un réseau ou d'un acquéreur à l'autre, et certains refus viennent du terminal lui-même (carte expirée, carte non supportée).</p>
+      <div class="keyfact"><b>À retenir&nbsp;:</b> le code 05 indique un refus, mais ne l'explique pas&nbsp;: c'est un code d'erreur générique.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 6 · QUIZ 3 -->
+  <section class="screen" data-step="6">
+    <div class="qnum">QUIZ 3 / 4</div>
+    <div class="question">Un client a 3&nbsp;000&nbsp;€ sur son compte et paie 1&nbsp;800&nbsp;€. L'achat est refusé et le commerçant ne comprend pas. Qu'est-ce qui peut l'expliquer&nbsp;?</div>
+    <div class="options" data-quiz="2" data-answer="3" data-next="7">
+      <button class="opt">Le terminal a envoyé un mauvais montant</button>
+      <button class="opt">La banque a bloqué la carte par erreur</button>
+      <button class="opt">Le compte est passé à découvert</button>
+      <button class="opt">Le montant dépasse ce que la carte autorise</button>
+    </div>
+  </section>
+
+  <!-- 7 · CONCEPT : l'authentification forte -->
+  <section class="screen" data-step="7">
+    <div class="concept-card">
+      <div class="kicker">Concept 4 / 4 · L'authentification forte</div>
+      <h2>Le seul refus qui n'en est pas un</h2>
+      <p>Parfois, l'émetteur ne refuse pas&nbsp;: il demande de s'identifier à nouveau, au titre de l'authentification forte (DSP2). Le code est 1A chez Visa et 65 chez Mastercard. En ligne, le site envoie le client confirmer dans l'application de sa banque, puis relance la demande. En magasin, le terminal demande le code PIN.</p>
+      <div class="hub-illus" aria-hidden="true">
+        <svg viewBox="0 0 340 112" xmlns="http://www.w3.org/2000/svg" font-family="Instrument Sans, system-ui, sans-serif" role="img" aria-label="Fraude sur les paiements par carte sur internet, en € pour 100 000 € payés">
+          <text x="0" y="34" font-size="13" font-weight="600" fill="#0E1B2C">2020</text>
+          <rect x="44" y="14" width="232" height="28" rx="6" fill="#4A5A70"/>
+          <text x="282" y="33" font-size="13" font-weight="600" fill="#0E1B2C">249 €</text>
+          <text x="0" y="86" font-size="13" font-weight="600" fill="#0E1B2C">2025</text>
+          <rect x="44" y="66" width="116" height="28" rx="6" fill="#1F4FD8"/>
+          <text x="166" y="85" font-size="13" font-weight="600" fill="#0E1B2C">124 €</text>
+        </svg>
+      </div>
+      <p class="hub-cap">Fraude sur les paiements par carte sur internet, en € pour 100&nbsp;000&nbsp;€ payés. Source&nbsp;: Observatoire de la sécurité des moyens de paiement (OSMP, Banque de France), rapport annuel 2025.</p>
+      <div class="keyfact"><b>À retenir&nbsp;:</b> l'authentification forte combine deux éléments parmi trois&nbsp;: ce que l'on sait (le code PIN), ce que l'on possède (le téléphone, la carte), ce que l'on est (l'empreinte, le visage).</div>
+
+      <!-- Texte relu et validé par Charles le 2026-11-23 -->
+      <div class="voix">
+        <div class="voix-kicker">Mon avis</div>
+        Avoir l'argent sur son compte ne suffit pas&nbsp;: chaque carte a ses propres limites, et les cartes haut de gamme n'ont pas les mêmes que les autres. Sur un panier élevé, proposer le paiement en plusieurs fois peut débloquer des refus qui n'ont rien à voir avec le solde.
+      </div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
+  </section>
+
+  <!-- 8 · QUIZ 4 -->
+  <section class="screen" data-step="8">
+    <div class="qnum">QUIZ 4 / 4</div>
+    <div class="question">Un site marchand reçoit la réponse «&nbsp;authentification requise&nbsp;». Que fait-il&nbsp;?</div>
+    <div class="options" data-quiz="3" data-answer="3" data-next="9">
+      <button class="opt">Il abandonne&nbsp;: la banque a refusé</button>
+      <button class="opt">Il renvoie la même demande aussitôt</button>
+      <button class="opt">Il demande une autre carte au client</button>
+      <button class="opt">Il envoie le client valider sur son appli, puis relance</button>
+    </div>
+  </section>
+
+  <!-- 9 · RECAP -->
+  <section class="screen" data-step="9">
+    <div>
+      <div class="kicker">Épisode terminé</div>
+      <div class="score-big" id="scoreval">–</div>
+      <div class="score-label" id="scoremsg">SCORE</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TEMPS</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>SÉRIE MAX</span></div>
+      </div>
+      <div class="recap-list" id="recaplist">
+        <div class="recap-item" data-q="0">La demande d'autorisation transporte le contexte de la carte, du terminal et du commerçant, jamais le panier. Le code d'activité (MCC) pèse sur le risque et sur les frais.</div>
+        <div class="recap-item" data-q="1">Une autorisation dure environ deux secondes. Le terminal est l'étape la plus longue, la connexion vers l'acquéreur la plus variable.</div>
+        <div class="recap-item" data-q="2">Le code de réponse tient sur deux caractères&nbsp;: 00 accepte, 05 refuse sans dire pourquoi. Le solde n'est qu'une des vérifications, la carte a aussi ses propres limites.</div>
+        <div class="recap-item" data-q="3">Un code peut demander une authentification forte au lieu de refuser&nbsp;: le site envoie le client valider sur son appli, puis relance la demande.</div>
+      </div>
+      <div class="teaser">
+        <div class="kicker">Prochain épisode</div>
+        <!-- [VOIX ?] teaser E08 : texte de la fiche E08 v0.4 (teaser à poser dans le lot E07), à valider par Charles. -->
+        <b>S1 · E08 · Compensation et règlement</b> – L'autorisation a réservé, personne n'a encore été payé. On suit la vente jusqu'au compte du commerçant&nbsp;: combien de temps la réservation tient, à partir de quand on compte, et pourquoi il est payé selon un calendrier qui n'est pas tout à fait celui de la France.
+        <form id="ep-signup" novalidate>
+          <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
+          <button type="submit">Recevoir E08</button>
+        </form>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
+        <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>
+      </div>
+      <p class="suggest"><a href="/episodes/s1e06.html">← Épisode précédent : L'émission</a></p>
+      <p class="suggest"><a href="/episodes/s1e06.html">← Épisode précédent : L'émission</a></p>
+      <p class="suggest">Une notion du paiement qui vous &eacute;chappe encore&nbsp;?<br>
+        <a href="mailto:bonjour@paiement-decrypte.fr?subject=Proposition%20de%20sujet&amp;body=Le%20sujet%20ou%20l%27outil%20que%20j%27aimerais%20voir%20d%C3%A9crypt%C3%A9%20%3A%0A%0A">Proposez le prochain sujet</a>
+      </p>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" id="sharebtn" onclick="shareScore()">Partager mon score</button>
+      <button class="cta ghost" onclick="location.reload()">Refaire l'épisode</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Feedback sheet -->
+<div class="sheet" id="sheet" aria-live="polite">
+  <div class="sheet-inner">
+    <div class="sheet-title" id="sheet-title"></div>
+    <div class="sheet-text" id="sheet-text"></div>
+    <button class="cta" id="sheet-cta"></button>
+  </div>
+</div>
+
+<script src="../assets/telemetry.js"></script>
+<script src="../assets/progress.js"></script>
+<script src="../assets/gamify.js?v=1"></script>
+<script src="../assets/subscribe.js"></script>
+<script>
+  // ===== MOTEUR D'EPISODE - NE PAS MODIFIER SANS RAISON =====
+  // Seuls EXPLAIN, le bloc « moment interactif » et SHARE_TITLE changent d'un episode a l'autre.
+  const EP = document.body.dataset.ep;                 // ex. "s1e03"
+  const SHARE_TITLE = "S1 · E07 · L'autorisation";
+
+  const PDT = window.PD || { track(){}, screen(){}, complete(){} };
+  const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open');
+
+  let current = 0, score = 0, streakNow = 0, streakBest = 0, t0 = null;
+  const results = [null,null,null,null];
+  const order = ['cover','1','2','3','4','5','6','7','8','9'];
+
+  const segWrap = document.getElementById('segments');
+  for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
+
+  function start(){ t0 = Date.now(); PDP.save(EP, {completed:false}); PDT.track('ep_start'); go(1); }
+
+  function go(n){
+    current = n;
+    PDT.screen(order[n]);
+    if(n > 0 && order[n] !== '9'){
+      PDP.save(EP, {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+    }
+    document.getElementById('sheet').classList.remove('show','good','bad');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
+    document.getElementById('topbar').style.visibility = n===0 ? 'hidden' : 'visible';
+    document.querySelectorAll('.seg').forEach((s,i)=>{
+      s.classList.toggle('done', i < n-1);
+      s.classList.toggle('now', i === n-1);
+    });
+    if(order[n]==='9') showScore();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Quiz : 1 entree par question, dans l'ordre. `bad` doit contenir la bonne reponse en <b>. ----
+  const EXPLAIN = [
+    {good:"L'émetteur ne voit ni le panier ni le détail de l'achat. Il voit le secteur du commerçant, une des informations qui pèsent sur son évaluation du risque.", bad:"Entre un site de vêtements et un site de jeux d'argent, <b>ce que l'émetteur voit de différent, c'est le secteur du commerçant</b>. Ni le détail de l'achat, ni le mode de lecture, ni le pays d'émission de la carte ne changent."},
+    {good:"Les opérations du terminal sont les plus longues, mais peu variables&nbsp;: le logiciel fonctionne en local. Le lien vers l'acquéreur est court en temps normal, mais il dépend de la connexion réseau du commerçant. C'est le plus sensible&nbsp;: il peut s'allonger bien plus que tout le reste.", bad:"<b>Le lien entre le terminal et l'acquéreur</b> est le plus sensible&nbsp;: court en temps normal, il dépend de la connexion réseau du commerçant. Les opérations du terminal sont les plus longues, mais peu variables&nbsp;: le logiciel fonctionne en local."},
+    {good:"Le solde n'est qu'une des vérifications. Chaque carte a aussi ses propres limites, qui varient selon le type de carte.", bad:"<b>Le montant dépasse ce que la carte autorise</b>&nbsp;: le solde n'est qu'une des vérifications. Chaque carte a ses propres limites, qui varient selon le type de carte."},
+    {good:"C'est une règle automatique côté e-commerce&nbsp;: selon la réponse de l'émetteur, le site déclenche lui-même l'authentification. Le client n'a rien à demander.", bad:"<b>Le site envoie le client valider sur son appli, puis relance la demande.</b> C'est une règle automatique côté e-commerce&nbsp;: le client n'a rien à demander."}
+  ];
+  const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
+  const BAD_TITLES = ["Le secteur, pas le panier","Le terminal est long, la connexion varie","Le solde n'est qu'un contrôle","Un code qui demande l'authentification"];
+
+  document.querySelectorAll('.options').forEach(block=>{
+    const qi = +block.dataset.quiz, ans = +block.dataset.answer, next = +block.dataset.next;
+    block.querySelectorAll('.opt').forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const good = i===ans;
+        results[qi] = good;
+        PDT.track('quiz_answer', {quiz:qi, choice:i, correct:good});
+        if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); } else { streakNow = 0; }
+        btn.classList.add(good?'correct':'wrong');
+        if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
+        if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
+        const st = document.getElementById('streak');
+        if(streakNow >= 2){ st.textContent = '\u2713 \u00d7' + streakNow; st.classList.add('on'); } else { st.classList.remove('on'); }
+        const sheet = document.getElementById('sheet');
+        document.getElementById('sheet-title').textContent =
+          good ? '\u2713 ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '\u2717 ' + BAD_TITLES[qi];
+        document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
+        const cta = document.getElementById('sheet-cta');
+        cta.textContent = next===9 ? 'Voir mon score' : 'Continuer';
+        cta.onclick = ()=>go(next);
+        sheet.classList.add('show', good?'good':'bad');
+        sheet.classList.remove(good?'bad':'good');
+      });
+    });
+  });
+
+  // ---- Moment interactif : la frise d'une autorisation (ordres de grandeur, ralenti x2) ----
+  const FLOW = [1.3, 0.1, 0.4, 0.25];
+  const FLOW_TOTAL = FLOW.reduce((a,b)=>a+b, 0);
+  const SLOW = 2;
+  const flowFills = Array.from(document.querySelectorAll('#flow .fb i'));
+  const flowLis = Array.from(document.querySelectorAll('#flowsteps li'));
+  const flowBtn = document.getElementById('flowbtn');
+  const flowClock = document.getElementById('flowclock');
+  const flowRes = document.getElementById('flowres');
+  let flowRunning = false, flowTracked = false;
+  function fmtS(v){ return v.toFixed(1).replace('.', ',') + '\u00a0s'; }
+  function flowReset(){
+    flowFills.forEach(f=>{ f.style.width = '0'; });
+    flowLis.forEach(l=>l.classList.remove('now','done'));
+    flowRes.classList.remove('show');
+    flowClock.textContent = fmtS(0);
+  }
+  function flowRender(sim){
+    let acc = 0;
+    FLOW.forEach((d,i)=>{
+      const frac = Math.max(0, Math.min(1, (sim - acc) / d));
+      flowFills[i].style.width = (frac*100) + '%';
+      flowLis[i].classList.toggle('done', frac >= 1);
+      flowLis[i].classList.toggle('now', frac > 0 && frac < 1);
+      acc += d;
+    });
+    flowClock.textContent = fmtS(Math.min(sim, FLOW_TOTAL));
+  }
+  function flowFinish(){
+    flowRunning = false;
+    flowRender(FLOW_TOTAL);
+    flowClock.textContent = '≈ 2 s';
+    flowRes.classList.add('show');
+    flowBtn.disabled = false;
+    flowBtn.textContent = 'Relancer';
+    document.getElementById('next-bet').disabled = false;
+  }
+  function runFlow(){
+    if(flowRunning) return;
+    if(!flowTracked){ flowTracked = true; PDT.track('interactive_used', {mode:'flow'}); }
+    flowRunning = true;
+    flowBtn.disabled = true;
+    flowReset();
+    document.getElementById('flowslow').textContent = 'ralenti ×2';
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ flowFinish(); return; }
+    const t0f = performance.now();
+    (function tick(now){
+      const sim = (now - t0f) / 1000 / SLOW;
+      if(sim >= FLOW_TOTAL){ flowFinish(); return; }
+      flowRender(sim);
+      requestAnimationFrame(tick);
+    })(t0f);
+  }
+
+  // ---- Score ----
+  function fmtTime(ms){ const s = Math.round(ms/1000); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+  function showScore(){
+    PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
+    PDP.save(EP, {completed:true, screen:9, score, streakBest, results});
+    document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const relire = missed.length===1 ? "RELISEZ LE CONCEPT "+missed[0]
+                 : "RELISEZ LES CONCEPTS "+missed.slice(0,-1).join(", ")+" ET "+missed[missed.length-1];
+    const msg = score===4 ? "SANS FAUTE \u2013 NIVEAU EXPERT" :
+                score>=3 ? "SOLIDE \u2013 "+relire+" ET C'EST PARFAIT" :
+                score>=2 ? "CORRECT \u2013 "+relire : "\u00c0 REVOIR \u2013 REFAITES L'\u00c9PISODE";
+    document.getElementById('scoremsg').textContent = msg;
+    document.getElementById('stat-score').textContent = score + '/4';
+    document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '\u2013';
+    document.getElementById('stat-best').textContent = '\u00d7' + streakBest;
+    document.querySelectorAll('.recap-item').forEach(el=>{
+      const r = results[+el.dataset.q];
+      if(r===true) el.classList.add('ok');
+      if(r===false) el.classList.add('ko');
+    });
+    if(score===4) confetti();
+  }
+
+  function confetti(){
+    const c = document.createElement('div'); c.className = 'confetti';
+    const colors = ['#1F4FD8','#17B587','#E85C4A','#0E1B2C'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('i');
+      p.style.left = (Math.random()*100)+'%';
+      p.style.background = colors[i%4];
+      p.style.animationDelay = (Math.random()*0.9)+'s';
+      p.style.animationDuration = (2+Math.random()*1.4)+'s';
+      c.appendChild(p);
+    }
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+
+  // ---- Partage facon Wordle ----
+  function shareScore(){
+    const grid = results.map(r=>r?'\u{1F7E9}':'\u{1F7E5}').join('');
+    const time = t0 ? fmtTime(Date.now()-t0) : '';
+    const txt = `${SHARE_TITLE} \u2013 ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.\npaiement-decrypte.fr`;
+    const btn = document.getElementById('sharebtn');
+    const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile && navigator.share){
+      navigator.share({text:txt}).catch(()=>{});
+    } else {
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(()=>{}); }
+      btn.textContent = 'Copi\u00e9 \u2713 \u2013 votre post LinkedIn est pr\u00eat';
+      setTimeout(()=>btn.textContent='Partager mon score', 3000);
+      window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
+    }
+    PDT.track('share', {score});
+  }
+
+  // ---- Abonnement fin d'episode ----
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
+      var el = document.getElementById('ep-signup-ok');
+      el.textContent = ok ? 'Presque fait ! Confirmez via l\'email qui vient de partir.' : (msg || 'Une erreur est survenue \u2013 r\u00e9essayez.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+      if(ok) PDT.track('subscribe_ok');
+    });
+  }
+
+  // ---- Reprise ----
+  (function(){
+    const p = PDP.load(EP);
+    if(!p || p.completed || !(p.screen > 0)) return;
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9};
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3};
+    let target = p.screen;
+    if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){ target = QUIZ_NEXT[target]; }
+    const b = document.getElementById('resumebtn');
+    b.textContent = 'Reprendre o\u00f9 j\'en \u00e9tais';
+    b.style.display = 'block';
+    b.onclick = ()=>{
+      score = p.score || 0; streakBest = p.streakBest || 0;
+      (p.results || []).forEach((r,i)=>{ results[i] = r; });
+      t0 = Date.now() - (p.elapsed || 0);
+      PDT.track('resume', {screen: target});
+      go(target);
+    };
+  })();
+</script>
+</body>
+</html>
