@@ -66,11 +66,10 @@
   .masthead-right{margin-left:auto;display:flex;align-items:center;gap:8px}
   .lang{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--cobalt);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px}
   .tools-nav{
-    display:inline-flex;align-items:center;gap:6px;background:var(--cobalt);color:#fff;
-    font-weight:600;font-size:12.5px;padding:8px 14px;border-radius:999px;text-decoration:none;
-    
+    display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--cobalt);
+    border:1px solid var(--cobalt);font-weight:600;font-size:12.5px;padding:7px 13px;border-radius:999px;text-decoration:none;
   }
-  .tools-nav:hover{background:var(--mint-deep)}
+  .tools-nav:hover{background:var(--cobalt);color:#fff}
   .tools-nav,.lang{position:relative}
   .tools-nav::after,.lang::after{content:"";position:absolute;inset:-5px 0}
   .lang::after{inset:-9px -4px}
@@ -78,7 +77,7 @@
   h1{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
     font-size:clamp(32px,9vw,44px);line-height:1.06;letter-spacing:-.01em;
-    margin-bottom:14px;
+    margin-bottom:14px;text-wrap:balance;
   }
   h1 em{font-style:normal;color:var(--cobalt)}
   .lede{color:var(--ink-soft);font-size:16px;max-width:40ch}
@@ -114,8 +113,8 @@
   .card:active{transform:scale(.985)}
   .card.episode{border-left-color:var(--cobalt)}
   .card.tool{border-left-color:var(--mint)}
-  .card.locked{background:rgba(255,255,255,.55);border-color:rgba(216,222,233,.6);border-left-color:rgba(31,79,216,.5);pointer-events:none}
-  .card.locked > :not(.badge){opacity:.55}
+  .card.locked{background:transparent;border:1px dashed #C5CEDC;border-left:4px solid rgba(31,79,216,.5);pointer-events:none}
+  .card.locked h3{color:var(--ink-soft)}
 
   .card-eyebrow{
     font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;
@@ -130,12 +129,12 @@
   .card p{color:var(--ink-soft);font-size:14.5px;flex:1}
   .card p.card-eyebrow{flex:none}
   .card-cta{
-    margin-top:14px;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
-    background:var(--cobalt);color:#fff;font-weight:600;font-size:15px;
-    padding:12px 20px;border-radius:999px;
+    margin-top:12px;display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+    color:var(--cobalt);font-weight:600;font-size:15px;
   }
-  .card.tool .card-cta{background:var(--mint);color:var(--ink)}
-  .card-cta::after{content:"→"}
+  .card-cta::after{content:"→";transition:transform .15s ease}
+  .card:hover .card-cta{text-decoration:underline;text-underline-offset:3px}
+  .card:hover .card-cta::after{transform:translateX(3px)}
   .card.locked .badge{
     display:inline-block;margin-top:12px;
     font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;
@@ -188,11 +187,13 @@
   .hero-cta::after{content:"→"}
   .hero-cta:hover{background:var(--cobalt-deep)}
   .author a{display:inline-block;padding:10px 0}
-  @media (prefers-reduced-motion:reduce){.app,.card{transition:none}}
+  @media (prefers-reduced-motion:reduce){.app,.card,.card-cta::after{transition:none}}
   /* Mascotte (poulpe) */
   .hero{display:grid;gap:4px;align-items:center}
-  .hero-mascot{margin:20px auto 0;width:min(210px,60vw);text-align:center}
-  .poulpe{cursor:pointer}
+  .hero-mascot{margin:12px auto 0;width:140px;text-align:center}
+  .byline{margin-top:10px;font-size:14px;color:var(--ink-soft)}
+  .byline a{color:var(--cobalt);font-weight:600;text-decoration:none}
+  .byline a:hover{text-decoration:underline}
   .poulpe svg{display:block;width:100%;height:auto;overflow:visible}
   @media (min-width:760px){.hero{grid-template-columns:minmax(0,1fr) 280px;gap:32px}.hero-mascot{margin:0;width:280px}}
 </style>
@@ -219,6 +220,7 @@
     Interactive <strong>5-minute</strong> micro-lessons on the payments nobody
     explains: card schemes, interchange, acquiring.
   </p>
+  <p class="byline">By <a href="#about">Charles Saudemont</a>, ten years in payments</p>
   <a class="hero-cta" href="episodes/s1e01.html" data-hero-cta>Start episode 1</a>
   </div>
   <figure class="hero-mascot">
@@ -242,14 +244,14 @@
       <a class="card episode" href="episodes/s1e02.html">
         <p class="card-eyebrow"><span>E02</span><span class="accent">~5 min</span></p>
         <h3>Interchange</h3>
-        <p>Who pays what on &euro;60 of card sales, payments&rsquo; most misunderstood fee. Place your bet.</p>
+        <p>Who pays what on &euro;60 of card sales. Place your bet.</p>
         <span class="card-cta">Start the episode</span>
       </a>
 
       <a class="card episode" href="episodes/s1e03.html">
         <p class="card-eyebrow"><span>E03</span><span class="accent">~5 min</span></p>
         <h3>Co-badging &amp; domestic schemes</h3>
-        <p>Two networks on one chip, a single winner per payment, and what a domestic scheme is really for.</p>
+        <p>Two card networks on one chip, a single winner per payment, and what a domestic scheme is for.</p>
         <span class="card-cta">Start the episode</span>
       </a>
 
@@ -270,14 +272,14 @@
       <a class="card episode" href="episodes/s1e06.html">
         <p class="card-eyebrow"><span>E06</span><span class="accent">~5 min</span></p>
         <h3>Issuing</h3>
-        <p>Immediate, deferred, credit: what the issuer actually advances, and how it blocks an amount without ever taking it.</p>
+        <p>Immediate, deferred, credit: what the issuer advances, and how it blocks an amount without taking it.</p>
         <span class="card-cta">Start the episode</span>
       </a>
 
       <a class="card episode" href="episodes/s1e07.html">
         <p class="card-eyebrow"><span>E07</span><span class="accent">~5 min</span></p>
         <h3>The authorisation</h3>
-        <p>We've seen who says yes. This time, we follow the request itself: what it carries, and what a decline actually means.</p>
+        <p>What an authorisation request carries, and what a decline means.</p>
         <span class="card-cta">Start the episode</span>
       </a>
 
@@ -292,7 +294,7 @@
 
   <section class="section" id="tools-preview">
     <h2 class="section-title-main">My toolkit</h2>
-    <p class="section-sub">Not episodes: working tools to keep within reach.</p>
+    <p class="section-sub">Free working tools that run in your browser.</p>
 
     <div class="grid">
       <a class="card tool" href="tools/tlv-stream/">
@@ -326,7 +328,7 @@
       <a class="card tool" href="glossary/">
         <p class="card-eyebrow"><span>REFERENCE</span></p>
         <h3>EMV glossary</h3>
-        <p>Every chip tag, explained: what the data is for, what it changes in a real transaction, where you will meet it.</p>
+        <p>The chip&rsquo;s EMV tags, one by one: what the data is for, what it changes in a real transaction, where you will meet it.</p>
         <span class="card-cta">Open the glossary</span>
       </a>
 
@@ -342,12 +344,12 @@
   <section class="author" id="about">
     <h2>Who writes</h2>
     <p>In payments, everyone knows their own link well, few people see the whole chain. Paiement Décrypté takes one mechanism at a time and explains it in five minutes, quizzes included.</p>
-    <p>I&rsquo;m Charles Saudemont. I&rsquo;ve worked in payments for ten years and had the chance to work on several links of that chain: terminals and their after-sales, card issuing, and today the architecture of an in-store payment solution, from the terminal to acquiring. I care about sharing my experience and expertise to make payments accessible and let as many people as possible understand this world.</p>
+    <p>I&rsquo;m Charles Saudemont. I&rsquo;ve worked in payments for ten years, on several links of that chain: terminals and their after-sales, card issuing, and today the architecture of an in-store payment solution, from the terminal to acquiring.</p>
     <p><a href="https://www.linkedin.com/in/csaudemont/" rel="noopener">Find me on LinkedIn</a></p>
   </section>
 
   <section class="signup" id="subscribe">
-    <h2>Stay in the loop.</h2>
+    <h2>Get new episodes by email</h2>
     <p>New episodes, new tools, nothing else. One-click unsubscribe.</p>
     <!-- KIT_FORM : formulaire Kit EN n°9773354 -->
     <form id="signup-form" novalidate data-kit-form="9773354"
@@ -359,7 +361,7 @@
       <button type="submit">Notify me</button>
     </form>
     <p class="ok" id="signup-ok" role="status"></p>
-    <p class="note">Double opt-in: you&rsquo;ll confirm your address by email. One-click unsubscribe.</p>
+    <p class="note">Double opt-in: you&rsquo;ll confirm your address by email.</p>
   </section>
 
   </main>
