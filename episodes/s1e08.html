@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 · E08 · Compensation et règlement</title>
+<meta name="description" content="Après l'autorisation, il faut capturer la vente : combien de temps l'autorisation garantit le paiement, à partir de quand le commerçant compte ses jours, et pourquoi le règlement suit un calendrier européen. Micro-formation paiement, 5 minutes, avec quiz.">
+<link rel="canonical" href="https://paiement-decrypte.fr/episodes/s1e08.html">
+<link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e08.html">
+<link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e08.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Paiement Décrypté">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://paiement-decrypte.fr/episodes/s1e08.html">
+<meta property="og:title" content="S1 · E08 · Compensation et règlement – Paiement Décrypté">
+<meta property="og:description" content="L'autorisation a réservé, personne n'a encore été payé. On suit la vente jusqu'au compte du commerçant, en 5 minutes, avec quiz.">
+<meta property="og:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1254">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://paiement-decrypte.fr/assets/og-fr.png">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+
+<style>
+  @font-face{font-family:'Bricolage Grotesque';src:url('../assets/fonts/bricolage-grotesque-var.woff2') format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'Instrument Sans';src:url('../assets/fonts/instrument-sans-var.woff2') format('woff2');font-weight:400 700;font-display:swap}
+  @font-face{font-family:'JetBrains Mono';src:url('../assets/fonts/jetbrains-mono-var.woff2') format('woff2');font-weight:100 800;font-display:swap}
+  :root{
+    --bg:#F2F4F8;
+    --ink:#0E1B2C;
+    --ink-soft:#4A5A70;
+    --cobalt:#1F4FD8;
+    --cobalt-deep:#153A9E;
+    --mint:#17B587;
+    --coral:#E85C4A;
+    --line:#D8DEE9;
+    --card:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{height:100%}
+  body{min-height:100%}
+  body{
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;justify-content:center;
+    line-height:1.5;
+  }
+  .app{
+    width:100%;max-width:480px;min-height:100dvh;
+    display:flex;flex-direction:column;
+    padding:16px 20px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Progress ---------- */
+  .topbar{display:flex;align-items:center;gap:14px;margin-bottom:18px;min-height:28px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    color:var(--ink-soft);white-space:nowrap;
+  }
+  .segments{display:flex;gap:6px;flex:1}
+  .seg{
+    height:6px;flex:1;border-radius:3px;background:var(--line);
+    transition:background .35s ease;
+  }
+  .seg.done{background:var(--cobalt)}
+  .seg.now{background:linear-gradient(90deg,var(--cobalt),var(--mint));animation:segpulse 1.6s ease infinite}
+  @keyframes segpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .streak{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--mint);white-space:nowrap;display:none;
+  }
+  .streak.on{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.6)}to{transform:none}}
+
+  /* ---------- Écrans ---------- */
+  .screen{flex:1;display:none;flex-direction:column;animation:slideIn .32s ease}
+  .screen.active{display:flex}
+  @keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){
+    .screen,.streak.on,.seg.now,.sheet,.opt.correct,.opt.wrong{animation:none !important;transition:none !important}
+  }
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(30px,8vw,38px);line-height:1.08;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:22px;line-height:1.15;margin-bottom:12px;
+  }
+  .home-link{
+    display:inline-block;margin-bottom:14px;font-size:13px;
+    color:var(--ink-soft);text-decoration:none;
+  }
+  .home-link:hover,.home-link:focus{color:var(--cobalt)}
+  .kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:10px;
+  }
+  p{color:var(--ink-soft);font-size:15.5px}
+  p + p{margin-top:10px}
+  p strong{color:var(--ink);font-weight:600}
+
+  /* ---------- Cover ---------- */
+  .cover{justify-content:space-between}
+  .cover-mark{width:44px;height:44px;display:block;margin:26px 0 22px}
+  .cover-meta{
+    display:flex;gap:18px;margin-top:18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+  }
+  .cover-meta span b{color:var(--ink);font-weight:600}
+
+  /* ---------- Cartes concept ---------- */
+  .concept-card{
+    background:var(--card);border-radius:var(--radius);
+    padding:22px;border:1px solid var(--line);
+    
+  }
+  .keyfact{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;color:var(--ink);
+  }
+  .keyfact b{font-weight:600}
+  .keyfact.kf2{margin-top:8px}
+  .keyfact .kf-lab{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--cobalt);margin-bottom:4px;
+  }
+  .bet{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px 14px;margin-top:14px;
+  }
+  .bet-q{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;
+    line-height:1.25;margin-bottom:14px;color:var(--ink);
+  }
+  .concept-card p + p,.concept-card ul + p{margin-top:12px}
+  .steps{list-style:disc;margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:6px}
+  .steps li{font-size:15.5px;color:var(--ink-soft)}
+  .steps li::marker{color:var(--cobalt)}
+  .hub-illus{display:flex;justify-content:center;margin:16px 0 0}
+  .hub-illus svg{width:100%;max-width:420px;height:auto;display:block}
+  .hub-cap{margin:8px 0 0;font-size:13px;color:var(--ink-soft);text-align:center}
+  .steps li strong{color:var(--ink);font-weight:600}
+  /* ---------- Moment interactif : choix / révélation (origine S1E04) ---------- */
+  .bet-ctx{font-size:14.5px;margin-bottom:12px}
+  .pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 4px}
+  .pick-opt{
+    min-height:48px;padding:14px 12px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:15px;font-weight:600;
+    color:var(--ink);cursor:pointer;transition:border-color .2s,opacity .25s,transform .1s;
+  }
+  .pick-opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .pick-opt.chosen{border-color:var(--cobalt);background:#EDF1FB}
+  .pick-opt.dim{opacity:.4}
+  .pick-opt:disabled{cursor:default}
+  .flow-caption{
+    margin-top:12px;min-height:66px;padding:12px 14px;border-radius:12px;
+    background:#EDF1FB;border-left:3px solid var(--cobalt);
+    font-size:14.5px;line-height:1.5;color:var(--ink);text-align:left;
+  }
+  .flow-caption b{color:var(--cobalt-deep)}
+
+  /* ---------- Quiz ---------- */
+  .qnum{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+    color:var(--ink-soft);margin-bottom:8px;
+  }
+  .question{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;line-height:1.25;margin-bottom:16px}
+  .options{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+    background:var(--card);font-family:inherit;font-size:14.5px;color:var(--ink);
+    cursor:pointer;transition:border-color .2s, background .2s, transform .1s;
+  }
+  .opt:not(:disabled):active{border-color:var(--cobalt);transform:scale(.98)}
+  .opt.correct{border-color:var(--mint);background:#E9F8F2;animation:popIn .35s ease}
+  .opt.wrong{border-color:var(--coral);background:#FCEEEB;animation:shake .3s ease}
+  @keyframes popIn{0%{transform:scale(1)}45%{transform:scale(1.04)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:none}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+  .opt:disabled{cursor:default}
+
+  /* ---------- Feedback sheet (façon Duolingo) ---------- */
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;pointer-events:none;
+    transform:translateY(110%);transition:transform .32s cubic-bezier(.2,.9,.3,1);
+  }
+  .sheet.show{transform:none;pointer-events:auto}
+  .sheet-inner{
+    width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 30px rgba(14,27,44,.18);
+  }
+  .sheet.good .sheet-inner{background:#E9F8F2}
+  .sheet.bad .sheet-inner{background:#FCEEEB}
+  .sheet-title{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  }
+  .sheet.good .sheet-title{color:#0C6B4E}
+  .sheet.bad .sheet-title{color:#9C3527}
+  .sheet-text{font-size:14px;line-height:1.5}
+  .sheet.good .sheet-text{color:#0C6B4E}
+  .sheet.bad .sheet-text{color:#9C3527}
+  .sheet-text b{font-weight:600}
+  .sheet .cta{margin-top:16px}
+  .sheet.good .cta{background:var(--mint);color:var(--ink)}
+  .sheet.bad .cta{background:var(--coral);color:var(--ink)}
+
+  /* ---------- Recap / score ---------- */
+  .score-big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;
+    line-height:1;margin:10px 0 4px;
+  }
+  .score-label{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:.08em}
+  .stats{
+    display:flex;gap:10px;margin-top:18px;
+  }
+  .stat{
+    flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat b{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;display:block}
+  .stat span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-soft)}
+  .recap-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .recap-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:13px 15px;font-size:14px;color:var(--ink);display:flex;gap:10px;
+  }
+  .recap-item::before{content:"→";color:var(--cobalt);font-weight:700;flex-shrink:0}
+  .recap-item.ok::before{content:"✓";color:var(--mint)}
+  .recap-item.ko::before{content:"✗";color:var(--coral)}
+  .teaser{
+    margin-top:20px;padding:15px 16px;border-radius:12px;background:#0E1B2C;color:#C9D4E4;
+    font-size:13.5px;
+  }
+  .teaser b{color:#fff}
+  .teaser .kicker{color:#7FA0F0;margin-bottom:6px}
+  .teaser form{display:flex;gap:8px;margin-top:14px}
+  .teaser input{
+    flex:1;min-width:0;font:inherit;font-size:14px;padding:11px 14px;border-radius:10px;
+    border:1px solid #33445C;background:#16283F;color:#fff;outline:none;
+  }
+  .teaser input::placeholder{color:#7286A0}
+  .teaser input:focus{border-color:var(--mint)}
+  .teaser form button{
+    font:inherit;font-weight:600;font-size:14px;color:var(--ink);
+    background:var(--mint);border:0;border-radius:10px;padding:11px 14px;cursor:pointer;white-space:nowrap;
+  }
+  .teaser form button:disabled{opacity:.6}
+  .teaser .sub-note{font-size:11.5px;color:#7286A0;margin-top:8px}
+  .suggest{margin-top:18px;text-align:center;font-size:13px;line-height:1.5;color:var(--ink-soft)}
+  .suggest a{color:var(--cobalt);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(31,79,216,.35)}
+  .teaser .sub-ok{display:none;margin-top:10px;font-weight:600;color:var(--mint);font-size:13.5px}
+  .teaser .sub-ok.show{display:block}
+
+  /* ---------- Bloc voix : « Ce qu'on entend » / « Ce qui compte vraiment » / « Mon avis »
+       OBLIGATOIRE, exactement 1 par épisode. Voir references/quiz-et-terrain.md ---------- */
+  .voix{
+    margin-top:16px;padding:14px 16px;border-radius:12px;
+    background:#FDF3F1;border-left:3px solid var(--coral);
+    font-size:14.5px;color:var(--ink);
+  }
+  .voix .voix-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--coral);margin-bottom:6px;
+  }
+
+  /* ---------- Confetti (sans faute) ---------- */
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:12px;opacity:.95;border-radius:2px;
+    animation:fall 2.6s ease-in forwards;
+  }
+  @keyframes fall{
+    to{transform:translateY(105vh) rotate(540deg);opacity:.7}
+  }
+
+  /* ---------- CTA bas ---------- */
+  .cta-zone{margin-top:auto;padding-top:22px}
+  .cta{
+    width:100%;padding:16px;border:none;border-radius:14px;
+    background:var(--cobalt);color:#fff;font-family:'Instrument Sans',sans-serif;
+    font-weight:600;font-size:16px;cursor:pointer;
+    transition:opacity .2s, background .2s, transform .1s;
+  }
+  .cta:disabled{opacity:.35;cursor:default}
+  .cta:not(:disabled):active{background:var(--cobalt-deep);transform:scale(.98)}
+  .cta.ghost{background:transparent;color:var(--cobalt);border:1.5px solid var(--cobalt);margin-top:10px}
+  .cta.ghost:not(:disabled):active{background:#EDF1FB}
+</style>
+</head>
+<body data-ep="s1e08">
+<div class="app">
+
+  <div class="topbar" id="topbar" style="visibility:hidden">
+    <span class="eyebrow">S1 · E08</span>
+    <div class="segments" id="segments"></div>
+    <span class="streak" id="streak"></span>
+  </div>
+
+  <!-- 0 · COVER -->
+  <section class="screen cover active" data-step="cover">
+    <div>
+      <a class="home-link" href="/#formation">← Tous les épisodes</a>
+      <div class="kicker">Micro-formation · Saison 1 · Épisode 8</div>
+      <h1 style="margin-top:18px">Compensation et règlement</h1>
+      <p style="margin-top:14px;font-size:16.5px">L'autorisation réserve les fonds pour environ une semaine. Le commerçant n'est pas encore payé&nbsp;: il faut encore capturer la vente, c'est-à-dire l'envoyer en compensation.</p>
+      <div class="cover-meta">
+        <span><b>5 min</b> · lecture</span>
+        <span><b>4</b> concepts</span>
+        <span><b>4</b> quiz</span>
+      </div>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" onclick="start()">Commencer</button>
+      <button class="cta ghost" id="resumebtn" style="display:none"></button>
+    </div>
+  </section>
+
+  <!-- 1 · CONCEPT : le second message -->
+  <!-- [VERROU 9] Troisième puce écrite avec réserve (« selon le réseau et le canal ») tant que le single message en France n'est pas confirmé. -->
+  <section class="screen" data-step="1">
+    <div class="concept-card">
+      <div class="kicker">Concept 1 / 4 · Le second message</div>
+      <h2>Autoriser, puis capturer</h2>
+      <p>L'autorisation réserve les fonds, mais ne paie pas le commerçant. Il faut encore la capturer, c'est-à-dire l'envoyer en compensation. Trois façons de le faire&nbsp;:</p>
+      <ul class="steps">
+        <li>un message de capture, envoyé automatiquement juste après chaque vente&nbsp;;</li>
+        <li>un second message groupé en fin de journée pour toutes les ventes autorisées&nbsp;: <strong>la remise</strong>&nbsp;;</li>
+        <li>selon le réseau et le canal, un message unique qui autorise et capture à la fois (<strong>single message</strong>).</li>
+      </ul>
+      <p>Quand il y a remise, elle part soit du terminal, en automatique ou déclenchée par le commerçant, soit directement du serveur (backend).</p>
+      <!-- [À VALIDER] keyfact C1 -->
+      <div class="keyfact"><b>À retenir :</b> autorisé, le paiement est garanti. Capturé, il devient une dette que la banque du porteur doit régler.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(2)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 2 · QUIZ 1 -->
+  <section class="screen" data-step="2">
+    <div class="qnum">QUIZ 1 / 4</div>
+    <div class="question">Un soir, le terminal d'un commerçant reste éteint. Le lendemain matin, avant de le rallumer, il voit pourtant ses ventes de la veille remises chez son acquéreur. Qu'est-ce qui l'explique&nbsp;?</div>
+    <div class="options" data-quiz="0" data-answer="1" data-next="3">
+      <button class="opt">Le terminal les a envoyées quand il a été rallumé le matin</button>
+      <button class="opt">Ses ventes ne dépendaient pas du terminal pour partir</button>
+      <button class="opt">Le réseau de cartes a transmis les ventes à la place du terminal</button>
+      <button class="opt">L'acquéreur a forcé une télécollecte à distance</button>
+    </div>
+  </section>
+
+  <!-- 3 · CONCEPT + INTERACTIF : les délais -->
+  <section class="screen" data-step="3">
+    <div class="concept-card" style="padding-bottom:16px">
+      <div class="kicker">Concept 2 / 4 · Les délais</div>
+      <h2>Deux délais, deux points de départ</h2>
+      <p>Une autorisation a une durée de vie limitée. Elle réserve les fonds et garantit le paiement environ une semaine, variable selon le réseau. Si la capture (ou la télécollecte) arrive après ce délai, la vente peut encore être acceptée techniquement. Mais l'autorisation ne la protège plus&nbsp;: selon le réseau et l'état du compte du porteur, l'émetteur peut la contester ensuite.</p>
+      <p>Une fois l'autorisation capturée, un autre décompte commence. Quand un contrat promet «&nbsp;J+1&nbsp;», J est le jour de la remise, pas celui de la vente. Et le week-end et certains jours fériés, il n'y a pas de versement.</p>
+    </div>
+    <div class="bet">
+      <p class="bet-ctx">Contrat&nbsp;: versement à J+1 après la remise. La remise part chaque soir à 23&nbsp;h. Une vente a lieu le jeudi à 23&nbsp;h&nbsp;30.</p>
+      <div class="bet-q">Quel jour le commerçant reçoit-il l'argent&nbsp;?</div>
+      <div class="pick" id="pick">
+        <button class="pick-opt" data-k="vendredi">Vendredi</button>
+        <button class="pick-opt" data-k="samedi">Samedi</button>
+        <button class="pick-opt" data-k="lundi">Lundi</button>
+        <button class="pick-opt" data-k="mardi">Mardi</button>
+      </div>
+      <div class="flow-caption" id="betcap" aria-live="polite">Choisissez, la réponse s'affiche.</div>
+      <div class="keyfact" id="betfact" style="display:none">J+1 se compte depuis la remise, et le week-end ne compte pas. Trente minutes de retard sur la remise du jeudi, et le versement passe de vendredi à lundi.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" id="next-bet" disabled onclick="go(4)">Continuer</button></div>
+  </section>
+
+  <!-- 4 · QUIZ 2 -->
+  <section class="screen" data-step="4">
+    <div class="qnum">QUIZ 2 / 4</div>
+    <div class="question">Un commerçant découvre que son terminal était en télécollecte manuelle&nbsp;: trois semaines de ventes n'ont jamais été télécollectées. Il lance la télécollecte. Qu'est-ce qui l'attend&nbsp;?</div>
+    <div class="options" data-quiz="1" data-answer="1" data-next="5">
+      <button class="opt">Rien de particulier&nbsp;: chaque vente a été autorisée, elle est donc garantie</button>
+      <button class="opt">Les plus anciennes partent sans la protection de leur autorisation</button>
+      <button class="opt">Rien ne part&nbsp;: au-delà de quelques jours, le terminal efface les ventes non télécollectées</button>
+      <button class="opt">L'acquéreur refuse la remise en bloc et demande les tickets papier</button>
+    </div>
+  </section>
+
+  <!-- 5 · CONCEPT : on règle des soldes -->
+  <section class="screen" data-step="5">
+    <div class="concept-card">
+      <div class="kicker">Concept 3 / 4 · La compensation</div>
+      <h2>Personne ne vire 42&nbsp;€</h2>
+      <p>Les remises de toute la journée sont mises en commun. Chaque banque ou établissement n'a qu'une position nette&nbsp;: tout ce qu'il doit aux autres, moins tout ce que les autres lui doivent. Des millions de ventes se résument en un montant par établissement, réglé une fois. C'est la compensation. En France, pour CB, c'est STET qui calcule ces positions.</p>
+      <div class="hub-illus">
+        <svg viewBox="0 0 340 196" xmlns="http://www.w3.org/2000/svg" font-family="Instrument Sans, system-ui, sans-serif" role="img" aria-label="Trois banques. A doit 30 et doit recevoir 45 : elle reçoit 15. B doit 40 et doit recevoir 20 : elle paie 20. C doit 25 et doit recevoir 30 : elle reçoit 5. Trois mouvements nets, dont la somme fait zéro.">
+          <defs>
+            <marker id="arrM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#17B587"/></marker>
+            <marker id="arrC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#E85C4A"/></marker>
+          </defs>
+          <!-- banques -->
+          <rect x="1" y="6" width="116" height="48" rx="10" fill="#fff" stroke="#D8DEE9"/>
+          <text x="12" y="26" font-size="13" font-weight="600" fill="#0E1B2C">Banque A</text>
+          <text x="12" y="44" font-size="11" fill="#4A5A70">doit 30 · attend 45</text>
+          <rect x="1" y="74" width="116" height="48" rx="10" fill="#fff" stroke="#D8DEE9"/>
+          <text x="12" y="94" font-size="13" font-weight="600" fill="#0E1B2C">Banque B</text>
+          <text x="12" y="112" font-size="11" fill="#4A5A70">doit 40 · attend 20</text>
+          <rect x="1" y="142" width="116" height="48" rx="10" fill="#fff" stroke="#D8DEE9"/>
+          <text x="12" y="162" font-size="13" font-weight="600" fill="#0E1B2C">Banque C</text>
+          <text x="12" y="180" font-size="11" fill="#4A5A70">doit 25 · attend 30</text>
+          <!-- chambre de compensation -->
+          <rect x="222" y="68" width="117" height="60" rx="12" fill="#EDF1FB" stroke="#1F4FD8" stroke-width="1.5"/>
+          <text x="280" y="94" font-size="13" font-weight="600" text-anchor="middle" fill="#153A9E">Compensation</text>
+          <text x="280" y="112" font-size="11" text-anchor="middle" fill="#4A5A70">calcule les soldes</text>
+          <!-- mouvements nets -->
+          <line x1="220" y1="86" x2="121" y2="34" stroke="#17B587" stroke-width="2" marker-end="url(#arrM)"/>
+          <text x="166" y="48" font-size="11.5" font-weight="600" fill="#0C6B4E" font-family="JetBrains Mono, monospace">reçoit 15</text>
+          <line x1="121" y1="98" x2="220" y2="98" stroke="#E85C4A" stroke-width="2" marker-end="url(#arrC)"/>
+          <text x="170" y="91" font-size="11.5" font-weight="600" text-anchor="middle" fill="#9C3527" font-family="JetBrains Mono, monospace">paie 20</text>
+          <line x1="220" y1="110" x2="121" y2="162" stroke="#17B587" stroke-width="2" marker-end="url(#arrM)"/>
+          <text x="166" y="158" font-size="11.5" font-weight="600" fill="#0C6B4E" font-family="JetBrains Mono, monospace">reçoit 5</text>
+        </svg>
+      </div>
+      <p class="hub-cap">En millions d'euros. Des milliers de ventes croisées, trois mouvements nets&nbsp;: 15&nbsp;+&nbsp;5 reçus, 20 payés, la somme fait zéro.</p>
+      <p>Le commerçant vit la même chose à son échelle. Son versement est un solde, dont on a retiré les remboursements, les impayés et, selon le contrat, les commissions (acquéreur, interchange, réseau). D'où le rapprochement, l'exercice que connaît tout service comptable&nbsp;: retrouver chaque vente derrière un versement.</p>
+      <div class="keyfact"><b>À retenir :</b> le calcul en net se fait à deux niveaux.</div>
+      <div class="keyfact kf2"><div class="kf-lab">Entre banques</div>Chacune règle un solde, interchange déjà déduite (épisode 2).</div>
+      <div class="keyfact kf2"><div class="kf-lab">Pour le commerçant</div>L'acquéreur verse ses ventes moins les remboursements et les impayés. Sa commission est retirée du versement ou facturée à part, selon le contrat.</div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(6)">Vérifier que c'est acquis</button></div>
+  </section>
+
+  <!-- 6 · QUIZ 3 -->
+  <section class="screen" data-step="6">
+    <div class="qnum">QUIZ 3 / 4</div>
+    <div class="question">Ce jour-là, en CB, les commerçants d'une banque ont encaissé 40&nbsp;M€ auprès de porteurs d'autres banques, et ses propres porteurs ont dépensé 35&nbsp;M€ chez des commerçants d'autres banques. Pour régler ces seuls paiements CB, combien de mouvements voit-elle passer&nbsp;?</div>
+    <div class="options" data-quiz="2" data-answer="2" data-next="7">
+      <button class="opt">Un par banque avec laquelle elle a échangé ce jour-là</button>
+      <button class="opt">Deux&nbsp;: 40&nbsp;M€ reçus, puis 35&nbsp;M€ payés</button>
+      <button class="opt">Un seul&nbsp;: 5&nbsp;M€ en sa faveur</button>
+      <button class="opt">Aucun ce jour-là&nbsp;: les remises sont réglées en fin de mois</button>
+    </div>
+  </section>
+
+  <!-- 7 · CONCEPT : le calendrier de règlement (angle France/UE) -->
+  <section class="screen" data-step="7">
+    <div class="concept-card">
+      <div class="kicker">Concept 4 / 4 · Le calendrier</div>
+      <h2>Un calendrier européen</h2>
+      <p>Les soldes calculés par STET sont réglés une fois par jour, dans le système de règlement des banques centrales de la zone euro. C'est son calendrier qui fixe les jours où les banques se paient, et donc les jours où l'acquéreur est lui-même réglé.</p>
+      <p>Ce calendrier est le même dans toute la zone euro, et ce n'est pas celui des fériés français&nbsp;: le 14 juillet ou le 11 novembre, les banques se règlent normalement.</p>
+      <div class="keyfact"><b>À retenir :</b> 1<sup>er</sup> janvier, Vendredi saint, lundi de Pâques, 1<sup>er</sup> mai, 25 et 26 décembre&nbsp;: six jours sans règlement entre banques dans toute la zone euro, en plus des week-ends.</div>
+
+      <!-- [VOIX ?] Forme (d), matière de Charles du 11/11 (tendance J+1). VERROU 7 à confirmer. -->
+      <div class="voix">
+        <div class="voix-kicker">Ce qui compte vraiment</div>
+        Le délai de crédit est devenu une ligne commerciale&nbsp;: la tendance est au J+1, que certains acquéreurs facturent en option et que d'autres incluent. Comparer deux offres sur la seule commission, c'est oublier qu'un jour de trésorerie a un prix.
+      </div>
+    </div>
+    <div class="cta-zone"><button class="cta" onclick="go(8)">Dernière question</button></div>
+  </section>
+
+  <!-- 8 · QUIZ 4 -->
+  <section class="screen" data-step="8">
+    <div class="qnum">QUIZ 4 / 4</div>
+    <div class="question">Une boulangerie de Lyon télécollecte le jeudi soir avant Pâques. Son acquéreur la paie dès que les banques se sont réglées entre elles. Quel jour reçoit-elle l'argent&nbsp;?</div>
+    <div class="options" data-quiz="3" data-answer="3" data-next="9">
+      <button class="opt">Le vendredi</button>
+      <button class="opt">Le samedi</button>
+      <button class="opt">Le lundi</button>
+      <button class="opt">Le mardi</button>
+    </div>
+  </section>
+
+  <!-- 9 · RECAP -->
+  <section class="screen" data-step="9">
+    <div>
+      <div class="kicker">Épisode terminé</div>
+      <div class="score-big" id="scoreval">–</div>
+      <div class="score-label" id="scoremsg">SCORE</div>
+      <div class="stats">
+        <div class="stat"><b id="stat-score">–</b><span>SCORE</span></div>
+        <div class="stat"><b id="stat-time">–</b><span>TEMPS</span></div>
+        <div class="stat"><b id="stat-best">–</b><span>SÉRIE MAX</span></div>
+      </div>
+      <div class="recap-list" id="recaplist">
+        <div class="recap-item" data-q="0">Une vente doit être capturée pour être payée&nbsp;: juste après la vente, en remise du soir, ou, selon le réseau, dans le message qui l'autorise.</div>
+        <div class="recap-item" data-q="1">L'autorisation garantit une semaine environ. Le contrat verse à J+n après la remise, hors week-end et certains jours fériés.</div>
+        <div class="recap-item" data-q="2">On règle des soldes&nbsp;: entre banques, et jusque sur le compte du commerçant.</div>
+        <div class="recap-item" data-q="3">Le règlement entre banques suit un calendrier unique pour toute la zone euro, qui n'est pas celui des fériés français.</div>
+      </div>
+      <!-- [VOIX ?] Teaser E09 à figer quand le découpage d'E09 sera arrêté. -->
+      <div class="teaser">
+        <div class="kicker">Prochain épisode</div>
+        <b>S1 · E09 · Le chargeback</b> – Le commerçant a été payé. Un paiement peut pourtant revenir en arrière des mois plus tard, et ce n'est pas lui qui décide si sa défense tient.
+        <form id="ep-signup" novalidate>
+          <input type="email" name="email_address" placeholder="votre@email.fr" required autocomplete="email" inputmode="email">
+          <button type="submit">Recevoir E09</button>
+        </form>
+        <p class="sub-ok" id="ep-signup-ok" role="status"></p>
+        <p class="sub-note">Un email par épisode, rien d'autre. Double opt-in, désinscription en un clic.</p>
+      </div>
+      <p class="suggest"><a href="/episodes/s1e07.html">← Épisode précédent : L'autorisation</a></p>
+      <p class="suggest">Une notion du paiement qui vous &eacute;chappe encore&nbsp;?<br>
+        <a href="mailto:bonjour@paiement-decrypte.fr?subject=Proposition%20de%20sujet&amp;body=Le%20sujet%20ou%20l%27outil%20que%20j%27aimerais%20voir%20d%C3%A9crypt%C3%A9%20%3A%0A%0A">Proposez le prochain sujet</a>
+      </p>
+    </div>
+    <div class="cta-zone">
+      <button class="cta" id="sharebtn" onclick="shareScore()">Partager mon score</button>
+      <button class="cta ghost" onclick="location.reload()">Refaire l'épisode</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- Feedback sheet -->
+<div class="sheet" id="sheet" aria-live="polite">
+  <div class="sheet-inner">
+    <div class="sheet-title" id="sheet-title"></div>
+    <div class="sheet-text" id="sheet-text"></div>
+    <button class="cta" id="sheet-cta"></button>
+  </div>
+</div>
+
+<script src="../assets/telemetry.js"></script>
+<script src="../assets/progress.js"></script>
+<script src="../assets/gamify.js?v=1"></script>
+<script src="../assets/subscribe.js"></script>
+<script>
+  // ===== MOTEUR D'EPISODE - NE PAS MODIFIER SANS RAISON =====
+  // Seuls EXPLAIN, le bloc « moment interactif » et SHARE_TITLE changent d'un episode a l'autre.
+  const EP = document.body.dataset.ep;                 // ex. "s1e03"
+  const SHARE_TITLE = "S1 · E08 · Compensation et règlement";
+
+  const PDT = window.PD || { track(){}, screen(){}, complete(){} };
+  const PDP = window.PDProgress || { save(){}, load(){return null}, clear(){} };
+  PDT.track('page_open');
+
+  let current = 0, score = 0, streakNow = 0, streakBest = 0, t0 = null;
+  const results = [null,null,null,null];
+  const order = ['cover','1','2','3','4','5','6','7','8','9'];
+
+  const segWrap = document.getElementById('segments');
+  for(let i=0;i<9;i++){const d=document.createElement('div');d.className='seg';segWrap.appendChild(d)}
+
+  function start(){ t0 = Date.now(); PDP.save(EP, {completed:false}); PDT.track('ep_start'); go(1); }
+
+  function go(n){
+    current = n;
+    PDT.screen(order[n]);
+    if(n > 0 && order[n] !== '9'){
+      PDP.save(EP, {screen:n, score, streakBest, results, elapsed: t0 ? Date.now()-t0 : 0});
+    }
+    document.getElementById('sheet').classList.remove('show','good','bad');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`[data-step="${order[n]}"]`).classList.add('active');
+    document.getElementById('topbar').style.visibility = n===0 ? 'hidden' : 'visible';
+    document.querySelectorAll('.seg').forEach((s,i)=>{
+      s.classList.toggle('done', i < n-1);
+      s.classList.toggle('now', i === n-1);
+    });
+    if(order[n]==='9') showScore();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Quiz : 1 entree par question, dans l'ordre. `bad` doit contenir la bonne reponse en <b>. ----
+  const EXPLAIN = [
+    {good:"Oui. Quand la remise part du serveur, ou quand chaque vente est capturée au moment du paiement, le terminal n'a plus rien à envoyer le soir. Éteint ou pas, les ventes partent.", bad:"<b>Ses ventes ne dépendaient pas du terminal pour partir.</b> La remise peut être déclenchée depuis le serveur, sans que le terminal ait rien à envoyer. Un terminal éteint, lui, n'envoie rien."},
+    // [VOIX ?] pointe possible, non intégrée : « Le terminal a fait exactement ce qu'on lui a demandé : rien. »
+    {good:"Oui. Capturer reste possible, mais une autorisation ne garantit qu'une semaine environ. Au-delà, la garantie tombe&nbsp;: selon le réseau et l'état du compte du porteur, l'émetteur peut contester la vente.", bad:"<b>Les plus anciennes partent sans la protection de leur autorisation.</b> Les ventes de la dernière semaine restent couvertes. Les autres ne le sont plus&nbsp;: l'émetteur peut les contester."},
+    {good:"Oui. La compensation ne se fait pas banque par banque&nbsp;: toutes les remises CB de la journée sont mises en commun, et chaque établissement ne règle qu'un solde. Ici, 40 attendus moins 35 dus.", bad:"<b>Un seul mouvement, 5&nbsp;M€ en sa faveur.</b> La compensation met en commun toutes les remises CB de la journée. Chaque établissement règle un solde, pas une ligne par banque d'en face."},
+    {good:"Oui. Le Vendredi saint et le lundi de Pâques, les banques de la zone euro ne se règlent pas. Avec le week-end, cela fait quatre jours de suite sans règlement.", bad:"<b>Le mardi.</b> Le Vendredi saint n'est pas férié à Lyon, mais les banques ne se règlent pas ce jour-là, ni le lundi de Pâques. Avec le week-end, quatre jours sans règlement."}
+  ];
+  const GOOD_TITLES = ["Exact !","Bien vu !","Sans faute !","Précisément !"];
+  const BAD_TITLES = ["Le terminal n'était pas indispensable","La garantie a une date de péremption","Un solde, pas une ligne par banque","Un calendrier qui n'est pas français"];
+
+  document.querySelectorAll('.options').forEach(block=>{
+    const qi = +block.dataset.quiz, ans = +block.dataset.answer, next = +block.dataset.next;
+    block.querySelectorAll('.opt').forEach((btn,i)=>{
+      btn.addEventListener('click',()=>{
+        block.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const good = i===ans;
+        results[qi] = good;
+        PDT.track('quiz_answer', {quiz:qi, choice:i, correct:good});
+        if(good){ score++; streakNow++; streakBest = Math.max(streakBest,streakNow); } else { streakNow = 0; }
+        btn.classList.add(good?'correct':'wrong');
+        if(!good) block.querySelectorAll('.opt')[ans].classList.add('correct');
+        if(navigator.vibrate) navigator.vibrate(good ? 20 : [30,40,30]);
+        const st = document.getElementById('streak');
+        if(streakNow >= 2){ st.textContent = '\u2713 \u00d7' + streakNow; st.classList.add('on'); } else { st.classList.remove('on'); }
+        const sheet = document.getElementById('sheet');
+        document.getElementById('sheet-title').textContent =
+          good ? '\u2713 ' + GOOD_TITLES[Math.min(streakNow-1,3)] : '\u2717 ' + BAD_TITLES[qi];
+        document.getElementById('sheet-text').innerHTML = good ? EXPLAIN[qi].good : EXPLAIN[qi].bad;
+        const cta = document.getElementById('sheet-cta');
+        cta.textContent = next===9 ? 'Voir mon score' : 'Continuer';
+        cta.onclick = ()=>go(next);
+        sheet.classList.add('show', good?'good':'bad');
+        sheet.classList.remove(good?'bad':'good');
+      });
+    });
+  });
+
+  // ---- MOMENT INTERACTIF (pattern CHOIX / REVELATION, origine S1E04) ----
+  // Regles : (1) revelation au clic ; (2) PDT.track('interactive_used', {...}) obligatoire ; (3) debloque #next-bet.
+  const REVEAL = {
+    vendredi: "<b>Lundi.</b> Vous avez compté depuis la vente. Elle a manqué la remise de jeudi 23&nbsp;h&nbsp;: elle part vendredi soir.",
+    samedi:   "<b>Lundi.</b> La remise part bien vendredi soir, mais le samedi, il n'y a pas de versement.",
+    lundi:    "<b>Lundi, exactement.</b> Remise vendredi soir, J+1 tombe un samedi&nbsp;: le versement glisse au lundi.",
+    mardi:    "<b>Lundi.</b> Le week-end décale le versement au premier jour ouvré suivant, pas au second."
+  };
+  let picked = false;
+  document.querySelectorAll('.pick-opt').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(picked) return; picked = true;
+      document.querySelectorAll('.pick-opt').forEach(x=>{
+        x.disabled = true; if(x!==b) x.classList.add('dim');
+      });
+      b.classList.add('chosen');
+      PDT.track('interactive_used', {choice: b.dataset.k});
+      document.getElementById('betcap').innerHTML = REVEAL[b.dataset.k];
+      document.getElementById('betfact').style.display = 'block';
+      document.getElementById('next-bet').disabled = false;
+    });
+  });
+
+  // ---- Score ----
+  function fmtTime(ms){ const s = Math.round(ms/1000); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+  function showScore(){
+    PDT.complete({score, totalMs: t0 ? Date.now()-t0 : null, streakBest});
+    PDP.save(EP, {completed:true, screen:9, score, streakBest, results});
+    document.getElementById('scoreval').textContent = score + " / 4";
+    const missed = results.map((r,i)=>r===false?i+1:null).filter(Boolean);
+    const relire = missed.length===1 ? "RELISEZ LE CONCEPT "+missed[0]
+                 : "RELISEZ LES CONCEPTS "+missed.slice(0,-1).join(", ")+" ET "+missed[missed.length-1];
+    const msg = score===4 ? "SANS FAUTE \u2013 NIVEAU EXPERT" :
+                score>=3 ? "SOLIDE \u2013 "+relire+" ET C'EST PARFAIT" :
+                score>=2 ? "CORRECT \u2013 "+relire : "\u00c0 REVOIR \u2013 REFAITES L'\u00c9PISODE";
+    document.getElementById('scoremsg').textContent = msg;
+    document.getElementById('stat-score').textContent = score + '/4';
+    document.getElementById('stat-time').textContent = t0 ? fmtTime(Date.now()-t0) : '\u2013';
+    document.getElementById('stat-best').textContent = '\u00d7' + streakBest;
+    document.querySelectorAll('.recap-item').forEach(el=>{
+      const r = results[+el.dataset.q];
+      if(r===true) el.classList.add('ok');
+      if(r===false) el.classList.add('ko');
+    });
+    if(score===4) confetti();
+  }
+
+  function confetti(){
+    const c = document.createElement('div'); c.className = 'confetti';
+    const colors = ['#1F4FD8','#17B587','#E85C4A','#0E1B2C'];
+    for(let i=0;i<36;i++){
+      const p = document.createElement('i');
+      p.style.left = (Math.random()*100)+'%';
+      p.style.background = colors[i%4];
+      p.style.animationDelay = (Math.random()*0.9)+'s';
+      p.style.animationDuration = (2+Math.random()*1.4)+'s';
+      c.appendChild(p);
+    }
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+
+  // ---- Partage facon Wordle ----
+  function shareScore(){
+    const grid = results.map(r=>r?'\u{1F7E9}':'\u{1F7E5}').join('');
+    const time = t0 ? fmtTime(Date.now()-t0) : '';
+    const txt = `${SHARE_TITLE} \u2013 ${score}/4 ${grid} en ${time}\nMicro-formation paiement, 5 min.\npaiement-decrypte.fr`;
+    const btn = document.getElementById('sharebtn');
+    const isMobile = (navigator.userAgentData && navigator.userAgentData.mobile) || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile && navigator.share){
+      navigator.share({text:txt}).catch(()=>{});
+    } else {
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(()=>{}); }
+      btn.textContent = 'Copi\u00e9 \u2713 \u2013 votre post LinkedIn est pr\u00eat';
+      setTimeout(()=>btn.textContent='Partager mon score', 3000);
+      window.open('https://www.linkedin.com/feed/?shareActive=true&text='+encodeURIComponent(txt), '_blank', 'noopener');
+    }
+    PDT.track('share', {score});
+  }
+
+  // ---- Abonnement fin d'episode ----
+  if(window.PDSubscribe){
+    PDSubscribe.bind(document.getElementById('ep-signup'), function(ok, msg){
+      var el = document.getElementById('ep-signup-ok');
+      el.textContent = ok ? 'Presque fait ! Confirmez via l\'email qui vient de partir.' : (msg || 'Une erreur est survenue \u2013 r\u00e9essayez.');
+      el.style.color = ok ? '' : '#E85C4A';
+      el.classList.add('show');
+      if(ok) PDT.track('subscribe_ok');
+    });
+  }
+
+  // ---- Reprise ----
+  (function(){
+    const p = PDP.load(EP);
+    if(!p || p.completed || !(p.screen > 0)) return;
+    const QUIZ_NEXT = {2:3, 4:5, 6:7, 8:9};
+    const QUIZ_IDX  = {2:0, 4:1, 6:2, 8:3};
+    let target = p.screen;
+    if(QUIZ_IDX[target] !== undefined && p.results && p.results[QUIZ_IDX[target]] !== null){ target = QUIZ_NEXT[target]; }
+    const b = document.getElementById('resumebtn');
+    b.textContent = 'Reprendre o\u00f9 j\'en \u00e9tais';
+    b.style.display = 'block';
+    b.onclick = ()=>{
+      score = p.score || 0; streakBest = p.streakBest || 0;
+      (p.results || []).forEach((r,i)=>{ results[i] = r; });
+      t0 = Date.now() - (p.elapsed || 0);
+      PDT.track('resume', {screen: target});
+      go(target);
+    };
+  })();
+</script>
+</body>
+</html>
