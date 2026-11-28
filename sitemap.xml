@@ -205,4 +205,14 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/mentions-legales/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/legal/"/>
   </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/episodes/s1e08.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e08.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e08.html"/>
+  </url>
+  <url>
+    <loc>https://paiement-decrypte.fr/en/episodes/s1e08.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://paiement-decrypte.fr/episodes/s1e08.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://paiement-decrypte.fr/en/episodes/s1e08.html"/>
+  </url>
 </urlset>

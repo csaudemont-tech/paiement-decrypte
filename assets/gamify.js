@@ -13,7 +13,7 @@
   'use strict';
 
   // Épisodes publiés. À mettre à jour à chaque publication (publication.md, étape 8).
-  var EPISODES = ['s1e01', 's1e02', 's1e03', 's1e04', 's1e05', 's1e06'];
+  var EPISODES = ['s1e01', 's1e02', 's1e03', 's1e04', 's1e05', 's1e06', 's1e07', 's1e08'];
   var KEY = 'pd_game';
   var EN = /^en/i.test(document.documentElement.lang || '');
 
