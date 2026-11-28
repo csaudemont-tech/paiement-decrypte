@@ -309,7 +309,7 @@
       <a class="home-link" href="/en/#training">← All episodes</a>
       <div class="kicker">Micro-training · Season 1 · Episode 08</div>
       <h1 style="margin-top:18px">Clearing and settlement</h1>
-      <p style="margin-top:14px;font-size:16.5px">The authorisation reserves the funds for about a week. The merchant is not paid yet: the sale still has to be captured, meaning sent into clearing.</p>
+      <p style="margin-top:14px;font-size:16.5px">The authorisation reserves the funds for a limited time. The merchant is not paid yet: the sale still has to be captured, meaning sent into clearing.</p>
       <div class="cover-meta">
         <span><b>5 min</b> · read</span>
         <span><b>4</b> concepts</span>
@@ -358,7 +358,7 @@
     <div class="concept-card" style="padding-bottom:16px">
       <div class="kicker">Concept 2 / 4 · The time limits</div>
       <h2>Two time limits, two starting points</h2>
-      <p>An authorisation has a limited lifespan. It reserves the funds and guarantees payment for about a week, depending on the network. If the capture (or the batch upload) arrives after that, the sale can still be accepted technically. But the authorisation no longer protects it: depending on the network and the state of the cardholder's account, the issuer can dispute it afterwards.</p>
+      <p>An authorisation has a limited lifespan. It reserves the funds and guarantees payment for a limited time, which varies by network and type of sale. If the capture (or the batch upload) arrives after that, the sale can still be accepted technically. But the authorisation no longer protects it: depending on the network and the state of the cardholder's account, the issuer can dispute it afterwards.</p>
       <p>Once the authorisation is captured, another count starts. When a contract promises “D+1”, D is the day of the batch, not the day of the sale. And on weekends and some public holidays, there is no payout.</p>
     </div>
     <div class="bet">
@@ -487,7 +487,7 @@
       </div>
       <div class="recap-list" id="recaplist">
         <div class="recap-item" data-q="0">A sale has to be captured to be paid: right after the sale, in the evening batch, or, depending on the network, in the message that authorises it.</div>
-        <div class="recap-item" data-q="1">The authorisation guarantees about a week. The contract pays at D+n after the batch, excluding weekends and some public holidays.</div>
+        <div class="recap-item" data-q="1">The authorisation guarantees payment only for a limited time. The contract pays at D+n after the batch, excluding weekends and some public holidays.</div>
         <div class="recap-item" data-q="2">What gets settled is balances: between banks, and all the way to the merchant's account.</div>
         <div class="recap-item" data-q="3">Settlement between banks follows a single calendar for the whole euro area, which is not the French public-holiday calendar.</div>
       </div>
@@ -569,7 +569,7 @@
   const EXPLAIN = [
     {good:"Yes. When the batch is sent from the server, or when each sale is captured at the time of payment, the terminal has nothing left to send in the evening. On or off, the sales go out.", bad:"<b>Their sales did not depend on the terminal to be sent.</b> The batch can be triggered from the server, with nothing for the terminal to send. A switched-off terminal, on the other hand, sends nothing."},
     // [VOIX ?] pointe possible, non intégrée : « Le terminal a fait exactement ce qu'on lui a demandé : rien. »
-    {good:"Yes. Capturing is still possible, but an authorisation only guarantees about a week. Beyond that, the guarantee lapses: depending on the network and the state of the cardholder's account, the issuer can dispute the sale.", bad:"<b>The oldest ones go out without the protection of their authorisation.</b> Last week's sales are still covered. The others no longer are: the issuer can dispute them."},
+    {good:"Yes. Capturing is still possible, but an authorisation only guarantees payment for a limited time. Beyond that, the guarantee lapses: depending on the network and the state of the cardholder's account, the issuer can dispute the sale.", bad:"<b>The oldest ones go out without the protection of their authorisation.</b> Last week's sales are still covered. The others no longer are: the issuer can dispute them."},
     {good:"Yes. Clearing is not done bank by bank: all of the day's CB batches are pooled, and each institution settles only one balance. Here, 40 expected minus 35 owed.", bad:"<b>Just one movement, €5M in its favour.</b> Clearing pools all of the day's CB batches. Each institution settles one balance, not one line per counterparty bank."},
     {good:"Yes. On Good Friday and Easter Monday, euro-area banks do not settle. With the weekend, that makes four days in a row without settlement.", bad:"<b>Tuesday.</b> Good Friday isn't a public holiday in Lyon, but banks do not settle that day, nor on Easter Monday. With the weekend, four days without settlement."}
   ];

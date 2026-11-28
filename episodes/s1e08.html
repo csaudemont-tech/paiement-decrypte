@@ -309,7 +309,7 @@
       <a class="home-link" href="/#formation">← Tous les épisodes</a>
       <div class="kicker">Micro-formation · Saison 1 · Épisode 8</div>
       <h1 style="margin-top:18px">Compensation et règlement</h1>
-      <p style="margin-top:14px;font-size:16.5px">L'autorisation réserve les fonds pour environ une semaine. Le commerçant n'est pas encore payé&nbsp;: il faut encore capturer la vente, c'est-à-dire l'envoyer en compensation.</p>
+      <p style="margin-top:14px;font-size:16.5px">L'autorisation réserve les fonds pour une durée limitée. Le commerçant n'est pas encore payé&nbsp;: il faut encore capturer la vente, c'est-à-dire l'envoyer en compensation.</p>
       <div class="cover-meta">
         <span><b>5 min</b> · lecture</span>
         <span><b>4</b> concepts</span>
@@ -358,7 +358,7 @@
     <div class="concept-card" style="padding-bottom:16px">
       <div class="kicker">Concept 2 / 4 · Les délais</div>
       <h2>Deux délais, deux points de départ</h2>
-      <p>Une autorisation a une durée de vie limitée. Elle réserve les fonds et garantit le paiement environ une semaine, variable selon le réseau. Si la capture (ou la télécollecte) arrive après ce délai, la vente peut encore être acceptée techniquement. Mais l'autorisation ne la protège plus&nbsp;: selon le réseau et l'état du compte du porteur, l'émetteur peut la contester ensuite.</p>
+      <p>Une autorisation a une durée de vie limitée. Elle réserve les fonds et garantit le paiement pour une durée limitée, qui varie selon le réseau et le type de vente. Si la capture (ou la télécollecte) arrive après ce délai, la vente peut encore être acceptée techniquement. Mais l'autorisation ne la protège plus&nbsp;: selon le réseau et l'état du compte du porteur, l'émetteur peut la contester ensuite.</p>
       <p>Une fois l'autorisation capturée, un autre décompte commence. Quand un contrat promet «&nbsp;J+1&nbsp;», J est le jour de la remise, pas celui de la vente. Et le week-end et certains jours fériés, il n'y a pas de versement.</p>
     </div>
     <div class="bet">
@@ -487,7 +487,7 @@
       </div>
       <div class="recap-list" id="recaplist">
         <div class="recap-item" data-q="0">Une vente doit être capturée pour être payée&nbsp;: juste après la vente, en remise du soir, ou, selon le réseau, dans le message qui l'autorise.</div>
-        <div class="recap-item" data-q="1">L'autorisation garantit une semaine environ. Le contrat verse à J+n après la remise, hors week-end et certains jours fériés.</div>
+        <div class="recap-item" data-q="1">L'autorisation ne garantit le paiement que pour une durée limitée. Le contrat verse à J+n après la remise, hors week-end et certains jours fériés.</div>
         <div class="recap-item" data-q="2">On règle des soldes&nbsp;: entre banques, et jusque sur le compte du commerçant.</div>
         <div class="recap-item" data-q="3">Le règlement entre banques suit un calendrier unique pour toute la zone euro, qui n'est pas celui des fériés français.</div>
       </div>
@@ -569,7 +569,7 @@
   const EXPLAIN = [
     {good:"Oui. Quand la remise part du serveur, ou quand chaque vente est capturée au moment du paiement, le terminal n'a plus rien à envoyer le soir. Éteint ou pas, les ventes partent.", bad:"<b>Ses ventes ne dépendaient pas du terminal pour partir.</b> La remise peut être déclenchée depuis le serveur, sans que le terminal ait rien à envoyer. Un terminal éteint, lui, n'envoie rien."},
     // [VOIX ?] pointe possible, non intégrée : « Le terminal a fait exactement ce qu'on lui a demandé : rien. »
-    {good:"Oui. Capturer reste possible, mais une autorisation ne garantit qu'une semaine environ. Au-delà, la garantie tombe&nbsp;: selon le réseau et l'état du compte du porteur, l'émetteur peut contester la vente.", bad:"<b>Les plus anciennes partent sans la protection de leur autorisation.</b> Les ventes de la dernière semaine restent couvertes. Les autres ne le sont plus&nbsp;: l'émetteur peut les contester."},
+    {good:"Oui. Capturer reste possible, mais une autorisation ne garantit le paiement que pour une durée limitée. Au-delà, la garantie tombe&nbsp;: selon le réseau et l'état du compte du porteur, l'émetteur peut contester la vente.", bad:"<b>Les plus anciennes partent sans la protection de leur autorisation.</b> Les ventes de la dernière semaine restent couvertes. Les autres ne le sont plus&nbsp;: l'émetteur peut les contester."},
     {good:"Oui. La compensation ne se fait pas banque par banque&nbsp;: toutes les remises CB de la journée sont mises en commun, et chaque établissement ne règle qu'un solde. Ici, 40 attendus moins 35 dus.", bad:"<b>Un seul mouvement, 5&nbsp;M€ en sa faveur.</b> La compensation met en commun toutes les remises CB de la journée. Chaque établissement règle un solde, pas une ligne par banque d'en face."},
     {good:"Oui. Le Vendredi saint et le lundi de Pâques, les banques de la zone euro ne se règlent pas. Avec le week-end, cela fait quatre jours de suite sans règlement.", bad:"<b>Le mardi.</b> Le Vendredi saint n'est pas férié à Lyon, mais les banques ne se règlent pas ce jour-là, ni le lundi de Pâques. Avec le week-end, quatre jours sans règlement."}
   ];
